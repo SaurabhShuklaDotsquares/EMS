@@ -1,0 +1,76 @@
+﻿@model List<EstimateRoleTechnoloyPriceDto>
+@{
+    ViewData["Title"] = "Index";
+
+    var estimateList = Model.GroupBy(x => new { x.EstimateRoleId, x.EstimateTechnologyId });
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <partial name="_Notification" />
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="dis-block clearfix">
+                    <h2 class="pull-left">
+                        Manage Estimate Price
+                    </h2>
+                    <div class="pull-right">
+                        <form action="/estimateprice">
+                            <div class="wdth1 margin-right10 pull-left">
+                                <select class="form-control" name="roleId" id="roleid" asp-items="ViewBag.Role">
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                            <div class="pull-right">
+                                <a class="btn btn-custom pull-right orange pull-right" href="/estimateprice/manageestimateprice">Add New</a>
+                            </div>
+                            <div class="margin-right10 pull-right">
+                                <button class="btn btn-custom pull-right orange pull-right">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="box-body ">
+                    <section id="no-more-tables">
+                        <table class="display postable table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Role Name</th>
+                                    <th>Technology</th>
+                                    <th>Experience with price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var estimate in estimateList)
+                                {
+                                    var first = estimate.FirstOrDefault();
+                                    <tr>
+                                        <td>@first.EstimateRoleName</td>
+                                        <td>@first.EstimateTechnologyName</td>
+                                        <td>
+                                            @foreach (var item in estimate)
+                                            {
+                                                <span class="round-b badge-warning"></span>
+                                                <span class="badge badge-secondary">@item.EstimateRoleExpName</span>
+                                                <span> £@item.Price</span>
+                                                <br />
+                                            }
+                                        </td>
+                                        <td><a href="/estimateprice/manageestimateprice/@first.EstimateRoleId@(first.EstimateTechnologyId!=null ? $"?technologyId={first.EstimateTechnologyId}":"")"><i class="fa fa-edit"></i></a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+    </script>
+}

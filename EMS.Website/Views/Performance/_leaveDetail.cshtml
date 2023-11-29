@@ -1,0 +1,42 @@
+﻿@model List<LeaveActivityDto>
+
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Leave Details" }); }
+
+<div class="modal-body">
+    @if (Model != null)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <td style="width:5%">S.No.</td>
+                    <td style="width:10%">Start Date</td>
+                    <td style="width:15%">End Date</td>
+                    <td style="width:33%">Reason</td>
+                    <td style="width:27%">Status</td>
+                    <td style="width:10%">Leave Type</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(++index)</td>
+                            <td>@item.StartDate</td>
+                            <td>@item.EndDate</td>
+                            <td>@item.Reason</td>
+                            <td>@(((Enums.LeaveStatus)item.Status).ToString())</td>
+                            <td>@item.FullOrHalf</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

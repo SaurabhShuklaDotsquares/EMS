@@ -1,0 +1,35 @@
+﻿@model List<RunningProjectWithDeveloperDto>
+
+@{ Html.RenderPartial("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Bucket Running Projects" }); }
+
+<div class="modal-body">
+    @if (Model.Any())
+    {
+        int index = 0;
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <td style="width:10%">S.No.</td>
+                    <td style="width:40%">Project</td>
+                    <td style="width:25%">Actual Dev.</td>
+                    <td style="width:25%">Virtual Dev.</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(++index)</td>
+                        <td>@string.Format("{0} [{1}]", item.ProjectName, item.CRMProjectId)</td>
+                        <td>@string.Join(", ", item.ProjectDevelopers.Select(x => x.DevName))</td>
+                        <td>@string.Join(", ", item.ProjectDevelopers.Select(x => x.VirDevName))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4>No project found</h4>
+    }
+</div>

@@ -1,0 +1,104 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model EMS.Dto.BooKMeetingRoomDto
+@{
+    ViewBag.Title = "Conference Room Booking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div class="ManageDepartment-page full-wdth clearfix clsmeetingcal">
+            <div class="box-body">
+                <div class="row">
+                    <div class="full">
+                        <div class="pull-left col-md-3">
+                            <h2>Conference Room Booking</h2>
+                        </div>
+                        <div class="col-md-9 search-filter pull-right officeroom @ViewBag.MeetingRoomList!=null'">
+                            <select id="CRId" class="form-control">
+                                <option value="0">All Meeting Rooms</option>
+                                @foreach (var row in ViewBag.OfficeList)
+                                {
+                                    <optgroup label="@row.Text">
+                                        @foreach (var item in ViewBag.MeetingRoomList)
+                                        {
+                                            if (item.Group.Name.ToLower() == row.Text.ToLower())
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="note-instruction">
+                <p style="line-height:2px;">Note: Please click on each row to book the conference room</p>
+            </div>
+            <div>
+                <div id="calender"></div>
+            </div>
+            <div class="color-code-list" id="divcolorlist" style="display:none">
+                <ul>
+                    @foreach (var row in ViewBag.ColorList)
+                    {
+                        <li class="@row.Class">@row.MeetingRoom</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="divoverlay hide">
+        </div>
+    </div>
+</div>
+<div id="modal_details" class="modal fade bookmeeting-popup meeting-schedule-popup" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Meeting Information</h4>
+            </div>
+            <div class="modal-body">
+                <p id="pDetails"></p>
+            </div>
+            <div class="modal-footer">
+                <div id="editCancelBtns"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal_booking" class="modal fade bookmeeting-popup" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Book Conference Room</h4>
+            </div>
+            <div class="modal-body">
+                <form class="">
+                    <div id="divBody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary1 save-btn">Save</button>
+                        <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="~/css/meetingroom.css" rel="stylesheet" />
+
+@section Scripts{
+    <script src="~/bundles/MeetingRoom/index"></script>
+    
+}
+
+
+

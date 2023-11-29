@@ -1,0 +1,23 @@
+﻿@using EMS.Web.Models.Others
+@model ExpenseReimburserdDto
+
+@using (Html.BeginForm("markasreimbursed", "expenses", FormMethod.Post, new { id = "reimbursedForm" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Paid Approved Claims" });
+
+    <div class="modal-body">
+        <div id="NotificationMessage"></div>
+        <div class="form-group required clearfix">
+            <div class="row formData" style="margin-top:5px">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.ReimburseDate, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.ReimburseDate, htmlAttributes: new { @class = "form-control", @autoComplete = "off"})
+                </div>
+            </div>
+        </div>
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter { SubmitButtonText="Mark as Paid",SubmitButtonID="markAsPaid"});
+}

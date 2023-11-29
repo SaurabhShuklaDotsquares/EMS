@@ -1,0 +1,215 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model CVBuilderIndexDto
+@{
+    ViewBag.Title = "CV(s) for Client";
+}
+<link href="~/css/fSelect.css" rel="stylesheet" />
+
+<style>
+    .listing-sec,
+    .filter-lib {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .li {
+        width: 100px;
+        padding: 0 0 0 0;
+    }
+
+    .flex {
+        flex: 1 0 0;
+    }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+    }
+
+    .flex-wrap {
+        -ms-flex-wrap: wrap !important;
+        flex-wrap: wrap !important;
+    }
+
+    .justify-content-between {
+        -webkit-box-pack: justify !important;
+        -ms-flex-pack: justify !important;
+        justify-content: space-between !important;
+    }
+
+    .align-items-center {
+        -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+        align-items: center !important;
+    }
+
+    .adv-srch .drop-sec {
+        display: none;
+        width: 100%;
+        right: 0;
+        z-index: 6;
+    }
+
+        .adv-srch .drop-sec .drop-in::before {
+            right: 20px;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .adv-srch .drop-sec label {
+        margin-bottom: 5px;
+    }
+
+    .fs-wrap,
+    .fs-dropdown {
+        width: 100% !important;
+    }
+
+    .fs-label-wrap .fs-label {
+        padding: 11px 22px 11px 11px !important;
+    }
+
+    .fs-arrow {
+        right: 12px !important;
+        opacity: 0.5;
+    }
+
+    .search-row {
+        position: relative;
+        /*z-index: 5;*/
+    }
+
+  
+
+    .industry-togle .industry-listing, #divAdvancedFilters .scroll2 {
+        width: 100% !important;
+    }
+
+    .filter-display {
+        margin-top: 10px;
+    }
+
+    .industry-block {
+        z-index: 99;
+    }
+    
+</style>
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+    <style>
+        .table-stats.project-closure td {
+            border-bottom: 0;
+        }
+    </style>
+    
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{
+            Html.RenderPartial("_Notification");
+        }
+        <div id="MessageDiv"></div>
+        <div class="row" style="padding-bottom:10px;">
+            <div class="col-sm-4">
+                <h2>CV(s) for Client</h2>
+            </div>
+            <div class="col-sm-8 text-right">
+                @if (Model.IsCVExists)
+                {
+                    <a class="btn btn-custom" href="@Url.Action("add")">Add Your CV</a>
+                }
+            </div>
+        </div>
+        <div class="row">
+            @if ((int)Enums.UserRoles.PM == CurrentUser.RoleId || RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+            {
+                <div class="col-sm-8">
+                    
+                    @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                    {
+                        <div class="col-md-2 form-group">
+                            @Html.DropDownList("pm", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })
+                        </div>
+                    }
+                    @if (ViewBag.DepartmentList != null)
+                    {
+                        if (ViewBag.DepartmentList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group">
+                                @Html.DropDownList("department", (List<SelectListItem>)ViewBag.DepartmentList, "All Department", new { @class = "m-wrap medium form-control searchfilterdepartment" })
+                            </div>
+                        }
+                    }
+                    @if (ViewBag.Users != null)
+                    {
+                        if (ViewBag.Users.Count > 0)
+                        {
+                            <div class="col-md-2 form-group">
+                                @Html.DropDownList("user", (List<SelectListItem>)ViewBag.Users, "All Employee", new { @class = "m-wrap medium form-control searchfilter" })
+                            </div>
+                        }
+                    }
+                    @if (ViewBag.ExperienceTypeList != null)
+                    {
+                        if (ViewBag.ExperienceTypeList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group">
+                                @Html.DropDownList("Experience", (List<SelectListItem>)ViewBag.ExperienceTypeList, null, new { @class = "form-control select2Experience" , @multiple = "multiple"})
+                            </div>
+                        }
+                    }
+                    @if (ViewBag.DomainTypeList != null)
+                    {
+                        if (ViewBag.DomainTypeList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group">
+                                @Html.DropDownList("industries", (List<SelectListItem>)ViewBag.DomainTypeList, null, new { @class = "form-control select2Industries ", @multiple = "multiple" })
+                            </div>
+                             
+                        }
+                    }
+                    @if (ViewBag.TechnologyList != null)
+                    {
+                        if (ViewBag.TechnologyList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group">                                
+                                <div class="form-group" id="techSelect">
+                                    @Html.DropDownList("technologies", (List<SelectListItem>)ViewBag.TechnologyList, null, new { @class = "form-control select2Technologies", @multiple = "multiple" })
+                                </div>
+                            </div>
+                        }
+                    } 
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group text-left">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                    <input type="button" class="btn btn-custom" id="btnDownload" value="Download ALL" />
+                    </div>
+                </div>
+            }
+        </div>
+      
+
+        <table id="grid-document-table" class="display postable table table-stats project-closure table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@await Html.PartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-view-cvdata", AreaLabeledId = "modal-leave-cvdata-label", Size = EMS.Core.Enums.ModalSize.Large })
+@section scripts{
+    <script type="text/javascript">
+        var isAllowed = @((CurrentUser.RoleId == (int)(int)Enums.UserRoles.Director || CurrentUser.IsSuperAdmin) ? 1 : 0);
+    </script>
+    
+    <script src="~/js/fSelect.js"></script>
+    <script src="~/Scripts/CustomJS/CVBuilder/Index.js" asp-append-version="true"></script>
+}
+

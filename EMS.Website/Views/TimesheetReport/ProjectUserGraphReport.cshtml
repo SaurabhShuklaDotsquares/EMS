@@ -1,0 +1,91 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core;
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{await Html.RenderPartialAsync("_Notification");}
+
+        <div class="row margin-bottom10">
+            <div class="col-sm-12">
+                <h2>Project Manager Time Sheet Report</h2>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                @Html.TextBox("txt_dateFrom", null, new { @class = "form-control dtfrom", @placeholder = "From Date", @readonly = "readonly" })
+                                <span class="input-group-addon clrFilterDate" style="cursor:pointer;border-radius: 0;">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                @Html.TextBox("txt_dateTo", null, new { @class = "form-control dtTo", @placeholder = "To Date", @readonly = "readonly" })
+                                <span class="input-group-addon clrFilterDate" style="cursor:pointer;border-radius: 0;">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </div>
+                        </div>
+                        @*<div class="col-sm-2">
+                            @Html.DropDownList("ddl_virtualdeveloper", ViewBag.VirtualDeveloperListByUkPm as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        </div>*@
+
+                        @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)Enums.UserRoles.PMOAU)
+                        {
+                            <div class="col-sm-2">
+                                @Html.DropDownList("ddl_user", ViewBag.UserList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        }
+                        @*<div class="col-sm-2">
+                            @Html.DropDownList("dk dl_project", ViewBag.ProjectList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        </div>*@
+                        <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-7">
+                <a class="export-btn" data-href="@Url.Action("ExportProjectUserReportToExcel","TimesheetReport")" href="@Url.Action("ExportProjectUserReportToExcel","TimesheetReport")" style="display:none">
+                    <img src="content/images/excel.png" alt="" /> Export To Excel
+                </a>
+            </div>
+            <div class="col-sm-5">
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                {
+                    <div id="div_delete" style="display:none;">
+                        <input id="btn_delete" type="button" value="Delete" class="btn btn-custom pull-right orange" />
+                        <input type="hidden" value="1" id="hdn_PM" />
+                    </div>
+                }
+                <div class="workingHours" style="display:none;">
+                    <h5 class="pull-right margin-top10 margin-right10">Total Working Hours: <span id="totalWorkingHours"></span></h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div id="container-chart" style="min-width: 220px; height: 350px; max-width: 600px; margin: 0 auto"></div>
+                <span> </span>
+            </div>
+            <div class="col-md-6" id="grid-timesheetGraph" style="height: 700px;overflow-y: auto;">
+                <table id="grid-timesheet" class="display postable table table-stats table-condensed"></table>
+            </div>
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-edit-projectuserreport", AreaLabeledId = "modal-edit-projectuserreport-label", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+    <script src="~/Scripts/datepicker/moment.js"></script>
+    <script src="~/Scripts/masked-input/jquery.maskedinput.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="~/Scripts/CustomJS/projectUserReportGraph.js" asp-append-version="true"></script>
+    <script src="~/Scripts/datepicker/jquery.inputmask.js"></script>
+    <script src="~/Scripts/datepicker/jquery.inputmask.date.extensions.js"></script>
+}

@@ -1,0 +1,127 @@
+﻿@model ProjectActualHoursDetailsDto;
+@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Project Actual Hour Details";
+}
+<style>
+    .padding-right {
+        padding-right: 5px !important;
+    }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Project Actual Hours Details</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 padding20">
+                <div><b>Project Name: </b> @Model.ProjectName</div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-stats">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Tasks
+                    </th>
+                    <th>
+                        Invoice Hours
+                    </th>
+                    <th>
+                        Actual Hours
+                    </th>
+                    <th>
+                        VARIANCE HOURS
+                    </th>
+                    <th>
+                        Comments
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.invoiceDetails.Count > 0)
+                {
+                    foreach (var invoice in Model.invoiceDetails)
+                    {
+                        <tr>
+                            <th style="font-weight:bold;">
+                                @invoice.Invoice.InvoiceStartDate.ToFormatDateString("dd MMM, yyyy")
+                                to
+                                @invoice.Invoice.InvoiceEndDate.ToFormatDateString("dd MMM, yyyy")
+                                @*Onwards*@
+                            </th>
+                            <th style="font-weight:bold;">
+                                Invoice Raised for @invoice.InvoicePlanHours hours, Invoice No.: @invoice.Invoice.InvoiceNumber, Dated: @invoice.Invoice.InvoiceStartDate.ToFormatDateString("dd MMM")
+                            </th>
+                            <th style="font-weight:bold;">
+                                @invoice.InvoicePlanHours Hours
+                            </th>
+                            <th style="font-weight:bold;">
+                                @invoice.InvoiceActualHours Hours
+                            </th>
+                            <th style="font-weight:bold;">
+                                @((invoice.dInvoicePlanHours - invoice.dInvoiceActualHours).GetTimeHoursFormatString()) Hours
+                            </th>
+                            <th style="font-weight:bold;">
+                            </th>
+                        </tr>
+                        var BalancePlanHours = invoice.dInvoicePlanHours;
+                        foreach (var timeSheet in invoice.TimeSheets)
+                        {
+                            BalancePlanHours = (BalancePlanHours - timeSheet.WorkHours.TotalHours);
+                            <tr>
+                                <td>
+                                    @if (timeSheet.AddDate > invoice.Invoice.InvoiceEndDate)
+                                    {
+                                        <label class="label label-danger converted">
+                                            @timeSheet.AddDate.ToFormatDateString("dd MMM, yyyy")
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        @timeSheet.AddDate.ToFormatDateString("dd MMM, yyyy")
+                                    }
+
+                                </td>
+                                <td>
+                                    @timeSheet.Description
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    @timeSheet.WorkHours.TotalHours.GetTimeHoursFormatString()
+                                </td>
+                                <td>
+                                    @BalancePlanHours.GetTimeHoursFormatString()
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+            @*<tfoot>
+                <tr>
+                    <td colspan="6"></td>
+                </tr>
+            </tfoot>*@
+        </table>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+
+

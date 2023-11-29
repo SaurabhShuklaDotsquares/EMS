@@ -1,0 +1,84 @@
+﻿@model PerformanceIndexDto
+<style>
+    .btn-link{
+        text-decoration:underline;
+    }
+    #btnReset.btn-custom {
+        background-color: #808080;
+    }
+    #btnReset:hover, #btnReset:focus {
+        background-color: #333;
+        color: #fff;
+    }
+
+    #performanceDetail #exampleModalLabel {
+        display: none;
+    }
+    #performanceDetail .modal-header {
+        padding: 0px;
+        border-bottom: none;
+    }
+    #performanceDetail .modal-body {
+        position: relative;
+        padding: 0px;
+    }
+    #performanceDetail button.close {
+        display: none;
+    }
+</style>
+
+@{
+    ViewBag.Title = "Performance Report";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{await Html.RenderPartialAsync("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-3">
+                <h2>Performance Report</h2>
+            </div>
+            <div class="col-sm-9 text-right">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <button type="button" id="btnReset" class="btn btn-custom pull-right"> Reset</button>
+                        <button type="button" id="btnSearch" class="btn btn-custom pull-right" style="margin-right: 26px;margin-left: 11px;"><i class="fa fa-search"></i> Search</button>
+
+                        <div class="col-md-2 pull-right">
+                            <input type="text" asp-for="EndDate" class="form-control" placeholder="End Date" readonly />
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <input type="text" asp-for="StartDate" class="form-control" placeholder="Start Date" readonly />
+                        </div>
+                        <div class="col-md-3 pull-right">
+                            <select asp-for="UserId" asp-items="Model.users" class="form-control">
+                                <option value="">-- Select User --</option>
+                            </select>
+
+                        </div>
+
+                        <input type="hidden" value="@Model.StartDate" id="sDate" />
+                        <input type="hidden" value="@Model.EndDate" id="eDate" />
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+        <div id="performanceDetail">
+
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    await Html.RenderPartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-performance-detail", AreaLabeledId = "modal-performance-detail-label", Size = EMS.Core.Enums.ModalSize.XLarge });
+    await Html.RenderPartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-perf-extra-detail", AreaLabeledId = "modal-perf-extra-detail-label", Size = EMS.Core.Enums.ModalSize.Large });
+}
+
+@section scripts{
+    @*<script src="~/Scripts/CustomJS/Performance/performance.js"></script>*@
+    <script src="~/bundles/Performance/Index"></script>
+
+}

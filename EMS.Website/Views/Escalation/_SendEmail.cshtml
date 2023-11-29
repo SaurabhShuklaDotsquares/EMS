@@ -1,0 +1,49 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+
+<div class="conclusion">
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Email Notification" })
+    <div class="modal-body">
+        <div id="error-ModalMessage"></div>
+        <div class="create-form-outer-box dis-block clearfix">
+            <form asp-action="AddEditConclusion" id="frm-Manage-Conclusion" method="post">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div id="validation-summary"></div>
+                    <div class="margin-bottom15">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="email">Email address</label>
+                                <input type="hidden" id="values" />
+                                <textarea id="email" rows="2" cols="2" class="form-control" style="height:100px" required></textarea>
+                                <label id="email-error" class="error" for="email" style="display:none">The Email field is required.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            @await Html.PartialAsync("_ModalFooter", new ModalFooter { SubmitButtonID = "btnEmailSubmit", SubmitButtonText = "Submit", CancelButtonText = "Cancel", DefaultButtonCss = false })
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).on("click", "#btnEmailSubmit", function () {
+        $("#emails-error").hide();
+        var email = $("#email").val();
+        var values = JSON.parse($("#values").val());
+        if (email == "") {
+            $("#email-error").show();
+        } else {
+            var data = { ValueArray: values, to: email };
+            $.ajax({
+                url: domain + 'Escalation/SendEmail',
+                type: 'POST',
+                data: data,
+                success: function (data) {
+                    window.location.href = domain + 'Escalation/Index';
+                }
+            });
+        }
+    })
+</script>

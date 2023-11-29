@@ -1,0 +1,90 @@
+﻿@using EMS.Web.Models.Others
+@model ExpenseDto
+
+@using (Html.BeginForm("addedit", "expenses", FormMethod.Post, new { id = "add-expenseForm" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = string.Format("{0} Expenses", Model.Id > 0 ? "Edit" : "Claim") });
+
+    <div class="modal-body">
+        <div id="NotificationMessage"></div>
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.ExpenseDate, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.ExpenseDate,  htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Descp, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextAreaFor(model => model.Descp,  2, 5, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Receipt)
+                </div>
+                <div class="col-md-3 rdo_receipt">
+                    <input type="radio" name="HasReceipt" id="receipt_yes" value="true" @(Model.ReceiptPath != null ? "checked" : "") /> <label for="receipt_yes">Yes</label> &nbsp;&nbsp;
+                    <input type="radio" name="HasReceipt" id="receipt_no" value="false" @(Model.ReceiptPath == null ? "checked" : "") /> <label for="receipt_no">No</label>
+                </div>
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.Receipt,  htmlAttributes: Model.ReceiptPath != null ? new { @type = "file" } : new { @type = "file", @class = "hidden" } as object)
+                </div>
+            </div>
+
+            @if (Model.Id > 0 && Model.ReceiptPath != null)
+            {
+                <div class="row receiptDocument">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-9">
+                        <a href="@(SiteKey.DomainName + Model.ReceiptPath)" target="_blank" style="cursor:pointer;text-decoration:underline;color:blue;">@(Model.ReceiptPath.Split('/').LastOrDefault())</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.CurrencyId,  Model.CurrencyList, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.Amount,  htmlAttributes: new { @class = "form-control decimal-number", @autoComplete = "off" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                <label>Payment made through</label>
+            </div>
+            <div class="col-md-9 form-group">
+                @foreach (var item in Model.ExpensePaymentThroughList)
+                {
+                <input type="radio" id="PaidThrough_@item.Value" name="PaidThrough" value="@item.Value" @(Model.PaidThrough == Convert.ToByte(item.Value) ? "checked" : "") data-rule-required="true" />
+                <label for="PaidThrough_@item.Value">@item.Text</label>
+                }
+                <div></div>
+                <label for="PaidThrough" class="error" style="position: absolute; display: none;">This field is required.</label>
+            </div>
+        </div>
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}

@@ -1,0 +1,64 @@
+﻿@using EMS.Core
+@model List<ProjectClosureSummaryDto>
+
+
+@if (Model.Count > 0)
+{
+       
+    @helper ClosureHeader()
+    {
+        <thead>
+            <tr>
+                <th>Team Manager</th>
+                <th class="rowCenterText">Projects Closed</th>
+                <th class="rowCenterText">Projects Re-started</th>
+                <th class="rowCenterText">Projects Not Started</th>
+
+                <th class="rowCenterText">Projects Confirm to Start (100% sure)</th>
+                <th class="rowCenterText">Project May Start (50-50%)</th>
+                <th class="rowCenterText">Approx. Project will not Start</th>
+                <th rowspan="@(Model.Count+1)" style="width:20px;background-color:#fff"></th>
+                <th class="rowCenterText">Recurring Project Closed</th>
+                <th class="rowCenterText">Recurring Project Re-started After chase</th>
+            </tr>
+        </thead>
+    }
+
+    @helper ClosureSummary(ProjectClosureSummaryDto item)
+    {
+        <tr>
+            <td>
+                @item.PMName
+                @Html.Hidden("PMId", item.PMId)
+            </td>
+            <td class="rowCenterText">@(item.TotalProjectClosed > 0 ? item.TotalProjectClosed.ToString() : "-")</td>
+            <td class="rowCenterText @(item.ProjectRestarted > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.ProjectRestarted">@(item.ProjectRestarted > 0 ? item.ProjectRestarted.ToString() : "-")</td>
+            <td class="rowCenterText @(item.ProjectNotStarted > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.ProjectNotRestarted">@(item.ProjectNotStarted > 0 ? item.ProjectNotStarted.ToString() : "-")</td>
+
+            <td class="rowCenterText @(item.ProjectPromising > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.ProjectPromising">@(item.ProjectPromising > 0 ? item.ProjectPromising.ToString() : "-")</td>
+            <td class="rowCenterText @(item.ProjectLessPromising > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.ProjectLessPromising">@(item.ProjectLessPromising > 0 ? item.ProjectLessPromising.ToString() : "-")</td>
+            <td class="rowCenterText">@(item.ProjectNotSure > 0 ? item.ProjectNotSure.ToString() : "-")</td>
+            @*<td class="rowCenterText @(item.ProjectNotSure > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.ProjectNotSure">@(item.ProjectNotSure > 0 ? item.ProjectNotSure.ToString() : "-")</td>*@
+            <td></td>
+            <td class="rowCenterText">@(item.RecurringProjectClosed > 0 ? item.RecurringProjectClosed.ToString() : "-")</td>
+            <td class="rowCenterText">@(item.RecurringProjectRestarted > 0 ? item.RecurringProjectRestarted.ToString() : "-")</td>
+
+            @*<td class="rowCenterText @(item.RecurringProjectClosed > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.RecurringProjectClosed">@(item.RecurringProjectClosed > 0 ? item.RecurringProjectClosed.ToString() : "-")</td>
+                <td class="rowCenterText @(item.RecurringProjectRestarted > 0 ? "filter" : "")" data-type="@Enums.ProjectClosureFilterType.RecurringProjectRestarted">@(item.RecurringProjectRestarted > 0 ? item.RecurringProjectRestarted.ToString() : "-")</td>*@
+        </tr>
+    }
+
+    <div class="row">
+        <div class="col-md-10">
+            <table class="table table-default">
+                @ClosureHeader()
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        @ClosureSummary(item)
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

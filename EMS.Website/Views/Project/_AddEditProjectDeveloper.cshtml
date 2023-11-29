@@ -1,0 +1,78 @@
+﻿@using EMS.Web.Models.Others
+@{
+    Layout = null;
+}
+
+
+<div class="addedit-addEditProjectDeveloper">
+
+
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Add/Edit Project Developer(s)" })
+
+    <div class="modal-body">
+        <div id="koProjectDeveloper">
+            @using (Html.BeginForm("AddEditProjectDeveloper", "Project", FormMethod.Post, new { @id = "addEditDeveloperForm", data_bind = "submit:saveProjectDeveloper" }))
+            {
+                <div class="form-group">
+                    <input type="hidden" id="hdnProjectId" value="@ViewBag.ProjectId" />
+                    <div class="row margin-bottom20">
+                        <div class="col-md-3">
+                            <strong class="">Project Developer</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Virtual Developer</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Remark</strong>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Status</strong>
+                        </div>
+                        <div class="col-lg-1">
+                            <strong>Action</strong>
+                        </div>
+                    </div>
+                    <hr />
+                    <div id="devModal-Process" style="text-align:center;display:none">
+                        <img src="~/Content/images/blue-loading-gif-transparent-9.gif" width="50" height="50" />
+                    </div>
+                    <div data-bind="foreach:{data:ProjectDevelopers}">
+                        <div class="row margin-bottom10">
+                            <div class="col-md-3">
+                                <select data-bind="options:$parents[0].ActualDevelopers,optionsText:'text',optionsValue:'value',optionsCaption:'--Select Developer--',value: Uid,attr:{'name':'ProjectDeveloperMapping['+$index()+'].Uid'}" class="form-control"></select>
+                           
+                            </div>
+                            <div class="col-md-3">
+
+                                <select data-bind="options:$parents[0].VirtualDevelopers,optionsText: 'text',optionsValue: 'value',optionsCaption:'--Virtual Developers--',value:VirtualDeveloperID,attr:{'name':'ProjectDeveloperMapping['+$index()+'].VirtualDeveloperID'}" class="form-control" required></select>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.TextArea("txtAreaRemark", new { data_bind = "value:Remark,attr:{'name':'ProjectDevelopingMapping['+$index()+'].Remark'}", @class = "form-control" })
+
+                            </div>
+                            <div class="col-md-2">
+                                <select data-bind="options:$parents[0].StatusList,optionsText:'text',optionsValue:'value',value:Status,attr:{'name':'ProjectDeveloperMapping['+$index()+'].status'}" class="form-control"></select>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-default AddNewProjectDeveloper" data-bind="click:$parent.addProjectDevelopers,visible:$parent.ProjectDevelopers().length==($index()+1)" type="button">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                                <button class="btn btn-default" data-bind="click:$parent.removeProjectDeveloper,visible:$parent.ProjectDevelopers().length>1" type="button">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    @await Html.PartialAsync("_ModalFooter", new ModalFooter { DefaultButtonCss = false, SubmitButtonID = "btn_SubmitProjectDev", SubmitButtonText = "Submit", CancelButtonText = "Cancel", OnlyCancelButton= !ViewBag.IsEditable })
+
+            }
+        </div>
+        @* A quick brown fox jump over the lazy dog*@
+    </div>
+
+
+</div>
+
+

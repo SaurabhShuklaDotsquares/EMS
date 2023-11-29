@@ -1,0 +1,144 @@
+﻿@model StudyDocumentsDto
+@{
+    var pageTitle = Model.Id > 0 ? "Update Study Center Documents" : "Add Study Center Documents";
+    ViewBag.Title = pageTitle;
+}
+
+<div class="full-wdth padding20">
+    <h2 class="pull-left">@pageTitle</h2>
+    <div class="clearfix"></div>
+
+    @* notification *@
+    <partial name="_Notification"></partial>
+
+    <div id="validation-summary"></div>
+
+    <div class="ems-form create-form-outer-box">
+        <form id="frmstudydocuments" asp-action="addedit" asp-controller="StudyDocuments" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-10">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Title*</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-red"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-md-9">
+                            <textarea asp-for="Description" class="form-control" style="height:60px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Upload Documents* (only .docx, .pdf)</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="file" name="documents" id="documents" accept="application/pdf,application/msword,
+  application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple style="width:100px;" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label id="viewsdf" style="cursor:pointer;display:none;">View Attached File(s)</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div id="dvsdf" style="display:none;">
+                                @{
+                                    var folderPath = System.IO.Path.Combine(SiteKey.DomainName, "upload", "studydocuments");
+                                    <table id="tblsdf" border="1" class="table" style="width:100%;">
+                                        @for (int i = 0; i < Model.studyDocumentFiles.Count; i++)
+                                        {
+                                            var filePath = System.IO.Path.Combine(folderPath, Model.studyDocumentFiles[i].FileName);
+
+                                            <tr class="clssdf">
+                                                <td style="width:10%;text-align:center;" class="clsresetindex" data-rowno="">@(i + 1)</td>
+                                                <td style="width: 40%;padding-left: 15px;">
+
+                                                    <input type="hidden" asp-for="@Model.studyDocumentFiles[i].Id" class="clsresetindex" />
+                                                    <input type="hidden" asp-for="@Model.studyDocumentFiles[i].FileName" class="clsresetindex" />
+
+                                                    <a href="@filePath" target="_blank" style="color:blue;">@Model.studyDocumentFiles[i].DisplayName</a>
+                                                </td>
+                                                <td style="width: 40%;padding-left: 15px;">
+
+                                                    <label>File Display Name*</label>
+                                                    <input asp-for="@Model.studyDocumentFiles[i].DisplayName" class="form-control clsresetindex clsdisplayname" />
+                                                    <label id="studyDocumentFiles_@(i)__DisplayName-error" class="error clsresetindex" for="studyDocumentFiles_@(i)__DisplayName"></label>
+                                                    <span asp-validation-for="@Model.studyDocumentFiles[i].DisplayName" class="text-red clsresetindex"></span>
+                                                </td>
+                                                <td style="width:10%;text-align:center;">
+                                                    <a href="javascript:void(0)" data-filename="" style="color:blue;">Remove</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Technology*</label>
+                        </div>
+                        <div class="col-md-5 ">
+                            <div class="custom-select2-dropdown-wrapper">
+                            <select asp-for="TechnologyId" asp-items="@ViewBag.TechnologyList">
+                                <option value="">Select Technology</option>
+                            </select>
+                            <span asp-validation-for="TechnologyId" class="text-red"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Active</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input asp-for="IsActive" />
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-custom">Save</button>
+                            <a href="@Url.Action("index","studydocuments")" class="btn btn-custom">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+@section styles{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/css/custom-css/studydocuments/studydocuments.css" rel="stylesheet" asp-append-version="true" />
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/ckeditor/ckeditor.js"></script>    
+    <script src="~/scripts/customjs/studydocuments/StudyDocumentCommon.js" asp-append-version="true"></script>
+    <script src="~/scripts/customjs/studydocuments/addedit.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Estimate Hosting Package";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <partial name="_Notification" />
+        <div class="estimateDocument-page fullwidth">
+            <h2>
+                @ViewData["Title"]
+                <a class="btn btn-custom pull-right" href="/estimatehostingpackage/manage">Add New</a>
+                <span class="btn btn-custom pull-right margin-right5" id="btnsearch">Search</span>
+                <div class="col-md-2 pull-right">
+                    <input class="form-control" id="packagename" placeholder="Package Name" />
+                </div>
+            </h2>
+            <div class="clearfix full-wdth margin-bottom15">
+                <section id="div-grid-EstimateDoc">
+                    <table class="table postable table-responsive table-bordered table-condensed" id="grid-estimatehostingpackage"></table>
+                </section>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/CustomJS/estimatehostingpackage/index.js" asp-append-version="true"></script>
+}
+
+

@@ -1,0 +1,109 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model ProjectClosureIndexDto
+@{
+    ViewBag.Title = "Project Engagement Report";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+        @Html.Partial("_Notification")
+
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="pull-left">Project Engagement Report</h2>
+                </div>
+                <div class="col-md-6 text-right info-block1">
+                    <a href="@Url.Action("DownloadExcel")" target="_blank" class="margin-right10">
+                        <img src="~/images/icons/excel.png" alt="ExportToExcel" Height="21" Width="21" /> Export To Excel
+                    </a>
+                    <span class="color-info"><i class="chasebg"></i>Poor</span>
+                    <span class="color-info"><i class="convertedbg"></i>Promising</span>
+                    <span class="color-info"><i class="actionbg"></i>Average</span>
+                  
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+                    @Html.TextBox("txtSearch", null, new { @class = "form-control", @placeholder = "CRM ID/Client/Project name" })
+                </div>
+
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+                    <div class="input-group">
+                        @Html.TextBox("ReportDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date Range", @style = "background-color: #fff;" })
+                        <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    <select class="form-control" id="chaseStatus">
+                        <option value="1">Next Chased</option>
+                        <option value="2">Last Chased</option>
+                        <option value="3">Date Of Closing</option>
+                    </select>
+                </div>
+
+                @if (Model.IsDirector)
+                {
+                    <div class="col-sm-6 col-md-3 col-lg-1 form-group">
+                        @Html.DropDownListFor(model => model.PMUid, Model.PMList, "Select PM", new { @class = "form-control" })
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-6 col-md-3 col-lg-1 form-group">
+                        @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "Select BA", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-1 form-group">
+                        @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "Select TL", new { @class = "form-control" })
+                    </div>
+                }
+
+                <div class="col-sm-6 col-md-3 col-lg-1 form-group">
+                    <select asp-for="ProjectStatus" asp-items="Html.GetEnumSelectList(typeof (Enums.CloserType))"></select>
+                    @*@Html.EnumDropDownListFor(model => model.ProjectStatus, true, "All Records", new { @class = "form-control" })*@
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-1 form-group">
+                    @Html.DropDownListFor(model => model.CRMStatusId, Model.CRMStatus, "Projet CRM Status", new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group text-right">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+
+        <div id="div_baconversion" class="form-group clearfix">
+
+        </div>
+
+        <table id="grid-projectcloser" class="table table-stats"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-delete-projectClosure", AreaLabeledId = "modal-delete-projectClosure-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-status-projectClosure", AreaLabeledId = "modal-status-projectClosure-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-chase-projectClosure", AreaLabeledId = "modal-chase-projectClosure-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-detail-projectClosure", AreaLabeledId = "modal-detail-projectClosure-label", Size = Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-review-projectClosure", AreaLabeledId = "modal-review-projectClosure-label", Size = Enums.ModalSize.Large })
+
+@section scripts{
+    <script>
+        var isDirector = "@Model.IsDirector.ToString().ToLower()";
+    </script>
+
+   <script src="/Scripts/plugin/FullCalender/Js/moment.min.js"></script>
+    <script src="/Scripts/plugin/DateRangePicker/daterangepicker.js"></script>
+    <script src="/Scripts/CustomJS/ProjectClosure/projectClosure-index.js" asp-append-version="true"></script>
+    @*<script src="~/bundles/ProjectClosure/index"></script>*@
+}

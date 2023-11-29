@@ -1,0 +1,27 @@
+﻿<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Review Time Sheet</h2>
+            <div class="dis-block clearfix">
+                <div class="pull-right box2">
+                    <label class="pull-left" style="margin: 9px 10px 0 0;">Select Employee:</label> @Html.DropDownList("ddl_User", ViewBag.UserList as IEnumerable<SelectListItem>, new { @class = "form-control pull-left", @style = "width:200px;", @required = "required" })
+                </div>
+            </div>
+            <div class="box marR7 flotR margin-top20" id="div_verified">
+                <button type="button" class="btn btn-custom pull-right orange" id="btn_verified" style="display:none">Verified</button>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-timesheetReview" class="display postable table table-bordered table-striped table-condensed"></table>
+                </section>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+@section scripts
+    {
+    <script src="~/Scripts/CustomJS/timeSheetReview.js"></script>
+}

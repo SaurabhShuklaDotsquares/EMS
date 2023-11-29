@@ -1,0 +1,183 @@
+﻿@model MomMeetingDto
+@using EMS.Core;
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Minutes of Meeting Action List";
+}
+@section styles{
+    <link href="~/css/select2.css" rel="stylesheet" />
+    <link href="~/Scripts/plugin/Datepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <style>
+        .table, .form-control, .control-label, .modal-dialog modal-lg tbody tr > td, #grid-minutesOfMeetingTask tbody tr > td {
+            color: #000000;
+        }
+
+        .meeting-status.active {
+            box-shadow: 0 0 5px 0px #000;
+        }
+
+        .scs strong {
+            vertical-align: middle;
+            margin: 0 5px 0 0;
+        }
+    </style>
+}
+<div class="main_content">
+    @Html.HiddenFor(Model => Model.Id)
+    @Html.HiddenFor(Model => Model.MeetingMasterID)
+
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <h2>@Model.MeetingTitle (@Model.DateOfMeetings) - MOM Action </h2>
+            </div>
+            <div class="col-md-6 text-right">
+                <a class="btn btn-custom" href="@Url.Action("Index", "minutesOfMeeting")">Finish Meeting</a>
+                <a class="btn btn-custom" data-target="#modal-add-mom" data-toggle="modal" data-backdrop="static" href="@Url.Action("AddEditTask", "minutesOfMeeting", new { meetingId = Model.Id})">Add New Action</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-9 text-right">
+                <div class="task-statusfilter">
+                    <div class="meeting-status" id="divalltasks">
+                        @Html.CheckBox("chkAllTasks", new { @value = 0, @class = "Chktaskstatus" })
+                        <label for="chkAllTasks">All</label>
+                    </div>
+                </div>
+                <div class="task-statusfilter">
+                    <div class="meeting-status" id="divpending">
+                        @Html.CheckBox("chkPending", new { @value = (byte)Enums.MomMeetingStatus.Pending, @class = "Chktaskstatus" })
+                        <label for="chkPending">@Enums.MomMeetingStatus.Pending.ToString()</label>
+                    </div>
+                </div>
+                <div class="task-statusfilter">
+                    <div class="meeting-status" id="divongoing">
+                        @Html.CheckBox("chkOngoing", new { @value = (byte)Enums.MomMeetingStatus.Ongoing, @class = "Chktaskstatus" })
+                        <label for="chkOngoing">@Enums.MomMeetingStatus.Ongoing.ToString()</label>
+                    </div>
+                </div>
+                <div class="task-statusfilter">
+                    <div class="meeting-status" id="divdelayed">
+                        @Html.CheckBox("chkDelayed", new { @value = (byte)Enums.MomMeetingStatus.Delayed, @class = "Chktaskstatus" })
+                        <label for="chkDelayed">@Enums.MomMeetingStatus.Delayed.ToString()</label>
+                    </div>
+                </div>
+                <div class="task-statusfilter">
+                    <div class="meeting-status" id="divcompleted">
+                        @Html.CheckBox("chkCompleted", new { @value = (byte)Enums.MomMeetingStatus.Completed, @class = "Chktaskstatus" })
+                        <label for="chkCompleted"> @Enums.MomMeetingStatus.Completed.ToString()</label>
+                    </div>
+                </div>
+                <div class="task-statusfilter">
+                    <div class="meeting-status" id="divfuturetask">
+                        @Html.CheckBox("chkFutureTask", new { @value = (byte)5, @class = "Chktaskstatus" })
+                        <label for="chkFutureTask"> Future Action</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3" id="momPriorityStatusdiv">
+                <div id="calendardiv">
+                    <div class="calendar-box clearfix">
+                        <div class="cald-box1 clearfix">
+                            <div class="cald-box1 clearfix">
+                                <div class="col-md-12 padding-top5 text-right pull-right">
+                                    <span class="text-right">
+                                        <span class="statusfilter">
+                                            <span class="info-block2">
+                                                <i class="priorityLow"></i><span>Low</span>
+                                            </span>
+                                            <span class="info-block2">
+                                                <i class="priorityMedium"></i><span>Medium</span>
+                                            </span>
+                                            <span class="info-block2">
+                                                <i class="priorityHigh"></i><span>High</span>
+                                            </span>
+                                            <span class="info-block2">
+                                                <i class="priorityVeryHigh"></i><span>Very High</span>
+                                            </span>
+                                        </span>
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                @Html.DropDownListFor(model => model.Paticipants, Model.PaticipantList, "All Participants", htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+            </div>
+            <div class="col-sm-7 text-right" style="top:13px;">
+                <label style="font-size:12px;"><strong>Note :</strong> Pending,Ongoing,Delayed status show those actions which has target date till today.</label>
+
+            </div>
+        </div>
+
+        <table id="grid-minutesOfMeetingTask" class="table table-stats table-hover table-responsive"></table>
+    </div>
+</div>
+
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-add-mom", AreaLabeledId = "modal-add-mom-label", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-view-mom", AreaLabeledId = "modal-view-mom-label", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-decision-mom", AreaLabeledId = "modal-decision-mom-label", Size = Enums.ModalSize.Medium })
+
+<div aria-hidden="true" aria-labelledby="modal-mom-label-agenda" role="dialog" tabindex="-1" id="modal-mom-agenda" class="modal fade">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>    <div class="modal-body">
+                <div class="form-group clearfix">
+                    <div class="col-md-12">
+                        <div class="row showComment">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="modal-mom-label-participant" role="dialog" tabindex="-1" id="modal-mom-participants" class="modal fade">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group clearfix">
+                    <div class="col-md-12">
+                        <div class="row showComment">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@section scripts{
+    <script src="~/ckeditor/ckeditor.js" asp-append-version="true"></script>
+    <script src="~/bundles/Select2"></script>
+    <script src="~/bundles/DataTimePicker" asp-append-version="true"></script>
+    @*<script src="~/Scripts/CustomJS/MOM/viewtask.js" asp-append-version="true"></script>*@
+    <script src="~/bundles/MOM/viewtask" asp-append-version="true"></script>
+}
+
+
+

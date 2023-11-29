@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewData["Title"] = "ManageLibraryDownloadPermissionList";
+}
+
+@section styles{
+    <style>
+        .background-aqua {
+            background-color: #f7efef !important;
+        }
+
+        .paddingRemove {
+            padding: 0px !important;
+        }
+    </style>
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div id="MessageDiv"></div>
+        @Html.Partial("_Notification")
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="full">
+                            <div class="pull-left col-md-12">
+                                <h2>Manage Library Download Permission List</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body dataTable-paging">
+                    <section id="no-more-tables">
+                        <table id="grid-LibraryDwnloadPermission" class="table default-table black-theme-table"></table>
+                    </section>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="divoverlay">
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-delete-LibDownloadPermission", AreaLabeledId = "modal-delete-LibDownloadPermission-label", Size = Enums.ModalSize.Medium })
+
+@section scripts
+    {
+    <script src="~/Scripts/CustomJS/LibraryManagement/LibraryDownloadPermission.js"></script>
+
+}

@@ -1,0 +1,63 @@
+﻿@model ProjectClientFeedbackDto
+@{
+    ViewBag.Title = "Project Client Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .doc-list {
+        border-left: 1px solid rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+        .doc-list li {
+            width: 50%;
+            padding: 10px 15px;
+            border-right: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+            .doc-list li a {
+                word-break: break-all;
+            }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{await Html.RenderPartialAsync("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="pull-left col-md-4">
+                    <h2 class="">Project Client Feedback</h2>
+                </div>
+                
+                <div class="pull-right">
+                    <div class="pull-left margin-top5 margin-right5"><label>Project :</label></div>
+                    <div class="pull-left">
+                        <select id="ProjectList" asp-items="Model.ProjectList" class="form-control">
+                            <option value="0">-- Select Project --</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-custom pull-left margin-left5" id="btn_search">Search</button>
+                    <div class="pull-left" style="padding-left:3px;">
+                        <a class="btn btn-custom" href="@Url.Action("AddEditFeedback")" data-target="#modal-AddEditFeedback-detail" data-toggle="modal" data-backdrop="static">Add New</a>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+        <table id="grid-projectclientfeedback" class="table table-stats"></table>
+    </div>
+</div>
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-projectClientFeedback-detail", AreaLabeledId = "modal-projectClientFeedback-detail-Label", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-AddEditFeedback-detail", AreaLabeledId = "modal-AddEditFeedback-detail-Label", Size = Enums.ModalSize.Large })
+@section scripts{
+    <script src="~/bundles/ProjectClientFeedback/index" asp-append-version="true"></script>
+    @*<script src="~/Scripts/CustomJS/ProjectClientFeedback/index.js" asp-append-version="true"></script>*@
+}

@@ -1,0 +1,116 @@
+﻿@using EMS.Core;
+@{
+    ViewBag.Title = "Manage Attendance";
+}
+
+<style type="text/css">
+    tr td, tr th {
+        padding: 10px !important;
+    }
+
+        tr td:first-child {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+    span.watch1 {
+        padding: 5px 15px;
+        color: #fff;
+        border-radius: 2px;
+        background: #4c4c4c; /* Old browsers */
+        background: -moz-linear-gradient(left, #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #111111 60%, #2b2b2b 76%, #000333 90%, #1c1c1c 91%, #131313 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(left, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#111111 60%,#2b2b2b 76%,#000333 90%,#1c1c1c 91%,#131313 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to right, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#111111 60%,#2b2b2b 76%,#000333 90%,#1c1c1c 91%,#131313 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=1 );
+    }
+
+    span.watch {
+        padding: 5px 15px;
+        border-radius: 2px;
+        border: solid 2px #ccc;
+    }
+    /*tr td:nth-child(2),tr td:nth-child(3),tr td:nth-child(4){text-align:center;}*/
+    tr.even {
+        background: white;
+    }
+
+    tr.odd {
+        background: #efefef;
+    }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Manage Attendance</h2>
+            </div>
+            <div class="col-sm-8 pull-right">
+                <div class="row">                   
+                    @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                       || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+           || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+                       || RoleValidator.DV_RoleIds.Contains(CurrentUser.RoleId))
+                    {
+                        <div class="col-md-4 pull-right">@Html.DropDownList("user", (List<SelectListItem>)ViewBag.Users, "All Employee", new { @class = "m-wrap medium form-control" })</div>
+                        if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                        {
+                            <div class="col-md-4 pull-right">@Html.DropDownList("pm", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })</div>
+                        }
+                    }
+                    else
+                    {
+                        @Html.Hidden("user", CurrentUser.Uid)
+                    }
+                </div>
+            </div>
+        </div>
+
+        <span class="font-weight600">Notes:</span>
+
+        <ul style="list-style:disc!important;">
+            <li class="attendance-unorderd-list">Attendance can be checked for last 30 days only.</li>
+            <li class="attendance-unorderd-list">Since the system will be updated daily, in-case of missing in/out punch, an automated email will be sent regarding information for same.</li>
+            <li class="attendance-unorderd-list">Employee has to report same day for missed punch. Any requests raised later shall not be entertained.</li>
+            <li class="attendance-unorderd-list">Any Single punch found (In/Out), shall be marked Absent automatically, advised to keep a check for same (Applies for Saturdays also).</li>
+            <li class="attendance-unorderd-list">In-case you are unable to mark attendance on biometric due to skin or any other problem, please inform HR regarding same & send an email with cc to your respective PM/TL.</li>
+            <li class="attendance-unorderd-list">Attendance for previous day will be updated between 11am-04pm, till that time it will display as “ In Process”</li>
+            <li class="attendance-unorderd-list">Sometimes, due to technical issues attendance might not get updated within specified time, please check next day.</li>
+            <li class="attendance-unorderd-list">Saturdays will be marked as present on completion of 4 hours with both In/Out punch available.</li>
+        </ul>
+        <div class="form-group clearfix">
+            <table id="grid-attendance" class="display postable table table-stats table-condensed"></table>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div class="divoverlay hide"></div>
+@section scripts
+    {
+    <script type="text/javascript">
+
+        var displayinoutTime = @((CurrentUser.RoleId == (int)Enums.UserRoles.PM
+                || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+                ) ?1:0);
+    </script>
+    <script src="~/Scripts/CustomJS/attendance/Index.js" asp-append-version="true"></script>
+}

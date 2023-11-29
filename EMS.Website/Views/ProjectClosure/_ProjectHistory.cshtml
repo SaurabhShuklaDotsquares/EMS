@@ -1,0 +1,55 @@
+﻿@using EMS.Web.Models.Others
+@model ProjectClosureProjectDetailDto
+<style>
+
+    #tblClosure_Details tr {
+        color: #333;
+    }
+
+    #tblClosure_Details td {
+        padding: 10px 7px;
+    }
+</style>
+<div>
+
+
+    <table class="table table-stats">
+        <thead>
+            <tr>
+                <th width="5%">Sr. No.</th>
+                <th width="10%">Date</th>
+                <th width="25%">Reason of closing</th>
+                <th width="35%">Suggestion</th>
+                <th width="15%">Assigned To</th>
+                <th width="10%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                foreach (var item in Model.ClosureHistory)
+                {
+            <tr>
+                <td width="5%">@(i++)</td>
+                <td width="10%">@item.DateOfClosing</td>
+                <td width="25%">@Html.Raw(item.Reason)</td>
+                <td width="35%">@Html.Raw(item.Suggestion)</td>
+                <td width="15%">@Html.Raw(item.AssignedToBA)</td>
+                <td width="10%">
+                    <a id="viewDetail" title="View Detail" href="@(SiteKey.DomainName+"projectclosure/detail/"+item.Id)"
+                       data-toggle="modal" data-target="#modal-detail-projectClosure"
+                       data-backdrop="static">
+                        <i class="glyphicon glyphicon-eye-open" style="color:black"></i>
+                    </a>
+                </td>
+            </tr>
+                }
+            }
+            @if (Model.ClosureHistory.Count == 0)
+            {
+                <tr><td colspan="5" class="text-center">No Record Found.</td></tr>
+            }
+        </tbody>
+    </table>
+
+</div>

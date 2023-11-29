@@ -1,0 +1,110 @@
+﻿@model ProjectLessonDto
+@{
+    ViewBag.Title = "Lesson learned from Project";
+}
+
+@section styles{
+    <style type="text/css">
+        .bg-gray{background-color:#ddd}
+        textarea {height:68px !important;
+        }
+    </style>
+}
+
+<div class="full-wdth padding20">
+    <h2 class="pull-left">Lesson Learned from Project</h2>
+    <div class="clearfix"></div>
+
+    @{ Html.RenderPartial("_Notification"); }
+    <div id="validation-summary"></div>
+
+    <div class="ems-form create-form-outer-box">
+        @using (Html.BeginForm("addedit", "lessonlearned", FormMethod.Post, new { id = "lessonlearnedForm" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(x => x.ProjectId)
+                        </div>
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(x => x.ProjectId,  Model.ProjectList, "-Select-",
+                 htmlAttributes: new { @class = "form-control", @data_msg_required = "*required" })
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-stats">
+                            <thead>
+                                <tr>
+                                    <td width="4%">S.No.</td>
+                                    <td width="20%">Topic</td>
+                                    <td width="19%">What Went Good?</td>
+                                    <td width="19%">What Went Wrong?</td>
+                                    <td width="19%">What Learned?</td>
+                                    <td width="19%">What Impacted?</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int index = 0;
+
+                                    var lessonsGroups = Model.LearnedLessons.GroupBy(x => x.TopicGroup).OrderBy(x=> x.Key);
+
+                                    foreach (var group in lessonsGroups)
+                                    {
+                                        int srNo = 1;
+                                        <tr>
+                                            <td colspan="6" class="text-upper bg-gray"><b>@(group.FirstOrDefault()?.TopicGroupName)</b></td>
+                                        </tr>
+                                        foreach (var lesson in group)
+                                        {
+                                            <tr>
+                                                <td>@(srNo++)</td>
+                                                <td>
+                                                    @lesson.ProjectLessonTopicName
+                                                    @Html.Hidden("LearnedLessons["+index+"].ProjectLessonTopicId", lesson.ProjectLessonTopicId)
+                                                </td>
+                                                <td>
+                                                    @Html.TextArea("LearnedLessons[" + index + "].WhatWentGood", htmlAttributes: new { @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextArea("LearnedLessons[" + index + "].WhatWentBad", htmlAttributes: new { @class = "form-control" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextArea("LearnedLessons[" + index + "].WhatLearned", htmlAttributes: new { @class = "form-control"})
+                                                </td>
+                                                <td>
+                                                    @Html.TextArea("LearnedLessons[" + index + "].WhatImpacted", htmlAttributes: new { @class = "form-control" })
+                                                </td>
+                                            </tr>
+
+                                            index++;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-sm-10 text-right">
+                            <a href="@Url.Action("Index")" class="btn btn-custom">Cancel</a>
+                            <button type="submit" class="btn btn-custom" name="Save">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/bundles/LessonLearned/addedit"></script>
+}

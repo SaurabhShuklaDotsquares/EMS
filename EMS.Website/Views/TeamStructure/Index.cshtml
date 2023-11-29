@@ -1,0 +1,48 @@
+﻿@model TeamStructureDto
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .node {
+        cursor: pointer;
+    }
+
+        .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .node text {
+            font: 10px sans-serif;
+        }
+
+    .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 1.5px;
+    }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row">
+            <div class="col-md-9 text-left">
+                <h2> @Model.Name Team Structure </h2>
+            </div>
+            <div class="col-md-3">
+                @if (Model.IsDropDownVisible)
+                {
+                    @Html.DropDownListFor(model => model.UserId, Model.UserslList, "--Select User--", htmlAttributes: new { @class = "form-control" })
+                }
+            </div>
+        </div>
+        <div id="tree-view"></div>
+    </div>
+</div>
+@section scripts{
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="~/bundles/TeamStructure/index"></script>
+}
+

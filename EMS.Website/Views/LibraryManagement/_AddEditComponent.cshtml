@@ -1,0 +1,68 @@
+﻿@model ComponentTypeDto
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "componentForm" }))
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Create Component" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+        <div class="form-group required">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Name, htmlAttributes: new { @class = "form-control", @placeholder = "Enter Component Name", @maxlength = 100, @required = "required", @id = "name" })
+                    <label id="component-error" class="error" style="" for="Description"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+
+<script>
+    $(document).ready(function () {
+        $('#componentForm').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: domain + 'LibraryManagement/AddComponent',
+                data: { name: $("#name").val() },
+                type: "POST",
+                success: function (result) {
+                    $("#Description-error").text('');
+                    if (result.isSuccess == true) {
+                        $("#modal-add-component").modal("hide");
+                        $("#modal-add-component").data("newComponentTypeName", $("#name").val());
+                        $("#modal-add-component").data("newComponentTypeId", result.data);
+                        $("#name").val('');
+                    } else {
+                        $("#component-error").text(result.message);
+                    }
+                }
+            })
+        });
+
+        $("#name").autocomplete({
+            source:[],
+            minLength: 2
+        });
+
+        $("#name").on("keyup", function () {
+            var value = $("#name").val();
+            if (value.length > 1) {
+                $.ajax({
+                    url: "LibraryManagement/GetComponentAutoComplete",
+                    data: { "prefix": value },
+                    type: 'POST',
+                    success: function (result) {
+                        if (result != "") {
+                            var data = JSON.parse(result);
+                            $("#name").autocomplete("option","source",data);
+                        }
+                    }
+                });
+            }
+            
+        });
+    });
+</script>

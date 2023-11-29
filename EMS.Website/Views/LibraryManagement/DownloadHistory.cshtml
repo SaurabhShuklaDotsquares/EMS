@@ -1,0 +1,126 @@
+﻿@model LibraryDownloadHistoryDto
+@{
+    ViewData["Title"] = "Library Download History";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div id="NotificationMessage"></div>
+        <div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h2>
+                        Library Download History
+                    </h2>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="row">
+                @*<div class="col-sm-12 col-md-3 col-lg-1 form-group txtSearch">
+                        @Html.TextBox("UserName", null, new { @class = "form-control", @placeholder = "User Name" })
+                    </div>*@
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownListFor(model => model.Users, Model.Users, "Select User", new { @class = "form-control chosen" })
+                </div>
+
+                <div class="col-sm-12 col-md-3 col-lg-3 form-group">
+                    <div class="input-group">
+                        @Html.TextBox("HistoryDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date Range", @style = "background-color: #fff;" })
+                        <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group txtSearch">
+                    @Html.TextBox("LibraryTitle", null, new { @class = "form-control", @placeholder = "Component Title" })
+                </div>
+
+                @*@if (Model.IsDirector)
+                    {
+                        <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                            @Html.DropDownListFor(model => model., Model.PMList, "Select PM", new { @class = "form-control" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                            @Html.DropDownListFor(model => model., Model.BAList, "Select BA", new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                            @Html.DropDownListFor(model => model., Model.TLList, "Select TL", new { @class = "form-control" })
+                        </div>
+                    }*@
+
+                <div class="col-sm-6 col-md-3 col-lg-3 form-group  div-btn-footer">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix full-wdth margin-bottom15">
+            <fieldset style="border: 1px">
+                <legend class="actualtop">Library Download Summary</legend>
+                <div class="dis-block" style="color: #000; border-bottom: solid 1px #fff; text-align: left;">
+                    <div class="dis-inline pull-left" style="width: 49%; ">
+                        <table id="tblDwnloadHistSummaryLeft" class="table table-stats">
+                            <thead>
+                                <tr>
+                                    <th style="width: 44%;">
+                                        Component Name
+                                    </th>
+                                    <th class="" width="14%" style="text-align: center;">
+                                        Total Download
+                                    </th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="dis-inline pull-left" style="width: 2%;">
+                        &nbsp;
+                    </div>
+                    <div id="dvbeforedetail" class="dis-inline pull-left" style="width: 49%;">
+                        <table id="tblDwnloadHistSummaryRight" class="table table-stats">
+                            <thead>
+                                <tr>
+                                    <th style="width: 44%;">
+                                        Component Name
+                                    </th>
+                                    <th class="" width="14%" style="text-align: center;">
+                                        Total Download
+                                    </th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div style="clear: both;">
+                    </div>
+                </div>
+                <div style="visibility:visible !important;float: left;padding-right:27px;">
+                    <span id="btnMore" class="more showmoreless" style="width: 100%; float: right; cursor: pointer; text-decoration: underline; color: navy; border: 0px; background: none; box-shadow: none; border-radius: 0px; display: block;">More</span>
+                    <br>
+                    <span id="btnLess" class="less showmoreless" style="width:100%;float:right;cursor:pointer;text-decoration:underline;color:navy;border:0px;background:none;box-shadow: none; border-radius: 0px; display: none;">Less</span>
+                </div>
+            </fieldset>
+        </div>
+
+        <table id="grid-LibraryDownloadHistoryList"
+               class="table default-table black-theme-table"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/Scripts/plugin/SearchDropdown/choosen.js"></script>
+    <script src="~/bundles/Home/Moment" asp-append-version="true"></script>
+    <script src="~/Scripts/CustomJS/LibraryManagement/DownloadHistory.js" asp-append-version="true"></script>
+
+}

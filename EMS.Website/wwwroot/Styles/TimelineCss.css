@@ -1,0 +1,117 @@
+﻿
+.timeline {
+    width: 100%;
+    background-color: #072736;
+    color: #fff;
+    padding: 30px 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+    margin-bottom:5px;
+}
+
+    .timeline ul {
+        list-style-type: none;
+        border-left: 2px solid #094a68;
+        padding: 10px 5px;
+    }
+
+        .timeline ul li {
+            padding: 20px 20px;
+            position: relative;
+            cursor: pointer;
+            transition: .5s;
+        }
+
+            .timeline ul li span {
+                display: inline-block;
+                background-color: #4cadd9;
+                border-radius: 25px;
+                padding: 2px 5px;
+                font-size: 15px;
+                text-align: center;
+                color: white;
+            }
+            .timeline ul li span.txt {
+                display: inline-block;
+                background-color: #0F0;
+                border-radius: 25px;
+                padding: 2px 5px;
+                font-size: 15px;
+                text-align: center;
+                color:black;
+            }
+
+            .timeline ul li .content h3 {
+                color: #34ace0;
+                font-size: 17px;
+                padding-top: 5px;
+            }
+
+            .timeline ul li .content p {
+                padding: 5px 0px 15px 0px;
+                font-size: 15px;
+            }
+
+            .timeline ul li:before {
+                position: absolute;
+                content: '';
+                width: 10px;
+                height: 10px;
+                background-color: #34ace0;
+                border-radius: 50%;
+                left: -11px;
+                top: 28px;
+                transition: .5s;
+            }
+
+           /* .timeline ul li:hover {
+                background-color: #071f2a;
+            }
+
+                .timeline ul li:hover:before {
+                    background-color: #0F0;
+                    box-shadow: 0px 0px 10px 2px #0F0;
+                }*/
+
+            .timeline ul li.selected {
+                background-color: #071f2a;
+            }
+
+                .timeline ul li.selected:before {
+                    background-color: #0F0;
+                    box-shadow: 0px 0px 10px 2px #0F0;
+                }
+.number {
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    margin-right: 14px;
+    border: 2px solid #86d5f9;
+}
+.step {
+    display: flex;
+    position: relative;
+}
+h1{
+    color:white;
+    text-align:center;
+}
+
+@media (max-width:300px) {
+    .timeline {
+        width: 100%;
+        padding: 30px 5px 30px 10px;
+    }
+
+        .timeline ul li .content h3 {
+            color: #34ace0;
+            font-size: 15px;
+        }
+}

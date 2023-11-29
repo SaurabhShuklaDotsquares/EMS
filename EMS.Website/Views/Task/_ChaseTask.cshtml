@@ -1,0 +1,24 @@
+﻿@using EMS.Web.Models.Others
+@model Commentdto
+<div>
+    @using (Html.BeginForm("chase", "task", FormMethod.Post, new { @id = "chase-task-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.TaskID)
+        @Html.HiddenFor(m => m.TaskStatusID)
+        @Html.HiddenFor(m => m.User)
+
+        @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Email" })
+
+        <div class="modal-body">
+            <div id="validation-summary"></div>
+            <div class="form-group required clearfix">
+                <label class="control-label " for="Comment">Comment</label>
+                @Html.TextAreaFor(model => model.Comment, 10, 10, new { @class = "form-control ", @maxlength = 500 })
+            </div>
+        </div>
+
+        @Html.Partial("_ModalFooter", new ModalFooter { })
+    }
+</div>
+<script src="~/Scripts/CustomJS/Task/task-chasepopup.js"></script>

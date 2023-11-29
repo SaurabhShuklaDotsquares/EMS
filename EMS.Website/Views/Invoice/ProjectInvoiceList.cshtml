@@ -1,0 +1,38 @@
+﻿@model InvoiceFilterDto
+@{
+    ViewBag.Title = "Project Invoice List";
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div id="NotificationMessage"></div>
+        <div class="manage-ProjectList-page">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h2>
+                        CRM Project Invoices List
+                    </h2>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                    <a href="@Url.Action("Index","Invoice")" class="btn btn-custom" style="margin-right:4px;">Back</a>
+                    <button class="btn btn-custom" id="updateCrminvoices">
+                        Update Invoice From Crm
+                    </button>
+                </div>
+            </div>
+            <div class="row hidden">
+                <div class="col-sm-12">
+                    @Html.DropDownList("BAList", Model.BAList, "--Select BA--", new { @class = "form-control" })
+                    @Html.DropDownList("TLList", Model.TLList, "--Select TL--", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        
+        <table id="grid-projectInvoiceList" class="table table-stats"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/bundles/Invoice/invoiceList"></script>  
+}

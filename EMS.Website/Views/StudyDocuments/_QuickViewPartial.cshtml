@@ -1,0 +1,142 @@
+﻿@model StudyDocumentsQuickViewDto
+@{
+    Layout = null;
+}
+
+
+<div class="modal-body library-detail-popup">
+    <div class="detail-cont flex-wrap">
+
+        <div class="row form-group" style="margin:0px">
+            <div class="col-sm-11">
+
+                <div id="validation-summary-quickview"></div>
+
+            </div>
+        </div>
+
+        <div class="dt-desc">
+            <h4 class="modal-title" id="exampleModalLabel">
+                View Study Center
+            </h4>
+            <hr />
+
+            <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                <img src="~/images/close-black.png" />
+            </button>
+
+            <div class="ems-form create-form-outer-box">
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Title</label>
+                            </div>
+                            <div class="col-md-9">
+                                @Model.Title
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Description</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-control" style="height:100px;overflow-y:auto;">
+                                    @Html.Raw(Model.Description)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Technology</label>
+                            </div>
+                            <div class="col-md-9">
+                                @Model.Technology
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Active</label>
+                            </div>
+                            <div class="col-md-3">
+                                @{
+                                    if (Model.IsActive)
+                                    {
+                                        <text>True</text>
+                                    }
+                                    else
+                                    {
+                                        <text>False</text>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Attached File(s)</label>
+                            </div>
+                            <div class="col-md-9">
+                                @{
+                                    var folderPath = System.IO.Path.Combine(SiteKey.DomainName, "upload", "studydocuments");
+                                    <table border="1" class="table" style="width:100%;">
+                                        @for (int i = 0; i < Model.studyDocumentFiles.Count; i++)
+                                        {
+                                            var filePath = System.IO.Path.Combine(folderPath, Model.studyDocumentFiles[i].FileName);
+
+                                            <tr class="clssdf">
+                                                <td style="width:10%;text-align:center;" class="clsresetindex" data-rowno="">@(i + 1)</td>
+                                                <td style="width: 75%;padding-left: 15px;">
+                                                    <a href="@filePath" target="_blank" style="color:blue;">@Model.studyDocumentFiles[i].DisplayName</a>
+                                                </td>
+                                                <td style="width:15%;text-align:center;">
+                                                    <a href="javascript:void(0);" class="clsdelSdfile" data-keyid="@Model.KeyId" data-filekeyid="@Model.studyDocumentFiles[i].KeyId" style="color:blue;">Remove</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Allowed User(s)</label>
+                            </div>
+                            <div class="col-md-9">
+                                @if (Model.userPermissions.Count > 0)
+                                {
+                                    <table border="1" class="table" style="width:100%;">
+                                        @for (int i = 0; i < Model.userPermissions.Count; i++)
+                                        {
+                                            <tr>
+                                                <td style="width:10%;text-align:center;">@(i + 1)</td>
+                                                <td style="width: 90%;padding-left: 15px;">
+                                                    <a asp-action="AddEditPermission" asp-controller="studydocuments" asp-route-id="@Model.KeyId" asp-route-uid="@Model.userPermissions[i].EncryptedUserId" style="color:blue;" target="_blank">@Model.userPermissions[i].UserName</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                                else
+                                {
+                                    <div style="margin-top: 5px;">No User</div>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

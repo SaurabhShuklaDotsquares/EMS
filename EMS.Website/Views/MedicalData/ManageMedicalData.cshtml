@@ -1,0 +1,293 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.MedicalDataDto
+@using EMS.Core
+@{
+    ViewBag.Title = "Manage Medical Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var titleList = typeof(EMS.Core.Enums.Title).EnumToDictionaryWithDescription().Select(s => new SelectListItem { Text = s.Key, Value = s.Value.ToString() }).ToList();
+    var genderList = typeof(EMS.Core.Enums.Gender).EnumToDictionaryWithDescription().OrderByDescending(x => x.Value).Select(s => new SelectListItem { Text = s.Key, Value = s.Value.ToString() }).ToList();
+
+
+    var relationList = typeof(EMS.Core.Enums.RelationType).EnumToDictionaryWithDescription().Select(s => new SelectListItem { Text = s.Key, Value = s.Value.ToString() }).ToList();
+
+}
+
+
+
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .no-padding {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Manage Medical Data</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform" id="leaveform">
+                        @using (Html.BeginForm("ManageMedicalData", "MedicalData", FormMethod.Post, new { @id = "Form1" })) {
+                            @Html.HiddenFor(x => x.Id)
+                            @Html.HiddenFor(x => x.UserId)
+                            @Html.HiddenFor(x => x.AddedDate)
+                        <div class="row dvuser">
+                            <div class="col-md-6">
+                                <div class="col-md-6">
+                                    <label>Employee Name:</label>
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.DropDownListFor(x => x.NameTitle, titleList, null, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(x => x.Name, null, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            @if (Model.PremiumTotal > 0) {
+                                <div class="col-md-6">
+
+                                    <div class="col-md-3">
+                                        <label style="color:brown; font-size:14px;">Total Premium in Rs.</label><br />
+                                        <label style="font-size: 14px;color:red; ">@Model.PremiumTotal</label>
+                                    </div>
+                                    @if (Model.PremiumPerMonth > 0) {
+                                        <div class="col-md-4">
+                                            <label style="color:brown; font-size:14px;">Premium Per Month in Rs.</label><br />
+                                            <label style="font-size: 14px;color:red; ">@Model.PremiumPerMonth</label>
+                                        </div>
+                                    }
+                                        <div class="col-md-5">
+                                            <label style="font-size: 14px;color:darkgreen;  ">Total Coverage Rs.@Model.TotalCoverage (Family Floater, Validity: @Model.Validity Year) </label><br />
+                                            <b><a target="_blank" class="fa fa-download" title="Download Policy Document" href="@(SiteKey.DomainName)upload/medicalpolicy/Insurance_policy_star_health.pdf" style="font-size:14px;color:blue;"> Features of Health Insurance Policy</a></b>
+                                        </div>
+
+                                </div>
+                            }
+                            else {
+                                <div class="col-md-6">
+
+                                    <b><a target="_blank" class="fa fa-download" title="Download Policy Document" href="@(SiteKey.DomainName)upload/medicalpolicy/Insurance_policy_star_health.pdf" style="font-size:14px;color:blue;"> Features of Health Insurance Policy</a></b>
+                                </div>
+                                    }
+                                </div>
+                                <div class="row dvuser">
+                                    <div class="col-md-6">
+                                        <div class="col-md-6">
+                                            <label>Employee Code:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @if (!string.IsNullOrWhiteSpace(Model.EmployeeCode)) {
+                                                @Html.Label(Model.EmployeeCode)
+                                                @Html.HiddenFor(x => x.EmployeeCode)
+                                            }
+                                            else {
+                                                @Html.TextBoxFor(x => x.EmployeeCode, null, new { @class = "form-control" })
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row dvuser">
+                                    <div class="col-md-6">
+                                        <div class="col-md-6">
+                                            <label>Gender:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(x => x.Gender, genderList, null, new { @class = "form-control", required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row dvuser">
+                                    <div class="col-md-6">
+                                        <div class="col-md-6">
+                                            <label>Designation:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.Designation, null, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row dvuser">
+                                    <div class="col-md-6">
+                                        <div class="col-md-6">
+                                            <label>Date Of Birth:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.DOB, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                /*Start add  for medicaldata relative 23 Nov */
+                                <div class="row dvuser">
+                                    <div class="col-md-6">
+                                        <div class="col-md-6">
+                                            <label>I wish to be a part of proposed company group insurance policy</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.CheckBoxFor(x => x.ShowRelative, new { @id = "chk_relative" })
+                                        </div>
+                                    </div>
+                                </div>
+                                /*End add  for medicaldata relative 23 Nov */
+                                /*add show_relative class and style  for medicaldata relative 23 Nov */
+                                <div class="relativeparent show_relative" style="display:none">
+                                    <h2>Relative Data</h2>
+                                    @{ int i = 0; }
+                                    @while (i < Model.Relatives.Count) {
+                                        <div class="relativedata" data-number="@(i+1)">
+                                            @Html.HiddenFor(x => x.Relatives[i].Id)
+                                            @Html.HiddenFor(x => x.Relatives[i].AddedDate)
+
+                                            <div class="row">
+                                                <label class="lblnumber">Relative @(i + 1)</label>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Name:</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @Html.DropDownListFor(x => x.Relatives[i].NameTitle, new SelectList(titleList, "Value", "Text", Model.Relatives[i].NameTitle), null, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @Html.TextBoxFor(x => x.Relatives[i].Name, null, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Gender:</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @Html.DropDownListFor(x => x.Relatives[i].Gender, new SelectList(genderList, "Value", "Text", Model.Relatives[i].Gender), null, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Relation:</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @Html.DropDownListFor(x => x.Relatives[i].Relation, new SelectList(relationList, "Value", "Text", Model.Relatives[i].Relation), null, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Date Of Birth:</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @Html.TextBoxFor(x => x.Relatives[i].DOB, null, new { @class = "form-control datepicker" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        i++;
+                                    }
+                                    @if (Model.Relatives.Count == 0) {
+                                        <div class="relativedata hide" data-number="@i">
+                                            <div class="row">
+                                                <label class="lblnumber">Relative @(i + 1)</label>
+                                            </div>
+                                            @Html.Hidden("Relatives[" + i + "].Id", 0)
+                                            @Html.Hidden("Relatives[" + i + "].AddedDate", DateTime.Now)
+
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Name:</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @Html.DropDownList("Relatives[" + i + "].NameTitle", titleList, null, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @Html.TextBox("Relatives[" + i + "].Name", null, new { @class = "form-control childName" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Gender:</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @Html.DropDownList("Relatives[" + i + "].Gender", new SelectList(genderList, "Value", "Text"), null, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Relation:</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @Html.DropDownList("Relatives[" + i + "].Relation", relationList, null, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row dvuser">
+                                                <div class="col-md-6">
+                                                    <div class="col-md-6">
+                                                        <label>Date Of Birth:</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+
+                                                        @Html.TextBox("Relatives[" + i + "].DOB", null, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", @readonly = "readonly" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                /*add show_relative class and style  for medicaldata relative 23 Nov */
+                                <div class="row">
+                                    <div class="col-md-3 show_relative" style="display:none">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-success" id="btnaddrelatives">Add More Relatives</a>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                                        <button type="submit" class="btn btn-custom" name="Save">Save</button>
+                                    </div>*@
+                                </div>
+                            }
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .lblnumber {
+        position: relative;
+        padding-left: 30px;
+        font-size: 17px;
+    }
+
+        .lblnumber:before {
+            content: "";
+            background: #e18f00;
+            height: 2px;
+            width: 20px;
+            display: block;
+            position: absolute;
+            bottom: 0;
+        }
+</style>
+
+@section scripts
+    {
+    <script src="~/Scripts/CustomJS/MedicalData/manageMedicalData.js" asp-append-version="true"></script>
+}

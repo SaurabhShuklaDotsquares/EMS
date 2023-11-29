@@ -1,0 +1,23 @@
+﻿@using EMS.Website.Code.LIBS;
+@{
+    EMS.Web.LIBS.Notification model = new EMS.Web.LIBS.Notification();
+    if (ViewData["NotificationModel"] != null)
+    {
+        model = ViewData["NotificationModel"] as EMS.Web.LIBS.Notification;
+    }
+    else
+    {
+        model = TempData.Get<EMS.Web.LIBS.Notification>("NotificationModel");
+    }
+}
+
+@if (model != null)
+{
+    <div class="alert alert-@(model.Type.ToString().ToLower()) alert-dismissable">
+        @*<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>*@
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        @Html.Raw(model.Message)
+    </div>
+}

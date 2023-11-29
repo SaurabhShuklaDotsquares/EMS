@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TimeSheetSummaryReportDto>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="roundedL"></th>
+            <th>Project</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null && Model.Count() > 0)
+        {
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count = count + 1;
+                <tr>
+                    <td style="width: 8%;text-align:center;vertical-align:top;">@count</td>
+                    <td>@item.ProjectName</td>
+                    <td>@item.StartDate</td>
+                    <td>@item.EndDate</td>
+                </tr>
+
+            }
+        }
+        else
+        {
+            <tr class="tr-norecord">
+                <td colspan="5" style="font-size:larger; text-align:center;">No Record Found !!</td>
+            </tr>
+        }
+    </tbody>
+</table>

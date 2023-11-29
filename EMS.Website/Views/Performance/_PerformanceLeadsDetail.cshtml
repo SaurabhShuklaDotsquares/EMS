@@ -1,0 +1,40 @@
+﻿@model List<LeadDto>
+
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Estimate Details" }); }
+
+<div class="modal-body">
+    @if (Model != null && Model.Count > 0)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Estimated time in days</th>
+                    <th scope="col">Generated date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(++index)</td>
+                            <td>@item.Title</td>
+                            <td>@item.ClientName</td>
+                            <td>@item.EstimateTimeInDays</td>
+                            <td>@item.AddDate.ToFormatDateString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

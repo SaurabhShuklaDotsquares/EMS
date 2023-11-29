@@ -1,0 +1,14 @@
+{
+  "ConnectionStrings": {
+    "dsmanagementConnection": "Server=192.168.0.252;User Id=usr_dsmanagement; Password=dsmanagement909;Initial Catalog=db_dsmanagementnew;"
+  },
+
+  "SiteKeys": {
+    "HostName": "webmail.24livehost.com",
+    "SMTPUserName": "wwwsmtp@24livehost.com",
+    "SMTPPassword": "dsmtp909#",
+    "SMTPPort": "587",
+    "LogFilePath": "\"D:\\local\\EMSWeb\\TimesheetReminderSchedular\\\""
+  }
+
+}

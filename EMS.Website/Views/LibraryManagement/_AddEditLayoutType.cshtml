@@ -1,0 +1,45 @@
+﻿@model LibraryLayoutTypeDto
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "layoutTypeForm" }))
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Create Layout type" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+        <div class="form-group required">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Name, htmlAttributes: new { @class = "form-control", @placeholder = "Enter Layout Type Name", @maxlength = 100, @autocomplete = "off", @required = "required", @id = "layoutName" })
+                    <label id="layout-error" class="error" style="" for="Description"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+
+<script>
+    $(document).ready(function(){
+        $('#layoutTypeForm').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: domain + 'LibraryManagement/AddLayoutType',
+                data: { name: $("#layoutName").val() },
+                type: "POST",
+                success: function (result) {
+                    $("#Description-error").text('');
+                    if (result.isSuccess == true) {
+                        $("#modal-add-layout").data("newLayoutTypeName", $("#layoutName").val());
+                        $("#modal-add-layout").data("newLayoutTypeId", result.data);
+                        $("#modal-add-layout").modal("hide");
+                        $("#layoutName").val('');
+                    } else {
+                        $("#layout-error").text(result.message);
+                    }
+                }
+            })
+        });
+    });
+</script>

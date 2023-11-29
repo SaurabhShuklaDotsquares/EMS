@@ -1,0 +1,89 @@
+﻿@model LessonLearntDto
+@{
+    ViewData["Title"] = "AddEdit";
+}
+
+<form asp-controller="LessonLearnt" asp-action="AddEdit" method="post">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = $"{(Model.Id > 0 ? "Edit" : "Add")} Lesson Learned" })
+    <div class="modal-body">
+        @*<div id="validation-summary"></div>*@
+        <input type="hidden" asp-for="Id" />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ProjectId" class="control-label">Project Name <span style="font-size:10px;">(if lesson learned related to any project then choose it)</span></label>
+                            <select asp-for="ProjectId" asp-items="Model.ProjectList" class="form-control">
+                                <option value=""> Select Project </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label asp-for="WhatLearnt" class="control-label"></label>
+                            <textarea asp-for="WhatLearnt" class="form-control" required style="min-height:180px;"></textarea>
+                            <span asp-validation-for="WhatLearnt"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="checkbox" asp-for="IsSendEmail" />
+                            <label asp-for="IsSendEmail" class="control-label">Send email for all members of Roles PM,TL,BA and SD ?</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+
+</form>
+
+
+@*<div class="main_content">
+        <div class="full-wdth padding20">
+            <div id="validation-summary"></div>
+
+            <div class="row form-group">
+                <div class="col-sm-12"><h2>@string.Format("{0} Lesson Learnt", Model.Id > 0 ? "Edit" : "Add")</h2></div>
+            </div>
+
+            <form method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="ProjectId" class="control-label"></label>
+                                    <select asp-for="ProjectId" asp-items="Model.ProjectList" class="form-control">
+                                        <option value=""> Select Project </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="WhatLearnt" class="control-label"></label>
+                                    <textarea asp-for="WhatLearnt" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="checkbox" asp-for="IsSendEmail" />
+                                    <label asp-for="IsSendEmail" class="control-label"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <a href="@Url.Action("index")" class="btn btn-custom pull-right">Cancel</a>
+                            <button class="btn btn-custom btn-pink pull-right margin-right10"  type="submit">SUBMIT</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>*@
+

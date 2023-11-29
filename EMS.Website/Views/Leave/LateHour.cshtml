@@ -1,0 +1,72 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model EmployeeListDto
+@{
+    ViewBag.Title = "Late Hour List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link rel="stylesheet" href="~/css/select2.css" />
+    <link rel="stylesheet" href="~/content/scroll/skins.css" />
+   
+    <style>
+        .table > thead:first-child > tr:first-child > th { /* border-top: 0; */
+            background: #333333 none repeat scroll 0 0 !important;
+            color: #fff !important;
+            text-transform: uppercase !important;
+        }
+
+        p {
+            display: block;
+            line-height: 16px !important;
+            margin: 0;
+            padding: 0px !important;
+        }
+
+        .dropdown_employee {
+            width: 200px;
+            position: relative;
+            float: right;
+            margin-left: 10px;
+        }
+
+        .filterLateHour {
+            float: right !important;
+            position: relative !important;
+            margin-left: 13px !important;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="manage-Project-page full-wdth">
+            <h2 style="float:left;">Late Hour</h2>
+
+            <a class="btn btn-warning filterLateHour" href="@(SiteKey.DomainName+"leave/downloadlatehourexcel")">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i> Export Excel
+            </a>
+            <input class="btn btn-warning filterLateHour" type="button" name="name" id="btn_reset" value="Reset" />
+            <input class="btn btn-warning filterLateHour" type="button" name="name" id="btnSearch" value="Search" />
+            @Html.TextBox("dateTo", null, "{0:dd/MM/yyyy}", new { @class = "form-control filterLateHour", @readonly = "readonly", style = "width: 110px;", @placeholder = "To" })
+            @Html.TextBox("dateFrom", null, "{0:dd/MM/yyyy}", new { @class = "form-control filterLateHour", @readonly = "readonly", style = "width: 110px;", @placeholder = "From" })
+            @Html.DropDownListFor(model => model.EmployeeId, Model.SelectEmployeeList, "All Employees", htmlAttributes: new { @class = "form-control dropdown_employee" })
+            <select id="search_lateHour" style="float:right">
+                <option>All</option>
+                <option value="1">Late Hour/Early Leave</option>
+                <option value="2">UnAuthorized</option>
+                <option value="3">Work From Home</option>
+            </select>
+            
+            <section id="no-more-tables">
+
+                <table id="grid-latehour" class="display postable table table-bordered table-condensed"></table>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/Scripts/CustomJS/Leave/latehour-index.js"></script>
+}

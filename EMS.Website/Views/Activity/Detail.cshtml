@@ -1,0 +1,316 @@
+﻿@model ActivityDto
+@using EMS.Core
+
+
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .agreen {
+        color: green !important;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .ared {
+        color: red !important;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    tr.freeuser, tr.freeuser td {
+        background: #FFBABA !important;
+        color: #000 !important;
+        font-weight: normal;
+    }
+
+    tr.working, tr.working td {
+        background: #caffab !important;
+        color: #000 !important;
+        font-weight: normal;
+    }
+
+    tr.nologin, tr.nologin td {
+        background: #f1f1f1 !important;
+        color: #000 !important;
+        font-weight: normal;
+    }
+
+    tr.addassigned, tr.addassigned td {
+        background: #FAC957 !important;
+        color: #000 !important;
+        font-weight: normal;
+    }
+
+    /*.space-br .space {
+        margin-top: 20px;
+    }*/
+
+    .black-theme-table {
+        background: #fefcf9;
+    }
+
+        .black-theme-table > thead > tr > th, .black-theme-table > tbody > tr > th {
+            background: #333333 none repeat scroll 0 0;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .black-theme-table > thead > tr > th, .black-theme-table > tbody > tr > th {
+            background: #333333 none repeat scroll 0 0;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+    .field_box_new {
+        background: #fbfaf5 none repeat scroll 0 0;
+        border: 1px solid #dddddd;
+        float: left;
+        padding: 0 10px;
+    }
+
+    legend {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
+        border-radius: 0 !important;
+        color: #333333 !important;
+        font-size: 14px;
+        font-weight: 600 !important;
+        padding: 0 0 5px !important;
+        text-align: left;
+    }
+
+        legend.searchbtn {
+            position: absolute;
+            bottom: -12px;
+            right: 0px;
+        }
+
+
+    .ablue {
+        color: Blue !important;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    fieldset {
+    }
+
+        fieldset .fieldset {
+            background: #f5f5f5 none repeat scroll 0 0;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+    legend {
+        border: 0;
+        margin-bottom: 0;
+    }
+
+    /*.hds {
+        display: block;
+        color: #e99701;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 0 0 0;
+        border-bottom: 1px solid #ddd;
+        margin: 0 0 5px;
+    }*/
+    .create-form-outer-box label {
+        font-weight: 400;
+    }
+
+    .wrongproject {
+        color: #da7c0c;
+        font-weight: bold;
+    }
+
+    .blue {
+        color: Blue;
+        font-weight: bold;
+    }
+
+    .red {
+        color: #F00;
+        float: left;
+    }
+
+    .notice {
+        padding-left: 5px;
+        color: #ff0202;
+    }
+
+    .pad_emp {
+        /*padding: 0 15px 10px 0;*/
+    }
+
+    .custom-btn, .button, .orange {
+        background-color: #e99701;
+        border: medium none;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.42857;
+        margin: 0;
+        outline: medium none;
+        padding: 8px 20px;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+
+    .marR7 {
+        margin-right: 7px !important;
+    }
+
+    b, strong {
+        font-weight: 600;
+    }
+
+    .chosen-container {
+        width: 100% !important;
+    }
+
+    .team-summary {
+        border-collapse: collapse;
+        width: 100%;
+        color: #100;
+        border: 2px solid darkgray;
+    }
+
+        .team-summary td, #TeamSummary th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: top;
+            border-bottom: 1px solid #bbb;
+        }
+
+        .team-summary th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .team-summary.indidual td:first-child {
+            font-weight: bold;
+            width: 35%;
+        }
+
+    .RunningInfo {
+        background: lightgreen;
+    }
+
+    .EmployeeInfo {
+        background: #fbca95;
+    }
+
+    .SupportInfo {
+        background: lightgoldenrodyellow;
+    }
+
+    .red-bg {
+        background-color: #FF6347;
+    }
+
+    .orange-bg {
+        background-color: orange;
+    }
+
+    .blue-bg {
+        background-color: lightblue;
+    }
+
+    .team-summary thead {
+        border-bottom: 2px solid darkgray;
+        font-weight: 600;
+    }
+
+    .RunningMain {
+        background: #32CD32;
+    }
+
+    .EmployeeMain {
+        background: #f8b56e;
+    }
+
+    .SupportMain {
+        background-color: #EEE8AA;
+    }
+
+    .chk_box_pm {
+        float: left;
+        margin-right: 5px;
+    }
+
+        .chk_box_pm label {
+            padding: 5px 10px;
+            font-size: 18px;
+            color: #423c3c;
+            background-color: #dddddd;
+            cursor: pointer;
+            display: block
+        }
+
+        .chk_box_pm input[type=checkbox], .chk_box_pm input[type=radio] {
+            display: none;
+        }
+
+            .chk_box_pm input[type=checkbox]:checked + label, .chk_box_pm input[type=radio]:checked + label {
+                background-color: #ffa500;
+                color: #ffffff;
+            }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div id="divNoti">
+            @Html.Partial("_Notification")
+        </div>
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Employee Activity</h2>
+
+            <div class="row">
+                <div class="col-md-12">
+                    @{
+                        var teamSummary = (List<TeamOccupancyDto>)ViewBag.TeamSummary;
+
+                        if (teamSummary != null && teamSummary.Any())
+                        {
+                            if (CurrentUser.RoleId == (int)Enums.UserRoles.Director)
+                            {
+                                <div class="chk_box_pm">
+                                    <input type="radio" id="chk_tm_all" name="PMId" value="0" checked="checked" />
+                                    <label for="chk_tm_all">All Team Managers</label>
+                                </div>
+                                foreach (var pm in Model.PmFilter)
+                                {
+                                    <div class="chk_box_pm">
+                                        <input type="radio" id="rdo_tm_@pm.Value" name="PMId" value="@pm.Value" class="team-filter" />
+                                        <label for="rdo_tm_@pm.Value">@pm.Text</label>
+                                    </div>
+                                }
+                            }
+
+                            <div class="clearfix"></div>
+                            <hr />
+                            <div id="team_summary">
+                                @{ Html.RenderPartial("_ActivityDetailList", teamSummary); }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="divoverlay hide">
+    <input type="hidden" id="filterPMId" value="@TempData["filterPMId"]" />
+</div>
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/ActivityDetail.js"></script>
+}

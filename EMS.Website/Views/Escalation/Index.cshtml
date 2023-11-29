@@ -1,0 +1,94 @@
+﻿
+@section styles{
+    <style>
+        .chk_box {
+            padding: 0;
+            border: none;
+        }
+
+            .chk_box input[type=checkbox] {
+                display: none;
+            }
+
+            .chk_box label {
+                margin-bottom: 0;
+                cursor: pointer;
+                line-height: 16px;
+                font-size: 13px;
+                padding: 5px 10px;
+                border: 1px solid #ddd;
+            }
+
+                .chk_box label.covid19 {
+                    background-color: #ff0000;
+                }
+
+            .chk_box input[type=checkbox]:checked + label {
+                background-color: #b0c4de
+            }
+
+        /*Tooltip to be use in grid/table*/
+
+        .tooltipfortable {
+            position: relative;
+            display: inline-block;
+            /*border-bottom: 1px dotted black;*/
+            color: blue;
+            text-decoration: underline;
+        }
+
+            .tooltipfortable .tooltiptextfortable {
+                visibility: hidden;
+                width: 400px;
+                background-color: white;
+                color: black;
+                /*color: #fff;*/
+                text-align: justify;
+                border-radius: 6px;
+                border: 1px solid gray;
+                padding: 10px 10px 10px 10px;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+                top: -5px;
+                right: 105%;
+            }
+
+            .tooltipfortable:hover .tooltiptextfortable {
+                visibility: visible;
+            }
+    </style>
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div id="MessageDiv"></div>
+        <div class="EstimateLeadPage fullwidth clearfix">
+
+            <div class="row">
+                <div class="col-sm-3"><h2>Escalation List</h2></div>
+                <div class="col-sm-9">
+                    @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                    {
+                        <div class="pull-right margin-right5">
+                            <a href="@Url.Action("addedit", "escalation")" class="btn btn-custom" name="btnAddNew">Add New</a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="box-body" style="margin-top:10px;">
+                <section id="no-more-tables">
+                    <table id="grid-escalationlist" class="table default-table black-theme-table"></table>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide">
+</div>
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/Escalation/index.js" asp-append-version="true"></script>
+}

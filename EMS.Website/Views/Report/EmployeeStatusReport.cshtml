@@ -1,0 +1,38 @@
+﻿<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Employee Status Report</h2>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        <input type="button" id="searchDate" class="btn btn-custom btn-block" value="Search" />
+                    </div>
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        @Html.DropDownList("userId", ViewBag.UserList as IEnumerable<SelectListItem>, "All Employee", new { @class = "form-control", @required = "required" })
+                    </div>
+                    @if (CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.HRBP)
+                    {
+                        <div class="col-md-2 col-sm-3 pull-right">
+                            @Html.DropDownList("pmId", ViewBag.PM as IEnumerable<SelectListItem>, "All PM", new { @class = "form-control", @required = "required" })
+                        </div>
+                    }
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        <input type="text" name="EndDate" id="EndDate" placeholder="End Date" class="form-control" autocomplete="off" readonly="readonly" />
+                    </div>
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        <input type="text" name="StartDate" id="StartDate" placeholder="Start Date" class="form-control" autocomplete="off" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table id="grid-employeestatusreport" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts
+    {
+    <script src="~/Scripts/CustomJS/report/employeestatusreport.js"></script>
+}

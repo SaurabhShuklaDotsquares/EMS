@@ -1,0 +1,67 @@
+﻿@model ProjectAdditionalSupportIndexDto
+@using EMS.Web.Models.Others
+@using EMS.Core;
+@{
+    ViewBag.Title = "Project Additional Support Requests";
+}
+
+@section styles{
+    @*<link type="text/css" href="~/css/select2.css" />*@
+    <style>
+        #grid b {
+            font-weight: 600;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div id="MainNotificationMessage"></div>
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Project Additional Support Requests</h2>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    @if (!Model.IsDirector) {
+                        <div class="col-md-2 col-sm-6 pull-right">
+                            <a class="btn btn-custom btn-block" href="@Url.Action("requestadditionalsupport")" data-target="#modal-additionalSupport" data-toggle="modal" data-backdrop="static">Add New</a>
+                        </div>
+                    }
+                    <div class="col-md-2 col-sm-6 pull-right">
+                        <button type="button" id="btnSearch" class="btn btn-custom btn-block">Search</button>
+                    </div>
+
+                    @if (Model.IsDirector) {
+                        <div class="col-md-3 col-sm-6 pull-right">
+                            @Html.DropDownList("PMUid", Model.PMUserList, "All PM", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    }
+                    <div class="col-md-3 col-sm-6 pull-right">
+                        @Html.DropDownList("Status", Model.StatusList, "All Status", htmlAttributes: new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 pull-right">
+                        @Html.DropDownList("ProjectId", Model.ProjectList, "All Projects", htmlAttributes: new { @class = "form-control" })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <table id="grid-additional-support" class="table table-stats"></table>
+       
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-additionalSupport", AreaLabeledId = "modal-additionalSupport-label", Size = Enums.ModalSize.Large });
+
+
+@section scripts{
+    <script>
+        var isDirector = "@Model.IsDirector.ToString().ToLower()";
+    </script>    
+    <script src="~/bundles/Select2"></script>
+    <script src="~/bundles/Project/additionalSupport" asp-append-version="true"></script>
+}

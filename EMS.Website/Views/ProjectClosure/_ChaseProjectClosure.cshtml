@@ -1,0 +1,48 @@
+﻿@using EMS.Web.Models.Others
+@model ProjectClousreDetailDto
+@section styles{
+<style>
+    input.form-control.error {
+        border-color: red !important;
+    }
+</style>
+}
+
+@using (Html.BeginForm("chase", "projectclosure", FormMethod.Post, new { @id = "chase-manageprojectclosure-form" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Comments of Engagement" });
+    <div class="modal-body">
+        @Html.HiddenFor(m => m.ProjectClousreId)
+        @Html.HiddenFor(m => m.IsConfirmSubmit)
+        <div id="validation-summary"></div>
+        <div class="form-group required">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Next Engagement Date </label>
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.NextStartDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @class = "form-control", @id = "EnagementDate", @autocomplete = "off", placeholder = "Next Date" })
+                </div>
+            </div>
+            
+        </div>
+        <div class="form-group required">
+            @Html.LabelFor(model => model.Reason, new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.Reason, 5, 10, new { @class = "form-control ", @maxlength = 500 })
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label" for="ExpectedNewWork">Expected New Work</label>&nbsp;&nbsp;&nbsp;@Html.CheckBoxFor(m => Model.ExpectedNewWork)
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.ConversionDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @class = "form-control", @id = "ConversionDate", @autocomplete = "off", placeholder = "Conversion Date", style = "display: none;" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}
+
+<script src="~/Scripts/CustomJS/ProjectClosure/projectclosure-chasepopup.js"></script>

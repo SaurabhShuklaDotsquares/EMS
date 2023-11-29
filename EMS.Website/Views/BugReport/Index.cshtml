@@ -1,0 +1,36 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model BugReportDto
+@{
+    ViewBag.Title = "Bug/Suggestion";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{await Html.PartialAsync("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-8">
+                <h2>Report Bug/Suggestions</h2>
+            </div>
+            <div class="col-sm-4">
+                <a id="btnAddNew" class="btn btn-custom pull-right " href="@Url.Action("add","bugreport")">Add New</a>
+                @Html.DropDownList("StatusFilterId", Model.StatusList, "ALL", htmlAttributes: new { @class = "form-control pull-right margin-right15", @style = "width:100px;" })
+            </div>
+        </div>
+        <table id="grid-bugReport-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    await Html.PartialAsync("_Modal", new Modal { ID = "modal-delete-bugReport", AreaLabeledId = "lbl-delete-bugReport", Size = Enums.ModalSize.Medium });
+    await Html.PartialAsync("_Modal", new Modal { ID = "modal-approvestatus", AreaLabeledId = "lbl-approvestatus", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script>
+        var isApprover = @Model.IsApprover.ToString().ToLower();
+    </script>
+    <script src="~/bundles/BugReport/index"></script>
+
+}
+

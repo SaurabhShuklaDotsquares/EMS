@@ -1,0 +1,29 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    ViewBag.Title = "DomainList";
+}
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Manage Domains</h2>
+            </div>
+            <div class="col-md-8 text-right">
+                <a class="btn btn-custom" data-target="#modal-add-DomainType" data-backdrop="static" data-toggle="modal" href="@Url.Action("add","Domain")">Add New</a>
+            </div>
+        </div>
+        <table id="grid-DomainList" class="display postable table table-stats table-condensed"></table>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@Html.Partial("_Modal", new Modal { ID = "modal-add-DomainType", AreaLabeledId = "modal-add-Technology-label", Size = Enums.ModalSize.Medium })
+@section scripts{
+    <script src="~/Scripts/CustomJS/Domain/Domain.js"></script>
+}

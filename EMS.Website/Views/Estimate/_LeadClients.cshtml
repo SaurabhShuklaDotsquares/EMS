@@ -1,0 +1,72 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.LeadClientDto
+
+<div class="addClient">
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Add/Select Client" })
+    <div class="modal-body">
+
+        <div id="MessageNotification"></div>
+
+        <div role="tabpanel">
+            <ul class="nav nav-tabs margin-bottom20">
+                <li class="active">
+                    <a style="cursor:pointer;" data-target="#newClientt" data-toggle="tab">New Client</a>
+                </li>
+                <li>
+                    <a style="cursor:pointer;" data-target="#existingClientt" data-toggle="tab">Existing Client</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" id="newClientt">
+                <div id="dvCreateClient">
+                    @using (Html.BeginForm("addclient", "estimate", FormMethod.Post,new { @id="createClient"}))
+                        {
+                        @Html.HiddenFor(l => l.LeadId)
+                        <div class="form-group err_msg_inControl">
+                            <div class="row margin-bottom15">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(l => l.Name)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(l => l.Name,  null, new { @class = "form-control", data_rule_required = "true" })
+                                </div>
+                            </div>
+                            <div class="row margin-bottom15">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(l => l.Email)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(l => l.Email,  null, new { @class = "form-control", data_rule_required = "true", data_rule_email = "true" })
+                                </div>
+                            </div>
+                            @Html.Partial("_ModalFooter", new ModalFooter { CancelButtonText = "Cancel", SubmitButtonID = "btnNewClient", SubmitButtonText = "Submit", DefaultButtonCss = true })
+                        </div>
+                        }
+                </div>
+            </div>
+            <div class="tab-pane" id="existingClientt">
+                <div id="dvExistingClient">
+                    @using (Html.BeginForm("addclient", "estimate", FormMethod.Post, new { @id = "selectClient" }))
+                        {
+                        @Html.HiddenFor(l => l.LeadId)
+                        <div class="form-group err_msg_inControl">
+                            <div class="row margin-bottom15">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(l => l.ClientId)
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(l => l.ClientId,  Model.LeadClientList, "--Select Client--", new { @class = "form-control", data_rule_required="true" })
+                                </div>
+                            </div>
+                            @Html.Partial("_ModalFooter", new ModalFooter { CancelButtonText = "Cancel", SubmitButtonID = "btnExistingClient", SubmitButtonText = "Submit", DefaultButtonCss = true })
+                        </div>
+                        }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/CustomJS/Estimate/createClient.js"></script>

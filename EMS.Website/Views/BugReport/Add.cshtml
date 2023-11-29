@@ -1,0 +1,94 @@
+﻿@model BugReportDto
+@{
+    ViewData["Title"] = "Add";
+}
+<div class="main_content clearfix">
+    <div class="full-wdth padding20">
+        <div id="validation-summary"></div>
+        <form asp-controller="bugreport" asp-action="add" method="post" enctype="multipart/form-data">
+            <h3>ADD Bug/Suggestion</h3>
+            <div id="validation-summary"></div>
+            <div class="row form-group">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group required">
+                                <label asp-for="SectionName" class="control-label"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input type="text" asp-for="SectionName" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group required">
+                                <label asp-for="SectionDescription" class="control-label"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <textarea asp-for="SectionDescription" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label asp-for="PagePath" class="control-label"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input type="text" asp-for="PagePath" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label asp-for="Attachment" class="control-label"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input type="file" asp-for="Attachment" name="Attachment"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-10">
+                            <a href="@Url.Action("index","bugreport")" id="btn_cancel" class="btn btn-custom pull-right" data-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-custom btn-pink pull-right margin-right10" id="btn_submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/CustomJS/BugReport/addedit.js" asp-append-version="true"></script>
+}
+
+

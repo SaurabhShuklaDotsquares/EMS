@@ -1,0 +1,63 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@section styles{
+    <link href="~/css/colorbox.css" />
+
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div class="estimateDocument-page fullwidth">
+            <h2>Estimate Documents</h2>
+            <div class="clearfix full-wdth margin-bottom15">
+                <div class="full-wdth clearfix">
+                    <div class="pull-left">
+                        <a href="@Url.Action("UploadDocument","Lead")" data-target="#modal-AddEditEstimateDocument" data-toggle="modal" class="btn btn-custom margin-bottom10 pull-left">Add New</a>
+                    </div>
+
+
+                    <div style="width:60%;float:right;">
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-custom pull-left" id="btnSearch">Search</button>
+                        </div>
+                        <div class="pull-right box2 margin-right10">
+                            <input class="form-control" style="width: 250px;" type="text" placeholder="Search Filter" id="txtSearch" />
+                        </div>
+                        <div class="pull-right margin-right10">
+                            @Html.DropDownList("DocType", new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem() { Text="--Select Document Type--"},
+                                                                    new SelectListItem() { Text= "Proposal Document", Value = "PD" },
+                                                                    new SelectListItem() { Text= "Wireframe/Mockups", Value = "WM"},
+                                                                    new SelectListItem() { Text= "Other Document", Value = "OD" }
+
+                                                                }, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-right margin-right10">
+                            @Html.DropDownList("drpSpam", new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem() { Text= "Included from library", Value = "0" },
+                                                                    new SelectListItem() { Text= "Excluded from library", Value = "1"},
+
+                                                                }, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+                <section id="div-grid-EstimateDoc">
+                    <table class="table postable table-responsive table-bordered table-condensed" id="grid-EstimateDoc"></table>
+                </section>
+                <section id="wireframe-Image-gallery" style="display:none;"></section>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-AddEditEstimateDocument", AreaLabeledId = "lbl-AddEditEstimateDocument", Size = Enums.ModalSize.Large })
+@section scripts{
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/CustomJS/estimateDocument.js"></script>
+    <script src="~/Scripts/jquery.colorbox-min.js"></script>
+ 
+}

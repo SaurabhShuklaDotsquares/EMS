@@ -1,0 +1,92 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.RoleDto
+@using EMS.Core
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .menuaccuss_editable {
+        margin-top: 20px;
+    }
+
+    .customCombobox {
+        width: 200px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        align-content: center;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div class="timesheet-page full-wdth clearfix">
+            <div id="RoleMessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+            <h2> Manage Role </h2>
+            <div class="validation-summary"></div>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form checkList-outer dis-block clearfix">
+                        @using (Html.BeginForm("SaveRecords", "Role", FormMethod.Post, new { @id = "form1" }))
+                        {
+
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Role Category:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.RoleCateGoryId, new SelectList(Model.roleCategoryList, "Id", "Text"), "-Select-", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Role Name:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.RoleId, new SelectList(Model.RoleList, "Id", "Text"), "-Select-", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Designation :</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.DesignationId, new SelectList(Model.designationList, "Id", "Text"), "-Select-", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <div class="row menuaccuss_editable"></div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-custom pull-right margin-right10" name="Save">Update</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@section scripts{
+    <script src="/Scripts/CustomJS/Role.js">
+    </script>
+}

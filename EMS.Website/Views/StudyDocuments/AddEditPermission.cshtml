@@ -1,0 +1,156 @@
+﻿@model StudyDocumentsPermissionDto
+@{
+    ViewBag.Title = "Permission Study Center";
+}
+
+<div class="full-wdth padding20">
+    <h2 class="pull-left">Permission Study Center</h2>
+    <div class="clearfix"></div>
+
+    @* notification *@
+    <partial name="_Notification"></partial>
+
+    <div id="validation-summary"></div>
+
+    <div class="ems-form create-form-outer-box">
+        <form id="frmaddeditpermission" asp-action="AddEditPermission" asp-controller="StudyDocuments" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="userPermission.UserId" />
+            <input type="hidden" asp-for="userPermission.EncryptedUserId" />
+            <input type="hidden" asp-for="Title" />
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-10">
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Title</label>
+                        </div>
+                        <div class="col-md-3">                            
+                            @Model.Title
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-control" style="height:100px;overflow-y:auto;">
+                                @Html.Raw(Model.Description)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Attached File(s)</label>
+                        </div>
+                        <div class="col-md-6">
+                                @{
+                                    var folderPath = System.IO.Path.Combine(SiteKey.DomainName, "upload", "studydocuments");
+                                    <table border="1" class="table" style="width:100%;">
+                                        @for (int i = 0; i < Model.studyDocumentFiles.Count; i++)
+                                        {
+                                            var filePath = System.IO.Path.Combine(folderPath, Model.studyDocumentFiles[i].FileName);
+
+                                            <tr class="clssdf">
+                                                <td style="width:10%;text-align:center;">@(i + 1)</td>
+                                                <td style="width: 75%;padding-left: 15px;">
+                                                    <a href="@filePath" target="_blank" style="color:blue;">@Model.studyDocumentFiles[i].DisplayName</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                      </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Technology</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Model.Technology
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Active</label>
+                        </div>
+                        <div class="col-md-3">
+                            @{
+                                if (Model.IsActive)
+                                {
+                                    <text>True</text>
+                                }
+                                else
+                                {
+                                    <text>False</text>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Requested By</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Model.userPermission.RequestedUser
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Add/Remove Permission</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input asp-for="AddDelPermission" />
+                            &nbsp;&nbsp;<label>(Please Check/Uncheck to Allow/Restrict permission)</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Valid From Date </label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="hidden" id="StartDate" value="@Model.userPermission.StartDate" />
+                            <input type="text" asp-for="userPermission.StartDate" readonly class="form-control"/>                            
+                            <span asp-validation-for="userPermission.StartDate"></span>
+                        </div>
+                        <div class="col-md-2" style="left: 100px;">
+                            <label>To Date </label>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="hidden" id="EndDate" value="@Model.userPermission.EndDate" />
+                            <input type="text" asp-for="userPermission.EndDate" readonly class="form-control"/>
+                            <span asp-validation-for="userPermission.EndDate"></span>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-custom">Submit</button>
+                            <a href="@Url.Action("index","studydocuments")" class="btn btn-custom">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="~/scripts/customjs/studydocuments/permission.js" asp-append-version="true"></script>
+}

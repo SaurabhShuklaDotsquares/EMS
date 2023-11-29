@@ -1,0 +1,62 @@
+﻿@model EMS.Dto.LeadTransactionDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<div class="lead-transaction">
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Estimate History" })
+    <div class="modal-body">
+        <div id="error-ModalMessage"></div>
+
+        <div class="row margin-bottom15">
+            <div class="col-md-4 font-weight700">
+                @Html.DisplayTextFor(x => x.LeadId)
+            </div>
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4 font-weight700">
+                @Html.DisplayTextFor(x => x.NextChaseDate)
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-stats">
+                <thead>
+                    <tr>
+                        <td style="width:5%;">#</td>
+                        <td style="width:75%;">Note</td>
+                        @*<td>Doc</td>*@
+                        @*<td>Status</td>*@
+                        @*<td>Added By</td>*@
+                    <td style="width:20%;">Added By</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.LeadTransactionList != null && Model.LeadTransactionList.Count > 0)
+                    {
+                        foreach (var leadTran in Model.LeadTransactionList)
+                        {
+                    <tr>
+                        <td style="vertical-align: top;width:5%;">@Html.Label(leadTran.SNo.ToString())</td>
+                        <td style="width:75%;">
+                            @Html.Raw(leadTran.TrasnactionDescrtiption)<br />
+                            <a href="@leadTran.Document" target="_blank" class="ablue">@leadTran.DocumentName</a>
+                        </td>
+                        @* <td><a href="@leadTran.Document" target="_blank" class="ablue">@leadTran.DocumentName</a></td>*@
+                        @*<td>@Html.Label(leadTran.Status.ToString())</td>*@
+                        @*<td>@Html.Label(leadTran.AddedBy.ToString())</td>*@
+                        <td style="width:25%;">@Html.Label(leadTran.AddedBy.ToString())<br />@Html.Label(leadTran.AddedDate.ToString())</td>
+                    </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="6" class="txtcenter">No record found!</td></tr>
+                }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { CancelButtonText = "Close", CancelButtonID = "btn-cancle", OnlyCancelButton = true })
+</div>

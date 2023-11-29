@@ -1,0 +1,311 @@
+﻿@model EMS.Web.EstimateViewModel
+@using EMS.Web.Models.Others
+@section styles{
+    <style>
+        .chk_box {
+            padding:0;
+            border: none;
+        }
+
+            .chk_box input[type=checkbox] {
+                display: none;
+            }
+
+            .chk_box label {
+                margin-bottom: 0;
+                cursor: pointer;
+                line-height: 16px;
+                font-size: 13px;
+                padding: 5px 10px;
+                border: 1px solid #ddd;
+            }
+                .chk_box label.covid19 {
+                    background-color: #ff0000;
+                }
+            .chk_box input[type=checkbox]:checked+label {
+                background-color:#b0c4de
+            }
+
+            /*Tooltip to be use in grid/table*/
+
+        .tooltipfortable {
+            position: relative;
+            display: inline-block;
+            /*border-bottom: 1px dotted black;*/
+            color: blue;
+            text-decoration: underline;
+        }
+
+            .tooltipfortable .tooltiptextfortable {
+                visibility: hidden;
+                width: 400px;
+                background-color: white;
+                color: black;
+                /*color: #fff;*/
+                text-align: justify;
+                border-radius: 6px;
+                border: 1px solid gray;
+                padding: 10px 10px 10px 10px;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+                top: -5px;
+                right: 105%;
+            }
+
+            .tooltipfortable:hover .tooltiptextfortable {
+                visibility: visible;
+            }
+    </style>
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div id="MessageDiv"></div>
+        <input type="hidden" id="hdnSelectedNote" />
+        <div class="EstimateLeadPage fullwidth clearfix">
+
+            <div class="clearfix">
+                <h2 class="pull-left">Estimates</h2>
+                <div class="pull-right">
+                    <div id="chkCountry" class="pull-left box1 clearfix">
+                        <div class="margin-left10 pull-left chk_countryflag chk_box">
+                            <input name="Country" id="flag_uk" type="checkbox" value="UK" />
+                            <label for="flag_uk">
+                                <img src="~/images/icons/UK.jpg" alt="UK" title="UK" class="" />
+                            </label>
+                        </div>
+                        <div class="pull-left chk_countryflag chk_box">
+                            <input name="Country" id="flag_us" type="checkbox" value="US" />
+                            <label for="flag_us">
+                                <img src="~/images/icons/US.jpg" alt="US" title="US" class="" />
+                            </label>
+                        </div>
+                        <div class="pull-left chk_countryflag chk_box">
+                            <input name="Country" id="flag_au" type="checkbox" value="AUS" />
+                            <label for="flag_au">
+                                <img src="~/images/icons/AUS.jpg" alt="AUS" title="AUS" class="" />
+                            </label>
+                        </div>
+                        <div class="pull-left chk_countryflag chk_box">
+                            <input name="Country" id="flag_ind" type="checkbox" value="IND" />
+                            <label for="flag_ind">
+                                <img src="~/images/icons/IND.jpg" alt="IND" title="IND" class="" />
+                            </label>
+                        </div>
+                    </div>
+                    <div id="chkStatus" class="pull-left box2 clearfix margin-left20">
+                        <div class="margin-left10 pull-left chk_countryflag-span chk_box">
+                            <input type="checkbox" name="covid19" id="covid19" value="covid19"/>
+                            <label for="covid19" class="covid19">
+                                COVID 19 Impact
+                            </label>
+                        </div>
+                        <div class="margin-left10 pull-left chk_countryflag-span chk_box">
+                            <input type="checkbox" name="leadStatus" id="status_converted" value="Converted" />
+                            <label for="status_converted">
+                                <img src="~/images/icons/CONV.jpg" align="left" />&nbsp;Converted
+                            </label>
+                        </div>
+                        <div class="pull-left chk_countryflag-span chk_box">
+                            <input type="checkbox" name="leadStatus" id="status_chase" value="Chase Request" />
+                            <label for="status_chase">
+                                <img src="~/images/icons/CHAS.jpg" align="left" />&nbsp;Chase Request
+                            </label>
+                        </div>
+                        <div class="pull-left chk_countryflag-span chk_box">
+                            <input type="checkbox" name="leadStatus" id="status_teamaction" value="Action Required From (Team)" class="hidden" />
+                            <label for="status_teamaction">
+                                <img src="~/images/icons/ACTR.jpg" align="left" />&nbsp;Action Required From (Team)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="create-form-outer-box clearfix dis-block">
+                <div class="pull-left margin-right5 margin-bottom10">
+                    @Html.TextBox("txtSearch", null, new { @class = "form-control", style = "width: 216px;", @placeholder = "search by LeadId/CRMId/Title" })
+                </div>
+                <div class="pull-left margin-right5">
+                    <div class="input-group" style="width:255px">
+                        @Html.TextBox("txtAssignedFrom", Model.AssignedFrom, htmlAttributes: new { @class = "form-control", @readonly = "readonly", style = "width: 110px;", @placeholder = "Assign From" })
+                        <span class="input-group-btn" style="width:0px;"></span>
+                        @Html.TextBox("txtAssignedTo", Model.AssignedTo, htmlAttributes: new { @class = "form-control", @readonly = "readonly", style = "width: 110px;margin-left:-1px", @placeholder = "Assign To" })
+                        <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="pull-left margin-right5">
+                    @Html.DropDownList("drpOwner", Model.LeadOwners, "Select Owner", new { @class = "form-control", style = "width: 150px;" })
+                </div>
+                <div class="pull-left margin-right5">
+                    @Html.DropDownList("drpStatus", Model.LeadStatus, "Select Status", new { @class = "form-control", style = "width: 150px;", @placeholder = "Status" })
+                </div>
+                <div class="pull-left margin-right5">
+                    @Html.DropDownList("drpType", Model.LeadTypes, "Select Type", new { @class = "form-control", style = "width: 150px;", @placeholder = "Type" })
+                </div>
+                <div class="pull-left margin-right5">
+                    @Html.DropDownList("drpClient", Model.ClientTypes, "Select Client", new { @class = "form-control", style = "width: 150px;", @placeholder = "Select Client" })
+                </div>
+                <div class="pull-left margin-right5 left10">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                </div>
+                <div class="pull-left margin-right5">
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+                <div class="pull-right margin-right5">
+                    <a href="@Url.Action("addeditlead","estimate")" class="btn btn-custom" name="btnAddNew">Add New</a>
+                </div>
+            </div>
+
+            <div id="summary_stats">
+                <div class="row margin-bottom15">
+
+                    <div class="col-sm-3">
+                        <div class="fa-border totalClient field_box_new">
+                            <div class="clearfix font-weight600 margin-bottom5 newbox"><span>Total Leads : </span><span id="totalLead"></span></div>
+                            <div class="clearfix font-weight400 newbox-main">
+                                <a id="newClient" style="color:forestgreen" href="javascript:void(0)">
+                                    <span>New Client : </span><span id="spanNewClient"> - &nbsp; </span>
+                                </a>
+                                <span class="margin-right10 margin-left10"> | </span>
+                                <a id="existingClient" style="color:forestgreen" href="javascript:void(0)">
+                                    <span>Existing Client : </span><span id="spanExistingClient"> - &nbsp; </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="fa-border convertedClient field_box_new">
+                            <div class="clearfix font-weight600 margin-bottom5 newbox"><span>Converted Leads : </span><span id="convertedLead"></span></div>
+                            <div class="clearfix font-weight400 newbox-main">
+                                <a id="newConvertedClient" style="color:red" href="javascript:void(0)">
+                                    <span>New Client : </span><span id="spanConvertedNewClient"> - &nbsp; </span>
+                                </a>
+                                <span class="margin-right10 margin-left10"> | </span>
+
+                                <a id="existingConvertedClient" style="color:red" href="javascript:void(0)">
+                                    <span>Existing Client : </span><span id="spanConvExistingClient"> - &nbsp; </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="fa-border otherClient field_box_new">
+                            <div class="clearfix font-weight600 margin-bottom5 newbox"><span>Other Leads</span></div>
+                            <div class="clearfix font-weight400 newbox-main">
+                                <a id="escalatedClient" style="color:#fa9a56" href="javascript:void(0)">
+                                    <span>Escalated Leads : </span><span id="spanEscalatedClient"> - &nbsp; </span>
+                                </a>
+                                <span class="margin-right10 margin-left10"> | </span>
+                                <a id="awaitingResponse" style="color:#fa9a56" href="javascript:void(0)">
+                                    <span>Awaiting Response : </span><span id="spanAwaitingResponse"> - &nbsp; </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="fa-border otherClient field_box_new">
+                            <div class="clearfix font-weight600 margin-bottom5 newbox" style="color: #333333; font-weight: bold; font-size: 16px;"><span>New Lead Conversion: </span><span id="totalNewConversion"></span></div>
+                            <div class="clearfix font-weight400 newbox-main">
+                                <a id="escalatedClient" style="color: #333333; font-weight: bold; font-size: 11px;" href="javascript:void(0)">
+                                    <span>Total Conversion: </span><span id="totalConversion"> - &nbsp; </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="clearfix full-wdth margin-bottom15">
+                    <fieldset style="border: 1px">
+                        <legend class="actualtop">Estimate Owner Conversion</legend>
+                        <div class="dis-block" style="color: #000; border-bottom: solid 1px #fff; text-align: left;">
+                            <div class="dis-inline pull-left" style="width: 49%; ">
+                                <table id="tblEstimateOwnerLeft" class="table table-stats">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 44%;">
+                                                Owner Name
+                                            </th>
+                                            <th class="" width="14%" style="text-align: center;">
+                                                Conv. New (Total)
+                                            </th>
+                                            <th class="" width="16%" style="text-align: center;">
+                                                Conv. Existing (Total)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="dis-inline pull-left" style="width: 2%;">
+                                &nbsp;
+                            </div>
+                            <div id="dvbeforedetail" class="dis-inline pull-left" style="width: 49%;">
+                                <table id="tblEstimateOwnerRight" class="table table-stats">
+                                    <thead>
+                                        <tr class="alternate">
+                                            <th style="width: 44%;">
+                                                Owner Name
+                                            </th>
+                                            <th width="14%" style="text-align: center;">
+                                                Conv. New (Total)
+                                            </th>
+                                            <th width="16%" style="text-align:center;">
+                                                Conv. Existing (Total)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="dvdetail"></div>
+
+                            <div style="visibility:visible !important;float: right;padding-right:27px;">
+                                <span id="btnMore" class="more showmoreless" style="width: 100%; float: right; cursor: pointer; text-decoration: underline; color: navy; border: 0px; background: none; box-shadow: none; border-radius: 0px; display: block;">More</span>
+                                <br>
+                                <span id="btnLess" class="less showmoreless" style="width:100%;float:right;cursor:pointer;text-decoration:underline;color:navy;border:0px;background:none;box-shadow: none; border-radius: 0px; display: none;">Less</span>
+                            </div>
+
+                            <div style="clear: both;">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="loading_stats" class="text-center hidden" style="height:100px;background-color:#f0f0f0;color:#000;font-size:25px;padding:25px">
+                Loading ...
+            </div>
+
+            <div class="box-body">
+                <div style="width:50%;float:right;">
+                    <div class="pull-right box1" style="margin-right:10px;">
+                        <a href="@Url.Action("exporttoexcel","estimate")" id="exportToExcel"><img src="@(SiteKey.DomainName)images/icons/excel.png" alt="excel" width="30" height="30" />Export To Excel</a>
+
+                    </div>
+                </div>
+                <section id="EstimateGrid">
+                    <table id="grid-Estimates" class="table table-stats default-table black-theme-table"></table>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide">
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-createSelectClient", AreaLabeledId = "lblCreateSelectClient", Size = EMS.Core.Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-conclusion", AreaLabeledId = "lbl-conclusion", Size = EMS.Core.Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-leadStatus", AreaLabeledId = "lbl-leadStatus", Size = EMS.Core.Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-lead-delete", AreaLabeledId = "modal-lead-delete-label", Size = EMS.Core.Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-lead-estimateHistory", AreaLabeledId = "modal-lead-estimateHistory-label", Size = EMS.Core.Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-lead-crmnotes", AreaLabeledId = "modal-lead-crmnotes-label", Size = EMS.Core.Enums.ModalSize.Medium })
+
+@section scripts{
+   <script src="~/Scripts/CustomJS/Estimate/index.js" asp-append-version="true"></script>
+    }

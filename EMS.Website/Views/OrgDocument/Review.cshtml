@@ -1,0 +1,29 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core;
+@{
+    ViewBag.Title = "Review Configuration Items (CI)";
+}
+@section styles{
+    <style>
+        .btn-link{
+            padding: 5px;
+        }
+    </style>
+    }
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+        <h2 class="pull-left">Review Configuration Items (CI)</h2>
+        <a class="btn btn-custom pull-right" href="@Url.Action("addedit", "orgdocument")">Add New</a>
+
+        <div class="clearfix"></div>
+
+        <table id="grid-orgdocument" class="display postable table table-bordered table-condensed table-stats"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@Html.Partial("_Modal", new Modal { ID = "modal-orgApprovedDoc", AreaLabeledId = "modal-orgApprovedDoc-label", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+   <script src="~/bundles/OrgDocument/review"></script>
+}

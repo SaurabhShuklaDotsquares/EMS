@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Setting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <partial name="_Notification" />
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <h2>Setting</h2>
+                <div class="pull-left">
+                    @using (Html.BeginForm("Setting", "LibraryManagement", FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-custom margin-bottom10 pull-left" style="margin-right:10px">Sync Watermark Images</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

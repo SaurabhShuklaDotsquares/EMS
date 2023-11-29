@@ -1,0 +1,109 @@
+﻿@model ProjectClientFeedbackDetailDto
+<form asp-controller="ProjectClientFeedback" asp-action="AddEditFeedback" enctype="multipart/form-data">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "ADD/EDIT Feedback" })
+    <input type="hidden" asp-for="Id" />
+    <div class="modal-body">
+        @await Html.PartialAsync("_Notification")
+        <div id="validation-summary"></div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Project : </div>
+                <div class="col-md-4">
+                    <select asp-for="ProjectId" asp-items="@Model.ProjectList" class="form-control" required></select>
+                </div>
+                <div class="col-md-2">Status :</div>
+                <div class="col-md-4"><select asp-for="Status" asp-items="@Model.Statuses" class="form-control" required></select></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Website Name :</div>
+                <div class="col-md-4"><input type="text" asp-for="WebsiteName" class="form-control" /> </div>
+                <div class="col-md-2">Website URL :</div>
+                <div class="col-md-4"><input type="text" asp-for="WebUrl" class="form-control" /></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Company :</div>
+                <div class="col-md-4"><input type="text" asp-for="CompanyName" class="form-control" /></div>
+                <div class="col-md-2">Client Name :</div>
+                <div class="col-md-4"><input type="text" asp-for="ClientName" class="form-control" /></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Comment Date :</div>
+                <div class="col-md-4"><input type="text" asp-for="Commentdate" class="form-control" readonly></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Comment :</div>
+                <div class="col-md-10"><textarea asp-for="Comment" class="form-control" rows="2"></textarea></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Business description :</div>
+                <div class="col-md-10"><textarea asp-for="BusinessDescription" class="form-control" rows="2"></textarea></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Project Scope :</div>
+                <div class="col-md-10"><textarea asp-for="ProjectScope" class="form-control" rows="2"></textarea></div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Meet Requirements :</div>
+                <div class="col-md-10"><textarea asp-for="MeetRequirements" class="form-control" rows="2" required></textarea></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Values About Dotsquares :</div>
+                <div class="col-md-10"><textarea asp-for="ValueAboutDotsquares" class="form-control" rows="2" required></textarea></div>
+            </div>
+
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label">Upload Documents</label>
+            <input type="file" name="docs" multiple />
+        </div>
+        @if (Model.ClientFeedbackDocuments !=null && Model.ClientFeedbackDocuments.Count > 0)
+        {
+        <div class="row clearfix">
+            <div class="col-md-12 ">
+                <ul class="doc-list">
+
+                    @foreach (var item in Model.ClientFeedbackDocuments)
+                    {
+                        var file = item.DocumentPath.ToLower();
+                        <li>
+                            <i class='@(file.Contains(".ppt")? "fa fa-file-powerpoint-o" :
+                                (file.Contains(".doc") || file.Contains(".docx"))? "fa fa-file-word-o":
+                                file.Contains(".xls") ||file.Contains(".xlsx") ?"fa fa-file-excel-o":
+                                file.Contains(".txt")?"fa fa-file-text-o":
+                                file.Contains(".rar")|| file.Contains(".zip")?"fa fa-file-zip-o":
+                                file.Contains(".mp4") || file.Contains(".wmv") || file.Contains(".wav")?"fa fa-file-video-o":
+                                "fa fa-file-image-o")'></i>
+                            <a href="~/Upload/ClientFeedbackDocument/@file" class="btn-link" download="download">  @item.DocumentPath </a>
+                            <span><a href="javascript:;" data-href="@(SiteKey.DomainName + "ProjectClientFeedback/DeleteDocument/" + item.Id)" class="delete-document"> <i class="fa fa-trash" style="color:red;font-size:17px;"></i></a> </span>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+        }
+
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+
+</form>
+    
+

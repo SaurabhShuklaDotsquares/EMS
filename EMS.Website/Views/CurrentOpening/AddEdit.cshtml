@@ -1,0 +1,96 @@
+﻿@using EMS.Dto;
+@model CurrentOpeningDto
+@{
+    ViewBag.Title = "AddEdit";
+}
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2> @(Model.Id > 0 ? "Edit Openings" : "Add New Openings") </h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        @using (Html.BeginForm("addedit", "CurrentOpening", FormMethod.Post, new { @id = "form1" }))
+                        {
+                            @Html.HiddenFor(x => x.Id)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Department*</label>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        @Html.DropDownListFor(x => x.DepartmentId, new SelectList(ViewBag.DepartmentList, "DeptId", "Name") as IEnumerable<SelectListItem>, new { @class = "form-control", data_rule_required = "true" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Post*</label>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.Post, new { @class = "form-control", data_rule_required = "true" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Technology*</label>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(x => x.Technology, new { @class = "form-control", data_rule_required = "true" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Min. Expereince*</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.Min_Experience, new { @class = "form-control", data_rule_required = "true" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Small Description*</label>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        @Html.TextAreaFor(x => x.Small_Description, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", data_rule_required = "true" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Active</label>
+                                    </div>
+                                    <div class="col-md-1">
+                                        @Html.CheckBoxFor(x => x.IsActive, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="@Url.Action("index","currentopening")" class="btn btn-custom pull-right" name="Cancel">Cancel</a>
+                                    <button type="submit" class="btn btn-custom pull-right margin-right10" name="Save">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+   <script src="~/Scripts/CustomJS/currentOpening.js"></script>
+}

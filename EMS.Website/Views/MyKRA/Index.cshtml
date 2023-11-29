@@ -1,0 +1,113 @@
+﻿@model EMS.Dto.KRA.KraDtoGroup
+@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Your KRA";
+
+}
+@section styles{
+    <link href="~/Styles/TimelineCss.css" rel="stylesheet" />
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Your KRA</h2>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            @if (Model.DesignationList != null)
+            {
+                <div class="col-lg-6">
+                    <div class="timeline">
+                        <h1><u>Your Designation Levels</u></h1>
+                        <ul>
+                            @if (Model.DesignationList != null)
+                            {
+                                var previousDo = 1;
+                                var nextDo = 1;
+                                var Counter = 0;
+                                var designation = CurrentUser.DesignationId;
+                                var HTMLstr = string.Empty;
+                                var AnchorStr = string.Empty;
+                                @foreach (var item in Model.DesignationList)
+                                {
+                                    Counter = Counter + 1;
+                                    AnchorStr = $"<a class='prc-btn2' data-toggle='modal' data-target='#modal-kra-detail' href='{Url.Action("GetKRA", "MyKRA", new { id = item.Id })}'>";
+                                    if (Counter == 1)
+                                    {
+                                        previousDo = item.DisplayOrder.Value;
+                                        nextDo = item.DisplayOrder.Value;
+                                        HTMLstr = HTMLstr + ("<li class=''>");
+                                    }
+                                    else
+                                    {
+                                        nextDo = item.DisplayOrder.Value;
+                                    }
+
+                                    if (previousDo == nextDo & Counter == 1)
+                                    {
+                                        HTMLstr = HTMLstr + AnchorStr + ("<span id='" + @item.Id + "'>" + @item.Name + "</span></a>");
+
+                                    }
+
+                                    else if (previousDo == nextDo & Counter != 1)
+                                    {
+                                        HTMLstr = HTMLstr + AnchorStr + (" <span id='" + @item.Id + "'>" + @item.Name + "</span></a>");
+
+                                    }
+                                    else if (previousDo != nextDo)
+                                    {
+                                        HTMLstr = HTMLstr + ("</li>");
+                                        HTMLstr = HTMLstr + ("<li class=''>");
+                                        HTMLstr = HTMLstr + AnchorStr + ("<span id='" + @item.Id + "'>" + @item.Name + "</span></a>");
+                                    }
+                                    previousDo = nextDo;
+                                }
+                                HTMLstr = HTMLstr + ("</li>");
+                                @Html.Raw(HTMLstr)
+                                ;
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="timeline">
+                        <h1><u>KRA</u></h1>
+                        <p>As per your current designation <b>@Model.DesignationName</b> your key responsibility areas are:</p>
+                        @{
+                            int index = 1;
+                        }
+                        @if (Model.KRAList != null)
+                        {
+                            @foreach (var item in Model.KRAList)
+                            {
+                                <div class='step'>
+                                    <div class='number'>@index</div>
+                                    <div>
+                                        <p class='title'>@item.Title</p>
+                                    </div>
+                                </div>
+                                index++;
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-12">
+                    <div class="timeline">
+                        <h1>KRA not decided yet for designation, so please contact to HR department.</h1>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-kra-detail", AreaLabeledId = "modal-kra-detail-label", Size = Enums.ModalSize.Large })
+@section scripts{
+    <script src="~/Scripts/CustomJS/KRA/MyKRA.js" asp-append-version="true"></script>
+}

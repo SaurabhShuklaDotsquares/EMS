@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <partial name="_Notification" />
+        <div id="MessageDiv"></div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Lesson Learned</h2>
+            </div>
+            <div class="col-sm-8 text-right">                
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || RoleValidator.BA_RoleIds.Contains(CurrentUser.RoleId)
+                   || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                    || CurrentUser.RoleId == (int)Enums.UserRoles.Director)
+                {
+                <a data-toggle="modal" data-target="#modal-add-edit-lessonlearnt" href="@Url.Action("addedit")" class="btn btn-custom pull-right btn-addVirDev">Add New</a>
+                }
+            </div>
+        </div>
+        @*<h2>Lesson Learnt</h2>
+                <div class="dis-block clearfix">
+                <div class="pull-left box1">
+                    <a data-toggle="modal" data-target="#modal-add-edit-lessonlearnt" href="@Url.Action("addedit")" class="btn btn-custom pull-right btn-addVirDev">Add New</a>
+                </div>
+
+                <div class="pull-right box2">
+                    <div class="wdth2 margin-right10 pull-left">
+                        @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Search text", style = "width: 250px;" })
+
+                    </div>
+                    <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                </div>
+            </div>*@
+        <br />
+        <div class="box-body ">
+            <section id="no-more-tables">
+                <table id="grid-lessonlearnt-table" class="display postable table table-stats table-condensed"></table>
+            </section>
+        </div>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-lessonlearnt", AreaLabeledId = "lbl-delete-lessonlearnt", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-edit-lessonlearnt", AreaLabeledId = "modal-add-edit-lessonlearnt-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script src="~/bundles/lessonlearnt/index"></script>
+}
+

@@ -1,0 +1,54 @@
+﻿@model EMS.Dto.LeadDto
+<div class="main_content clearfix">
+    <div class="full-wdth padding20 clearfix">
+        @Html.Partial("_Notification")
+        <div class="EditEstimate full-wdth clearfix">
+            <h2>Edit Estimate</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    @using (Html.BeginForm("EditEstimate","Lead",FormMethod.Post,new { @id="editEstimateForm",@enctypr="multipart/form-data"}))
+                    {
+                        @Html.HiddenFor(model=>model.LeadId)
+                        <div class="row">
+                            <div class="col-md-6 margin-bottom10">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.LeadClientId)
+                                </div>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(model=>model.LeadClientId,new {@class="form-control"})
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model=>model.IsNewClient)
+                                </div>
+                                <div class="col-md-5">
+                                    @Html.TextBoxFor(model => model.IsNewClient, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                   @Html.LabelFor(model=>model.AbroadPMId)
+                                </div>
+                                <div class="col-md-5">
+                                   @Html.TextBoxFor(model=>model.AbroadPMId, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                   @Html.LabelFor(model=>model.LeadCRMId)
+                                </div>
+                                <div class="col-md-5">
+                                   @Html.TextBoxFor(model=>model.LeadCRMId, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

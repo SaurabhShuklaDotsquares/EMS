@@ -1,0 +1,203 @@
+﻿@model OrgDocumentDto
+@{
+    ViewBag.Title = "Organization Documents";
+}
+
+@section styles{
+    <style type="text/css">
+        input[type=checkbox] + label {
+            font-weight: normal;
+        }
+
+        .visibility input[type=checkbox]:checked + label {
+            font-weight: 600;
+            color: green;
+        }
+
+        label[for=allRoles], label[for=allDepartments] {
+            font-size: 15px;
+            font-weight: bold!important;
+        }
+
+        .btn-link {
+            text-decoration: underline;
+        }
+    </style>
+}
+
+<div class="full-wdth padding20">
+    <h2 class="pull-left">Organization Document</h2>
+    <a href="@Url.Action("review", "orgdocument")" class="btn btn-custom pull-right">Review Documents</a>
+    <div class="clearfix"></div>
+
+    @{ Html.RenderPartial("_Notification"); }
+    <div id="validation-summary"></div>
+
+    <div class="ems-form create-form-outer-box">
+        @using (Html.BeginForm("addedit", "orgdocument", FormMethod.Post, new { id = "orgdocumentForm" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+
+            if (!Model.AllowEdit)
+            {
+                @Html.HiddenFor(x => x.DocType)
+                @Html.HiddenFor(x => x.OrgDocumentMasterId)
+            }
+
+            <div class="row">
+                <div class="col-sm-12 col-lg-10">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(x => x.DocType)
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.DocType,  Model.DocumentTypeList, "-Select-",
+                                        htmlAttributes: Model.AllowEdit ? new { @class = "form-control", @data_msg_required = "*required" } :
+                                            new { @class = "form-control", @disabled = "disabled" } as object)
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(x => x.OrgDocumentMasterId)
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(x => x.OrgDocumentMasterId,  Model.OrgDocumentMasterList, "-Select-",
+                                        htmlAttributes: Model.AllowEdit ? new { @class = "form-control" } :
+                                            new { @class = "form-control", @disabled = "disabled" } as object)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div id="currentBaselineDoc"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @if (Model.AllowEdit)
+                        {
+                            <div class="col-md-2">
+                                <label>Would you like new/update baseline document?</label>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(x => x.Document,  htmlAttributes: Model.Id == 0 ? new { @type = "file", @data_msg_required = "*required", @data_rule_required = "true" } :
+                                                new { @type = "file" } as object)
+                            </div>
+                        }
+                        @if (Model.Id > 0 && !string.IsNullOrWhiteSpace(Model.DocumentPath))
+                        {
+                            <div class="col-md-2">
+                                <label>Uploaded Doc</label>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="@Model.DocumentPath" class="btn btn-link" target="_blank">@Model.OrgDocumentMasterName</a>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(x => x.IsMajorVer)
+                        </div>
+                        <div class="col-md-3">
+                            <input type="checkbox" value="true" name="IsMajorVer" @(Model.IsMajorVer ? "checked" : "") @(Model.AllowEdit ? "" : "disabled") />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(x => x.HighLevelChanges)
+                        </div>
+                        <div class="col-md-7">
+                            @if (Model.AllowEdit)
+                            {
+                                @Html.TextAreaFor(x => x.HighLevelChanges,  htmlAttributes: new { @class = "form-control", @style = "height:60px" })
+                            }
+                            else
+                            {
+                                @Html.Raw(Model.HighLevelChanges)
+                            }
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <h2>Set Document Access level</h2>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Departments</label>
+                        </div>
+
+                        <div class="col-md-10">
+                            <div class="row visibility">
+                                <div class="col-sm-12">
+                                    <input type="checkbox" id="allDepartments" @(Model.DepartmentIds != null && Model.DepartmentIds.Length == Model.DepartmentList.Count ? "checked" : "") />
+                                    <label for="allDepartments">All Departments</label>
+                                </div>
+                                @foreach (var dept in Model.DepartmentList)
+                                {
+                                    var isSelected = Model.DepartmentIds != null && Model.DepartmentIds.Contains(Convert.ToInt32(dept.Value));
+                                    <div class="col-sm-6 col-md-3">
+                                        <input type="checkbox" name="DepartmentIds[]" id="dept_@dept.Value" value="@dept.Value" @(isSelected ? "checked" : "") />
+                                        <label for="dept_@dept.Value">@dept.Text</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Roles</label>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row visibility">
+                                <div class="col-sm-12">
+                                    <input type="checkbox" id="allRoles" @(Model.RoleIds != null && Model.RoleIds.Length == Model.RoleList.Count ? "checked" : "") />
+                                    <label for="allRoles">All Roles</label>
+                                </div>
+                                @foreach (var role in Model.RoleList)
+                                {
+                                    var isSelected = Model.RoleIds != null && Model.RoleIds.Contains(Convert.ToInt32(role.Value));
+                                    <div class="col-sm-6 col-md-3">
+                                        <input type="checkbox" name="RoleIds[]" id="role_@role.Value" value="@role.Value" @(isSelected ? "checked" : "") />
+                                        <label for="role_@role.Value">@role.Text</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Would you like to send email after approved of document?</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="checkbox" value="true" name="IsSendEmail" @(Model.IsSendEmail ? "checked" : "") @(Model.IsApproved ? "disabled" : Model.Id > 0 && Model.CreateByUid != CurrentUser.Uid ? "disabled" : "") />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-sm-10 text-left">
+                            <button type="submit" class="btn btn-custom" name="Save">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script src="~/bundles/OrgDocument/addEdit"></script>
+
+    
+}

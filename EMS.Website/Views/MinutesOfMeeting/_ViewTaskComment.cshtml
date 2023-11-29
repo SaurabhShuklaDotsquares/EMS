@@ -1,0 +1,103 @@
+﻿@model MomMeetingTaskCommentsDto
+@using EMS.Web.Models.Others
+<style>
+   .table-striped > tbody > tr:nth-of-type(2n+1) {
+        background-color: #e9e9e9;
+    }
+    table-striped tr {
+        color: #333;
+    }
+    table-striped td {
+        padding: 10px 7px;
+    }
+    .comments {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        font-size: 13px;
+       
+    }
+        .comments i {
+            color: #757575;
+            font-size: 12px;
+            text-decoration: dotted;
+            margin-top: 8px;
+            display: block;
+             color:#000000;
+        }
+</style>
+<div>
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Action DETAILS <span class='pull-right margin-right15'>Target date to finish the Action : " + Model.MomMeetingTask.TargetDates + "</span>" })
+
+    <div class="modal-body">
+        <table class="table table-striped table-no-border">
+            <tbody>
+                <tr>
+                    <td width="17%"><strong>Action : </strong></td>
+                    <td width="33%">@Model.MomMeetingTask.Task</td>
+                    <td width="17%"><strong>Assigned Meeting : </strong></td>
+                    <td width="33%">  @Model.MomMeetingTask.MeetingTitle</td>
+
+                </tr>
+                <tr>
+                    <td width="17%"><strong>Current Status : </strong></td>
+                    <td width="33%"> @Model.MomMeetingTask.Status</td>
+                    <td width="17%"><strong>Assign To : </strong></td>
+                    <td width="33%"> @Model.MomMeetingTask.PaticipantsList</td>
+
+                </tr>
+                <tr>
+                    <td width="17%"><strong>Remark : </strong></td>
+                    <td colspan="3" width="83%"> @Html.Raw(Model.MomMeetingTask.Remark)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @if (Model.MomMeetingTaskTimeLineDto.Count > 0)
+        {
+            <h4 class="modal-title">Action HISTORY</h4>
+
+            foreach (var item in Model.MomMeetingTaskTimeLineDto)
+            {
+                var from = "";
+                @if (item.TaskCommentId > 0)
+                {
+                    from = " - (From To-Do)";
+                }
+
+                <div class="comments">
+                    <i>
+                        @item.CreatedDate.ToString("dd/MM/yyyy") &nbsp;&nbsp;  <b>@(item.CommentedBy != null && item.CommentedBy != "" ? "[Added By " + item.CommentedBy + "]" : "")</b>&nbsp;&nbsp;
+                        @if (item.Status == EMS.Core.Enums.MomMeetingStatus.Pending)
+                        {
+                            <strong class="alert-danger">@item.Status @from</strong>
+                        }
+                        else if (item.Status == EMS.Core.Enums.MomMeetingStatus.Delayed)
+                        {
+                    <strong class="alert-warning">@item.Status @from</strong>}
+                        else if (item.Status == EMS.Core.Enums.MomMeetingStatus.Ongoing)
+                        {
+                    <strong class="alert-info">@item.Status @from</strong>
+                        }
+                        else
+                        {
+                    <strong class="alert-success">@item.Status @from</strong>
+                        }
+
+                    </i>
+                    @Html.Raw(item.Comment)
+                </div>
+            }
+        }
+
+        <div class="panel-body">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+

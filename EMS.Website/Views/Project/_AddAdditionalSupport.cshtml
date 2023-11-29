@@ -1,0 +1,72 @@
+﻿@using System.Web.Mvc
+@using EMS.Web.Models.Others
+@model ProjectAdditionalSupportDto
+
+@using (Html.BeginForm("RequestAdditionalSupport", "Project", FormMethod.Post, new { @id = "additionalSupportForm" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Request Additional Support", DisplayCloseButton = false });
+
+    <div class="modal-body">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="validation-summary"></div>
+        @Html.HiddenFor(x => x.FromProjectStatus)
+        @Html.HiddenFor(x => x.Status)
+        @foreach (var id in Model.AssignedUserIds)
+        {
+            <input type="hidden" name="AssignedUserIds[]" value="@id" />
+        }
+
+        <div class="row form-group">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ProjectId)
+            </div>
+            <div class="col-md-10">
+
+                @Model.ProjectName
+                @Html.HiddenFor(model => model.ProjectId)
+
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Project Manager </label>
+            </div>
+            <div class="col-md-6">
+                @Html.DropDownListFor(model => model.TLid,  Model.TLList, "Select PM", new { @class = "form-control",  @data_rule_required = "true" })
+            </div>
+            <div class="col-md-4 padding-top15">
+                <label class="label label-danger">Project Manager is mandatory</label>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Reason for Add. Support</label>
+            </div>
+            <div class="col-md-10">
+                @*@Html.TextAreaFor(model => model.Description,  htmlAttributes: new { @class = "form-control", @data_msg_required = "Reason for Add. Support is required", @data_rule_required = "true" })*@
+                @Html.TextAreaFor(model => model.AddDescription, htmlAttributes: new { @class = "form-control", @data_msg_required = "Reason for Add. Support is required", @data_rule_required = "true" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Start Date for Add. Support</label>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.StartDate,  htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-md-2">
+                <label>End Date for Add. Support</label>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.EndDate,  htmlAttributes: new { @class = "form-control datepicker", @readonly = "readonly" })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button id="CancelAdditionalSupport" class="btn btn-custom pull-right" type="button">Cancel</button>
+        <button class="btn btn-custom btn-pink pull-right margin-right10" id="SubmitAddSupport" type="submit">SUBMIT</button>
+        <button class="btn btn-custom btn-pink pull-left" id="SubmitAddSupportContinue" type="submit">SKIP AND CONTINUE</button>
+    </div>
+}

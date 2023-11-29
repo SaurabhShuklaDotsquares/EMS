@@ -1,0 +1,52 @@
+﻿@model ProjectActualHoursDto;
+@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Project Actual Hour Report";
+}
+<style>
+    .padding-right {
+        padding-right: 5px !important;
+    }
+</style>
+
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Project Actual Hours Variance</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-right ">
+                <div class="pull-right ">
+                    <button id="btnGo" class="btn btn-custom">Search</button>
+                </div>
+                <div class="col-md-2 pull-right ">
+                    <input asp-for="DateTo" class="form-control" type="text" placeholder="To Date" autocomplete="off" />
+                </div>
+                <div class="col-md-2 pull-right ">
+                    <input asp-for="DateFrom" class="form-control" type="text" placeholder="From Date" autocomplete="off" />
+                </div>
+                <div class="col-md-2 pull-right ">
+                    @Html.DropDownListFor(x => x.ProjectStatus, new SelectList(Model.ProjectStatusList, "Value", "Text"), "--All Status--", new { @class = "form-control" })
+                </div>
+                <div class="pull-right ">
+                    @Html.DropDownListFor(x => x.ProjectId, new SelectList(Model.Projects, "Value", "Text"), "--All Projects--", new { @class = "form-control chosen" })
+                </div>
+            </div>
+        </div>
+        <table id="grid-ProjectActualHour-table" class="table table-stats"></table>
+    </div>
+    </div>
+<div class="divoverlay hide"></div>
+
+@section scripts{
+    <script src="~/Scripts\CustomJS\Report\ProjectActualHours.js" asp-append-version="true"></script>
+    <script type="~/Scripts/plugin/SearchDropdown/choosen.js"></script>
+}
+
+

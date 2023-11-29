@@ -1,0 +1,56 @@
+﻿@using EMS.Web.Models.Others
+@model TimeSheetReviewDto
+
+<div id="frm-edit-projectuserreport">
+    @using (Html.BeginForm())
+    {
+        @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Edit Time Sheet Report" })
+        <div class="modal-body">
+            @Html.HiddenFor(model => model.UserTimeSheetID)
+            @Html.HiddenFor(model => model.Uid)
+
+
+
+            
+            @Html.Hidden("hdnDeveloperid",Model.DeveloperId, new { @id="hdnDeveloperid"})
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group clearfix">
+                        @Html.TextBoxFor(model => model.AddedDate, null, new { @class = "form-control clsdatepicker",  @data_msg_required = "* Required", @data_rule_required = "true" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group clearfix">
+                        @Html.DropDownListFor(model => model.ProjectId, ViewBag.ProjectList as IEnumerable<SelectListItem>, null, new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true"})
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group clearfix">
+                        @Html.DropDownListFor(model => model.DeveloperId, Enumerable.Empty<SelectListItem>(), null, new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group clearfix">
+                        @Html.TextBoxFor(model => model.WorkHoours,  null, new { @class = "form-control clstimepicker"})
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group clearfix">
+                        @Html.TextAreaFor(model => model.Description,  6, 20, new { @class = "form-control", @maxlength = 500 })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button data-dismiss="modal" id="btn-cancel" class="btn btn-secondary" type="button">Cancel</button>
+                <button class="btn btn-primary1" id="btnsubmit" type="button">Submit</button>
+        </div>
+        @*@Html.Partial("_ModalFooter", new ModalFooter { })*@
+    }
+</div>

@@ -1,0 +1,71 @@
+﻿@model EMS.Dto.LibraryManagement.CvsTypeDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    Layout = null;
+}
+<style>
+    .chkbox {
+        padding-left: 2px;
+    }
+</style>
+<div class="cmxform addedit-saleskit">
+    @using (Html.BeginForm("AddEdit", "CVs", FormMethod.Post, new { @id = "frm-cvs" }))
+    {
+        @Html.HiddenFor(model => model.CvsId)
+
+        <div class="bg-white">
+            <div id="validation-summary"></div>
+            <div class="popup-top text-left">
+                @if (Model.CvsId == 0)
+                {
+                    <h3 style="color:#fff;padding-top:15px;" class="text-center">Add CV Type</h3>
+                }
+                else
+                {
+                    <h3 style="color:#fff;padding-top:15px;" class="text-center">Edit CV Type</h3>
+                }
+            </div>
+            <div class="popup-container" id="popup-container">
+
+
+                <p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Name)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.Name, null, new { @class = "form-control", @autocomplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                        </div>
+
+                    </div>
+                </p>
+                <p>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <div class="col-md-1">
+                                @Html.CheckBoxFor(model => model.IsActive)
+                            </div>
+                            <div class="col-md-4 chkbox">
+                                @Html.LabelFor(model => model.IsActive)
+                            </div>
+                        </div>
+                    </div>
+                </p>
+                <p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.DisplayOrder)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.DisplayOrder, null, new { @class = "form-control", @type = "number", @min = 0 })
+                        </div>
+                    </div>
+                </p>
+
+            </div>
+            @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonID = "btn-submit", SubmitButtonText = "Submit", CancelButtonText = "Cancel" })
+        </div>
+    }
+</div>

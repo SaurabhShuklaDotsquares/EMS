@@ -1,0 +1,72 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model AssignedHistoryIndexDto
+@{
+    ViewBag.Title = "Assigned Devices";
+}
+
+<div class="full-wdth padding20" id="deviceHistory">
+    @{ await Html.RenderPartialAsync("_Notification"); }
+    <div id="NotificationMessage"></div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Assigned Devices</h2>
+        </div>
+        <div class="col-md-8">
+            <div class="row clearfix">
+                @if (Model.AllowManage)
+                {
+                    <div class="col-sm-4 col-md-2 pull-right form-group">
+                        <a href="@Url.Action("devicemaster", new { option="add" })" class="btn btn-custom btn-block">Add Device</a>
+                    </div>
+                }
+                <div class="col-sm-4 col-md-2 pull-right form-group">
+                    <button type="button" id="btnSearch" class="btn btn-custom btn-block">
+                        Search
+                    </button>
+                </div>
+                <div class="col-sm-4 col-md-2 pull-right form-group">
+                    <select id="HistoryType" class="form-control">
+                        <option value="1">Currently Assigned</option>
+                        <option value="0">Complete History</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 col-md-2 pull-right form-group">
+                    <select id="DeviceId" class="form-control">
+                        <option>All Devices</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 col-md-2 pull-right form-group">
+                    @Html.DropDownList("DeviceType", Model.DeviceTypeList, "All Type", htmlAttributes: new { @class = "form-control" })
+                </div>
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                {
+                    <div class="col-sm-4 col-md-2 pull-right form-group">
+                        <select id="UserId" class="form-control" asp-items="@Model.UserList">
+                            <option>All</option>
+                        </select>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+
+    <a class="btn btn-custom pull-right" href="@Url.Action("addeditassigndevice")" data-target="#modal-assign-device" data-toggle="modal" data-backdrop="static">
+        Assign Device
+    </a>
+    
+    <table id="grid-device-history" class="table table-stats"></table>
+
+</div>
+<div class="divoverlay hide"></div>
+@{  
+    await Html.RenderPartialAsync("_Modal", new Modal { ID = "modal-assign-device", AreaLabeledId = "modal-assign-device-label", Size = Enums.ModalSize.Medium });
+    await Html.RenderPartialAsync("_Modal", new Modal { ID = "modal-return-device", AreaLabeledId = "modal-return-device-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{   
+    <script src="~/bundles/Device/index" asp-append-version="true"></script>  
+}

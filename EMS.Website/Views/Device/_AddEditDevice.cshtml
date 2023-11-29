@@ -1,0 +1,76 @@
+﻿@using EMS.Web.Models.Others
+@model DeviceDataDto
+
+
+@using (Html.BeginForm())
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = Model.Id > 0 ? "Edit Device" : "Add Device" });
+
+    <div class="modal-body">
+        <div id="NotificationMessage"></div>
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.AssignedQuantity)
+
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Name, null, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Name, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.DeviceType, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DeviceType, Model.DeviceTypeList, null, htmlAttributes: new { @class = "form-control" })
+                </div>
+
+
+                <div class="col-md-2 form-group required text-right nopad">
+                    @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.Quantity, htmlAttributes: new { @class = "form-control number", @autoComplete = "off", @maxLength = "4" })
+                    <span id="spnQuanityError" class="error"></span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group required clearfix sim">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.SimNetwork, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SimNetwork, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 text-right nopad">
+                    @Html.LabelFor(model => model.SimNumber, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SimNumber, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Condition, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Condition, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}

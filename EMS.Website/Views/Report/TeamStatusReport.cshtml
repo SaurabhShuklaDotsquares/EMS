@@ -1,0 +1,82 @@
+﻿@model TeamStatusReportDto;
+@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Team Status Report";
+}
+<style>
+    .padding-right {
+        padding-right: 5px !important;
+    }
+</style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row form-group">
+            <div class="col-sm-3">
+                <h2>Employee Status Report</h2>
+            </div>
+            <div class="col-sm-9 text-right">
+
+                <div class="row">
+                    
+                    <div class="pull-right">
+                        <button id="btnGo" class="btn btn-custom">Search</button>
+                        <button id="btnGoAll" class="btn btn-custom">All Team Members</button>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input asp-for="DateTo" class="form-control" type="text" placeholder="Date To" />
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input asp-for="DateFrom" class="form-control" type="text" placeholder="Date" />
+                    </div>
+
+                    <div class="div-Employee col-md-3 pull-right">
+                        <select asp-for="Uid" asp-items="Model.TlList" class="form-control">
+                            <option value="">- Select Tech Lead -</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row padding-top10">
+                    <div class="col-md-2 pull-right">
+                        <input asp-for="IsCurrentMonth" type="checkbox"/>
+                        <span><label for="IsCurrentMonth">Current Month</label></span>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input asp-for="IsCurrentWeek" type="checkbox"/>
+                        <span><label for="IsCurrentWeek">Current Week</label></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="div-chart dis-block padding-top15 clearfix">
+            <div id="g_chart" style="width: 100%; height: 500px"></div>
+        </div>
+
+        <div class="div-details dis-block padding-top15 clearfix">
+            <table id="grid-details" class="display postable table table-stats table-condensed">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Employee</th>
+                        <th>Project Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="~/Scripts/CustomJS/Report/TeamStatusReport.js" asp-append-version="true"></script>
+    @*<script src="~/bundles/Report/TeamStatusReport" asp-append-version="true"></script>*@
+}
+

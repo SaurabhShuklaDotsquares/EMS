@@ -1,0 +1,47 @@
+﻿@model InvoiceStatusDto
+@using EMS.Web.Models.Others
+@using (Html.BeginForm())
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Project Invoice Status" })
+    <div class="modal-body">
+        <div id="MessageDiv"></div>
+        @Html.HiddenFor(model => model.InvoiceId)
+        <div class="row form-group clearfix">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.ProjectName)
+            </div>
+            <div class="col-md-9">
+                @Model.ProjectName
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-3">
+                @Html.LabelFor(model=> model.CurrentStatus)
+            </div>
+            <div class="col-md-9">
+                @Model.CurrentStatus
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-3">
+                @Html.LabelFor(model=> model.InvoiceStatusId)
+            </div>
+            <div class="col-md-9">
+                @Html.DropDownListFor(model => model.InvoiceStatusId, Model.InvoiceStatus, null, new { @class = "form-control", @data_rule_required = "true", @data_msg_required = "*required" })
+            </div>
+        </div>
+        <div class="row form-group clearfix hide remainamnt">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.RemainingAmount)
+            </div>
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.RemainingAmount, null, new { @class = "form-control decimal-number",@data_rule_required = "true", @data_msg_required = "*required", @disabled = "disabled"})
+            </div>
+        </div>
+        
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter())
+}
+

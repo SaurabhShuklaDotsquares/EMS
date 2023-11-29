@@ -1,0 +1,418 @@
+﻿@model EstimateHourDto
+@{
+    if (Model.Id == 0)
+    {
+        ViewData["Title"] = "Add Estimate Hour";
+    }
+    else
+    {
+        ViewData["Title"] = "Edit Estimate Hour";
+    }
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var FileNameCount = Model.FileNames.Count;
+    var SelectedFileName = Model.EstimateHourFileNameTypeId;
+}
+@section styles{
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" />
+    <link rel="stylesheet" href="~/css/fSelect.css" />
+    <style>
+        .preview_image {
+            height: 100px;
+            width: 100%;
+        }
+
+        #previewImage {
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            #previewImage .link {
+                display: block;
+            }
+
+            #previewImage .col-md-2 {
+                margin-bottom: 10px;
+            }
+
+        .preview_doc {
+            height: 70px;
+            min-width: 65px;
+        }
+
+        .radio-custom input[type="radio"] + label {
+            background: url("") !important;
+        }
+
+        .error {
+            color: red !important;
+        }
+
+        .my-spacing {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .link {
+            color: #337ab7 !important;
+            text-decoration: underline !important;
+        }
+
+        fieldset {
+            border: 1px solid #979797;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            padding: 0.2em 0.5em;
+            border: 1px solid #979797;
+            font-size: 90%;
+            text-align: right;
+            width: auto;
+            margin-bottom: 0px;
+        }
+
+        /*.design-type-0 .remove-design-type {
+            display: none;
+        }*/
+        input[type="file"] {
+            white-space: normal;
+            word-wrap: break-word;
+            width: 240px;
+            overflow: auto;
+        }
+
+        #name {
+            position: relative;
+            z-index: 10000;
+        }
+
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+        .fs-label-wrap{
+            height: 35px;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <h2>@((Model.Id == 0) ? "Add" : "Edit") Estimate Hour</h2>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <partial name="_Notification" />
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("AddEdit", "EstimateHour", FormMethod.Post, new { @id = "createEstimateHour_form", @autocomplete = "off", @enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+
+            @*<input type="hidden" id="image_no" value="@imgNo" />
+                <input type="hidden" id="componentCount" value="@componentCount" />
+                <input type="hidden" id="layoutCount" value="@layoutCount" />
+                <input type="hidden" id="techCount" value="@techCount" />
+                <input type="hidden" id="designTypeCount" value="@designCount" />*@
+
+            <input type="hidden" id="FileNameCount" value="@FileNameCount" />
+            @Html.HiddenFor(x => x.EstimateHourFileNameTypeId)
+
+            @*<div class="row">*@
+            @*<div class="row col-sm-12">*@
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.RequirementName, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.RequirementName, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                            <label id="UniqueTitle-error" class="error" style="display:none">This requirment name is already exist</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Crmid, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.Crmid, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.ComplexityLevel, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                        </div>
+                        <div class="col-md-9">
+                            @*@foreach (var cValue in Enum.GetValues(typeof(Enums.ComplexityLevel)))
+                                {
+                                    var cLevel = Enum.GetName(typeof(Enums.ComplexityLevel), cValue);
+                                    var id = TagBuilder.CreateSanitizedId(string.Format("{0}_{1}_{2}", "rdbtn", typeof(Enums.ComplexityLevel), cValue), "");*@
+                            @*<div class="col-md-3">*@
+                            @*<div class="chk pull-left">*@
+                            @Html.DropDownListFor(model => model.ComplexityLevel, Html.GetEnumSelectList(typeof(Enums.ComplexityLevel)), "Select Complaxity", new { @class = "form-control" })
+                            @*<input type="radio" name="ComplexityLevel" id=@id data-id="@cValue" value=@((byte)cValue) @(Model.ComplexityLevel == (byte)cValue ? "checked" : "") />
+                                <label for=@id>&nbsp;@cLevel</label>*@
+
+                            @*@Html.RadioButtonFor(x=>  x.ComplaxityEnum, cValue, new { @id=id,@checked= (Model.ComplexityLevel.ToString() == ((byte)cValue).ToString() ? "true" : "false") })*@
+                            @*<label for=@id>&nbsp;@cLevel</label>*@
+                            @*</div>*@
+                            @*</div>*@
+                            @*}*@
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.EstimatedHour, htmlAttributes: new { @class = "control-label" })
+                            <label>*</label>
+                        </div>
+                        <div class="col-md-6">
+                            @if (Model.IsFreeBie)
+                            {
+                                @Html.TextBoxFor(model => model.EstimatedHour, htmlAttributes: new { @class = "form-control", @disabled = "disabled", @id = "EstimatedHours", @autocomplete = "off", @placeholder = "Estimated Hours" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.EstimatedHour, htmlAttributes: new { @class = "form-control", @id = "EstimatedHours", @autocomplete = "off", @placeholder = "Estimated Hours" })
+
+                            }
+                        </div>
+                        <div class="col-md-3">
+                            @Html.CheckBoxFor(m => m.IsFreeBie)
+                            <label for="IsFreeBie" class="control-label">
+                                FreeBie
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.EstimateHourFileNameTypeId, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-9">
+                            <div id="FileNameList">
+                                @*<div class="col-md-7">*@
+                                    <select asp-for="EstimateHourFileNameTypeId" style="width:150px !important;" class="test" name="EstimateHourFileNameTypeId" required id="selectFileList">
+                                        @*multiple="multiple"*@
+                                        <option value="">Select File</option>
+                                        @foreach (var item in Model.FileNames)
+                                        {
+                                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                        }
+                                    </select>
+                                @*</div>*@
+                                @*<div class="col-md-5" style="padding-top:5px;">*@
+                                    <a id="newFileName" title="Create" class="link" href="@Url.Action("AddfileName","EstimateHour")" data-toggle="modal"
+                                       data-target="#modal-add-FileName" data-backdrop="static" style="text-decoration: none !important;">
+                                        Add New File <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </a>
+                                @*</div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row ba-row" )>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Domains, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownList("DomainId", Model.Domains, "Select Domain", new { @class = "form-control", })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row col-md-12" style="margin-bottom:15px;">
+                <div class="col-md-6">
+                    <div class="row ba-row" )>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.BAUsers, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownList("Bauid", Model.BAUsers, "Select BA", new { @class = "form-control", })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.TLUsers, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownList("Tluid", Model.TLUsers, "Select TL", new { @class = "form-control", })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row col-md-12" style="margin-bottom:15px;">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.RequirementDesc, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextAreaFor(x => x.RequirementDesc, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Description", @rows = "2" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.ConversionDate, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.ConversionDate, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @readonly = "readonly" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="row col-md-12 my-spacing industryRow">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Domains, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-10">
+                        @foreach (var item in Model.Domains)
+                        {
+                            <div class="col-md-3">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" name="Industry" id="chkIndustry_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") />
+                                    <label for="chkIndustry_@item.Value">&nbsp;@item.Text</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>*@
+
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.TechnologyParents, htmlAttributes: new { @class = "control-label" })
+                    <span id="techParentSpan">*</span>
+                    <label id="TechnologyParent-error" class="error" style="" for="TechnologyParent"></label>
+                </div>
+                <div class="col-md-10" id="techParent">
+                    @foreach (var item in Model.TechnologyParents)
+                    {
+                        <div class="col-md-3">
+                            <div class="chk pull-left">
+                                <input type="checkbox" name="TechnologyParent" id="chkTechnologyParent_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") required />
+                                <label for="chkTechnologyParent_@item.Value">&nbsp;@item.Text</label>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="row col-md-12 my-spacing" id="techVisibility" @((Model.Id > 0 || Model.OpenBy == "Save And Add New") ? "style=display:block" : "style=display:none")>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Technologies, htmlAttributes: new { @class = "control-label" })
+                    <span>*</span>
+                    <label id="Technology-error" class="error" style="" for="Technology"></label>
+                </div>
+                <div class="col-md-10" id="techIds">
+                    @if (Model.Id > 0 || Model.OpenBy == "Save And Add New")
+                    {
+                        @foreach (var item in Model.Technologies)
+                        {
+                            <div class="col-md-3 parentTechId_@item.Group.Name">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" name="Technology" id="chkTechnology_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") />
+                                    <label for="chkTechnology_@item.Value">&nbsp;@item.Text</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                @*<div class="col-md-12">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="col-md-3" style="padding-left: 5px;">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" id="chkOtherTechnology" @(!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "checked" : "") />
+                                    <label for="chkOtherTechnology">&nbsp;Other Technology</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="divOtherTechnology" @(string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "style=display:none" : "")>
+                                <div class="chk pull-left">
+                                    @Html.TextBoxFor(model => model.OtherTechnology, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter technology name" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+
+            <div class="row col-md-12 my-spacing" style="padding:0px;">
+                <div class="col-md-12">
+                    <div class="pull-right ">
+                        <a href="@Url.Action("Index","EstimateHour")" class="btn btn-custom margin-right10" style="background-color: lightgray;" name="Save">Cancel</a>
+                        <input type="submit" id="btnsave" class="btn btn-custom margin-right10" name="Save" value="Save" />
+
+                        @if (Model.Id == 0)
+                        {
+                            <input type="submit" id="btnsaveAndAddNew" class="btn btn-custom margin-right10" name="SaveAndAddNew" value="Save And Add New" />
+                        }
+                    </div>
+
+                </div>
+            </div>
+            @*</div>*@
+            @*</div>*@
+        }
+    </div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-add-FileName", AreaLabeledId = "modal-add-FileName-label", Size = Enums.ModalSize.Medium })
+@*@Html.Partial("_Modal", new Modal { ID = "modal-add-component", AreaLabeledId = "modal-add-component-label", Size = Enums.ModalSize.Medium })
+    @Html.Partial("_Modal", new Modal { ID = "modal-add-template", AreaLabeledId = "modal-add-template-label", Size = Enums.ModalSize.Medium })
+
+    @Html.Partial("_Modal", new Modal { ID = "modal-add-layout", AreaLabeledId = "modal-add-layout-label", Size = Enums.ModalSize.Medium })*@
+
+@section scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <script src="~/Scripts/CustomJS/EstimateHour/estimateHourAddEdit.js" asp-append-version="true"></script>
+    <script src="~/js/fSelect.js"></script>
+    <script>
+        (function ($) {
+            $(function () {
+                window.fs_test = $('.test').fSelect();
+            });
+        })(jQuery);
+    </script>
+}

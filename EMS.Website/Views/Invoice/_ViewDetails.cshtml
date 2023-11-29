@@ -1,0 +1,114 @@
+﻿@model InvoiceDto
+@using EMS.Web.Models.Others
+<style>
+    .table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #e9e9e9;
+}
+    .table-striped {
+        border: none;
+    }
+
+        .table-striped tbody > tr > td {
+            border-bottom: none;
+            border-right: none;
+            border-left: none;
+            border-top: none;
+            color: #333;
+            padding: 10px 7px;
+        }
+
+        .table-striped tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+            .table-striped tbody tr:last-child {
+                border-bottom: none;
+            }
+
+    label {
+        font-weight: 600;
+        margin-bottom:0
+    }
+
+    .comments {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+        .comments i {
+            color: #757575;
+            font-size: 12px;
+            text-decoration: dotted;
+            margin-top: 8px;
+            display: block;
+        }
+</style>
+
+@Html.Partial("_ModalHeader", new ModalHeader { Heading = "View Invoice" })
+
+<div class="modal-body">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <td><label>Invoice Created Date</label></td>
+                <td>@Model.Created</td>
+                <td><label>Invoice Number</label></td>
+                <td>@Model.InvoiceNumber</td>
+            </tr>
+            <tr>
+                <td><label>Client Name</label></td>
+                <td>@Model.ClientName</td>
+                <td><label>Project Name</label></td>
+                <td>@Model.ProjectName</td>
+            </tr>
+            <tr>
+                @if (!string.IsNullOrWhiteSpace(Model.InvoiceAmount))
+                {
+                    <td><label>Invoice Amount</label></td>
+                    <td>@Model.Amount</td>
+                    <td><label>Invoice Status</label></td>
+                    <td>@Model.Status</td>
+                }
+                else
+                {
+                    <td><label>Invoice Status</label></td>
+                    <td colspan="3">@Model.Status</td>
+                }
+            </tr>
+            <tr>
+                <td><label>Invoice Start Date</label></td>
+                <td>@Model.StartDate</td>
+                <td><label>Invoice End Date</label></td>
+                <td>@Model.EndDate</td>
+            </tr>
+            <tr>
+                <td><label>BA Name</label></td>
+                <td>@Model.BAName</td>
+                <td><label>TL Name</label></td>
+                <td>@Model.TLName</td>
+            </tr>
+            <tr>
+                <td><label>Technologies</label></td>
+                <td colspan="3">@Model.Technologies</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="clearfix">
+        @if (Model.ProjectInvoiceComments.Count > 0)
+            {
+            <h4 class="modal-title">
+                Invoice Chased History
+            </h4>
+            foreach (var item in Model.ProjectInvoiceComments)
+            {
+                <div class="comments">
+                    <i>@item.CommentDate</i>
+                    @item.Comment
+                </div>
+            }
+        }
+    </div>
+</div>
+<script src="~/Scripts/CustomJS/Invoice/invoice-detailpopup.js"></script>

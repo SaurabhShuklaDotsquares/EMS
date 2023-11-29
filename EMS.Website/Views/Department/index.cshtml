@@ -1,0 +1,46 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" />
+    
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+
+        <div class="ManageDepartment-page full-wdth clearfix">
+            <h2>Manage Department</h2>
+            <div class="dis-block clearfix">
+                <div class="pull-left box1">
+                    <a data-toggle='modal' data-target='#modal-action-department' href="@Url.Action("AddEditDepartment", "Department")" class="btn btn-custom pull-right btn-addDept">Add New</a>
+                </div>
+                <div class="pull-right box2">
+                    <div class="wdth2 margin-right10 pull-left">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="wdth1 margin-right10 pull-left">
+                                @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Enter Department Name", style = "width: 250px;" })
+                            </div>
+
+                            <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <br />
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-department" class="display postable table table-bordered table-condensed"></table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-action-department", AreaLabeledId = "modal-action-department-label", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+    <script  src="~/Scripts/CustomJS/department.js"></script>
+    
+}

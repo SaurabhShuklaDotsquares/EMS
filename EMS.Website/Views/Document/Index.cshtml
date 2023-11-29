@@ -1,0 +1,43 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Document";
+}
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+}
+
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Department Documents</h2>
+            </div>
+            @if (CurrentUser.RoleId == (int)Enums.UserRoles.Director || CurrentUser.IsSuperAdmin)
+            {
+                <div class="col-sm-8 text-right">
+                    <a class="btn btn-custom" href="@Url.Action("add")">Add New</a>
+                </div>
+            }
+        </div>
+        <table id="grid-document-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-document", AreaLabeledId = "lbl-delete-document", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-edit-document", AreaLabeledId = "modal-add-edit-document-label", Size = Enums.ModalSize.Large });
+}
+
+@section scripts{
+    <script type="text/javascript">
+        var isAllowed =@((CurrentUser.RoleId==(int)(int)Enums.UserRoles.Director || CurrentUser.IsSuperAdmin) ?1:0);
+    </script>
+    <script src="~/Scripts/CustomJS/Document/index.js" asp-append-version="true"></script>
+    
+
+}
+

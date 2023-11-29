@@ -1,0 +1,251 @@
+﻿@using System.Web.Mvc
+@using EMS.Core
+@model ProjectDto
+@using EMS.Web.Code.LIBS
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="manageProject-Page full-wdth clearfix">
+            <h2>Edit Project</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="grey-bg ems-form dis-block clearfix">
+                    @using (Html.BeginForm("AddEditProject", "Project", FormMethod.Post, new { @id = "addEditProjectForm", @enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(model => model.ProjectId)
+                        @Html.Hidden("IsInHouseOld", Model.IsInHouse)
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.Name)
+                                </div>
+                                <div class="col-lg-7">
+                                    @Html.TextBoxFor(model => model.Name, null, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.CRMId)
+                                </div>
+                                <div class="col-lg-3">
+                                    @Html.TextBoxFor(model => model.CRMId, null, new { @class = "form-control", @maxlength = "8" })
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.EstimatedDays)
+                                </div>
+                                <div class="col-lg-3">
+                                    @Html.TextBoxFor(model => model.EstimatedDays, new { @class = "form-control", @maxlength = "4" })
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.Model)
+                                </div>
+                                <div class="col-lg-7">
+                                    @Html.DropDownListFor(model => model.Model, Model.ModelList, "--Select Model--", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.ActualDevelopers)
+                                </div>
+                                <div class="col-lg-3">
+                                    @Html.TextBoxFor(model => model.ActualDevelopers, new { @class = "form-control", @maxlength = "4" })
+                                </div>
+                                @if (Model.ProjectId != 0)
+                                {
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(model => model.ClientId)
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                        @Html.TextBoxFor(model => model.ClientId, new { @class = "form-control", @maxlength = "5" })
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.Status)
+                                </div>
+                                <div class="col-lg-7">
+                                    @Html.DropDownListFor(model => model.Status, Model.ProjectStatusList, "--Select--", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.StartDate)
+                                </div>
+                                <div class="col-lg-3">
+                                    @Html.TextBoxFor(model => model.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-2"><label for="StartDate" style="float:left" class="error"></label></div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.BillingTeam)
+                                </div>
+                                <div class="col-lg-7">
+                                    @Html.DropDownListFor(model => model.BillingTeam,  new List<SelectListItem>
+                           {
+
+                               new SelectListItem { Text="UK",Value="UK"},
+                               new SelectListItem { Value="USA", Text="USA"},
+                               new SelectListItem { Value="AUS", Text="Australia"},
+                               new SelectListItem { Value="INRFL", Text="India FL"},
+                               new SelectListItem { Value="INR", Text="India"},
+                               new SelectListItem { Value="Fr" ,Text="France"},
+                               new SelectListItem { Value="UAE" ,Text="UAE"}
+
+                           }, "--Select--", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.Notes)
+                                </div>
+                                <div class="col-lg-8">
+                                    @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", @style = "width:100%; resize:none;min-height:50px;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.ProjectDetailsDoc)
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="file" name="ProjectDetailsDoc" />
+
+                                    @*@Html.TextBoxFor(model => model.ProjectDetailsDoc, new { @type = "file",@name="file" })*@
+
+                                    <p style="font-size:smaller">(Upload only *.pdf,*.doc,*.docx,*.zip and *.rar file)</p>
+                                </div>
+
+                                @*<div class="col-md-8">
+
+                    </div>*@
+
+                            </div>
+                            <div class="col-md-6">
+                                @if (Model.ProjectDetailsDoc != null)
+                                {
+                                    <div class="col-md-2">
+                                        @Html.Label("Uploaded Files:")
+                                    </div>
+                                    <div class="col-md-7">
+                                        <a title="view file content" href="javascript:void(0)" onclick="window.open('Content/ProjectDoc/@Model.ProjectDetailsDoc', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');">
+                                            @Model.ProjectDetailsDoc
+                                        </a>
+                                    </div>
+
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.IsInHouse)
+                                </div>
+                                <div class="col-md-7">
+                                    @Html.CheckBoxFor(model => model.IsInHouse)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row margin-top20">
+
+                            <div class="col-md-12">
+                                <div>
+                                    <div class="hds">Department:</div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-12 deptChkBox">
+
+                                @if (Model.DepartmentList != null)
+                                {
+                                    foreach (var dept in Model.DepartmentList)
+                                    {
+                                        @*@Html.CheckBoxListFor(Model.Department, @Model.DepartmentList,)*@
+                                        <div class="col-md-3">
+
+                                            @if (Model.DepartmentList.Any(x => x.Id == dept.Id && x.Selected == true))
+                                            {
+
+                                                <input type="checkbox" name="Department" id="dept_@dept.Id" data-id="@dept.Id" value="@dept.Id" checked="@dept.Selected" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="Department" id="dept_@dept.Id" data-id="@dept.Id" value="@dept.Id" />
+                                            }
+
+
+                                            <label for="dept_@dept.Id" style="font-size: 13px;">&nbsp; @dept.Text</label>
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+                        </div>
+                        <div class="row margin-top20">
+                            <div class="col-md-12">
+
+                                <div>
+                                    <div class="hds">Technology:</div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-12 ">
+                                @if (Model.TechnologyList != null)
+                                {
+                                    foreach (var tech in Model.TechnologyList)
+                                    {
+                                        <div class="col-md-3">
+
+                                            @if (Model.TechnologyList.Any(x => x.Id == tech.Id && x.Selected == true))
+                                            {
+                                                <input type="checkbox" name="Technology" id="tech_@tech.Id" data-id="@tech.Id" value="@tech.Id" checked="@tech.Selected" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="Technology" id="tech_@tech.Id" data-id="@tech.Id" value="@tech.Id" />
+                                            }
+
+
+                                            <label for="tech_@tech.Id">&nbsp; @tech.Text</label>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 margin-top20">
+                                <button type="submit" id="btn-Submit" class="btn btn-custom pull-left" value="Save">Save</button>
+                                <a href="@Url.Action("Index","Project")" class="btn btn-custom pull-left margin-left10">Cancel</a>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{   
+    <script src="~/Scripts/CustomJS/Project/index.js"></script>
+
+}

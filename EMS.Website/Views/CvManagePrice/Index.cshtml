@@ -1,0 +1,95 @@
+﻿@model EMS.Dto.CVEstimatePrice.CVEstimatePriceDto
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  }
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .menuaccuss_editable {
+        margin-top: 20px;
+    }
+
+    .customCombobox {
+        width: 200px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        align-content: center;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div class="timesheet-page full-wdth clearfix">
+            <div id="CVEstimatePriceMessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+            <div id="MessageDiv"></div>
+             @Html.Partial("_Notification")
+            <h2> Manage Resource Price </h2>
+            <div class="validation-summary"></div>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form checkList-outer dis-block clearfix">
+                        @using (Html.BeginForm("SaveRecords", "CvManagePrice", FormMethod.Post, new { @id = "formcvmanageprice" }))
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Role Category:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.RoleCateGoryId, new SelectList(Model.roleCategoryList, "Id", "Text"), "-Select-", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                        <span asp-validation-for="RoleCateGoryId" class="text-danger validRoleCate"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Role Name:</label>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        @Html.DropDownList("RoleId", Enumerable.Empty<SelectListItem>(), "--Select --", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                        <span asp-validation-for="RoleId" class="text-danger validRole"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <div class="row techno" style="display:none;">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Technology:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.TechnologyId, new SelectList(Model.technologyList, "Id", "Text"), "-Select-", new { @class = "form-control", @required = "required" })
+                                        @*<span asp-validation-for="TechnologyId" class="text-danger validRoleTech"></span>*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <fieldset>
+                                <legend><h4>Fill the price as per experience (£) </h4></legend>
+                                <div class="row" id="container-result">
+                                    @Html.Partial("_EstimatePrice")
+                                </div>
+                                
+                            </fieldset>
+                            
+                       
+                        
+                        }
+                        @Html.Partial("_EstimatePriceList")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/scripts/customjs/cvestimateprice/cvestimateprice.js"></script>
+    <script src="~/Scripts/CustomJS/CVEstimatePrice/CVEstimatePriceList.js"></script>
+}

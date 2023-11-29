@@ -1,0 +1,51 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core;
+
+<div class="main_content">
+    <style>
+        .working {
+            background: #caffab !important;
+            color: #000 !important;
+            font-weight: normal;
+        }
+    </style>
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div class="manage-Project-page full-wdth">
+            <div class="divFloat-Left">
+                <h2 style="float:left;">Resource Pool(Free)</h2>
+
+                <div class="pull-right">
+                    <div class="wdth1 margin-right10 pull-left">
+                        <a class="export-btn" id="btn_export" style="display:none" data-href="@Url.Action("ExportToExcel","resourcepool")" href="@Url.Action("ExportToExcel","resourcepool")"><img src="content/images/excel.png" alt=""> Export To Excel</a>
+                    </div>
+                    <div class="wdth1 margin-right10 pull-left">
+                        @Html.DropDownList("ddl_department", ViewBag.DepartmentList as IEnumerable<SelectListItem>, "All Department", new { @class = "form-control" })
+                    </div>
+
+
+                    @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                    {
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.DropDownList("ddl_Pm", ViewBag.PMList as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 150px;" })
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="box-body">
+                <section id="no-more-tables">
+                    <table id="grid-manageProject" class="display postable table table-bordered table-condensed"></table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/CustomJS/ResourcePool.js"></script>
+
+}

@@ -1,0 +1,194 @@
+﻿@model FileNameDto
+
+
+@using (Html.BeginForm("AddfileName", "EstimateHour", FormMethod.Post, new { id = "FileNameForm", enctype = "multipart/form-data" }))
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Create File Name" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+        <div class="form-group required">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Name, htmlAttributes: new { @class = "form-control", @placeholder = "Enter File Name", @maxlength = 100, @required = "required", @id = "name" })
+                    <label id="component-error" class="error" style="" for="Description"></label>
+                </div>
+            </div>
+            <div style="margin-top: 4px;">
+                <input style="float:left;" type="file" name="EstimateFiles" id="EstimateFiles" />
+                @*<span id="upload-error" class="error" style="display:none">max file upload limit.</span>*@
+                <span id="upload-error" class="error" style="display:none"></span>
+            </div>
+        </div>
+
+        @Html.Partial("_ModalFooter", new ModalFooter { })
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#FileNameForm').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: domain + 'EstimateHour/AddFileName',
+                data: { name: $("#name").val() },
+                type: "POST",
+                success: function (result) {
+                    $("#Description-error").text('');
+                    if (result.isSuccess == true) {
+                        $("#modal-add-FileName").modal("hide");
+                        $("#modal-add-FileName").data("newFileName", $("#name").val());
+                        $("#modal-add-FileName").data("newFileNameId", result.data);
+                        $("#name").val('');
+                    } else {
+                        $("#component-error").text(result.message);
+                    }
+                }
+            })
+        });
+
+        $("#name").autocomplete({
+            source: [],
+            minLength: 2
+        });
+
+        $("#EstimateFiles").change(function () {
+                      readURL(this);
+        });
+
+        function readURL(input) {
+             //var temFileCount = parseInt($(".tempFile").length);
+            //var imgNo = parseInt($("#image_no").val()) - temFileCount;
+            //libraryType = $('.library-type:checked').val();
+            //var maxAllowedfiles = 10;
+            //var message = "10 max file upload limit.";
+            if (input.files) { //&& input.files.length > 0
+                //   $(".tempFile").remove();
+                // var newNo = imgNo + input.files.length;
+                var j = 0;
+                //if (imgNo < maxAllowedfiles) {
+
+                $("#upload-error").hide();
+                //for (var i = imgNo; i < newNo; i++) {
+                if (input.files) { //&& input.files[j]
+                    // var selectedFileCount = input.files.length;
+                    var reader = new FileReader();
+                    reader.onload = (function (j) {
+                       var fileName = j;
+                        //return function (e) {
+                        //var imageCount = parseInt(fileName.index) + 1;
+                        //if (imageCount <= maxAllowedfiles) {
+                        var imageExtensions = ["jpg", "png", "jpeg", "gif"];
+                        var OtherExtensions = ["pdf", "docx", "doc", "ppt", "xlsx", "xls", "doc", "csv", "psd", "html", "rar", "zip"];
+                        var extension = fileName.name.split('.').pop().toLowerCase();
+                        if (extension == 'exe') {
+                            alert(".exe type not allowed")
+                            return false
+                        }
+                        //if ($.inArray(extension, imageExtensions) > -1) {
+                        //    $("#previewImage").append("<div class='col-md-2 tempFile'><img id='img" + fileName.index + "' class='preview_image' src='" + e.target.result + "'><br><label><input type='radio' name='CoverImage' value='" + fileName.index + "' /> Is Banner?</label></div>");
+                        //} else {
+                        //    if ($.inArray(extension, OtherExtensions) > -1) {
+                        //        $("#previewImage").append("<div class='col-md-2 tempFile'><img id='img" + fileName.index + "' class='preview_doc' src='/images/Filetypes/" + extension + ".png'></div>");
+                        //    }
+                        //    else {
+                        //        $("#previewImage").append("<div class='col-md-2 tempFile'><img id='img" + fileName.index + "' class='preview_doc' src='/images/document.svg'></div>");
+                        //    }
+                        //}
+                        //$("#image_no").val(selectedFileCount);
+                        //} else {
+                        //    $("#upload-error").text(message);
+                        //    $("#upload-error").show();
+                        //}
+                        // };
+                    })(input.files[0]);
+                    //input.files[j].index = i;
+                    reader.readAsDataURL(input.files[0]);
+                    // j++;
+                }
+                //}
+                //} else {
+                //    $("#upload-error").text(message);
+                //    $("#upload-error").show();
+                //}
+            }
+        }
+        //function readURL(input) {
+        //    var temFileCount = parseInt($(".tempFile").length);
+        //    var imgNo = parseInt($("#image_no").val()) - temFileCount;
+        //    libraryType = $('.library-type:checked').val();
+        //    var maxAllowedfiles = 10;
+        //    var message = "10 max file upload limit.";
+        //    if (input.files && input.files.length > 0) {
+        //        $(".tempFile").remove();
+        //        var newNo = imgNo + input.files.length;
+        //        var j = 0;
+        //        if (imgNo < maxAllowedfiles) {
+
+        //            $("#upload-error").hide();
+        //            for (var i = imgNo; i < newNo; i++) {
+        //                if (input.files && input.files[j]) {
+        //                    var selectedFileCount = input.files.length;
+        //                    var reader = new FileReader();
+        //                    reader.onload = (function (j) {
+        //                        var fileName = j;
+        //                        return function (e) {
+        //                            var imageCount = parseInt(fileName.index) + 1;
+        //                            if (imageCount <= maxAllowedfiles) {
+        //                                var imageExtensions = ["jpg", "png", "jpeg", "gif"];
+        //                                var OtherExtensions = ["pdf", "docx", "doc", "ppt", "xlsx", "xls", "doc", "csv", "psd", "html", "rar", "zip"];
+        //                                var extension = fileName.name.split('.').pop().toLowerCase();
+        //                                if (extension == 'exe') {
+        //                                    alert(".exe type not allowed")
+        //                                    return false
+        //                                }
+        //                                if ($.inArray(extension, imageExtensions) > -1) {
+        //                                    $("#previewImage").append("<div class='col-md-2 tempFile'><img id='img" + fileName.index + "' class='preview_image' src='" + e.target.result + "'><br><label><input type='radio' name='CoverImage' value='" + fileName.index + "' /> Is Banner?</label></div>");
+        //                                } else {
+        //                                    if ($.inArray(extension, OtherExtensions) > -1) {
+        //                                        $("#previewImage").append("<div class='col-md-2 tempFile'><img id='img" + fileName.index + "' class='preview_doc' src='/images/Filetypes/" + extension + ".png'></div>");
+        //                                    }
+        //                                    else {
+        //                                        $("#previewImage").append("<div class='col-md-2 tempFile'><img id='img" + fileName.index + "' class='preview_doc' src='/images/document.svg'></div>");
+        //                                    }
+        //                                }
+        //                                $("#image_no").val(selectedFileCount);
+        //                            } else {
+        //                                $("#upload-error").text(message);
+        //                                $("#upload-error").show();
+        //                            }
+        //                        };
+        //                    })(input.files[j]);
+        //                    input.files[j].index = i;
+        //                    reader.readAsDataURL(input.files[j]);
+        //                    j++;
+        //                }
+        //            }
+        //        } else {
+        //            $("#upload-error").text(message);
+        //            $("#upload-error").show();
+        //        }
+        //    }
+        //}
+
+        $("#name").on("keyup", function () {
+            var value = $("#name").val();
+            if (value.length > 1) {
+                $.ajax({
+                    url: "EstimateHour/GetFileNameAutoComplete",
+                    data: { "prefix": value },
+                    type: 'POST',
+                    success: function (result) {
+                        if (result != "") {
+                            var data = JSON.parse(result);
+                            $("#name").autocomplete("option", "source", data);
+                        }
+                    }
+                });
+            }
+
+        });
+    });
+</script>

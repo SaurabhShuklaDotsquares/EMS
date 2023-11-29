@@ -1,0 +1,38 @@
+﻿@model List<ActivityFreeDetaiDto>
+
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Activity Details" }); }
+
+<div class="modal-body">
+    @if (Model != null)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <td style="width:5%">S.No.</td>
+                    <td style="width:15%">Date</td>
+                    <td style="width:40%">Activity</td>
+                    <td style="width:40%">Timesheet</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(++index)</td>
+                            <td>@item.Date</td>
+                            <td>@Html.Raw(item.Description)</td>
+                            <td>@Html.Raw(item.TimeSheet)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

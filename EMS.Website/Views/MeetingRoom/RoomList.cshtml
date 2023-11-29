@@ -1,0 +1,45 @@
+﻿
+@using EMS.Data;
+@using EMS.Core;
+@model IEnumerable<ConferenceRoom>
+
+@{
+    ViewBag.Title = "Meeting Room";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="full">
+                            <div class="pull-left col-md-2">
+                                <h2>Meeting Room</h2>
+                            </div>
+                            <div class="col-md-10 search-filter pull-right">
+                                <div class="row form-group">
+                                    @Html.ActionLink("Add Meeting Room", "ManageRoom", "MeetingRoom", null, new { @class = "btn btn-custom pull-right margin-right10 btnlistview" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body dataTable-paging">
+                    <section id="no-more-tables">
+                        <table id="grid-Rooms" class="griddata display postable table table-bordered table-striped table-condensed"></table>
+                    </section>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/CustomJS/MeetingRoom/RoomList.js"></script>
+    
+}

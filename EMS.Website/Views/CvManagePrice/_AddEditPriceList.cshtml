@@ -1,0 +1,42 @@
+﻿@model EMS.Dto.CVEstimatePrice.CVEstimatePriceDto
+@using EMS.Web.Models.Others
+
+@using (Html.BeginForm("SaveRecords", "CvManagePrice", FormMethod.Post, new { @id = "formcvmanageprices" }))
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = @Model.Id == 0 ? "Edit Price (£)" : "Edit Price (£)" })
+
+    <div class="modal-body">
+        <div id="NotificationMessage"></div>
+        @Html.HiddenFor(model => model.RoleId)
+        @Html.HiddenFor(model => model.TechnologyId)
+        <div class="row form-group required clearfix">
+            <div class="col-md-12">
+                <div class="col-md-2">
+                    <label>Entry Level (£)</label>
+                    @Html.TextBoxFor(model => model.EntryLevelPrice, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Amount"})
+                </div>
+                <div class="col-md-2">
+                    <label>1-2 Years (£)</label>
+                    @Html.TextBoxFor(model => model.OneToTwoPrice, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Amount"})
+                </div>
+                <div class="col-md-2">
+                    <label>3-6 Years (£)</label>
+                    @Html.TextBoxFor(model => model.ThreeToSixPrice, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Amount"})
+                </div>
+
+                <div class="col-md-2">
+                    <label>6-10 Years (£)</label>
+                    @Html.TextBoxFor(model => model.SixToTenPrice, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Amount"})
+                </div>
+
+                <div class="col-md-2">
+                    <label>10+ Years (£)</label>
+                    @Html.TextBoxFor(model => model.TenPlusPrice, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Amount"})
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+

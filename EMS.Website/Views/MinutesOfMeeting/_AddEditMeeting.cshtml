@@ -1,0 +1,206 @@
+﻿@model MomMeetingDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<style>
+    .myclas {
+        margin-top: 8px;
+    }
+    .doc-list{border-left:1px solid rgba(0,0,0,0.1); border-top:1px solid rgba(0,0,0,0.1); display:flex; flex-wrap:wrap; justify-content:space-between;}
+    .doc-list li{width:50%; padding:10px 15px; border-right:1px solid rgba(0,0,0,0.1); border-bottom:1px solid rgba(0,0,0,0.1);}
+    .doc-list li a{word-break:break-all;}
+
+</style>
+
+@*@using (Html.BeginForm(FormMethod.Post,new { @enctype="multipart/form-data" }))*@
+@Html.Partial("_ModalHeader", new ModalHeader { Heading = @Model.Id == 0 ? "Add Minutes of Meeting (" + @Model.MeetingMasterTitle + ")" : "Edit Minutes of Meeting (" + @Model.MeetingMasterTitle + ")" })
+
+
+<div class="modal-body" id="mymodel">
+
+    @*@Html.HiddenFor(model => model.AuthorByUID)*@
+    @using (Html.BeginForm("AddEditMeeting", "MinutesOfMeeting", FormMethod.Post, new { id = "form", enctype = "multipart/form-data" })) {
+        @*<div id="NotificationMessage"></div>*@
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.MeetingMasterID)
+        @Html.HiddenFor(mode => mode.ParticipantType)
+
+        <div class="row form-group required clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Meeting Title</label>
+
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.MeetingTitle, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Venue</label>
+
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.VenueName, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group required clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Date Of Meeting</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.DateOfMeetings, htmlAttributes: new { @class = "form-control Calender", @placeholder = "dd/MM/yyyy", @autoComplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Start Time</label>
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.MeetingStartTime, htmlAttributes: new { @class = "form-control clstimepicker", @autocomplete = "off", @placeholder = "hh:mm", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                    <div class="myclas">
+                        <label class="control-label remove-star" for="Minutes" style="margin-left: -6px;">(24:00 hours format)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row required form-group clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Duration</label>
+
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.MeetingTime, htmlAttributes: new { @class = "form-control", @placeholder = "0", @autoComplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                    <div class="myclas">
+                        <label class="control-label remove-star" for="Minutes" style="margin-left: -6px;">Minutes</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label  remove-star">Participant Type</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.RadioButtonFor(s => s.ParticipantType, EMS.Core.Enums.MomMeetingParticipantType.Individual, htmlAttributes: new { @class = "ParticipantTypeName", @datattr = "Individual" })&nbsp;&nbsp;<strong> @Html.Label("Individual")</strong>
+                        &nbsp;&nbsp;
+                        @Html.RadioButtonFor(s => s.ParticipantType, EMS.Core.Enums.MomMeetingParticipantType.Group, htmlAttributes: new { @class = "ParticipantTypeName", @datattr = "Group" })&nbsp;&nbsp;<strong>@Html.Label("Group")</strong>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row required form-group clearfix">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" id="lblParticipant">Participants</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.ListBoxFor(model => model.Paticipants, Model.PaticipantList, htmlAttributes: new { @class = "form-control multiple ParticipantClass", @style = "padding:0px;", @autoComplete = "off", @placeholder = "-- Select Participant --"
+                            })
+                        @Html.ListBoxFor(model => model.Groups, Model.GroupList, htmlAttributes: new { @class = "form-control multiple hidden GroupClass", @style = "padding:0px;", @autoComplete = "off", @placeholder = "-- Select Group --" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row required form-group clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Chaired By</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ChairedByUID, Model.ChairedByList, "--Select Chaired By--", htmlAttributes: new { @class = "form-control", @autoComplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Author By</label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.AuthorByUID, Model.AuthorByList, "--Select Author By--", htmlAttributes: new { @class = "form-control", @autoComplete = "off", @disabled = "disabled", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group required clearfix">
+            <div class="col-md-12">
+                <div class="row">
+                    <label class="control-label">Meeting Agenda</label>
+                    @Html.TextAreaFor(model => model.Agenda, 3, 5, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+                </div>
+            </div>            
+        </div>
+
+        <div class="form-group clearfix">           
+            <div class="col-md-12">
+                <div class="row">                  
+                        <label class="control-label">Notes</label>
+                        @Html.TextAreaFor(model => model.Notes, 3, 5, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })                   
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group clearfix">
+            <label class="control-label">Upload Documents</label>
+            <input type="file" name="docs" multiple />
+        </div>
+        @if (Model.MomDocuments.Count > 0) {
+            <div class="row clearfix">
+                <div class="col-md-12 ">
+                    <ul class="doc-list">
+
+                        @foreach (var item in Model.MomDocuments) {
+
+                            <li>
+                                <i class='@(item.DocumentPath.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" : item.DocumentPath.ToLower().Contains(".doc")? "fa fa-file-word-o":item.DocumentPath.ToLower().Contains(".xls")?"fa fa-file-excel-o":item.DocumentPath.ToLower().Contains(".txt")?"fa fa-file-text-o":item.DocumentPath.ToLower().Contains(".rar")|| item.DocumentPath.ToLower().Contains(".zip")?"fa fa-file-zip-o":"fa fa-file-image-o")'></i> <a href="~/Upload/MomDocument/@item.DocumentPath.ToLower()" class="btn-link" download="download">  @item.DocumentPath </a>
+                                <span><a href="javascript:;" data-href="@(SiteKey.DomainName + "MinutesOfMeeting/DeleteDocument/" + item.Id)" class="delete-document"> <i class="fa fa-trash" style="color:red;font-size:17px;"></i></a> </span>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        }
+
+        if (Model.Id == 0) {
+            <div class="row clearfix">
+                <div class="col-md-3 pull-right">
+                    @Html.CheckBox("SendEmail", new { @class = "" })
+                    <label class="control-label" for="SendEmail">Send prior notification</label>
+                </div>
+            </div>
+        }
+
+        <div id="NotificationMessage"></div>
+
+
+        @Html.Partial("_ModalFooter", new ModalFooter { })
+
+
+    }
+
+</div>
+

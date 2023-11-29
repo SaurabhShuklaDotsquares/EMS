@@ -1,0 +1,627 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.UserProfileDto
+@using EMS.Core
+@{
+    string _profilePicture = string.IsNullOrEmpty(Model.ProfilePicture) ? "no-image.jpg" : $"profile/{Model.ProfilePicture}";
+}
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .checkList input[type=checkbox] + label, .checkList input[type=radio] + label {
+        font-weight: normal
+    }
+
+    .checkList input[type=checkbox]:checked + label, .checkList input[type=radio]:checked + label {
+        font-weight: bold
+    }
+
+    input[type="file"] {
+        display: block;
+    }
+
+    .demo {
+        opacity: 0.6;
+    }
+
+        .active,
+        .demo:hover {
+            opacity: 1;
+        }
+
+    img.hover-shadow {
+        transition: 0.3s;
+    }
+
+    .hover-shadow:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .documents {
+        margin-top: 17px;
+    }
+
+    .gallery img {
+        /*width: calc(14% - 4px);*/
+        height: 100px;
+        object-fit: contain;
+        margin: 2px;
+    }
+
+    .imageThumb {
+        max-height: 75px;
+        border: 2px solid;
+        padding: 1px;
+        cursor: pointer;
+    }
+
+    .pip {
+        display: inline-block;
+        margin: 10px 10px 0 0;
+    }
+
+    .remove {
+        display: block;
+        background: #444;
+        border: 1px solid black;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .remove:hover {
+            background: white;
+            color: black;
+        }
+
+    .documents > .column {
+        padding: 0 8px;
+    }
+
+    .documents:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .column {
+        float: left;
+        width: 25%;
+    }
+
+    .myclas {
+        margin-top: 8px;
+    }
+
+    .doc-list {
+        border-left: 1px solid rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+        .doc-list li {
+            width: 50%;
+            padding: 10px 15px;
+            border-right: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+            .doc-list li a {
+                word-break: break-all;
+            }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+
+        <div id="NotificationDiv"></div>
+        <div class="timesheet-page full-wdth clearfix">
+            <h2> Manage Profile </h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        @using (Html.BeginForm("ManageProfile", "User", FormMethod.Post, new { @id = "form1" }))
+                        {
+                            @Html.HiddenFor(model => model.Uid)
+                            @Html.HiddenFor(x => x.AddDate)
+                            <input type="hidden" value="@Model.ProfilePicture" name="ProfilePicture" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label asp-for="Name"></label>
+                                    </div>
+                                    <div class="col-md-1">
+                                        @Html.DropDownList("Title", new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem() { Text= "Mr.", Value = "Mr." ,Selected=true },
+                                                                    new SelectListItem() { Text= "Ms.", Value = "Ms." },
+                                                                    new SelectListItem() { Text= "Mrs.", Value = "Mrs." }
+                                                                })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+
+
+                                    <div class="col-md-3">
+                                        <label>Profile Picture</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <img src="~/images/@_profilePicture" id="imgProfileImage"
+                                             asp-append-version="true"
+                                             style="border:1px solid gray; margin-bottom:5px;height:150px;" />
+                                        <div class="custom-file">
+                                            <input asp-for="ProfileImage" class="custom-file-input" accept="image/png, image/jpeg, image/jpg" onchange="proFileImagePreview(event)">
+                                        </div>
+                                        <span style="font-weight:bold;">jpg, jpeg, png</span>
+                                        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Gender</label>
+                                    </div>
+                                    <div class="col-md-3 radio-custom ">
+                                        @Html.RadioButton("Gender", "M", new { @id = "rd", @class = "", @style = "display: inline;" })
+                                        Male
+                                        @Html.RadioButton("Gender", "F", new { @id = "rd1", @class = "", @style = "display: inline;" })
+                                        Female
+
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(Model.EmployeeCode))
+                                    {
+                                        <div class="col-md-3">
+                                            <label>Employee Code</label>
+                                        </div>
+                                        <div class="col-md-3 radio-custom ">
+                                            @Html.HiddenFor(model => model.EmployeeCode)
+                                            @Html.Label(Model.EmployeeCode)
+                                        </div>
+                                    }
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Date of Joining*</label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @*@Html.TextBoxFor(x => x.JoinedDate, true, "{0:dd/MM/yyyy}", new { @class = "form-control",@readonly="readpnly" })*@
+                                        @if (!string.IsNullOrWhiteSpace(Model.JoinedDate))
+                                        {
+                                            @Html.HiddenFor(model => model.JoinedDate)
+                                            @Html.Label(Model.JoinedDate)
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label asp-for="DOB"></label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        <input asp-for="DOB" class="form-control" asp-format="{0:dd/MM/yyyy}" />
+                                        <span asp-validation-for="DOB" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>Anniversary Date</label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.TextBoxFor(x => x.MarraigeDate, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Department</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.Label(Model.DeptName ?? "")
+                                        @Html.HiddenFor(x => x.DeptName)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3  ">
+                                        <label>Role Category</label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @if (Model.RoleCategoryName != null)
+                                        {
+                                            @Html.Label(Model.RoleCategoryName?? "");
+                                            @Html.HiddenFor(x => x.RoleCategoryName)
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Assigned To (PM)</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.Label(Model.PMName)
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Role </label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.Label(Model.RoleName ?? "")
+                                        @Html.HiddenFor(x => x.RoleName)
+                                    </div>
+
+                                    <div class="col-md-3  ">
+                                        <label>Designation </label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.Label(Model.DesignationName ?? "")
+                                        @Html.HiddenFor(x => x.DesignationName)
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @if (CurrentUser.RoleId != (int)Enums.UserRoles.HRBP && CurrentUser.RoleId != (int)Enums.UserRoles.PM && CurrentUser.RoleId != (int)Enums.UserRoles.PMO)
+                            {
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <label>Team/Project Lead </label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @if (ViewBag.TLList != null)
+                                            {
+                                                @Html.DropDownListFor(x => x.TLId, new SelectList(ViewBag.TLList, "Uid", "Name"), "--Select--", new { @class = "form-control" })
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label> E-mail (Official)* <br /><span class="clsSmallFont">(Work as username)</span></label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @Html.HiddenFor(x => x.EmailOffice)
+                                        @Html.Label("EmailOffice", Model.EmailOffice)
+                                        @*@Html.TextBoxFor(x => x.EmailOffice, true, null, new { @class = "form-control",@readonly="readonly" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3  ">
+                                        <label asp-for="MobileNumber"></label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        <input asp-for="MobileNumber" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>Alternate Number<br /><span class="clsSmallFont">(In case of emergency)</span></label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.TextBoxFor(x => x.AlternativeNumber, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label>E-mail <span class="clsSmallFont">(Personal)</span></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(x => x.EmailPersonal, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Phone Number <span class="clsSmallFont">(Landline)</span> </label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control" })
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Skype Id <span class="clsSmallFont"><br /> (Official)</span> </label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        <input asp-for="SkypeId" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Aadhaar Number</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input asp-for="AadharNumber" class="form-control" style="text-transform:uppercase" />
+                                        <span asp-validation-for="AadharNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>PAN Number</label>
+                                    </div>
+                                    <div class="col-md-3">
+
+                                        <input asp-for="PanNumber" class="form-control" style="text-transform:uppercase" />
+                                        <span asp-validation-for="PanNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Address </label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @Html.TextAreaFor(x => x.Address, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Address", @rows = "2" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6  form-group">
+                                    <div class="col-md-3  ">
+                                        <label>Passport Number</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input asp-for="PassportNumber" class="form-control" style="text-transform:uppercase" />
+                                        <span asp-validation-for="PassportNumber" class="text-danger"></span>
+
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>Blood Group</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select asp-for="BloodGroupId" asp-items="@(new SelectList(ViewBag.bloodGroup,"Value","Text"))" class="form-control">
+                                            <option>--Select--</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row" style="padding: 8px;">
+                                <div class="col-md-6 form-group" style="margin-bottom: 0px;">
+                                    <div class="col-md-3" style="margin-bottom: 0px;">
+                                        <label>PF Account</label>
+                                    </div>
+                                    <div class="col-md-9" style="margin-bottom: 0px;">
+                                        <label for="IsActive" style="color:#e99701;">
+                                            @Html.CheckBox("IsInterestedPffaccount", Model.IsInterestedPffaccount.HasValue ? Model.IsInterestedPffaccount : false)
+                                            Please Mark, If you are interested in opting for PF deduction.
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="pf_uan_div" class="row" style="padding: 8px;display:@(Model.IsInterestedPffaccount==true?"block":"none")">
+                                    <div class="col-md-6 form-group" style="margin-bottom: 0px;">
+                                        <div class="col-md-3" style="margin-bottom: 0px;">
+                                            <label>UAN Number <br /><span class="clsSmallFont">(Please add if you already have an UAN number)</span></label>
+                                        </div>
+                                        <div class="col-md-9" style="margin-bottom: 0px;">
+                                            <label for="UANNumber" style="color:#e99701;">
+                                                <input asp-for="UANNumber" class="form-control" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="margin-bottom: 0px;">
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row" style="padding: 8px;">
+                                <div class="col-md-3  ">
+                                    <label class="control-label">Upload Documents</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="file" id="files" name="files[]" multiple />
+
+                                </div>
+                                <div class="col-md-6" style="margin-bottom: 0px;">
+
+
+                                    @if (Model.ProfileDocumentsList.Count > 0)
+                                    {
+                                        int i = 0;
+
+                                        <div class="row clearfix">
+                                            <div class="col-md-12 ">
+                                                <ul class="doc-list">
+
+                                                    @foreach (var item in Model.ProfileDocumentsList)
+                                                    {
+                                                        i++;
+                                                        <li id="img@(item.Id)">
+                                                            <i class='@(item.DocumentPath.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" : item.DocumentPath.ToLower().Contains(".doc")? "fa fa-file-word-o":item.DocumentPath.ToLower().Contains(".xls")?"fa fa-file-excel-o":item.DocumentPath.ToLower().Contains(".txt")?"fa fa-file-text-o":item.DocumentPath.ToLower().Contains(".rar")|| item.DocumentPath.ToLower().Contains(".zip")?"fa fa-file-zip-o":item.DocumentPath.ToLower().Contains(".pdf")?"fa fa-file-pdf-o":"fa fa-file-image-o")'></i>
+                                                            <a href="@(SiteKey.DomainName+"Images/profile/"+item.DocumentPath)" class="btn-link" download="download">  @item.DocumentPath </a>
+                                                            <span><a href="javascript:;" style="float:right;" data-id="@item.Id" data-href="@(SiteKey.DomainName+"Images/profile/"+item.DocumentPath)" data-target="#modal-preview" data-toggle="modal" onclick="currentSlide(@i)" class="delete delete-perm"> <i class="fa fa-trash" style="color:red;font-size:17px;"></i></a> </span>
+                                                        </li>
+                                                    }
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+
+                                </div>
+                                <div class="col-md-6 ">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+
+                                </div>
+                            </div>
+
+                            <div class="row font12">
+                                <div class="col-md-4">
+                                    <div class="chk-new36" style="float:left;">
+                                        <div class="hds">Technology:</div>
+                                    </div>
+                                    <div class="chk-new5" style="float:left;">
+                                        <div class="hds">Specialization or Interested:</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="chk-new36" style="float:left;">
+                                        <div class="hds">Technology:</div>
+                                    </div>
+                                    <div class="chk-new5" style="float:left;">
+                                        <div class="hds">Specialization or Interested:</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="chk-new36" style="float:left;">
+                                        <div class="hds">Technology:</div>
+                                    </div>
+                                    <div class="chk-new5" style="float:left;">
+                                        <div class="hds">Specialization or Interested:</div>
+                                    </div>
+                                </div>
+                                @foreach (var tech in Model.TechnologyList)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="checkList">
+                                            <div class="chk-new36 pull-left">
+                                                <input type="checkbox" name="Technology" id="chkTech_@tech.TechId" data-id="@tech.TechId" value="@tech.TechId"
+                                                       @(Model.TechnologyList.Any(s => s.TechId == tech.TechId && s.Selected) ? "checked" : "") />
+                                                <label for="chkTech_@tech.TechId">&nbsp;@tech.TechName</label>
+                                            </div>
+                                            <div class="clearfix pull-left chkSecialization">
+                                                @foreach (var scType in Model.SpecTypeList)
+                                                {
+                                                    var splName = string.Format("chkSpec_{0}_{1}", tech.TechId, scType.Id);
+                                                    <input type="radio" name="@string.Format("chkSpec_{0}", tech.TechId)" class="checkspl" id="@splName" value="@scType.Id"
+                                                           @(tech.SpecTypeId == scType.Id ? "checked" : "") />
+                                                    <label for="@splName" class="margin-right5">&nbsp;@scType.Text</label>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="clearfix"></div>
+                                <div class="col-md-4">
+                                    <div class="checkList">
+                                        <div class="chk-new36 pull-left">
+                                            <input type="checkbox" name="chkOtherTechnology" id="chkOtherTech" @(!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "checked" : "") />
+                                            <label for="chkOtherTech">Other Technology</label>
+                                        </div>
+                                        <div class="clearfix pull-left" style="width:55%;">
+                                            @Html.TextBoxFor(x => x.OtherTechnology, new { @class = "form-control", @style = (!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "min-height:20px;" : "min-height:20px;display:none;"), @placeholder = "Enter technology name." })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="row font12 ">
+                                <div class="col-md-12">
+                                    <div class="hds">Domain Experience In:</div>
+                                </div>
+                                @foreach (var domain in Model.DomainExpert)
+                                {
+                                    <div class="col-md-3">
+                                        <div class="checkList">
+
+                                            <div class="chk-new36 pull-left">
+                                                <input type="checkbox" name="Domain" id="chkDom_@domain.DomainId" data-id="@domain.DomainId" value="@domain.DomainId"
+                                                       @(Model.DomainExpert.Any(s => s.DomainId == domain.DomainId && s.Selected) ? "checked" : "") />
+                                                <label for="chkDom_@domain.DomainId">&nbsp;@domain.DomainName</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-custom pull-right margin-right10" name="Save">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/bundles/jquery"></script>
+<script src="~/bundles/bootstrap"></script>
+<script src="~/bundles/jqueryval"></script>
+<script src="~/bundles/layoutjs"></script>
+<script src="@(SiteKey.DomainName)Scripts/CustomJS/ManageProfile.js" asp-append-version="true"></script>
+<script>
+
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        var captionText = document.getElementById("caption");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+    function proFileImagePreview(event) {
+        var reader = new FileReader();
+        var files = event.target.files;
+        if (files.length > 0) {
+            var extension = files[0].name.substr((files[0].name.lastIndexOf('.') + 1));
+            if (extension != "jpeg" && extension != "jpg" && extension != "png" && extension != "JPEG" && extension != "JPG" && extension != "PNG") {
+                alert("Please choose 'jpeg/jpg/png'.")
+                return;
+            }
+            reader.onload = function () {
+                var output = document.getElementById('imgProfileImage');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>

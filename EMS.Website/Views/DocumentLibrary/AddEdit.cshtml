@@ -1,0 +1,194 @@
+﻿@model DocumentLibraryDto
+@{
+    var currentUserRole = (CurrentUser.RoleId == (int)Enums.UserRoles.UIUXDesigner || CurrentUser.RoleId == (int)Enums.UserRoles.UIUXDeveloper || CurrentUser.RoleId == (int)Enums.UserRoles.UIUXFrontEndDeveloper || CurrentUser.RoleId == (int)Enums.UserRoles.UIUXManagerial || CurrentUser.RoleId == (int)Enums.UserRoles.UIUXMeanStackDeveloper).ToString();
+    ViewData["Title"] = "Document Library";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@section styles{
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" />
+    <link rel="stylesheet" href="~/css/fSelect.css" />
+    <style>
+
+
+        .error {
+            color: red !important;
+        }
+
+        .my-spacing {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .my-spacing-top {
+            /*margin-top: 15px;*/
+            margin-bottom: 15px;
+        }
+
+        .link {
+            color: #337ab7 !important;
+            text-decoration: underline !important;
+        }
+
+        fieldset {
+            border: 1px solid #979797;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            padding: 0.2em 0.5em;
+            border: 1px solid #979797;
+            font-size: 90%;
+            text-align: right;
+            width: auto;
+            margin-bottom: 0px;
+        }
+
+        /*.design-type-0 .remove-design-type {
+                                                                display: none;
+                                                            }*/
+        input[type="file"] {
+            white-space: normal;
+            word-wrap: break-word;
+            width: 240px;
+            overflow: auto;
+        }
+
+        #name {
+            position: relative;
+            z-index: 10000;
+        }
+
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+    </style>
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row form-group">
+            <div class="col-sm-12">
+               
+            </div>
+        </div>
+        @Html.Partial("_Notification")
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("AddEdit", "DocumentLibrary", FormMethod.Post, new { @id = "createLibrary_form", @autocomplete = "off", @enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.FilePath)
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8" style="background: #333;">
+                        <div class="row col-md-12 my-spacing-top">
+                            <div class="modal-header">
+                                <h2 class="modal-title" style="color: #fff;">Document Library</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8" style="background: #f1f1f1;padding: 100px 0;">
+                        <div class="row col-md-12 my-spacing-top">
+                            <div class="col-md-3">
+                                <div class="row">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.DocumentTitle, htmlAttributes: new { @class = "control-label" })
+                                        <span class="error">*</span>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(model => model.DocumentTitle, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                                        <label id="UniqueTitle-error" class="error" style="display:none">This library title already exist</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 my-spacing-top">
+                            <div class="col-md-3">
+                                <div class="row">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.DocumentType, htmlAttributes: new { @class = "control-label" })
+                                        <span class="error">*</span>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(model => model.DocumentType, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                                        <label id="UniqueTitle-error" class="error" style="display:none">This library title already exist</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 my-spacing-top">
+                            <div class="col-md-3">
+                                <div class="row">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.Version, htmlAttributes: new { @class = "control-label" })
+                                        <span class="error">*</span>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(model => model.Version, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter version" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 my-spacing-top">
+                            <div class="col-md-3">
+                                <div class="row">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.FilePath, htmlAttributes: new { @class = "control-label" })
+
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input style="float:left;" type="file" name="Files" id="Files" />
+                                        @*<span id="upload-error" class="error" style="display:none">max file upload limit.</span>*@
+                                        <span id="upload-error" class="error" style="display:none"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <a class="btn btn-custom  pull-right margin-right10" href="@Url.Action("index")">Cancel</a>
+                                <button type="submit" id="btnsave" class="btn btn-custom pull-right margin-right10" name="Save">Save</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2"></div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/DocumentLibrary/addEdit.js" asp-append-version="true"></script>
+}

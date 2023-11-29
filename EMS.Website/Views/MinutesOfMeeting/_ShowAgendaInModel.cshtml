@@ -1,0 +1,35 @@
+﻿@*@model MomMeetingDto
+    @using EMS.Web.Models.Others
+    @using EMS.Core*@
+
+@using EMS.Web.Models.Others
+@model MomMeetingDto
+
+
+@using (Html.BeginForm("MeetingAgenda", "MinutesOfMeeting", FormMethod.Post, new { id = "form", enctype = "multipart/form-data" }))
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Meeting Agenda" });
+
+
+    //Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Meeting Agenda" });
+    <div class="modal-body">
+        <div class="form-group clearfix">
+            <div class="col-md-12">
+                <div class="row">
+
+                    @Html.Raw(Model.Agenda)
+                </div>
+            </div>
+        </div>
+        @*<div class="form-group required clearfix">
+                <div class="row formData" style="margin-top:5px">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.ReimburseDate, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.ReimburseDate, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+                    </div>
+                </div>
+            </div>*@
+    </div>
+}

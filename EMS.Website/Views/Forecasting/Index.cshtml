@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Forecasting list";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="full">
+                            <div class="pull-left col-md-2">
+                                <h2>Forecasting list</h2>
+                            </div>
+                            <div class="col-md-10 search-filter pull-right">
+                                <div class="row form-group">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-custom pull-right btnlistview" href="javascript:void(0);" id="btnaddnew">ADD NEW</button>
+                                         <div class="col-md-2 pull-right">@Html.DropDownList("status", (List<SelectListItem>)ViewBag.ChasingStatus, "-Status-", new { @class = "m-wrap medium form-control searchfilter" })</div>
+                                        <div class="col-md-1 pull-right"><label style="font-weight:bold;margin-top: 10px;">Status:</label></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body dataTable-paging">
+                    <section id="no-more-tables">
+                        <table id="grid-Forecasting" class="griddata display postable table table-bordered table-striped table-condensed"></table>
+                    </section>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="divoverlay">
+        </div>
+    </div>
+</div>
+<div id="myModalUpdateStatus" class="modal fade model-popup" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="divheader">
+                <button type="button" id="closemodel" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="divtitle">Forecasting Type</h4>
+            </div>
+            <div class="modal-body">
+                <form id="myForm">
+                    <input type="hidden" id="seletedId" />
+                    <label class="container">
+                        Pending
+                        <input id="radio_pending" type="radio" checked="checked" value="1" name="status">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">
+                        Converted
+                        <input type="radio" id="radio_converted" value="2" name="status">
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <div class="modal-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary1 save-btn">UPDATE STATUS</button>
+                        <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModalSave" class="modal fade model-popup" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" id="divheader">
+                <button type="button" id="closemodel" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="divtitle">Manage Forecasting</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divBody">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/CustomJS/Forecasting/Index.js" asp-append-version="true"></script>
+    
+}

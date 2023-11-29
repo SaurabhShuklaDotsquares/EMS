@@ -1,0 +1,46 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="virtualDeveloper-page full-wdth clearfix">
+            <h2>Virtual Developer</h2>
+            <div class="dis-block clearfix">
+                <div class="pull-left box1">
+                    <a data-toggle="modal" data-target="#modal-action-virtualDeveloper" href="@Url.Action("AddEditDeveloper", "VirtualDeveloper")" class="btn btn-custom pull-right btn-addVirDev">Add New</a>
+                </div>
+
+                <div class="pull-right box2">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="wdth2 margin-right10 pull-left">
+                            @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Virtual developer Name", style = "width: 250px;" })
+
+                        </div>
+                        if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                        {
+                            <div class="wdth1 margin-right10 pull-left">
+                                @Html.DropDownList("ddl_pmUid", ViewBag.pmList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        }
+                        <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                    }
+                </div>
+
+            </div>
+            <br />
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-virtualDeveloper" class="display postable table table-bordered table-condensed"></table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-action-virtualDeveloper", AreaLabeledId = "modal-action-lblVirtualDeveloper", Size = Enums.ModalSize.Medium })
+@section scripts{
+    <script src="~/Scripts/CustomJS/virtualdeveloper.js"></script>
+}

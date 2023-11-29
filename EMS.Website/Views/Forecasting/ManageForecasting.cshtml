@@ -1,0 +1,136 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.ManageForecastingDto
+@using EMS.Core
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Manage Forecasting</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform" id="leaveform">
+                        @using (Html.BeginForm("ManageForecasting", "Forecasting", FormMethod.Post, new { id = "Form1" }))
+                        {
+                            @Html.HiddenFor(x => x.Id)
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-md-3">
+                                        <label>Forecasting Type:</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.RadioButtonFor(x => x.ForecastingType, "1", new { @id = "ForecastingType1", @checked = "checked" }) <label for="ForecastingType1">Exisitng Lead</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.RadioButtonFor(x => x.ForecastingType, "2", new { @id = "ForecastingType2" }) <label for="ForecastingType2">Exisitng Project / Client</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row dvuser">
+                                <div class="col-sm-12" id="divlead">
+                                    <div class="col-md-3">
+                                        <label>Lead:</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        @Html.DropDownListFor(x => x.Lead, new SelectList(ViewBag.LeadList, "Value", "Text"), "--Select Lead--", new { @class = "form-control chosen" })
+                                        <label id="leaderror">*required</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" id="divclient">
+                                    <div class="col-md-3">
+                                        <label>Project / Client :</label>
+                                    </div>
+                                    <div class="col-md-5">
+                                        @Html.DropDownListFor(x => x.ProjectId, new SelectList(ViewBag.Projectlist, "Value", "Text"), "--Select Project / Client--", new { @class = "form-control chosen" })
+                                        <label id="projectiderror">*required</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-md-3">
+                                        <label>Project Description :</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextAreaFor(x => x.ProjectDescription, 0, 0, new { @cols = "100", @rows = "5" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-md-3">
+                                        <label>Department :</label>
+                                    </div>
+                                    <div class="col-md-8" id="divdept">
+                                        @for (var i = 0; i < Model.DepartmentList.Count; i++)
+                                        {
+                                            <div class="col-sm-4 col-md-4">
+                                                <div class="">
+                                                    @Html.HiddenFor(x => x.DepartmentList[i].Value)
+                                                    @Html.HiddenFor(x => x.DepartmentList[i].Text)
+                                                    @Html.CheckBoxFor(x => x.DepartmentList[i].Selected, new { @id = "DepartmentList_" + i, @class = "dept-group" }) <label for="DepartmentList_@i">@Model.DepartmentList[i].Text</label>
+                                                </div>
+                                            </div>
+                                        }
+                                        @Html.TextBoxFor(x => x.SelectedDepartment, null, new { @class = "form-control", @style = "display:none" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-md-3">
+                                        <label>No Of Developer :</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.DeveloperCount, null, new { @class = "form-control", @pattern = "^[0-9]*$" })
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>Country :</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.DropDownListFor(x => x.Country, new SelectList(ViewBag.CountryList, "Value", "Text"), "--Select--", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-md-3">
+                                        <label>Tentive Date :</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.TentiveDate, null, new { @class = "form-control", @autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="col-md-6">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-custom" name="Save">SUBMIT</button>
+                                    <a href="@Url.Action("index", "forecasting")" class="btn btn-custom">CANCEL</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+@section scripts
+    {
+    <script type="~/Scripts/CustomJS/Forecasting/ManageForecasting.js"></script>
+    <script type="~/Scripts/plugin/SearchDropdown/choosen.js"></script>
+    
+}
+
+
+

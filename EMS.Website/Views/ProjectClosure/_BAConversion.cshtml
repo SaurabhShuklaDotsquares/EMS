@@ -1,0 +1,73 @@
+﻿@model List<BAConversionSummaryDto>
+@if (Model.Count > 0)
+{
+    <div class="text-left">
+        <strong>BA Conversion</strong>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-stats">
+                <thead>
+                    <tr>
+                        <th class="rowCenterText">BA Name</th>
+                        <th class="rowCenterText">Total</th>
+                        <th class="rowCenterText">Pending</th>
+                        <th class="rowCenterText">Conv.</th>
+                        <th class="rowCenterText">Dead Response</th>
+                        <th class="rowCenterText">Perc(%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            <tr>
+                                <td>@Model[i].BAName</td>
+                                <td class="rowCenterText">@(Model[i].Total > 0 ? Model[i].Total.ToString() : "-")</td>
+                                <td class="rowCenterText">@(Model[i].Pending > 0 ? Model[i].Pending.ToString() : "-")</td>
+                                <td class="rowCenterText">@(Model[i].Converted > 0 ? Model[i].Converted.ToString() : "-")</td>
+                                <td class="rowCenterText">@(Model[i].Escalated > 0 ? Model[i].Escalated.ToString() : "-")</td>
+                                <td class="rowCenterText">@Model[i].Per</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (Model.Count > 1)
+        {
+            <div class="col-md-6">
+                <table class="table table-stats">
+                    <thead>
+                        <tr>
+                            <th class="rowCenterText">BA Name</th>
+                            <th class="rowCenterText">Total</th>
+                            <th class="rowCenterText">Pending</th>
+                            <th class="rowCenterText">Conv.</th>
+                            <th class="rowCenterText">Dead Response</th>
+                            <th class="rowCenterText">Perc(%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (i % 2 != 0)
+                        {
+                                <tr>
+                                    <td>@Model[i].BAName</td>
+                                    <td class="rowCenterText">@(Model[i].Total > 0 ? Model[i].Total.ToString() : "-")</td>
+                                    <td class="rowCenterText">@(Model[i].Pending > 0 ? Model[i].Pending.ToString() : "-")</td>
+                                    <td class="rowCenterText">@(Model[i].Converted > 0 ? Model[i].Converted.ToString() : "-")</td>
+                                    <td class="rowCenterText">@(Model[i].Escalated > 0 ? Model[i].Escalated.ToString() : "-")</td>
+                                    <td class="rowCenterText">@Model[i].Per</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}

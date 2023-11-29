@@ -1,0 +1,33 @@
+﻿@model UserProfileDto
+@{
+    ViewBag.Title = "Dotsquares Employee Management 2013";
+   var empCode = Model.EmployeeCode;
+}
+
+
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20" style="height:300px">
+        <h2>Recruitment</h2>
+        @Html.Partial("_Notification")
+        <form action="http://ds19.projectstatus.co.uk/dsrecruitment/" method="post">
+            @Html.HiddenFor(model => model.EmployeeCode)
+            <div class="row">
+                <div class="col-md-12">
+
+                    <button style="margin-left:20%;margin-top:95px" class="btn btn-custom" name="submit" id="submit" type="submit">Refer a friend</button>
+                </div>
+            </div>
+        </form>
+        @*@using (Html.BeginForm($"referfriend?empCode={empCode}", "User", FormMethod.Post, new { id = "recruitmentform" }))
+        {
+            
+            <div class="row">
+                <div class="col-md-12">
+
+                    <button style="margin-left:20%;margin-top:95px" class="btn btn-custom" name="submit" id="submit" type="submit">Refer a friend</button>
+                </div>
+            </div>
+        }*@
+    </div>
+</div>

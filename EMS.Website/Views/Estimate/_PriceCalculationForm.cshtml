@@ -1,0 +1,111 @@
+﻿@model EstimateCalculationDto
+@using EMS.Core
+@{
+    ViewData["Title"] = "Estimate Calculator";
+    var headerTitle = "Estimate Calculator" + (string.IsNullOrEmpty(Model.CRMLeadId) ? "" : $" (CRM Lead Id : {Model.CRMLeadId} )");
+    var hidesection = (CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM || CurrentUser.RoleId == (int)Enums.UserRoles.AUPM) ? "hide" : "";
+}
+
+@if (Model.EstimateModel.Count > 1)
+{
+    <div class="modelsection">
+        @foreach (var item in Model.EstimateModel)
+        {
+            string showvalue = string.IsNullOrEmpty(item.Name) ? "Model" : (string.IsNullOrEmpty(item.EstimateName) || item.EstimateName == item.Name ? item.Name : $"{item.Name} - {item.EstimateName}");
+            <span class="btn btn-default @(item.Id == Model.EstimateModelId && item.EstimateName == Model.EstimateName ? "active" : "")" data-emodelid="@item.Id" data-estimatename="@item.EstimateName">@showvalue</span>
+        }
+    </div>
+}
+@using (Html.BeginForm("pricecalculation", "estimate", FormMethod.Post, new { id = "estimationForm" }))
+{
+    <div class="create-form-outer-box dis-block clearfix err_msg_inControl padding10">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="IsOverWrite" />
+        <input type="hidden" asp-for="IsSearchCRM" />
+        <div id="estimateform" class="@hidesection">
+            <partial name="_EstimateForm" model="@Model.EstimateForm" />
+        </div>
+        <div class="pull-left @hidesection">
+            <input id="btnEstimateFormSubmit" class="btn btn-custom" type="submit" value="Submit" name="Command" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <partial name="_EstimateCalculationResult" model="Model" />
+            </div>
+            <div class="col-md-12 ">
+                @*<div class="row">
+                        @if (Model.CalculationResult.Where(x => x.IsBasePrice).Count() > 0)
+                        {
+
+                            <table class="table table-bordered table-stats">
+
+                                <tbody>
+                                    @foreach (var item in Model.CalculationResult.Where(x => x.IsBasePrice))
+                                    {
+                                        <tr class="@(item.Heading == "Per Hour Project Cost" ? "fontbold":"")">
+                                            <td style="width:250px;font-weight:bold;">@item.Heading</td>
+                                            <td class="text-center">@(item.MinPound == "0" ? "-" : item.MinPound)</td>
+                                            <td class="text-center">@(item.MinUSD == "0.00" ? "-" : item.MinUSD)</td>
+                                            <td class="text-center">@(item.MinAUD == "0.00" ? "-" : item.MinAUD)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>*@
+                <div class="@hidesection" id="divSave">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input style="display: none" type="text" maxlength="7" asp-for="HiddenCRMLeadId" class="form-control" placeholder="CRM Lead Id" value="@Model.CRMLeadId" />
+                            <input type="text" maxlength="7" asp-for="CRMLeadId" class="form-control" placeholder="CRM Lead Id" value="@Model.CRMLeadId" />
+                        </div>
+                        <div class="col-md-3 pull-left">
+                            <select asp-for="EstimateModelId" asp-items="ViewBag.EstimateModel" class="form-control" required="">
+                                <option value="">Select Model</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 pull-left">
+                            <input type="hidden" id="hEstimateName" value="@Model.EstimateName" />
+                            <input type="text" asp-for="EstimateName" class="form-control" required="" placeholder="Lead Name" />
+                        </div>
+                        <div class="col-md-3">
+                            <input id="btnEstimateFormSave" class="btn btn-custom gray" type="submit" value="Save Calculator" name="Command" />
+                        </div>
+                    </div>
+
+
+                    @*<div class="row margin-top15">
+                        <div class="col-md-4 pull-left">
+                                <select asp-for="CountryId" asp-items="ViewBag.Country" class="form-control">
+                                    <option value="">Select Country</option>
+                                </select>
+                            </div>
+                        <div class="col-md-4">
+                            <input id="btnEstimateFormSave" class="btn btn-custom gray" type="submit" value="Save Calculator" name="Command" />
+                        </div>
+                    </div>*@
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" id="divGraph">
+            @if (Model.EstimateGraph.Count > 0)
+            {
+                <div>
+                    <div id="container-chart"></div>
+                    <span> </span>
+                </div>
+            }
+        </div>
+    </div>
+
+}
+@*<div id="serverhosting-section" class="hide">
+        <partial name="_EstimateHostingPackageList" model="Model.EstimateHostingPackage" />
+    </div>*@
+
+<script>
+        var graphJson = @Html.Raw(Json.Serialize(Model.EstimateGraph));
+</script>

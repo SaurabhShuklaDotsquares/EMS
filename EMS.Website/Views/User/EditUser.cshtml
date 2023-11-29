@@ -1,0 +1,585 @@
+﻿@using EMS.Web.Models.Others;
+@model EMS.Dto.ManageUserDto;
+@using EMS.Core;
+
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .checkList input[type=checkbox] + label, .checkList input[type=radio] + label {
+        font-weight: normal
+    }
+
+    .checkList input[type=checkbox]:checked + label, .checkList input[type=radio]:checked + label {
+        font-weight: bold
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div id="NotificationDiv"></div>
+
+        @*@Html.Partial("_Notification")*@
+
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Manage User</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        @using (Html.BeginForm("EditUser", "User", FormMethod.Post, new { @id = "edituserform" }))
+                        {
+                            @Html.HiddenFor(x => x.AddDate)
+                            @Html.HiddenFor(x => x.Uid)
+                            @Html.HiddenFor(x => x.AttendanceId)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Full Name*</label>
+                                    </div>
+                                    <div class="col-md-1">
+                                        @Html.DropDownList("Title", new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem() { Text= "Mr.", Value = "Mr." ,Selected=true },
+                                                                    new SelectListItem() { Text= "Ms.", Value = "Ms." },
+                                                                    new SelectListItem() { Text= "Mrs.", Value = "Mrs." }
+                                                                })
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.Name, null, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Gender</label>
+                                    </div>
+                                    <div class="col-md-3 radio-custom ">
+                                        @Html.RadioButton("Gender", "M", new { @id = "rd", @class = "", @style = "display: inline;" })
+                                        Male
+                                        @Html.RadioButton("Gender", "F", new { @id = "rd1", @class = "", @style = "display: inline;" })
+                                        Female
+
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(Model.EmployeeCode))
+                                    {
+                                        <div class="col-md-3">
+                                            <label>Employee Code</label>
+                                        </div>
+                                        <div class="col-md-3 radio-custom ">
+                                            @Html.HiddenFor(model => model.EmployeeCode)
+                                            @Html.Label(Model.EmployeeCode)
+                                        </div>
+                                    }
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Date of Joining*</label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @if (!String.IsNullOrEmpty(Model.JoinedDate))
+                                        {
+                                            @Html.HiddenFor(model => model.JoinedDate)
+                                            @Html.Label(Model.JoinedDate)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.JoinedDate, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label>DOB*</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(x => x.DOB, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Anniversary Date</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(x => x.MarraigeDate, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="col-md-3  ">
+                                        <label>Roles Category *</label>
+                                    </div>
+                                    <div class="col-md-9 ">
+                                        @Html.DropDownListFor(model => Model.RoleCateGoryId, new SelectList(ViewBag.RoleCategoryList, "Value", "Text"), "-Select-", new { @class = "form-control", @style = "" })
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Department</label>
+                                    </div>
+                                    @if (RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                                       || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                                    {
+                                        <div class="col-md-7">
+                                            @Html.DropDownListFor(model => model.DeptId, new SelectList(ViewBag.DepartmentList, "Value", "Text"), "-All-", new { @class = "form-control", @style = "" })
+                                            @Html.HiddenFor(x => x.DeptName)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-7">
+                                            @Html.Label(Model.DeptName ?? "")
+                                            @Html.HiddenFor(x => x.DeptId)
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label>Role *</label>
+                                    </div>
+                                    @if (RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                                    {
+                                        if (Model.RoleName != "Project Manager")
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.DropDownListFor(model => Model.RoleId, new SelectList(ViewBag.RoleList, "Value", "Text"), "-Select-", new { @class = "form-control", @style = "" })
+
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-9">
+                                                @Html.HiddenFor(x => x.RoleId)
+                                                @Html.Label(Model.RoleName)
+                                            </div>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-9">
+                                            @Html.Label(Model.RoleName ?? "")
+                                            @Html.HiddenFor(x => x.RoleId)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                @if (Model.RoleName != "Project Manager")
+                                {
+                                    <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <label>Assigned To (PM)*</label>
+                                        </div>
+                                        @if (RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                                        {
+                                            <div class="col-md-7">
+                                                @Html.DropDownListFor(model => model.PMUid, new SelectList(ViewBag.PMList, "Value", "Text"), "-All-", @*ViewBag.PMList as IEnumerable<SelectListItem>,*@new { @class = "form-control", @style = "" })
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-7">
+                                                @Html.Label(Model.PMName)
+                                                @Html.HiddenFor(x => x.PMUid)
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                <div class="col-md-6">
+                                    <div class="col-md-3  ">
+                                        <label>Designation *</label>
+                                    </div>
+                                    <div class="col-md-9 ">
+                                        @*@Html.DropDownListFor(model => Model.DesignationId, new SelectList(ViewBag.DesignationList, "Value", "Text"), "-Select-", new { @class = "form-control", @style = "" })*@
+
+                                        @Html.DropDownListFor(model => Model.DesignationId, (IEnumerable<SelectListItem>)ViewBag.DesignationList, "-Select-", new { @class = "form-control", @style = "" })
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            if (Model.RoleId != (int)Enums.UserRoles.PM && Model.RoleId != (int)Enums.UserRoles.PMO && Model.RoleId != (int)Enums.UserRoles.UKPM && Model.RoleId != (int)Enums.UserRoles.UKBDM)
+                            {
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        @if (RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                                         || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                                         || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                                         || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                                         || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                                         || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId))
+                                        {
+                                            <div class="col-md-3">
+                                                <label>Team/Project Lead </label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                @Html.Label(Model.TLName ?? "")
+                                                @Html.HiddenFor(x => x.TLId)
+                                            </div>
+                                        }
+                                        else if (ViewBag.TLList != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <label>Team/Project Lead </label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                @Html.DropDownListFor(x => x.TLId, new SelectList(ViewBag.TLList, "Uid", "Name"), "--Select--", new { @class = "form-control", @id = "TLId" })
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                    @if (RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId))
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="col-md-3">
+                                                <label>Attendance Id</label>
+                                            </div>
+                                            <div class="col-md-3 radio-custom ">
+                                                @Html.TextBoxFor(x => x.AttendanceId, null, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label> E-mail (Official)* <br /><span class="clsSmallFont">(Work as username)</span></label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @if (!String.IsNullOrEmpty(Model.EmailOffice))
+                                        {
+                                            @Html.HiddenFor(x => x.EmailOffice)
+                                            @Html.Label("EmailOffice", Model.EmailOffice)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.EmailOffice, null, new { @class = "form-control" })
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3  ">
+                                        <label> Mobile Number*</label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.TextBoxFor(x => x.MobileNumber, null, new { @class = "form-control" })
+
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>Alternate Number<br /><span class="clsSmallFont">(In case of emergency)</span></label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.TextBoxFor(x => x.AlternativeNumber, null, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label>E-mail <span class="clsSmallFont">(Personal)</span></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(x => x.EmailPersonal, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Phone Number <span class="clsSmallFont">(Landline)</span> </label>
+                                    </div>
+                                    <div class="col-md-3 ">
+                                        @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control" })
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Skype Id <span class="clsSmallFont"><br /> (Official)</span> </label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @Html.TextBoxFor(x => x.SkypeId, null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Aadhaar Number</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.AadharNumber, null, new { @class = "form-control", @style = "text-transform:uppercase" })
+
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>PAN Number</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.PanNumber, null, new
+                                   {
+                                       @class = "form-control",
+                                       @style = "text-transform:uppercase"
+                                   })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Address </label>
+                                    </div>
+                                    <div class="col-md-7 ">
+                                        @Html.TextAreaFor(x => x.Address, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Address", @rows = "2" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6  form-group">
+                                    <div class="col-md-3  ">
+                                        <label>Passport Number</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(x => x.PassportNumber, null, new { @class = "form-control", @style = "text-transform:uppercase;" })
+                                    </div>
+                                    <div class="col-md-3  ">
+                                        <label>Blood Group</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select asp-for="BloodGroupId" asp-items="@(new SelectList(ViewBag.bloodGroup,"Value","Text"))" class="form-control">
+                                            <option>--Select--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Active</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.CheckBoxFor(m => m.IsActive)
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>On Notice Period</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.CheckBoxFor(m => m.IsResigned)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                </div>
+
+                                <div class="col-md-6  form-group">
+                                    <div class="col-md-3  ">
+                                        <label>Total Premium (Rs.)</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.HiddenFor(m => m.EmployeeMedicalData.Id)
+                                        @Html.TextBoxFor(m => m.EmployeeMedicalData.PremiumTotal, null, new { @class = "form-control" })
+                                    </div>
+                                    <div id="divMonthPremium">
+                                        <div class="col-md-3">
+                                            <label>Premium In Month (Rs.)</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(m => m.EmployeeMedicalData.PremiumPerMonth, null, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                </div>
+
+                                <div class="col-md-6  form-group">
+                                    <div class="col-md-3  ">
+                                        <label>Total Coverage</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBoxFor(m => m.EmployeeMedicalData.TotalCoverage, null, new { @class = "form-control decimal-number" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Validity</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.LabelFor(m => m.EmployeeMedicalData.Validity, "1") Year
+                                        @*<label>1 Year</label>*@
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row font12">
+
+                                <div class="col-md-4">
+                                    <div class="chk-new36" style="float:left;">
+                                        <div class="hds">Technology:</div>
+                                    </div>
+                                    <div class="chk-new5" style="float:left;">
+                                        <div class="hds">Specialization or Interested:</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="chk-new36" style="float:left;">
+                                        <div class="hds">Technology:</div>
+                                    </div>
+                                    <div class="chk-new5" style="float:left;">
+                                        <div class="hds">Specialization or Interested:</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="chk-new36" style="float:left;">
+                                        <div class="hds">Technology:</div>
+                                    </div>
+                                    <div class="chk-new5" style="float:left;">
+                                        <div class="hds">Specialization or Interested:</div>
+                                    </div>
+                                </div>
+                                @foreach (var tech in Model.TechnologyList)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="checkList">
+                                            <div class="chk-new36 pull-left">
+                                                <input type="checkbox" name="Technology" id="chkTech_@tech.TechId" data-id="@tech.TechId" value="@tech.TechId"
+                                                       @(Model.TechnologyList.Any(s => s.TechId == tech.TechId && s.Selected) ? "checked" : "") />
+                                                <label for="chkTech_@tech.TechId">&nbsp;@tech.TechName</label>
+                                            </div>
+                                            <div class="clearfix pull-left chkSecialization">
+                                                @foreach (var scType in Model.SpecTypeList)
+                                                {
+                                                    var splName = string.Format("chkSpec_{0}_{1}", tech.TechId, scType.Id);
+                                                    <input type="radio" name="@string.Format("chkSpec_{0}", tech.TechId)" class="checkspl" id="@splName" value="@scType.Id"
+                                                           @(tech.SpecTypeId == scType.Id ? "checked" : "") />
+                                                    <label for="@splName" class="margin-right5">&nbsp;@scType.Text</label>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="clearfix"></div>
+                                <div class="col-md-4">
+                                    <div class="checkList">
+                                        <div class="chk-new36 pull-left">
+                                            <input type="checkbox" name="chkOtherTechnology" id="chkOtherTech" @(!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "checked" : "") />
+                                            <label for="chkOtherTech">Other Technology</label>
+                                        </div>
+                                        <div class="clearfix pull-left" style="width:55%;">
+                                            @Html.TextBoxFor(x => x.OtherTechnology, new { @class = "form-control", @style = (!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "min-height:20px;" : "min-height:20px;display:none;"), @placeholder = "Enter technology name." })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row font12 ">
+
+                                <div class="col-md-12">
+                                    <div class="hds">Domain Experience In:</div>
+                                </div>
+                                @foreach (var domain in Model.DomainExpert)
+                                {
+                                    <div class="col-md-3">
+                                        <div class="checkList">
+
+                                            <div class="chk-new36 pull-left">
+                                                <input type="checkbox" name="Domain" id="chkDom_@domain.DomainId" data-id="@domain.DomainId" value="@domain.DomainId"
+                                                       @(Model.DomainExpert.Any(s => s.DomainId == domain.DomainId && s.Selected) ? "checked" : "") />
+                                                <label for="chkDom_@domain.DomainId">&nbsp;@domain.DomainName</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+
+                            if (Model.Uid == 0)
+                            {
+                                <div style="background-color:black;" class="text-center"><h2 style="color:white;" class="padding-top10">Login Details</h2></div>
+                                <div class="row margin-top20">
+                                    <div class="col-md-12">
+                                        <div class="col-md-1 ">
+                                            <label>UserName*</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(x => x.UserName, null, new { @class = "form-control" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 margin-top10">
+                                        <div class="col-md-1 ">
+                                            <label>Password*</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            @Html.TextBoxFor(x => x.Password, null, new { @class = "form-control", @type = "password" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(x => x.UserName)
+                                @*@Html.HiddenFor(x => x.Password)*@
+                                @Html.HiddenFor(x => x.PasswordKey)
+                            }
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="@Url.Action("ManageUser","User")" class="btn btn-custom pull-right">Cancel</a>
+                                    <button type="button" id="btnsave" class="btn btn-custom pull-right margin-right10" name="Save">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+
+    <script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/jqueryval"></script>
+    <script src="~/Scripts/additional-methods.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/global.js"></script>
+    <script src="@(SiteKey.DomainName)Scripts/CustomJS/manageuser.js" asp-append-version="true"></script>
+    @*<script type="text/javascript" src="~/bundles/User/manageUser" asp-append-version="true"></script>*@
+}

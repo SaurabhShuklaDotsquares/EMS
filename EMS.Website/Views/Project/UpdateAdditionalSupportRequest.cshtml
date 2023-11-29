@@ -1,0 +1,166 @@
+﻿@model ProjectAdditionalSupportDto
+@using EMS.Core
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Process Additional Support</title>
+    <base href="@EMS.Web.Code.LIBS.SiteKey.DomainName" />
+    @*<link href="~/Content/layoutcss" />*@
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <link href="~/Scripts/datatables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/responsive.css" rel="stylesheet" />
+    <link href="~/Styles/jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Styles/alertmessages.css" rel="stylesheet" />
+    <link href="~/css/chosen.css" rel="stylesheet" />
+    <link href="~/Scripts/plugin/jquery-confirm.css" rel="stylesheet" />
+    <link href="~/css/select2.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div id="main_container" class="clearfix full-wdth">
+        <div class="header clearfix">
+            <div class="hdr-top-part dis-block clearfix">
+                <div class="logo"><a href="@Url.Action("Index", "Home")"><img src="~/content/images/logo.png" alt="Dotsquares Employee Management" /></a></div>
+            </div>
+        </div>
+        <div class="main_content clearfix">
+            <div class="full-wdth padding20">
+                @{
+                    Html.RenderPartial("_Notification");
+
+                    if (Model.AllowUpdate) {
+                        using (Html.BeginForm("UpdateAdditionalSupportRequest", "Project", FormMethod.Post, new { @id = "additionalSupportForm" })) {
+                            <div class="row">
+                                <div class="col-sm-12 col-md-8 col-md-offset-2">
+                                    <div class="panel panel-default margin-top50 margin-bottom50">
+                                        <div class="panel-heading">
+                                            <h4 style="padding-bottom:0;font-weight:500">Process Additional Support Request</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div id="NotificationMessage"></div>
+                                            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                                            @Html.HiddenFor(x => x.RequestToken)
+                                            @Html.HiddenFor(x => x.ApproveByUid)
+
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.ProjectId)
+                                                </div>
+                                                <div class="col-md-10">
+                                                    @Model.ProjectName
+                                                    @Html.HiddenFor(model => model.ProjectId)
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.RequestByUser)
+                                                </div>
+                                                <div class="col-md-4">
+                                                    @Model.RequestByUser
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.CreateDate)
+                                                </div>
+                                                <div class="col-md-4">
+                                                    @Model.CreateDate
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                @if (Model.Status == (int)Enums.AddSupportRequestStatus.Partial) {
+                                                    <div class="col-md-2">
+                                                        <label>Reason for Add. Support</label>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @Html.TextAreaFor(model => model.AddDescription, htmlAttributes: new { @class = "form-control", @data_msg_required = "Reason for Add. Support is required", @data_rule_required = "true" })
+                                                    </div>
+                                                }
+                                                else {
+                                                    <div class="col-md-2">
+                                                        <label>Reason for Add. Support</label>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @Model.AddDescription
+                                                        @Html.HiddenFor(model => model.AddDescription)
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.StartDate)
+                                                </div>
+                                                <div class="col-md-4">
+                                                    @Html.TextBoxFor(model => model.StartDate, htmlAttributes: new { @class = "form-control datepicker", @readonly = "readonly" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.EndDate)
+                                                </div>
+                                                <div class="col-md-4">
+                                                    @Html.TextBoxFor(model => model.EndDate, htmlAttributes: new { @class = "form-control datepicker", @readonly = "readonly" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.AssignedUserIds)
+                                                </div>
+                                                <div class="col-md-10">
+                                                    @Html.ListBoxFor(model => model.AssignedUserIds, Model.UserList, htmlAttributes: new { @style = "border: 1px solid #ddd;" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.Status)
+                                                </div>
+                                                <div class="col-md-4">
+                                                    @Html.DropDownListFor(model => model.Status,  Model.StatusList,
+                                            htmlAttributes: new { @class = "form-control", @data_msg_required = "Approval status required", @data_rule_required = "true", @required="required" })
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                    @Html.LabelFor(model => model.ApprovalComment)
+                                                </div>
+                                                <div class="col-md-10">
+                                                    @Html.TextAreaFor(model => model.ApprovalComment,
+                                            htmlAttributes: new { @class = "form-control", @data_msg_required = "Approver comments required", @data_rule_required = "true" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-footer text-right">
+                                            <button type="submit" class="btn btn-custom">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div class="footer clearfix">
+            <div class="dis-inline footer-logo"><img src="~/Content/images/dots-logon.png" alt="" /></div>
+            &copy; Copyright @(DateTime.Now.Year) Dotsquares Technologies (I) Pvt. Ltd. All Rights Reserved.
+        </div>
+    </div>
+    <script src="~/bundles/jquery"></script>
+    <script src="~/bundles/jqueryval"></script>
+    <script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/layoutjs"></script>
+    <script src="~/bundles/Select2"></script>
+     <script src="~/bundles/Project/updateAdditionalSupport"></script>
+
+</body>
+</html>

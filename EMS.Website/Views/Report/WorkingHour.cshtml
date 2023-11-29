@@ -1,0 +1,66 @@
+﻿@model WorkingHourDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    ViewBag.Title = "Dotsquares Employee Management 2013";
+}
+<style type="text/css">
+    #grid-TimesheetList.dataTable.table-condensed thead > tr > th {
+        background-color: #FFA500;
+    }
+</style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Working Hour Report</h2>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.Month, Model.MonthsList, "--Select Month--", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-custom" id="CustomSearch">Search</button>
+            </div>
+        </div>
+
+        @*<div class="row form-group">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered" id="TimeSpent">
+                        <thead>
+                            <tr>
+                                <th>Developer</th>
+                                <th>TL</th>
+                                <th>Designer</th>
+                                <th>BA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Model.DeveloperHours</td>
+                                <td>@Model.TLHours</td>
+                                <td>@Model.DesignerHours</td>
+                                <td>@Model.BAHours</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>*@
+
+        <table id="grid-InvoiceWorkingHour" class="display postable table table-stats table-condensed"></table>
+        <div id="TimesheetList" class="col-lg-12 text-left padding-top20">
+            <h4 id="TimesheetListHead"></h4>
+            <table id="grid-TimesheetList" class="display postable table table-stats table-condensed"></table>
+            &nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/bundles/Report/WorkingHourReport" asp-append-version="true"></script>
+}

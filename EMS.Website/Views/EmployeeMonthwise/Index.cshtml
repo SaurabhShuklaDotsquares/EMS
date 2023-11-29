@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Monthly Employees Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Monthly Employees Reports</h2>
+            </div>
+            <div class="col-md-8 search-filter">
+                <div class="pull-right box1">
+                   @* <a class="export-btn" data-href="EmployeeMonthwise/ExportReportToExcel" href="EmployeeMonthwise/ExportReportToExcel" style="">
+                        <img src="content/images/excel.png" alt=""> Export To Excel
+                    </a>*@                   
+                </div>
+            </div>
+          <div class="row clearfix">
+                    <div class="col-lg-1"></div>                
+                    <div class="col-lg-4 pull-right">
+                        <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                        @*<input type="button" class="btn btn-custom" id="btnReset" value="Reset" />*@
+                    <a id="btnExport" class="btn btn-custom" style="background-color: #3f8c09;" >
+                        <i class="fa fa-file-excel-o"></i> Export To Excel
+                    </a>
+                    </div> 
+                    <div class="col-lg-2 pull-right">
+                        @Html.DropDownList("MonthYear", ViewBag.MonthYear as List<SelectListItem>, new { @class = "m-wrap medium form-control", @required = "required" })
+                    </div>
+            </div>
+
+            <table id="grid-employeedata" class="display postable table table-stats table-condensed"></table>
+        </div>
+
+    </div>
+
+    <div class="divoverlay hide"></div>
+    
+    @section scripts
+        {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+        <script src="~/scripts/customjs/employeemonthwise/index.js" asp-append-version="true"></script>
+    }

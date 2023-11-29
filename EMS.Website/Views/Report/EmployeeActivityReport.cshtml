@@ -1,0 +1,78 @@
+﻿@model EmployeeReportIndexDto
+@{
+    ViewBag.Title = "Employee Activity Report";
+}
+@section styles{
+    <style>
+        label {
+            font-weight: 600;
+        }
+
+        .btn-sm {
+            padding: 3px 5px;
+        }
+    </style>
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <div class="box-body">
+                <div class="row">
+                    <div class="full">
+                        <div class="pull-left col-md-2">
+                            <h2>Employee Activity Report</h2>
+                        </div>
+                        <div class="col-md-10 search-filter pull-right">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <button type="button" id="searchDate" class="btn btn-custom pull-right"><i class="fa fa-search"></i> Search</button>
+                                    <div class="col-md-2 pull-right">
+                                        @Html.DropDownList("DeptId", Model.DepartmentList, "All Departments", new { @class = "form-control" })
+                                    </div>
+                                    @if (CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.Director)
+                                    {
+                                        <div class="col-md-2 pull-right">
+                                            @Html.DropDownList("PMId", Model.PMUserList, "All PM", new { @class = "form-control" })
+                                        </div>
+                                    }
+                                    <div class="col-md-2 pull-right">
+                                        @Html.DropDownList("NoOfFreeDays", new List<SelectListItem>(), "All", new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-2 pull-right">
+                                        @Html.TextBox("EndDate", Model.EndDate, new { @class = "form-control", @placeholder = "End Date", @readonly = "" })
+                                    </div>
+                                    <div class="col-md-2 pull-right">
+                                        @Html.TextBox("StartDate", Model.StartDate, new { @class = "form-control", @placeholder = "Start Date", @readonly = "" })
+                                    </div>
+
+                                    <input type="hidden" value="@Model.StartDate" id="sDate" />
+                                    <input type="hidden" value="@Model.EndDate" id="eDate" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <a id="btnDownload" class="btn btn-custom" style="display:none;background-color: #3f8c09;" href="@Url.Action("DownloadEmployeeActivityReport")" target="_blank">
+                        <i class="fa fa-file-excel-o"></i> Export to Excel
+                    </a>
+                </div>
+                <div class="col-sm-8 text-right" id="statistic"></div>
+            </div>
+            <table id="grid-report" class="table table-stats table-condensed"></table>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@{await Html.RenderPartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-activity-detail", AreaLabeledId = "modal-activity-detail-label", Size = EMS.Core.Enums.ModalSize.Large }); }
+@{await Html.RenderPartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-performance-detail", AreaLabeledId = "modal-performance-detail-label", Size = EMS.Core.Enums.ModalSize.XLarge }); }
+@{await Html.RenderPartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-perf-extra-detail", AreaLabeledId = "modal-perf-extra-detail-label", Size = EMS.Core.Enums.ModalSize.Large }); }
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/report/EmployeeActivityReport.js"></script>
+}

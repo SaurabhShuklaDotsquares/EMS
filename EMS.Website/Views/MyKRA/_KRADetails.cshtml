@@ -1,0 +1,37 @@
+﻿@model EMS.Website.Models.DesignationKRAViewModel
+@{
+    @using (Html.BeginForm())
+    {
+        
+   
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = $"KRA Details - {Model.DesignationTitle}" });
+    <div class="modal-body">
+
+        <div class="timeline">
+            <h1><u>KRA</u></h1>
+
+            @if (Model.DesignationKRAList != null)
+            {
+                <p>As per the selected designation <b>@Model.DesignationTitle</b>, the key responsibility areas will be:</p>
+                {
+                    int index = 1;
+
+                    @foreach (var item in Model.DesignationKRAList)
+                    {
+                        <div class='step'>
+                            <div class='number'>@index</div>
+                            <div>
+                                <p class='title'>@item.Title</p>
+                            </div>
+                        </div>
+                        index++;
+                    }
+                }
+            }
+        </div>
+    </div>
+       
+    }
+   
+
+}

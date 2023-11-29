@@ -1,0 +1,162 @@
+﻿@model FileNameDto
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "FileNameForm", enctype = "multipart/form-data" }))
+{
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Create File Name" })
+    <div class="modal-body" id="mymodel" style="height:220px;">
+        <div id="NotificationMessage"></div>
+
+        <div id="validation-summary"></div>
+        <div class="form-group required">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Name, htmlAttributes: new { @class = "form-control Name", @placeholder = "ex. Est_Business_Directory_Listing_Website_Development_v1 0", @maxlength = 100, @required = "required", @id = "name" })
+                    <span class="help-block" style="font-size:11px;color:red;">Note: File name should be unique and you can put the name without file extension</span>
+                        <label id="FileName-error" class="error" style="" for="Name"></label>
+</div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" style="margin-top: 4px;">
+                    <label id="FileUpload" class="control-label" for="EstimateFiles">Upload File</label>
+                    @*@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })*@
+                </div>
+                <div style="margin-top: 4px;" class="col-md-9">
+                    <input style="float:left;" type="file" name="EstimateFiles" id="EstimateFiles" required />
+                    @*<span id="upload-error" class="error" style="display:none">max file upload limit.</span>*@
+                    <span id="upload-error" class="error" style="display:none;margin-left: 12px;"></span>
+                </div>
+            </div>
+        </div>
+        <button type="button" id="btn-cancel" class="btn btn-custom pull-right" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-custom btn-pink pull-right margin-right10" id="btnSubmit">Submit</a>
+        @*@Html.Partial("_ModalFooter", new ModalFooter { })*@
+
+    </div>
+}
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#btnSubmit").click(function () {
+            var frmData = new FormData();
+            var filebase = $("#EstimateFiles").get(0);
+            var files = filebase.files;
+            var name = $('.Name').val();
+
+            if (name == "" || name == null) {
+                $("#FileName-error").html('Please Fill File Name first').show();
+                return false;
+            }
+            else {
+                $("#FileName-error").hide();
+            }
+            if (!files.length > 0) {
+                $("#upload-error").html('Please Choose a file first').show();
+                $('.Name').focus();
+                return false;
+            } else {
+                $("#upload-error").hide();
+            }
+
+            frmData.append("Name", name);
+            frmData.append(files[0].name, files[0]);
+            $.ajax({
+                url: domain + 'EstimateHour/AddFileName',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: frmData,
+                success: function (data) {
+                    if (data.isSuccess == true) {
+                        $("#modal-add-FileName").modal("hide");
+                        $("#modal-add-FileName").data("newFileName", $(".Name").val());
+                        $("#modal-add-FileName").data("newFileNameId", data.data);
+                        $(".Name").val('');
+                        $("#EstimateFiles").val('');
+                    } else {
+                        if (data.data == "For File") {
+                            $("#upload-error").html(data.message).show();
+                        }
+                        else if (data.data == "For Name") {
+                            $("#FileName-error").html(data.message).show();
+                        }
+                        else {
+                            $("#FileName-error").html(data.message).show();
+                        }
+                    }
+                }
+
+            });
+        });
+
+        $("#name").autocomplete({
+            source: [],
+            minLength: 2
+        });
+
+        $("#EstimateFiles").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+
+            if (input.files) { //&& input.files.length > 0
+                var j = 0;
+
+                $("#upload-error").hide();
+                if (input.files) { //&& input.files[j]
+                    var reader = new FileReader();
+                    reader.onload = (function (j) {
+                        var fileName = j;
+                        var imageExtensions = ["jpg", "png", "jpeg", "gif"];
+                        var OtherExtensions = ["pdf", "docx", "doc", "ppt", "xlsx", "xls", "doc", "csv", "psd", "html", "rar", "zip"];
+                        var extension = fileName.name.split('.').pop().toLowerCase();
+                        if (extension == 'exe') {
+                            alert(".exe type not allowed")
+                            return false
+                        }
+                    })(input.files[0]);
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+        $("#name").on("keyup", function () {
+            var value = $("#name").val();
+            if (value.length > 1) {
+                $.ajax({
+                    url: "EstimateHour/GetFileNameAutoComplete",
+                    data: { "prefix": value },
+                    type: 'POST',
+                    success: function (result) {                       
+                        if (result != "") {
+                            var data = JSON.parse(result);
+                            if (data.length > 0) {
+                                $.each(data, function (index, item) {                                    
+                                    if (value == item) {
+                                        $("#FileName-error").html('File Name Allready Exist').show();
+                                        return false;
+                                    }
+                                    else {
+                                        $("#FileName-error").hide();
+                                    }
+                                });
+                                $("#name").autocomplete("option", "source", data);
+                            }
+                            else {
+                                $("#FileName-error").hide();
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+    });
+</script>

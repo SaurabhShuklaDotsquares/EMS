@@ -1,0 +1,41 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="cvs-page full-wdth clearfix">
+            <h2>Manage CVs Type</h2>
+            <div class="dis-block clearfix">
+                <div class="pull-left box1">
+                    <a data-toggle="modal" data-target="#modal-action-cvs" href="@Url.Action("AddEdit", "CVs")" class="btn btn-custom pull-right btn-addCVs">Add New</a>
+                </div>
+
+                <div class="pull-right box2">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="wdth2 margin-right10 pull-left">
+                            @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "CVs Name", style = "width: 250px;" })
+
+                        </div>
+
+                        <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                    }
+                </div>
+
+            </div>
+            <br />
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-cvs" class="display postable table table-bordered table-condensed"></table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-action-cvs", AreaLabeledId = "modal-action-lblCVs", Size = Enums.ModalSize.Medium })
+@section scripts{
+    <script src="~/Scripts/CustomJS/cvs.js" asp-append-version="true"></script>
+}

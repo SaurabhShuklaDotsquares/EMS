@@ -1,0 +1,61 @@
+﻿@model EMS.Dto.EscalationConclusionDTO
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<div class="conclusion">
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Conclusion" })
+    <div class="modal-body">
+        <div id="error-ModalMessage"></div>
+        <div class="create-form-outer-box dis-block clearfix">
+            <form asp-action="AddEditConclusion" id="frm-Manage-Conclusion" method="post">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div id="validation-summary"></div>
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="EscalationId" />
+                    <div class="margin-bottom15">
+                        <div class="row">
+                            <div class="col-md-12 margin-bottom15">
+                                <label asp-for="Resolution"></label>
+                                <textarea asp-for="Resolution" rows="2" cols="2" class="form-control"></textarea>
+                                <label id="Resolution-error" class="error" for="Resolution" style="display:none">The Resolution field is required.</label><span asp-validation-for="Resolution"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <label asp-for="LessonLearnExplanation"></label>
+                                <textarea asp-for="LessonLearnExplanation" rows="2" cols="2" class="form-control"></textarea>
+                                <span asp-validation-for="LessonLearnExplanation"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            @await Html.PartialAsync("_ModalFooter", new ModalFooter { SubmitButtonID = "btnSubmit", SubmitButtonText = "Submit", CancelButtonText = "Cancel", DefaultButtonCss = false })
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+<script>
+    var Resolution = CKEDITOR.replace('Resolution');
+    var LessonLearnExplanation = CKEDITOR.replace('LessonLearnExplanation');
+
+    $("#btnSubmit").click(function () {
+        var resolution = CKEDITOR.instances['Resolution'].getData();
+        $("#Resolution-error").hide();
+        if (resolution == "") {
+            $("#Resolution-error").show();
+        } else {
+            for (instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
+            var data = $("#frm-Manage-Conclusion").serialize();
+            $.ajax({
+                url: domain + 'Escalation/AddEditConclusion',
+                type: 'POST',
+                data: data,
+                success: function (data) {
+                    window.location.href = data.redirectUrl;
+                }
+            });
+        }
+    })
+</script>

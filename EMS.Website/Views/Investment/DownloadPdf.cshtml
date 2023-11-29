@@ -1,0 +1,168 @@
+﻿@model InvestmentDto
+@{
+    Layout = null;
+    int count = 0;
+    decimal TotalAmout = 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Investment Details</title>
+    <link href="~/Content/css/bootstrap.min.css" />
+    <link href="~/Content/css/style.css" />
+    
+    <style type="text/css">
+        body {
+            background-color: #ffffff;
+            font-weight: normal;
+            font-family: arial;
+            letter-spacing: 1px;
+        }
+
+        .table-stats > thead > tr > th, .table-stats > thead > tr > td {
+            background: #ddd;
+            color: #333;
+        }
+
+        tfoot {
+            display: table-row-group;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 class="text-center">DOT SQUARES TECHNOLOGIES INDIA PRIVATE LIMITED</h2>
+    <p class="text-center">4 RA 5 JAWAHAR NAGAR JAIPUR, RAJASTHAN 302004</p>
+    <h5 class="text-center">INVESTMENTS DECLARATION FOR THE FINANCIAL YEAR @Model.FinancialYear</h5>
+    <p class="text-left"><b>Submittion on :</b> @Model.SubmitionDate</p>
+
+    <table class="table table-stats">
+        <tbody>
+            <tr>
+                <td width="15%"><b>Name</b></td>
+                <td width="30%" class="text-upper">@Html.DisplayTextFor(model => model.Name)</td>
+                <td width="25%"><b>Father's Name</b></td>
+                <td width="30%"> @Html.DisplayTextFor(model => model.FatherName) </td>
+            </tr>
+            <tr>
+                <td width="15%"><b>DOB</b></td>
+                <td width="30%">@Html.DisplayTextFor(model => model.DOB) </td>
+                <td width="25%"><b>Attandence Code</b></td>
+                <td width="30%"> @Html.DisplayTextFor(model => model.PAN) </td>
+            </tr>
+            <tr>
+                <td width="15%"><b>PAN</b></td>
+                <td width="30%"> @Html.DisplayTextFor(model => model.AttendanceCode) </td>
+                <td width="55%" colspan="2"></td>
+            </tr>
+            <tr>
+                <td width="15%"><b>Address</b></td>
+                <td width="85%" colspan="3">@Html.DisplayTextFor(model => model.HomeAddress) </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Monthly Rent </h2>
+
+    <table class="table table-stats" style="width:50%">
+        <thead>
+            <tr>
+                <th class="text-center">S.No.</th>
+                <th>Month</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                    count = 0;
+                    TotalAmout = 0;
+                    foreach (var item in Model.InvestmentMonths)
+                    {
+            <tr>
+                <td class="text-center">@(++count)</td>
+                <td>@item.MonthName</td>
+                <td align="right">@(item.MonthlyRent)</td>
+            </tr>
+                        TotalAmout += item.MonthlyRent ?? 0;
+                    }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-center">Total</td>
+                <td class="text-right">@TotalAmout</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h2>CLAIMING EXEMPTION UNDER CHAPTER VI-A</h2>
+
+    <table class="table table-stats">
+        <thead>
+            <tr>
+                <th class="text-center">S.No.</th>
+                <th>HEAD OF INVESTMENTS</th>
+                <th>SHORT NOTES</th>
+                <th>AMOUNT</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{   count = 0;
+                TotalAmout = 0;
+                foreach (var item in Model.InvestmentTypeAmountMaps)
+                {
+            <tr>
+                <td class="text-center"> @(++count)</td>
+                <td> @item.Name </td>
+                <td> @item.ShortNote </td>
+                <td align="right"> @item.Amount </td>
+            </tr>
+                    TotalAmout += item.Amount??0;
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-center">Total</td>
+                <td class="text-right">@TotalAmout</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h2>INCOME FROM OTHER SOURCES</h2>
+
+    <table class="table table-stats">
+        <thead>
+            <tr>
+                <th class="text-center">S.No.</th>
+                <th>HEAD</th>
+                <th>SHORT NOTES</th>
+                <th>AMOUNT</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{   count = 0;
+                TotalAmout = 0;
+                foreach (var item in Model.IncomeTypeAmountMaps)
+                {
+                    <tr>
+                        <td class="text-center"> @(++count)</td>
+                        <td> @item.Name </td>
+                        <td> @item.ShortNote </td>
+                        <td align="right"> @item.Amount </td>
+                    </tr>
+                    TotalAmout += item.Amount ?? 0;
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-center">Total</td>
+                <td class="text-right">@TotalAmout</td>
+            </tr>
+        </tfoot>
+    </table>
+
+</body>
+</html>

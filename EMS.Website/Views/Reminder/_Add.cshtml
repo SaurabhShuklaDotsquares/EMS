@@ -1,0 +1,114 @@
+﻿@model EMS.Dto.ReminderDto
+@using EMS.Web.Models.Others
+@{
+    Layout = null;
+}
+
+
+@using (Html.BeginForm("Add", "Reminder", FormMethod.Post, new { @id = "frm-addeditreminder" }))
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = @Model.Id == 0 ? "Add Reminder" : "Edit Reminder" })
+
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+        <div id="NotificationMessage"></div>
+        @Html.HiddenFor(model => model.Id)
+        <div class="row form-group required clearfix">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Title)
+                        <span asp-validation-for="Title" class="field-validation-error"> </span>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(model => model.Title,  null, new { @class = "form-control", @required = "required"})
+                    </div>
+
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.ReminderDate)
+                        <span asp-validation-for="ReminderDate" class="field-validation-error"> </span>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(x => x.ReminderDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @required = "required" })
+                    </div>
+
+                </div>
+                <div class="row" style="padding-top:10px;">
+                    <div class="col-md-4">
+                        <label>Reminder With</label>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.ListBoxFor(model => model.Paticipants, Model.PaticipantList, htmlAttributes: new { @class = "form-control multiple ParticipantClass", @required = "required" , @style = "padding:0px;", @autoComplete = "off", @placeholder = "-- Select Participant --"
+                    })
+                        @Html.ListBoxFor(model => model.Groups, Model.GroupList, htmlAttributes: new { @class = "form-control multiple hidden GroupClass", @style = "padding:0px;", @autoComplete = "off", @placeholder = "-- Select Group --" })
+                    </div>
+
+                </div>
+                @if (CurrentUser.IsSuperAdmin)
+                {
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.IsExcludeMe)
+                        </div>
+                        <div class="col-md-8">
+                            <div style="float: left;">
+                                @Html.CheckBoxFor(model => model.IsExcludeMe)
+                            </div>
+                            <div style="float: left; padding:3px">
+                                <label asp-for="IsExcludeMe"> Would you like to exclude yourself from reminder?</label>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+                @if (Model.Id > 0)
+                {
+                    <div class="row" style="padding-top:10px;">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.IsActive)
+                    </div>
+                    <div class="col-md-8">
+                        <div style="float: left;">
+                            @Html.CheckBoxFor(model => model.IsActive)
+                        </div>
+                        <div style="float: left; padding:3px">
+                            <label asp-for="IsActive"> Completed</label>
+                        </div>
+
+                    </div>
+                </div>
+                }
+                
+
+
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+
+
+@section scripts{
+
+    <script src="~/bundles/Select2" asp-append-version="true"></script>
+
+
+}
+<script>
+    //onAddEditReminderLoad();
+    $('#Paticipants').select2();
+
+    $("#ReminderDate").datepicker({
+        defaultDate: "today",
+        dateFormat: "dd/mm/yy",
+        changeMonth: true,
+        changeYear: true,
+        minDate: 0,
+        onClose: function (selectedDate) {
+        }
+    });
+
+</script>

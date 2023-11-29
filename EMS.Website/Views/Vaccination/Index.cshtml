@@ -1,0 +1,167 @@
+﻿@model VaccinationDto
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .my-spacing {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .dose-group {
+        cursor: pointer;
+    }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <h2>Add/Update My Vaccination Status</h2>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <div id="MessageDiv"></div>
+            </div>
+        </div>
+        <form asp-action="Index" asp-controller="Vaccination" method="post" enctype="multipart/form-data" id="form-vaccination">
+            <div id="validation-summary"></div>
+            <input type="hidden" asp-for="DeclartionText" />
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Vaccine Name</label>
+                            <span class="red">*</span>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="VaccinationTypeId" asp-items="@(new SelectList(Model.VaccineTypes,"Id","VaccineName"))" class="form-control">
+                                <option value="">-Select-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Vaccinated</label>
+                            <span class="red">*</span>
+                        </div>
+
+                        <div class="col-md-9">
+                            @foreach (var item in Model.DoseTypes)
+                            {
+                                @if (item.DoseName == "Partially")
+                                {
+                                    <input asp-for="SelectedDose" type="radio" value="@item.Id" class="dose-group" checked /> @item.DoseName
+
+                                }
+                                else
+                                {
+                                    <input asp-for="SelectedDose" type="radio" value="@item.Id" class="dose-group" /> @item.DoseName
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-6">
+                    <div class="row" id="divDose1">
+                        <div class="col-md-3">
+                            <label>Dose 1 ( Date )</label>
+                            <span class="red">*</span>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" asp-for="Dose1Date" placeholder="dd/mm/yyyy" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row ba-row" id="divDose2" style="display:none">
+                        <div class="col-md-3">
+                            <label>Dose 2 ( Date )</label>
+                            <span class="red">*</span>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" asp-for="Dose2Date" placeholder="dd/mm/yyyy" class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row col-md-12 my-spacing">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Upload Certificate</label>
+                            <span class="red">*</span>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="file" type="file" />
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-9">
+                        <input type="submit" id="btnSaveVaccination" class="btn btn-custom margin-right10" name="btnSaveVaccination" value="Submit" />
+                    </div>
+                </div>
+            </div>*@
+            </div>
+            <div class="row col-md-12 my-spacing">
+                <h2 class="show-star">Declaration</h2>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>@Model.DeclartionTextOne</label>
+                        <input asp-for="DeclartionTextTwo" type="text" class="removeTextBorder margin-left10" readonly />
+                        <span>
+                            @Model.DeclartionTextThree
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-md-12 my-spacing">
+              
+                <div class="col-md-6 pull-right">
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-9">
+                        <input type="submit" id="btnSaveVaccination" class="btn btn-custom margin-right10" name="btnSaveVaccination" value="Submit" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </form>
+
+        <div class="row" style="padding:15px"></div>
+            <div class="estimateDocument-page fullwidth">
+                <h2>My Vaccination Record</h2>
+                <div class="clearfix full-wdth margin-bottom15">
+                    <div class="full-wdth clearfix row">
+                        <div class="row" style="padding:5px">
+                            <div class="col-md-1"></div>
+                        </div>
+                    </div>
+                    <section id="div-grid-Vaccination">
+                        <table class="table postable table-responsive table-bordered table-condensed" id="grid-Vaccination"></table>
+                    </section>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="~/Scripts/CustomJS/User/Vaccination.js"></script>
+}

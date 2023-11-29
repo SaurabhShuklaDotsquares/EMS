@@ -1,0 +1,40 @@
+﻿@model EstimateHostingPackageDto
+@{
+    var index = Guid.NewGuid();
+    var packagedetail = $"{Model.Name}{Environment.NewLine}{Environment.NewLine}{Model.PackageDetail}";
+}
+<div class="col-md-3" data-countryid="@Model.CountryId">
+    @*<input type="hidden" name="EstimateHostingPackage.index" autocomplete="off" value="@index" />
+    <input type="hidden" asp-for="Name" name="EstimateHostingPackage[@(index)].Name" />
+    <input type="hidden" asp-for="PackageDetail" name="EstimateHostingPackage[@(index)].PackageDetail" />
+    <input type="hidden" asp-for="HostingCost" name="EstimateHostingPackage[@(index)].HostingCost" />
+    <input type="hidden" asp-for="HostingCostType" name="EstimateHostingPackage[@(index)].HostingCostType" />
+    <input type="hidden" asp-for="SetupCost" name="EstimateHostingPackage[@(index)].SetupCost" />
+    <input type="hidden" asp-for="SetupCostType" name="EstimateHostingPackage[@(index)].SetupCostType" />
+    <input type="hidden" asp-for="CountryId" name="EstimateHostingPackage[@(index)].CountryId" />
+    <input type="hidden" asp-for="CurrencyId" name="EstimateHostingPackage[@(index)].CurrencyId" />*@
+
+    <h2 class="package-box-header">@Model.Name @($"({Model.CountryName})")</h2>
+    <div class="package-box-body">
+        <strong>Technology </strong>
+        <p>@(Model.TechnologyName)</p>
+        <hr>
+        <strong> Package Detail <span class="pull-right btncopy pointer" title="Copy Package Detail"><i class="fa fa-copy"></i><span class="copy-msg"></span></span></strong>
+        <div class="pre-line  packagedetail-section hide" id="PackageDetail_@Model.Id">@(packagedetail)</div>
+        <p class="pre-line">@(Model.PackageDetail)</p>
+
+        @if (Model.HostingCost > 0)
+        {
+            <hr>
+            <strong>Hosting Cost (@Model.HostingCostTypeName)</strong>
+            <p>@($"{Model.CurrSign}{Model.HostingCost}")</p>
+
+        }
+        @if (Model.SetupCost > 0)
+        {
+            <hr>
+            <strong> Setup Cost (@Model.SetupCostTypeName)</strong>
+            <p class="">@($"{Model.CurrSign}{Model.SetupCost}")</p>
+        }
+    </div>
+</div>

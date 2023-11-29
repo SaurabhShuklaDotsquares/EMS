@@ -1,0 +1,503 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <StartupObject>EMS.Website.Program</StartupObject>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG </DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>2048</FileAlignment>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <FileAlignment>2048</FileAlignment>
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <DefineConstants>DEBUG </DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Code\LIBS\ExportToExcel\**" />
+    <Compile Remove="wwwroot\Activity\**" />
+    <Compile Remove="wwwroot\Appraise\**" />
+    <Compile Remove="wwwroot\BugReport\**" />
+    <Compile Remove="wwwroot\Complaint\**" />
+    <Compile Remove="wwwroot\DailyThought\**" />
+    <Compile Remove="wwwroot\Device\**" />
+    <Compile Remove="wwwroot\Estimate\**" />
+    <Compile Remove="wwwroot\Home\**" />
+    <Compile Remove="wwwroot\Invoice\**" />
+    <Compile Remove="wwwroot\LeadStatusModel\**" />
+    <Compile Remove="wwwroot\LessonLearned\**" />
+    <Compile Remove="wwwroot\MeetingRoom\**" />
+    <Compile Remove="wwwroot\MOM\**" />
+    <Compile Remove="wwwroot\NCLog\**" />
+    <Compile Remove="wwwroot\OrgDocument\**" />
+    <Compile Remove="wwwroot\PILog\**" />
+    <Compile Remove="wwwroot\ProductLandingPage\**" />
+    <Compile Remove="wwwroot\ProjectClosure\**" />
+    <Compile Remove="wwwroot\Project\**" />
+    <Compile Remove="wwwroot\Scripts\CustomJS\OrgImprovementArea\**" />
+    <Compile Remove="wwwroot\TeamStructure\**" />
+    <Compile Remove="wwwroot\User\**" />
+    <Content Remove="Code\LIBS\ExportToExcel\**" />
+    <Content Remove="wwwroot\Activity\**" />
+    <Content Remove="wwwroot\Appraise\**" />
+    <Content Remove="wwwroot\BugReport\**" />
+    <Content Remove="wwwroot\Complaint\**" />
+    <Content Remove="wwwroot\DailyThought\**" />
+    <Content Remove="wwwroot\Device\**" />
+    <Content Remove="wwwroot\Estimate\**" />
+    <Content Remove="wwwroot\Home\**" />
+    <Content Remove="wwwroot\Invoice\**" />
+    <Content Remove="wwwroot\LeadStatusModel\**" />
+    <Content Remove="wwwroot\LessonLearned\**" />
+    <Content Remove="wwwroot\MeetingRoom\**" />
+    <Content Remove="wwwroot\MOM\**" />
+    <Content Remove="wwwroot\NCLog\**" />
+    <Content Remove="wwwroot\OrgDocument\**" />
+    <Content Remove="wwwroot\PILog\**" />
+    <Content Remove="wwwroot\ProductLandingPage\**" />
+    <Content Remove="wwwroot\ProjectClosure\**" />
+    <Content Remove="wwwroot\Project\**" />
+    <Content Remove="wwwroot\Scripts\CustomJS\OrgImprovementArea\**" />
+    <Content Remove="wwwroot\TeamStructure\**" />
+    <Content Remove="wwwroot\User\**" />
+    <EmbeddedResource Remove="Code\LIBS\ExportToExcel\**" />
+    <EmbeddedResource Remove="wwwroot\Activity\**" />
+    <EmbeddedResource Remove="wwwroot\Appraise\**" />
+    <EmbeddedResource Remove="wwwroot\BugReport\**" />
+    <EmbeddedResource Remove="wwwroot\Complaint\**" />
+    <EmbeddedResource Remove="wwwroot\DailyThought\**" />
+    <EmbeddedResource Remove="wwwroot\Device\**" />
+    <EmbeddedResource Remove="wwwroot\Estimate\**" />
+    <EmbeddedResource Remove="wwwroot\Home\**" />
+    <EmbeddedResource Remove="wwwroot\Invoice\**" />
+    <EmbeddedResource Remove="wwwroot\LeadStatusModel\**" />
+    <EmbeddedResource Remove="wwwroot\LessonLearned\**" />
+    <EmbeddedResource Remove="wwwroot\MeetingRoom\**" />
+    <EmbeddedResource Remove="wwwroot\MOM\**" />
+    <EmbeddedResource Remove="wwwroot\NCLog\**" />
+    <EmbeddedResource Remove="wwwroot\OrgDocument\**" />
+    <EmbeddedResource Remove="wwwroot\PILog\**" />
+    <EmbeddedResource Remove="wwwroot\ProductLandingPage\**" />
+    <EmbeddedResource Remove="wwwroot\ProjectClosure\**" />
+    <EmbeddedResource Remove="wwwroot\Project\**" />
+    <EmbeddedResource Remove="wwwroot\Scripts\CustomJS\OrgImprovementArea\**" />
+    <EmbeddedResource Remove="wwwroot\TeamStructure\**" />
+    <EmbeddedResource Remove="wwwroot\User\**" />
+    <None Remove="Code\LIBS\ExportToExcel\**" />
+    <None Remove="wwwroot\Activity\**" />
+    <None Remove="wwwroot\Appraise\**" />
+    <None Remove="wwwroot\BugReport\**" />
+    <None Remove="wwwroot\Complaint\**" />
+    <None Remove="wwwroot\DailyThought\**" />
+    <None Remove="wwwroot\Device\**" />
+    <None Remove="wwwroot\Estimate\**" />
+    <None Remove="wwwroot\Home\**" />
+    <None Remove="wwwroot\Invoice\**" />
+    <None Remove="wwwroot\LeadStatusModel\**" />
+    <None Remove="wwwroot\LessonLearned\**" />
+    <None Remove="wwwroot\MeetingRoom\**" />
+    <None Remove="wwwroot\MOM\**" />
+    <None Remove="wwwroot\NCLog\**" />
+    <None Remove="wwwroot\OrgDocument\**" />
+    <None Remove="wwwroot\PILog\**" />
+    <None Remove="wwwroot\ProductLandingPage\**" />
+    <None Remove="wwwroot\ProjectClosure\**" />
+    <None Remove="wwwroot\Project\**" />
+    <None Remove="wwwroot\Scripts\CustomJS\OrgImprovementArea\**" />
+    <None Remove="wwwroot\TeamStructure\**" />
+    <None Remove="wwwroot\User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Code\LIBS\Emails.cs" />
+    <Compile Remove="Code\LIBS\FineUpload.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="Views\LibraryManagement\FileUpload.cshtml" />
+    <Content Remove="Views\ProjectClosure\_ProjectClosureSummary.cshtml" />
+    <Content Remove="Views\Shared\_LoginPartial.cshtml" />
+    <Content Remove="wwwroot\EmailTemplate\MeetingEmail1.html" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
+    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="1.0.236" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NPOI" Version="1.2.3" />
+    <PackageReference Include="PagedList.Core" Version="1.17.4" />
+    <PackageReference Include="PagedList.Core.Mvc" Version="2.0.1" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="18.4.0" />
+    <PackageReference Include="SharpZipLib" Version="1.1.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Web.Mvc.Extensions" Version="1.1.1.2" />
+    <PackageReference Include="UrlBase64" Version="0.1.2" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="7.6.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataTables.AspNet.AspNetCore\DataTables.AspNet.AspNetCore.csproj" />
+    <ProjectReference Include="..\DataTables.AspNet.Core\DataTables.AspNet.Core.csproj" />
+    <ProjectReference Include="..\EMS.Core\EMS.Core.csproj" />
+    <ProjectReference Include="..\EMS.Data\EMS.Data.csproj" />
+    <ProjectReference Include="..\EMS.Dto\EMS.Dto.csproj" />
+    <ProjectReference Include="..\EMS.Service\EMS.Service.csproj" />
+    <ProjectReference Include="..\EMS.Validations\EMS.Validations.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\bundles\TDS\" />
+    <Folder Include="wwwroot\Content\images\profile\" />
+    <Folder Include="wwwroot\images\escalation\" />
+    <Folder Include="wwwroot\images\CertificationImage\" />
+    <Folder Include="wwwroot\images\profile\" />
+    <Folder Include="wwwroot\Leave_Log\" />
+    <Folder Include="wwwroot\Upload\CV\" />
+    <Folder Include="wwwroot\Upload\LibraryDocument\" />
+    <Folder Include="wwwroot\Upload\StudyDocuments\" />
+    <Folder Include="wwwroot\Upload\TDS\" />
+    <Folder Include="wwwroot\User_Log\" />
+    <Folder Include="wwwroot\WFH_Log\" />
+    <Folder Include="wwwroot\WFH_Log\" />
+    <Folder Include="wwwroot\ReportFiles\" />
+    <Folder Include="wwwroot\Scripts\CustomJS\LessonLearnt\" />
+    <Folder Include="wwwroot\Upload\BugReport\" />
+    <Folder Include="wwwroot\Upload\CompanyDocument\" />
+    <Folder Include="wwwroot\Upload\LibraryComponentFiles\temp\" />
+    <Folder Include="wwwroot\Upload\LibraryFiles\temp\" />
+    <Folder Include="wwwroot\Upload\Document\" />
+    <Folder Include="wwwroot\WFH_Log\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Views\Activity\Detail.cshtml" />
+    <None Include="Views\Activity\Index.cshtml" />
+    <None Include="Views\Activity\_ActivityDetailList.cshtml" />
+    <None Include="Views\Activity\_ActivityList.cshtml" />
+    <None Include="Views\Activity\_BonusProjectList.cshtml" />
+    <None Include="Views\Activity\_BucketProjectList.cshtml" />
+    <None Include="Views\Activity\_SEOProjectList.cshtml" />
+    <None Include="Views\Activity\_UnassignedProjectList.cshtml" />
+    <None Include="Views\Appraise\Index.cshtml" />
+    <None Include="Views\Appraise\_AddEditAppraise.cshtml" />
+    <None Include="Views\Attendance\Index.cshtml" />
+    <None Include="Views\BucketModel\Index.cshtml" />
+    <None Include="Views\BucketModel\_AddEditBucketModel.cshtml" />
+    <None Include="Views\BugReport\Index.cshtml" />
+    <None Include="Views\BugReport\_UpdateStatus.cshtml" />
+    <None Include="Views\CompanyDocument\Index.cshtml" />
+    <None Include="Views\Complaint\AddEditComplaint.cshtml" />
+    <None Include="Views\Complaint\Index.cshtml" />
+    <None Include="Views\Component\Index.cshtml" />
+    <None Include="Views\Component\_AddEditComponent.cshtml" />
+    <None Include="Views\Component\_ComponentDesignImages.cshtml" />
+    <None Include="Views\CurrentOpening\AddEdit.cshtml" />
+    <None Include="Views\CurrentOpening\Index.cshtml" />
+    <None Include="Views\Dashboard\Index.cshtml" />
+    <None Include="Views\Department\index.cshtml" />
+    <None Include="Views\Department\_AddEditDepartment.cshtml" />
+    <None Include="Views\Device\DeviceMaster.cshtml" />
+    <None Include="Views\Device\Index.cshtml" />
+    <None Include="Views\Device\_AddEditAssignDevice.cshtml" />
+    <None Include="Views\Device\_AddEditDevice.cshtml" />
+    <None Include="Views\Device\_AddReturnDevice.cshtml" />
+    <None Include="Views\Error\accessdenied.cshtml" />
+    <None Include="Views\Estimate\AddEditLead.cshtml" />
+    <None Include="Views\Estimate\EditEstimate.cshtml" />
+    <None Include="Views\Estimate\EstimateDocuments.cshtml" />
+    <None Include="Views\Estimate\Index.cshtml" />
+    <None Include="Views\Estimate\_AddEditEstimateDocument.cshtml" />
+    <None Include="Views\Estimate\_ConclusionDetail.cshtml" />
+    <None Include="Views\Estimate\_EstimateHistory.cshtml" />
+    <None Include="Views\Estimate\_LeadClients.cshtml" />
+    <None Include="Views\Estimate\_LeadStatus.cshtml" />
+    <None Include="Views\Estimate\_WireframeMockupsImages.cshtml" />
+    <None Include="Views\Expenses\Index.cshtml" />
+    <None Include="Views\Expenses\_AddEdit.cshtml" />
+    <None Include="Views\Expenses\_MarkAsReimbursed.cshtml" />
+    <None Include="Views\Feedback\add.cshtml" />
+    <None Include="Views\Feedback\Index.cshtml" />
+    <None Include="Views\Forecasting\EditManageForecasting.cshtml" />
+    <None Include="Views\Forecasting\Index.cshtml" />
+    <None Include="Views\Forecasting\ManageForecasting.cshtml" />
+    <None Include="Views\Forecasting\_EditManageForecasting.cshtml" />
+    <None Include="Views\Forecasting\_ManageForecasting.cshtml" />
+    <None Include="Views\Investment\AddEdit.cshtml" />
+    <None Include="Views\Investment\DownloadPdf.cshtml" />
+    <None Include="Views\Investment\Index.cshtml" />
+    <None Include="Views\JobReference\ViewReferences.cshtml" />
+    <None Include="Views\JobReference\_ReferFriend.cshtml" />
+    <None Include="Views\JobReference\_ViewDetail.cshtml" />
+    <None Include="Views\LeadStatusModel\Index.cshtml" />
+    <None Include="Views\LeadStatusModel\_AddEditLeadStatusModel.cshtml" />
+    <None Include="Views\Lead\EstimateDocuments.cshtml" />
+    <None Include="Views\Lead\_AddEditEstimateDocument.cshtml" />
+    <None Include="Views\Lead\_WireframeMockupsImages.cshtml" />
+    <None Include="Views\LessonLearned\AddEdit.cshtml" />
+    <None Include="Views\LessonLearned\Detail.cshtml" />
+    <None Include="Views\LessonLearned\Index.cshtml" />
+    <None Include="Views\LibraryManagement\FileUpload.cshtml" />
+    <None Include="Views\MedicalData\Index.cshtml" />
+    <None Include="Views\MedicalData\ManageMedicalData.cshtml" />
+    <None Include="Views\MedicalData\_DisplayMedicalData.cshtml" />
+    <None Include="Views\MeetingRoom\Index.cshtml" />
+    <None Include="Views\MeetingRoom\ManageRoom.cshtml" />
+    <None Include="Views\MeetingRoom\RoomList.cshtml" />
+    <None Include="Views\MeetingRoom\_AddTimeSlot.cshtml" />
+    <None Include="Views\OrgDocument\AddEdit.cshtml" />
+    <None Include="Views\OrgDocument\Index.cshtml" />
+    <None Include="Views\OrgDocument\Review.cshtml" />
+    <None Include="Views\OrgDocument\_OrgDocApproved.cshtml" />
+    <None Include="Views\OrgDocument\_OrgDocRevisionHistory.cshtml" />
+    <None Include="Views\Preference\Index.cshtml" />
+    <None Include="Views\ProductLandingPage\AddEdit.cshtml" />
+    <None Include="Views\ProductLandingPage\Index.cshtml" />
+    <None Include="Views\ProductLandingPage\View.cshtml" />
+    <None Include="Views\ProjectClosure\Add.cshtml" />
+    <None Include="Views\ProjectClosure\Index.cshtml" />
+    <None Include="Views\ProjectClosure\ProjectionReport.cshtml" />
+    <None Include="Views\ProjectClosure\Report.cshtml" />
+    <None Include="Views\ProjectClosure\_AddEditReview.cshtml" />
+    <None Include="Views\ProjectClosure\_BAConversion.cshtml" />
+    <None Include="Views\ProjectClosure\_ChaseProjectClosure.cshtml" />
+    <None Include="Views\ProjectClosure\_ProjectClosureDetail.cshtml" />
+    <None Include="Views\ProjectClosure\_ProjectClosureHistory.cshtml" />
+    <None Include="Views\ProjectClosure\_ProjectClosureReviewSummary.cshtml" />
+    <None Include="Views\ProjectClosure\_ProjectClosureStatus.cshtml" />
+    <None Include="Views\ProjectInfo\Index.cshtml" />
+    <None Include="Views\Project\AddEditProject.cshtml" />
+    <None Include="Views\Project\AdditionalSupport.cshtml" />
+    <None Include="Views\Project\Index.cshtml" />
+    <None Include="Views\Project\UpdateAdditionalSupportRequest.cshtml" />
+    <None Include="Views\Project\_AddAdditionalSupport.cshtml" />
+    <None Include="Views\Project\_AddEditProjectDeveloper.cshtml" />
+    <None Include="Views\Project\_RequestAdditionalSupport.cshtml" />
+    <None Include="Views\ResourcePool\Index.cshtml" />
+    <None Include="Views\Task\Index.cshtml" />
+    <None Include="Views\Task\_AddEditTask.cshtml" />
+    <None Include="Views\Task\_ChaseTask.cshtml" />
+    <None Include="Views\Task\_CommentView.cshtml" />
+    <None Include="Views\TeamStructure\Index.cshtml" />
+    <None Include="Views\Technology\Index.cshtml" />
+    <None Include="Views\Technology\_AddEditTechnology.cshtml" />
+    <None Include="Views\TimesheetReport\ProjectSummaryReport.cshtml" />
+    <None Include="Views\TimesheetReport\ProjectUserReport.cshtml" />
+    <None Include="Views\TimesheetReport\TimeSheetReview.cshtml" />
+    <None Include="Views\TimesheetReport\TimesheetWeeklyReport.cshtml" />
+    <None Include="Views\TimesheetReport\_ProjectSummaryReport.cshtml" />
+    <None Include="Views\TimesheetReport\_ProjectUserReport.cshtml" />
+    <None Include="Views\TimesheetReport\_TimeSheetReview.cshtml" />
+    <None Include="Views\TimesheetReport\_TimesheetWeeklyReport.cshtml" />
+    <None Include="Views\Timesheet\Index.cshtml" />
+    <None Include="Views\Timesheet\_Paging.cshtml" />
+    <None Include="Views\Timesheet\_TimeSheet.cshtml" />
+    <None Include="Views\VirtualDeveloper\Index.cshtml" />
+    <None Include="Views\VirtualDeveloper\_AddEditVirtualDeveloper.cshtml" />
+    <None Include="wwwroot\bundles\Activity\activity.js" />
+    <None Include="wwwroot\bundles\Activity\activity.min.js" />
+    <None Include="wwwroot\bundles\Appraise\index.js" />
+    <None Include="wwwroot\bundles\Appraise\index.min.js" />
+    <None Include="wwwroot\bundles\blockUI.js" />
+    <None Include="wwwroot\bundles\bootstrap.js" />
+    <None Include="wwwroot\bundles\bootstrap.min.js" />
+    <None Include="wwwroot\bundles\BugReport\index.js" />
+    <None Include="wwwroot\bundles\BugReport\index.min.js" />
+    <None Include="wwwroot\bundles\Complaint\addEdit.js" />
+    <None Include="wwwroot\bundles\Complaint\addEdit.min.js" />
+    <None Include="wwwroot\bundles\Complaint\index.js" />
+    <None Include="wwwroot\bundles\Complaint\index.min.js" />
+    <None Include="wwwroot\bundles\DailyThought\index.js" />
+    <None Include="wwwroot\bundles\DailyThought\index.min.js" />
+    <None Include="wwwroot\bundles\Device\deviceMaster.js" />
+    <None Include="wwwroot\bundles\Device\deviceMaster.min.js" />
+    <None Include="wwwroot\bundles\Device\index.js" />
+    <None Include="wwwroot\bundles\Device\index.min.js" />
+    <None Include="wwwroot\bundles\Estimate\addEditLead.js" />
+    <None Include="wwwroot\bundles\Estimate\addEditLead.min.js" />
+    <None Include="wwwroot\bundles\Home\index.js" />
+    <None Include="wwwroot\bundles\Home\index.min.js" />
+    <None Include="wwwroot\bundles\Invoice\index.js" />
+    <None Include="wwwroot\bundles\Invoice\index.min.js" />
+    <None Include="wwwroot\bundles\Invoice\invoiceList.js" />
+    <None Include="wwwroot\bundles\Invoice\invoiceList.min.js" />
+    <None Include="wwwroot\bundles\jquery.js" />
+    <None Include="wwwroot\bundles\jqueryval.js" />
+    <None Include="wwwroot\bundles\jqueryval.min.js" />
+    <None Include="wwwroot\bundles\layoutjs.js" />
+    <None Include="wwwroot\bundles\layoutjs.min.js" />
+    <None Include="wwwroot\bundles\LeadStatusModel\index.js" />
+    <None Include="wwwroot\bundles\LeadStatusModel\index.min.js" />
+    <None Include="wwwroot\bundles\LessonLearned\addEdit.js" />
+    <None Include="wwwroot\bundles\LessonLearned\addEdit.min.js" />
+    <None Include="wwwroot\bundles\LessonLearned\index.js" />
+    <None Include="wwwroot\bundles\LessonLearned\index.min.js" />
+    <None Include="wwwroot\bundles\MeetingRoom\index.js" />
+    <None Include="wwwroot\bundles\MeetingRoom\index.min.js" />
+    <None Include="wwwroot\bundles\modernizr.min.js" />
+    <None Include="wwwroot\bundles\MOM\index.js" />
+    <None Include="wwwroot\bundles\MOM\index.min.js" />
+    <None Include="wwwroot\bundles\NCLog\index.js" />
+    <None Include="wwwroot\bundles\NCLog\index.min.js" />
+    <None Include="wwwroot\bundles\OrgDocument\addEdit.js" />
+    <None Include="wwwroot\bundles\OrgDocument\addEdit.min.js" />
+    <None Include="wwwroot\bundles\OrgDocument\review.js" />
+    <None Include="wwwroot\bundles\OrgDocument\review.min.js" />
+    <None Include="wwwroot\bundles\otherjs.js" />
+    <None Include="wwwroot\bundles\otherjs.min.js" />
+    <None Include="wwwroot\bundles\PILog\index.js" />
+    <None Include="wwwroot\bundles\PILog\index.min.js" />
+    <None Include="wwwroot\bundles\ProductLandingPage\addEdit.js" />
+    <None Include="wwwroot\bundles\ProductLandingPage\addEdit.min.js" />
+    <None Include="wwwroot\bundles\ProductLandingPage\index.js" />
+    <None Include="wwwroot\bundles\ProductLandingPage\index.min.js" />
+    <None Include="wwwroot\bundles\ProjectClosure\index.js" />
+    <None Include="wwwroot\bundles\ProjectClosure\index.min.js" />
+    <None Include="wwwroot\bundles\ProjectClosure\report.js" />
+    <None Include="wwwroot\bundles\ProjectClosure\report.min.js" />
+    <None Include="wwwroot\bundles\ProjectClosure\review.js" />
+    <None Include="wwwroot\bundles\ProjectClosure\review.min.js" />
+    <None Include="wwwroot\bundles\Project\additionalSupport.js" />
+    <None Include="wwwroot\bundles\Project\additionalSupport.min.js" />
+    <None Include="wwwroot\bundles\Project\index.js" />
+    <None Include="wwwroot\bundles\Project\index.min.js" />
+    <None Include="wwwroot\bundles\Project\updateAdditionalSupport.js" />
+    <None Include="wwwroot\bundles\Project\updateAdditionalSupport.min.js" />
+    <None Include="wwwroot\bundles\TeamStructure\index.js" />
+    <None Include="wwwroot\bundles\TeamStructure\index.min.js" />
+    <None Include="wwwroot\bundles\User\manageProfile.js" />
+    <None Include="wwwroot\bundles\User\manageProfile.min.js" />
+    <None Include="wwwroot\favicon.ico" />
+    <None Include="wwwroot\images\icons\Thumbs.db" />
+    <None Include="wwwroot\images\login\Thumbs.db" />
+    <None Include="wwwroot\images\shared\Thumbs.db" />
+    <None Include="wwwroot\images\Thumbs.db" />
+    <None Include="wwwroot\Rotativa\wkhtmltoimage.exe" />
+    <None Include="wwwroot\Rotativa\wkhtmltopdf.exe" />
+    <None Include="wwwroot\Scripts\CustomJS\Domain\Domain.js" />
+    <None Include="wwwroot\Scripts\CustomJS\Escalation\AddEdit.js" />
+    <None Include="wwwroot\Scripts\CustomJS\Event\addEdit.js" />
+    <None Include="wwwroot\Scripts\CustomJS\Event\index.js" />
+    <None Include="wwwroot\Scripts\CustomJS\Handover\index.js" />
+    <None Include="wwwroot\Scripts\CustomJS\Secret\secret.js" />
+    <None Include="wwwroot\Upload\EstimateDocument\B2B---travel-wholesales-booking---v1.1-03-19-2018T11-30-58.xlsx" />
+    <None Include="wwwroot\Upload\EstimateDocument\csharp_tutorial-03-14-2018T16-32-14.pdf" />
+    <None Include="wwwroot\Upload\EstimateDocument\csharp_tutorial-03-14-2018T17-38-18.pdf" />
+    <None Include="wwwroot\Upload\EstimateDocument\csharp_tutorial-03-22-2018T11-11-19.pdf" />
+    <None Include="wwwroot\Upload\EstimateDocument\dependencyinjection-03-14-2018T16-32-14.pdf" />
+    <None Include="wwwroot\Upload\EstimateDocument\dependencyinjection-03-14-2018T17-38-18.pdf" />
+    <None Include="wwwroot\Upload\EstimateDocument\Form-03-22-2018T10-48-31.docx" />
+    <None Include="wwwroot\Upload\EstimateDocument\lightbox2-master-03-14-2018T17-38-18.zip" />
+    <None Include="wwwroot\Upload\LibraryFiles\datta-erros_637169595570148692.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\repo-sample_637169537970384828.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data - 1_637169505813460585.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637166993387017855.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637166993596547884.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637166996829872913.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637166999058146687.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637167066328955588.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169290579719415.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169291562382650.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169294510946716.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169298278770425.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169302377564072.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169305417395522.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169308870600201.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169310774457064.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169313786045561.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169318409641633.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169320361419620.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169323064949092.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169326594008374.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169334776663682.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169359806325130.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169363949158143.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169370005591516.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169376721874868.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169379640604954.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169382320795841.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169385874074035.xlsx" />
+    <None Include="wwwroot\Upload\LibraryFiles\sample-data_637169405552008834.xlsx" />
+    <None Include="wwwroot\Upload\MedicalPolicy\Insurance_policy_star_health.pdf" />
+    <None Include="wwwroot\Upload\MomDocument\9-sep-09-18-2019T13-08-57.zip" />
+    <None Include="wwwroot\Upload\MomDocument\Bill_Split-09-18-2019T12-18-05.xlsx" />
+    <None Include="wwwroot\Upload\MomDocument\Create-IT-Case-final-09-18-2019T12-18-05.docx" />
+    <None Include="wwwroot\Upload\MomDocument\demo-09-18-2019T12-18-05.pptx" />
+    <None Include="wwwroot\Upload\MomDocument\demo-09-18-2019T18-06-13.pptx" />
+    <None Include="wwwroot\Upload\MomDocument\demo-09-18-2019T18-10-59.pptx" />
+    <None Include="wwwroot\Upload\MomDocument\demo-09-19-2019T12-02-45.pptx" />
+    <None Include="wwwroot\Upload\MomDocument\ProjectSummary_AnilKumarPrajapati_01_11_33_PM-11-14-2019T16-07-34.xls" />
+    <None Include="wwwroot\Upload\MomDocument\ProjectSummary_AnilKumarPrajapati_01_11_33_PM-11-14-2019T16-07-48.xls" />
+    <None Include="wwwroot\Upload\MomDocument\Tax-Relief-DSP-CRM-PMS-NO-SALARY_dev-09-18-2019T18-06-13.xlsx" />
+    <None Include="wwwroot\Upload\MomDocument\Tax-Relief-DSP-CRM-PMS-NO-SALARY_EMS-09-19-2019T12-02-45.xlsx" />
+    <None Include="wwwroot\Upload\ProposalDocument\Lead_103_1.Net Coding Guidelines v1.0.pdf" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_AurthorBookManagement.Assignment_20171023T043548Z_001.zip" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_csharp_tutorial.pdf" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_Evaluation Sheet.xlsx" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_Form-03-22-2018T10-48-31.docx" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_iOS Coding Guideline v1.0.pdf" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_jQueryAssignment5.rar" />
+    <None Include="wwwroot\Upload\ProposalDocument\ProposalDoc_ProposalDoc_Evaluation Sheet.xlsx" />
+    <None Include="wwwroot\Upload\Vaccination_Files\certificate-01-06-2022T11-30-13.pdf" />
+    <None Include="wwwroot\Upload\Vaccination_Files\certificate-01-06-2022T11-30-24.pdf" />
+    <None Include="wwwroot\Upload\Vaccination_Files\certificate-01-06-2022T11-30-44.pdf" />
+    <None Include="wwwroot\Upload\Vaccination_Files\certificate-01-06-2022T11-51-59.pdf" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\MyKRA\_KRADetails.cshtml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\MyKRA\_KRADetails.cshtml" />
+  </ItemGroup>
+
+</Project>

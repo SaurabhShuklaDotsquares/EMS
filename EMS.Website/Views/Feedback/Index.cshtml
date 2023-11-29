@@ -1,0 +1,145 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model FeedbackIndexDto
+@{
+    ViewBag.Title = "ShowfeedbackList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/Multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+
+}
+<style type="text/css">
+    .multiselect-container {
+        width: 100% !important;
+        overflow: scroll !important;
+    }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="manage-Project-page full-wdth">
+            <div class="divFloat-Left">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 style="float:left;">Employee Feedback</h2>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                        {
+                            <a class="btn btn-custom margin-left20" href="@Url.Action("empfeedback", "feedback")">Add New</a>
+                        }
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <div class="col-12 col-lg-12">
+                        <div class="col-6 col-lg-12" style="padding-top:5px;padding-bottom:5px;">
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <label><strong>Reasons</strong></label>
+                                <select id="ReasonList" multiple="multiple" required name="employeeReasons" style="">
+                                    @foreach (var item in Model.EmpFeedbackReasonList)
+                                    {
+                                        if (item.Text != null)
+                                        {
+                                            <option value="@item.Value">
+                                                @item.Text
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <label><strong>Project Manager</strong></label>
+                                @Html.DropDownList("PMList", Model.PMList, "-- Project Manager --", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <label><strong>Department</strong></label>
+                                @Html.DropDownList("DepartmentList", Model.DepartmentList, "-- Departments --", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <labl><strong>Employee Code/Name</strong></labl>
+                                @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Employee Code / Name" })
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-12" style="padding-top:5px;">
+                            <div class="col-sm-6 col-md-3 col-lg-3 form-group">
+                                <label><strong>Date of Leaving</strong></label>
+                                <div class="input-group">
+                                    @Html.TextBox("JoiningDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date of Leaving", @style = "background-color: #fff;" })
+                                    <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                                        <i class="fa fa-close"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <label><strong>Is Eligible for Rehire</strong></label>
+                                <select name="isEligibleForRehire" id="isEligibleForRehire" class="form-control">
+                                    <option value="">-- Eligible for Rehire --</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <label><strong>Is Voluntary Exit</strong></label>
+                                <select name="isVoluntryExit" id="isVoluntryExit" class="form-control">
+                                    <option value="">-- Voluntary Exit --</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3 form-group" style="margin-top:23px">
+                                <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                                <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                            </div>
+                        </div>
+                      
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <div id="container-chart" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                        <span> </span>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="leavereasonpm-chart" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pull-right">
+                        <div class="pull-right box1">
+                            <a class="export-btn" data-href="Feedback/ExportFeedbackDataReportToExcel" href="Feedback/ExportFeedbackDataReportToExcel" style="">
+                                <img src="content/images/excel.png" alt=""> Export To Excel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <section id="no-more-tables">
+                    <table id="grid-managefeedback" class="display postable table table-bordered table-condensed"></table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-viewfeedback", AreaLabeledId = "modal-viewfeedback", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+
+    @*<script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>*@
+    @*<script src="~/Scripts/knockout-3.3.0.js"></script>
+        <script src="~/Scripts/knockout.mapping-latest.js"></script>*@
+    @*<script src="~/Scripts/feedback.js" asp-append-version="true"></script>*@
+    @*<script src="~/Scripts/CustomJS/EmployeeFeedback/feedback.js"></script>*@
+
+    <script src="~/Scripts/datepicker/moment.js"></script>
+    <script src="~/Multiselect/bootstrap-multiselect.js"></script>
+    <script src="~/bundles/EmployeeFeedback" asp-append-version="true"></script>
+    @*<script src="https://code.highcharts.com/highcharts.js"></script>*@
+    <script src="~/Scripts/CustomJS/EmployeeFeedback/highcharts.js"></script>
+    @*<script src="https://code.highcharts.com/modules/exporting.js"></script>*@
+    @*<script src="https://code.highcharts.com/modules/export-data.js"></script>*@
+
+}

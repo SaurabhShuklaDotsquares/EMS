@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<meta charset="utf-8">
+
+<title>Dropzone simple example</title>
+
+
+<!--
+  DO NOT SIMPLY COPY THOSE LINES. Download the JS and CSS files from the
+  latest release (https://github.com/enyo/dropzone/releases/latest), and
+  host them yourself!
+-->
+<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+
+<p>
+  This is the most minimal example of Dropzone. The upload in this example
+  doesn't work, because there is no actual server to handle the file upload.
+</p>
+
+<!-- Change /upload-target to your upload address -->
+<form action="/librarymanagement/FileUploads" class="dropzone" id="my-awesome-dropzone"></form>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+$(function(){
+  Dropzone.options.myAwesomeDropzone = {
+    autoProcessQueue: false,
+    maxFilesize:1,
+    addRemoveLinks: true,
+    dictResponseError: 'Server not Configured',
+    acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
+    init:function(){
+      var self = this;
+      // config
+      self.options.addRemoveLinks = true;
+      self.options.dictRemoveFile = "Delete";
+      //New file added
+      self.on("addedfile", function (file) {
+        console.log('new file added ', file);
+      });
+      // Send file starts
+      self.on("sending", function (file) {
+        console.log('upload started', file);
+        $('.meter').show();
+      });
+      
+      // File upload Progress
+      self.on("totaluploadprogress", function (progress) {
+        console.log("progress ", progress);
+        $('.roller').width(progress + '%');
+      });
+
+      self.on("queuecomplete", function (progress) {
+        $('.meter').delay(999).slideUp(999);
+      });
+      
+      // On removing file
+      self.on("removedfile", function (file) {
+        console.log(file);
+      });
+    }
+  };
+})
+</script>

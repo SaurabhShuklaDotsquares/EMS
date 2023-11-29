@@ -1,0 +1,363 @@
+﻿@model EMS.Dto.HomeDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    ViewBag.Title = "EMS :: Home";
+}
+@section styles{
+    <style>
+        .field_box_new {
+            background: #fbfaf5 none repeat scroll 0 0;
+            border: 1px solid #dddddd;
+            padding: 0 10px;
+        }
+
+        .LB {
+            text-align: center;
+        }
+
+        .inner {
+            padding: 10px;
+        }
+
+        .small-box {
+            border-radius: 2px;
+            position: relative;
+            display: block;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+            .small-box > .inner {
+                padding: 10px;
+            }
+
+            .small-box .icon {
+                -webkit-transition: all .3s linear;
+                -o-transition: all .3s linear;
+                transition: all .3s linear;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 0;
+                font-size: 90px;
+                color: rgba(0,0,0,0.15);
+            }
+
+        /*Tooltip to be use in grid/table*/
+
+        .tooltipfortable {
+            position: relative;
+            display: inline-block;
+            /*border-bottom: 1px dotted black;*/
+            color: blue;
+            text-decoration: underline;
+        }
+
+            .tooltipfortable .tooltiptextfortable {
+                visibility: hidden;
+                width: 400px;
+                background-color: #f0e9e9;
+                color: black;
+                /*color: #fff;*/
+                text-align: justify;
+                border-radius: 6px;
+                border: 1px solid gray;
+                padding: 10px 10px 10px 10px;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+                top: -5px;
+                right: 105%;
+            }
+
+            .tooltipfortable:hover .tooltiptextfortable {
+                visibility: visible;
+            }
+
+        .kra-btn {
+            position: relative;
+            z-index: 1;
+        }
+
+    </style>
+}
+<div class="main_content" id="HomeView">
+    <input type="hidden" id="hdnSelectedNote" />
+    <div class="full-wdth padding20">
+        @if (!RoleValidator.HideKRA_RoleIds.Contains(CurrentUser.RoleId))
+        {
+            <div class="pull-right margin-right10 kra-btn" id="btnKRA">
+                <a class="btnKRA" href="@Url.Action("index", "mykra")"><img src="@SiteKey.DomainName/images/kraicon.png" alt="Your KRA" /></a>
+            </div>
+        }
+
+        <div id="MessageDiv"></div>
+        <div class="row"></div>
+
+        <div class="thought padding-bottom10 text-center">
+
+            @if (Model.IsAshishTeamMember == true && !Model.IsPMUser && Model.PlanHours != "")
+            {
+                <div class="row col-lg-12 margin-bottom15">
+                    <h5 style="color: GrayText!important;font-family: trebuchet ms; font-size: 25px;">Today's Planned Hours: <span style="color: #F98E00;">@Model.PlanHours</span> Today's Actual Hours: <span style="color: #F98E00;">@Model.ActualHours</span></h5>
+                </div>
+            }
+
+            <div id="LeaveBalance"></div>
+
+          
+            <div id="thoughts" class="hide" data-bind="attr: {style: 'display: ' + (showThoughts() ? 'block !important' : 'none')}" style="padding-top:25px !important;">
+                <h3 id="MainContent_headThought" style="color: GrayText!important; font-family: trebuchet ms; font-size: 22px; padding-top:10px; ">                   
+                    Thought of the day
+                </h3>
+                <br />
+                <h3 style="color: #F98E00; font-family: trebuchet ms; font-size: 25px;">
+                    <span style="box-sizing: border-box;"><img alt='' src='images/icons/left_quote.png' height='11' width='13' />&nbsp;@Model.DailyThought1<img alt='' src='images/icons/right_quote.png' height='11' width='13' /></span>
+                </h3>
+                <br /><br />
+                <h3 style="color: #F98E00; font-family: trebuchet ms; font-size: 25px;">
+                    <span style="box-sizing: border-box;"><img alt='' src='images/icons/left_quote.png' height='11' width='13' />&nbsp;@Model.DailyThought2<img alt='' src='images/icons/right_quote.png' height='11' width='13' /></span>
+                </h3>
+                <br /><br />
+            </div>
+            
+
+            @*<div style="text-align:center"><img style="height:500px !important;padding-bottom:20px;" src="~/content/images/DiwaliBanner.png" alt="" /></div>*@
+
+
+            @if (Model.UserBirthday.HasValue())
+            {
+                <h3>
+                    @string.Format("{0} {1}", "Many many happy returns of the day to", @Model.UserBirthday)
+                </h3>
+                <br />
+            }
+            @if (Model.UserMarriage.HasValue())
+            {
+                <h3>
+                    @string.Format("{0} {1}", "Many happy marriage anniversary to ", @Model.UserMarriage)
+                </h3>
+                <br />
+            }
+
+            @if (Model.UserWorkanniversary.HasValue())
+            {
+                <h3>
+                    @Html.Raw(string.Format("{0} {1} {2}", "Congratulations ", @Model.UserWorkanniversary, " on your work anniversary."))
+                </h3>
+                <br />
+            }
+
+
+            @if (Model.UserTimeSheet.HasValue())
+            {
+                <span class="timesheet-style">
+                    @Model.UserTimeSheet
+                </span>
+            }
+
+
+
+        </div>
+
+
+
+
+        <div id="reportFilters" class="row form-group clearfix hidden" data-bind="css: {hidden: !showReportFilters()}">
+            <div class="col-md-10 chese-list">
+                <div class="radio_box">
+                    <input id="rd1" name="reportingDays" type="radio" value="@Enums.HomeReportingDays.Today" checked="checked" />
+                    <label for="rd1" class="rdo_lbl">Today’s Call</label>
+                </div>
+                <div class="radio_box">
+                    <input id="rd2" name="reportingDays" type="radio" value="@Enums.HomeReportingDays.Tomorrow" />
+                    <label for="rd2" class="rdo_lbl">Tomorrow’s Call</label>
+                </div>
+                <div class="radio_box">
+                    <input id="rd3" name="reportingDays" type="radio" value="@Enums.HomeReportingDays.Week" />
+                    <label for="rd3" class="rdo_lbl">This Week Call</label>
+                </div>
+                <div class="radio_box">
+                    <input id="rd4" name="reportingDays" type="radio" value="@Enums.HomeReportingDays.Pending" />
+                    <label for="rd4" class="rdo_lbl">Pending Call</label>
+                </div>
+
+                @if (Model.IsPMUser)
+                {
+                    <div class="radio_box invoicebutton">
+                        <a href="@Url.Action("index", "invoice")">
+                            <label for="rd5" class="rdo_lbl">Invoices</label>
+                        </a>
+                    </div>
+                }
+            </div>
+            @if (Model.IsPMUser)
+            {
+                <div class="col-md-2">
+                    <div class="text-right">
+                        @Html.DropDownList("selectbaId", Model.BAList, "--Select BA--", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        <div class="row margin-bottom15 hidden" data-bind="css: {hidden: (!hasPostSales() && !hasPreSales() && !hasInvoices() && !hasToDos())}">
+
+            <div class="col-lg-2 col-6" data-bind="css: {hidden: !hasExpectedPreSales()}">
+                <!-- small box -->
+                <a id="lnk_expected_pre_sale_activity" href="void:javascript();" style="text-decoration:none;">
+                    <div class="fa-border small-box expected-rework-color">
+                        <div class="inner">
+                            <h3><span id="totalExpectedPreSalesActivity"></span>&nbsp;</h3>
+
+                            <p style="font-weight:600">EXPECTED REWORK TO BE CHASED</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-shopping-basket"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- ./col -->
+
+            <div class="col-lg-2 col-6" data-bind="css: {hidden: !hasFutureOccupancyPreSales()}">
+                <!-- small box -->
+                <a id="lnk_future_sale_activity" href="void:javascript();" style="text-decoration:none;">
+                    <div class="fa-border small-box future-occupancy-color">
+                        <div class="inner">
+                            <h3><span id="totalFutureOccupancyPreSalesActivity"></span>&nbsp;</h3>
+
+                            <p style="font-weight:600">Future Occupancy</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-shopping-basket"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- ./col -->
+
+            <div class="col-lg-2 col-6" data-bind="css: {hidden: !hasPostSales()}">
+                <!-- small box -->
+                <a id="lnk_post_sale_activity" href="void:javascript();" style="text-decoration:none;">
+                    <div class="fa-border small-box bg-info">
+                        <div class="inner">
+                            <h3><span id="totalPostSalesActivity"></span>&nbsp;</h3>
+
+                            <p style="font-weight:600">CLIENT(S) TO BE CHASED</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-shopping-bag"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ./col -->
+            <div class="col-lg-2 col-6" data-bind="css: {hidden: !hasPreSales()}">
+                <!-- small box -->
+                <a id="lnk_pre_sale_activity" href="void:javascript();" style="text-decoration:none;">
+                    <div class="fa-border small-box bg-success">
+                        <div class="inner">
+                            <h3><span id="totalPreSalesActivity"></span>&nbsp;</h3>
+
+                            <p style="font-weight:600">LEAD(S) TO BE CHASED</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ./col -->
+            <div class="col-lg-2 col-6" data-bind="css: {hidden: !hasInvoices()}">
+                <!-- small box -->
+                <a id="lnk_unpaid_invoice_grid" href="void:javascript();" style="text-decoration:none;">
+                    <div class="fa-border small-box bg-warning">
+                        <div class="inner">
+                            <h3><span id="totalUnpaidInvoiceList"></span>&nbsp;</h3>
+
+                            <p style="font-weight:600">UNPAID INVOICE(S) LIST</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-shopping-bag"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ./col -->
+            <div class="col-lg-2 col-6" data-bind="css: {hidden: !hasToDos()}">
+                <!-- small box -->
+                <a id="lnk_to_do_list" href="void:javascript();" style="text-decoration:none;">
+                    <div class="fa-border small-box bg-danger">
+                        <div class="inner">
+                            <h3><span id="totalToDoList"></span>&nbsp;</h3>
+
+                            <p style="font-weight:600">TO-DO LIST</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-tasks"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- ./col -->
+        </div>
+
+
+        <div id="expected_pre_sale_activity" name="expected_pre_sale_activity" class="form-group clearfix hidden" data-bind="css: {hidden: !hasExpectedPreSales()}">
+            <h2>EXPECTED REWORK TO BE CHASED</h2>
+            <table id="grid-homeExpectedPreSaleActivity" class="table black-theme-table"></table>
+        </div>
+
+        <div id="pre_sale_activity" name="pre_sale_activity" class="form-group clearfix hidden" data-bind="css: {hidden: !hasPreSales()}">
+            <h2>LEAD(S) TO BE CHASED</h2>
+            <table id="grid-homePreSaleActivity" class="table black-theme-table"></table>
+        </div>
+
+        <div id="post_sale_activity" name="post_sale_activity" class="form-group clearfix hidden" data-bind="css: {hidden: !hasPostSales()}">
+            <h2>CLIENT(S) TO BE CHASED</h2>
+            <table id="grid-homePostSaleActivity" class="table black-theme-table"></table>
+        </div>
+
+        <div id="unpaid_invoice_grid" name="unpaid_invoice_grid" class="form-group clearfix hidden" data-bind="css: {hidden: !hasInvoices()}">
+            <h2>UNPAID INVOICE(S) LIST</h2>
+            <table id="grid-invoice" class="table black-theme-table"></table>
+        </div>
+
+        <div id="to_do_list" name="to_do_list" class="form-group clearfix hidden" data-bind="css: {hidden: !hasToDos()}">
+            <h2>TO-DO LIST</h2>
+            <table id="grid-taskList" class="table black-theme-table"></table>
+        </div>
+    </div>
+
+    <div class="divoverlay hide"></div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-ViewInvoice", AreaLabeledId = "lbl-ViewInvoice", Size = Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-chaseInvoice", AreaLabeledId = "lbl-chaseInvoice", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-detail-projectClosure", AreaLabeledId = "modal-detail-projectClosure-label", Size = Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-chase-projectClosure", AreaLabeledId = "modal-chase-projectClosure-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-conclusion", AreaLabeledId = "lbl-conclusion", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-lead-estimateHistory", AreaLabeledId = "modal-lead-estimateHistory-label", Size = Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-chase-task", AreaLabeledId = "modal-chase-task-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-comment-task", AreaLabeledId = "modal-chase-task-label", Size = Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-leadStatus", AreaLabeledId = "lbl-leadStatus", Size = Enums.ModalSize.Large })
+@Html.Partial("_Modal", new Modal { ID = "modal-createSelectClient", AreaLabeledId = "lblCreateSelectClient", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-lead-crmnotes", AreaLabeledId = "modal-lead-crmnotes-label", Size = EMS.Core.Enums.ModalSize.Medium })
+@section scripts{
+    <script>
+        var isPMUser = "@Model.IsPMUser.ToString().ToLower()";
+        var isDirector = "@Model.IsDirector.ToString().ToLower()";
+    </script>
+    @*<script src="~/bundles/Home/index"></script>*@
+    <script src="~/Scripts/knockout-3.3.0.js" asp-append-version="true"></script>
+    <script src="~/Scripts/knockout.mapping-latest.js" asp-append-version="true"></script>
+    <script src="~/Scripts/CustomJS/Home/index.js" asp-append-version="true"></script>
+
+
+}

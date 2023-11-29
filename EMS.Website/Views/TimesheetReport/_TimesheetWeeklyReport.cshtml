@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TimeSheetReportDto>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 8%;text-align:center;" class="roundedL">#</th>
+            <th style="width: 20%">Date</th>
+            @*<th>Name</th>*@
+            <th style="width: 10%;text-align:right;">Hours</th>
+            <th style="width: 57%">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{if (@Model.Count() > 0)
+            {
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="width: 8%;text-align:center;vertical-align:top;" >@i</td>
+                        <td style="width: 20%;vertical-align:top;">@item.Date</td>
+                        @*<td>@item.User</td>*@
+                        <td style="width: 10%;text-align:right;vertical-align:top;"><b>@item.Hours</b></td>
+                        <td style="width: 77%"><b>- </b>@Html.Raw(item.Description)</td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr class="tr-norecord">
+                    <td colspan="5" style="font-size:larger; text-align:center;">No Record Found !!</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

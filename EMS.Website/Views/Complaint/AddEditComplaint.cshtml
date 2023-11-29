@@ -1,0 +1,143 @@
+﻿@model ComplaintDto
+@{
+    ViewBag.Title = "Complaint";
+}
+@section styles{
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" />
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{
+            Html.RenderPartial("_Notification");
+        }
+        <div id="validation-summary"></div>
+
+        <div class="row form-group">
+            <div class="col-sm-12"><h2>@string.Format("{0} Complaint", Model.Id > 0 ? "Edit" : "Add")</h2></div>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                                @Html.LabelFor(model => model.ComplaintType, htmlAttributes: new { @class = "control-label" })
+                            </div>
+                            <div class="col-md-10">
+                                @foreach (var item in Model.ComplaintType)
+                                {
+                                    <input type="radio" name="ComplaintTypeId" value="@item.Value" @(Convert.ToInt32(item.Value) == Model.ComplaintTypeId ? "checked" : "") /> @item.Text
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EmployeeList, htmlAttributes: new { @class = "control-label" })
+
+                                @Html.ListBoxFor(model => model.Employees, Model.EmployeeList, htmlAttributes: new { @class = "form-control multiple", @style = "padding:0px;", @autoComplete = "off" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Priority, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.PriorityId, Model.Priority, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Project, htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.ProjectId, ViewBag.ProjectList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="ClientComplaintdiv" class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ClientComplainDate, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(x => x.ClientComplainDate, htmlAttributes: new { @class = "form-control datepicker", @id = "clientComplaintDate", @autocomplete = "off", @readonly = "readonly" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ClientComplain, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextAreaFor(x => x.ClientComplain, 5, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @data_rule_required = "true" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TlComplainDate, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(x => x.TlComplainDate, htmlAttributes: new { @class = "form-control datepicker", @id = "tlComplaintDate", @autocomplete = "off", @readonly = "readonly" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TlExplanation, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextAreaFor(x => x.TlExplanation, 5, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @data_rule_required = "true" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AreaofImprovement, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextAreaFor(x => x.AreaofImprovement, 8, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @style = "height:212px" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DeveloperComplainDate, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(x => x.DeveloperComplainDate, htmlAttributes: new { @class = "form-control datepicker", @id = "devComplaintDate", @autocomplete = "off", @readonly = "readonly" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DeveloperExplanation, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextAreaFor(x => x.DeveloperExplanation, 5, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @if (SiteKey.AshishTeamPMUId == CurrentUser.PMUid || SiteKey.AshishTeamPMUId == CurrentUser.Uid)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.LessionLearned, htmlAttributes: new { @class = "control-label" })
+                                    @Html.TextAreaFor(x => x.LessionLearned, 8, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @style = "height:212px" })
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-md-6" style="margin-top: 18px;">
+                            @if (SiteKey.AshishTeamPMUId == CurrentUser.PMUid || SiteKey.AshishTeamPMUId == CurrentUser.Uid)
+                            {
+                                <div class="form-group" style="margin-bottom: 0px;">
+                                    @Html.CheckBoxFor(m => m.SendEmailLessionLearned)
+                                    @Html.LabelFor(model => model.SendEmailLessionLearned, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                            }
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                @Html.CheckBoxFor(m => m.SendEmailEmployee)
+                                @Html.LabelFor(model => model.SendEmailEmployee, htmlAttributes: new { @class = "control-label" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="@Url.Action("index")" class="btn btn-custom pull-right">Cancel</a>
+                        <button class="btn btn-custom btn-pink pull-right margin-right10" id="SubmitComplaint" type="submit">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <script src="~/bundles/Complaint/addEdit"></script>
+
+
+}

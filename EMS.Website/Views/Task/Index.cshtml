@@ -1,0 +1,83 @@
+﻿@model EMS.Dto.TaskToDoDto
+@{
+    ViewBag.Title = "TaskList";
+}
+@section styles{
+    <link href="~/css/select2.css" rel="stylesheet" />
+}
+<style type="text/css">
+    .ParentDiv {
+    }
+</style>
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+        @Html.Hidden("AddedUid", CurrentUser.Uid)
+        <div class="manage-Project-page full-wdth">
+            <div class="custom-flex justify-content-between filterHeader margin-bottom10">
+                <h2>View To - DO List</h2>
+
+
+                <div class="filterBtns">
+                    <div class="Tasks task-statusfilter">
+                        <div class="meeting-status chkMyTasks" id="divMyTasks">
+                            @Html.CheckBox("chkMyTasks", new { @value = (byte)Enums.Tasks.AssignedToMe, @class = "Chktasks", @checked = "checked" })
+                            <label for="chkMyTasks">My TO-DO</label>
+                        </div>
+                    </div>
+
+                    <div class="task-statusfilter">
+                        <div class="meeting-status" id="divAssignedByMe">
+                            @Html.CheckBox("chkAssignedByMe", new { @value = (byte)Enums.Tasks.AssignedByMe, @class = "Chktasks" })
+                            <label for="chkAssignedByMe">Assigned TO-DO</label>
+                        </div>
+                    </div>
+                    @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                    {
+                        <div class="task-statusfilter">
+                            <div class="meeting-status" id="divOherTeamMembers">
+                                @Html.CheckBox("chkOtherTeamMembers", new { @value = (byte)Enums.Tasks.OtherTeamMembers, @class = "Chktasks" })
+                                <label for="chkOtherTeamMembers">Team Member TO-DO</label>
+                            </div>
+                        </div>
+                    }
+                    @*<div class="task-statusfilter">
+                            <div class="meeting-status" id="divCompleted">
+                                @Html.CheckBox("chkCompleted", new { @value = (byte)Enums.Tasks.Completed, @class = "Chktasks" })
+                                <label for="chkCompleted">Completed</label>
+                            </div>
+                        </div>*@
+                </div>
+
+                <div class="filterEmployee">
+                    <a class="btn btn-custom pull-right" data-target="#modal-add-task" data-backdrop="static" data-toggle="modal" href="@Url.Action("add", "task")">Add New</a>
+                    @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                    {
+                        <select asp-items="Model.users" name="selectUserId" class="form-control taskdropdown_employee" id="selectUserId">
+                            <option>All Employee</option>
+                        </select>
+                    }
+
+                    @Html.DropDownListFor(model => Model.TaskStatusId, Html.GetEnumSelectList(typeof(Enums.TaskStatusType)), "All Status", new { @class = "form-control taskdropdown_employee", id = "selectTaskStatusId" })
+                </div>
+            </div>
+            <section id="no-more-tables">
+                <table id="grid-taskList" class="table default-table"></table>
+            </section>
+
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@Html.Partial("_Modal", new Modal { ID = "modal-add-task", AreaLabeledId = "modal-delete-task-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-delete-task", AreaLabeledId = "modal-delete-task-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-chase-task", AreaLabeledId = "modal-chase-task-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-comment-task", AreaLabeledId = "modal-chase-task-label", Size = Enums.ModalSize.Large })
+@section scripts{
+    <script src="~/ckeditor/ckeditor.js" asp-append-version="true"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/scripts/select2.min.js"></script>
+    <script src="~/scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/Scripts/CustomJS/Task/task.js" asp-append-version="true"></script>
+}

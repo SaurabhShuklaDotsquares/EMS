@@ -1,0 +1,75 @@
+﻿
+@model MomMeetingTaskDecisionDTO
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<style>
+    .table-striped > tbody > tr:nth-of-type(2n+1) {
+        background-color: #e9e9e9;
+    }
+
+    table-striped tr {
+        color: #333;
+    }
+
+    table-striped td {
+        padding: 10px 7px;
+    }
+
+    .comments {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        font-size: 13px;
+    }
+
+        .comments i {
+            color: #757575;
+            font-size: 12px;
+            text-decoration: dotted;
+            margin-top: 8px;
+            display: block;
+        }
+</style>
+
+<div>
+
+
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Decision Detail" })
+
+    <div class="modal-body" id="decision_model">
+
+        @if (Model.MomMeeting.Count > 0)
+        {
+            for (int i = 0; i < Model.MomMeeting.Count; i++)
+            {
+                if (Model.MomMeeting[i].MomMeetingTasks.Count > 0)
+                {
+                    foreach (var item in Model.MomMeeting[i].MomMeetingTasks)
+                    {
+                        <div class="comments">
+                            <i>
+                                @item.TargetDate.ToFormatDateString("MMM d, yyyy")  &nbsp; Discussed in Action&nbsp;<b>(@(item.Task))</b>&nbsp;&nbsp;
+                            </i>
+                            @item.Decision
+                        </div>
+                    }
+                }
+            }
+        }
+        else
+        {
+            <div class="comments" style="text-align:center;">
+                <strong>No record found.</strong>
+            </div>
+        }
+
+
+        <div class="panel-body">
+
+        </div>
+        @*@Html.Partial("_ModalFooter", new ModalFooter { })*@
+    </div>
+
+</div>

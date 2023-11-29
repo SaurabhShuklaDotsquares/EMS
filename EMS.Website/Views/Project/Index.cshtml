@@ -1,0 +1,67 @@
+﻿@model ProjectIndexDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div class="manage-Project-page full-wdth">
+            <div class="divFloat-Left">
+                <h2 style="float:left;">Manage Project</h2>
+                <div class="pull-right">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("hdnIsSuperAdmin", Model.IsSuperAdmin)
+                        @Html.Hidden("hdnIsHr", Model.IsHR);
+                        if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                        {
+                            <div class="wdth1 margin-right10 pull-left">
+                                @Html.DropDownList("ddlPMList", Model.PMList, "--Select PM--", new { @class = "form-control" })
+                            </div>
+
+                        }
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.DropDownList("ddl_status", Model.ProjectStatusList, "--All--", new { @class = "form-control" })
+                        </div>
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Search by Name/CRM Id", style = "width: 250px;" })
+
+                        </div>
+
+                        <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="box-body">
+                <div style="width:50%;float:right;">
+                    @*<div class="pull-right box1">
+                        <button class="btn btn-custom pull-right" id="btnCRMProject">View Pending CRM List</button>
+
+                    </div>*@
+
+                    <div class="pull-right box2">
+                        @if (CurrentUser.IsSuperAdmin || CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                        {
+                            <a href="@Url.Action("addeditproject", "project")" class="btn btn-custom pull-left">Add New Project</a>
+                        }
+                    </div>
+                </div>
+                <section id="no-more-tables">
+                    <table id="grid-manageProject" class="display postable table table-bordered table-condensed">
+
+                    </table>
+
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-addEditDevforProject", AreaLabeledId = "modal-lbladdeditDevforProject", Size = Enums.ModalSize.XLarge })
+
+@section scripts{
+   <script src="~/bundles/Project/index" asp-append-version="true"></script>
+}

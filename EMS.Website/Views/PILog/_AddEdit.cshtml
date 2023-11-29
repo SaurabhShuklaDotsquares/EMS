@@ -1,0 +1,65 @@
+﻿@using EMS.Web.Models.Others
+@model PILogRequestDto
+
+@using (Html.BeginForm("addedit", "pilog", FormMethod.Post, new { id = "add-pilogForm" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = string.Format("{0} PI Log", Model.Id > 0 ? "Edit" : "Add") });
+
+    <div class="modal-body">
+        <div id="NotificationMessage"></div>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row" id="dvProcessId">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.ProcessId, "Process Name")
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.DropDownListFor(model => model.ProcessId, Model.ProcessList, "-Select-", htmlAttributes: new { @class = "form-control" })
+                @*@Html.TextBoxFor(model => model.ProcessName, htmlAttributes: new { @class = "form-control" })*@
+            </div>
+        </div>
+        <div class="row" id="dvOtherProcess">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.ProcessName, "Other Process Name")
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.TextBoxFor(model => model.ProcessName, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.PotentialArea, "Potential Improvement Area")
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.TextAreaFor(model => model.PotentialArea, 3, 5, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}
+
+
+
+<script type="text/javascript">
+
+    $('#dvOtherProcess').hide();
+     $("#ProcessName").val('--select--');
+    $("#ProcessId").on("change", function () {
+
+        var text = $("#dvProcessId #ProcessId option:selected").text();
+        if (text.toLowerCase() === "Other".toLowerCase()) {
+            $("#ProcessName").val('');
+            $('#dvOtherProcess').show();
+        } else {
+            $('#dvOtherProcess').hide();
+            $("#ProcessName").val(text);
+        }
+
+    });
+
+</script>
+

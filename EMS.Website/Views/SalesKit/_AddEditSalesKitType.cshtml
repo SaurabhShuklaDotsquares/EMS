@@ -1,0 +1,102 @@
+﻿@model EMS.Dto.LibraryManagement.SalesKitTypeDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    Layout = null;
+}
+<style>
+    .lable {
+        padding-top: 12px;
+        padding-left: inherit;
+    }
+    .chkbox {
+        padding-left: 2px;
+    }
+</style>
+<div class="cmxform addedit-saleskit">
+    @using (Html.BeginForm("AddEdit", "SalesKit", FormMethod.Post, new { @id = "frm-saleskit" }))
+    {
+        @Html.HiddenFor(model => model.SalesKitId)
+
+        <div class="bg-white">
+            <div id="validation-summary"></div>
+            <div class="popup-top text-left">
+                @if (Model.SalesKitId == 0)
+                {
+                    <h3 style="color:#fff;padding-top:15px;" class="text-center">Add Sales Kit Type</h3>
+                }
+                else
+                {
+                    <h3 style="color:#fff;padding-top:15px;" class="text-center">Edit Sales Kit Type</h3>
+                }
+            </div>
+            <div class="popup-container" id="popup-container">
+
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-7">
+                        <div class="col-md-1">
+                            @Html.CheckBoxFor(model => model.IsChild)
+                        </div>
+                        <div class="col-md-10 chkbox">
+                            @Html.LabelFor(x=>x.IsChild)
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row hide" id="parentSalesKit">
+                    <div class="col-md-3">
+                        @Html.Label("Select Category")
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownListFor(model => model.ParentId, Model.ParentSalesKit, "-Select Category-", new { @class = "form-control", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(model => model.Name, null, new { @class = "form-control", @autocomplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.DisplayName)
+                    </div>
+                    <div class="col-md-7">
+                        @Html.TextBoxFor(model => model.DisplayName, null, new { @class = "form-control", @autocomplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-7">
+                        <div class="col-md-1">
+                            @Html.CheckBoxFor(model => model.IsActive)
+                        </div>
+                        <div class="col-md-4 chkbox">
+                            @Html.LabelFor(model => model.IsActive)
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("Display Order")
+                    </div>
+                    <div class="col-md-5">
+                        @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control", @type = "number", @min = 0 })
+                    </div>
+                </div>
+            </div>
+            @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonID = "btn-submit", SubmitButtonText = "Submit", CancelButtonText = "Cancel" })
+        </div>
+    }
+</div>

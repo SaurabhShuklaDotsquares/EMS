@@ -1,0 +1,29 @@
+﻿@model List<SelectListItem>
+@{
+    ViewBag.Title = "Dotsquares Employee Management 2013";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>User Project Report</h2>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-3">
+                @Html.DropDownList("selectUserId", Model, "All User", htmlAttributes: new { @class = "form-control " })
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-custom" id="CustomSearch">Search</button>
+            </div>
+        </div>
+        <table id="grid-UserProjectList" class="display postable table table-stats table-condensed"></table>
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/bundles/Report/UserReport"></script>
+}

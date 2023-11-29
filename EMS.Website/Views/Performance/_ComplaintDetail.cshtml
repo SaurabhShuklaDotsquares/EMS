@@ -1,0 +1,44 @@
+﻿@model List<ComplaintDto>
+
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Complaint Details" }); }
+
+<div class="modal-body">
+    @if (Model != null && Model.Count>0)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Complaint Type</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Area of improvement</th>
+                    <th scope="col">Add Date</th>
+                    <th scope="col">Client Comment</th>
+                    <th scope="col">Client Comment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                <tr>
+                    <td>@(++index)</td>
+                    <td>@Extensions.GetDescription((Enums.ComplainType)item.ComplaintTypeId)</td>
+                    <td>@Extensions.GetDescription((Enums.Priority)item.PriorityId)</td>
+                    <td>@item.AreaofImprovement</td>
+                    <td>@item.AddedDate</td>
+                    <td>@item.ClientComplain</td>
+                    <td>@item.ClientComplainDate</td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

@@ -1,0 +1,138 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model ProjectNCLogAuditeeDto
+
+@using (Html.BeginForm("auditeecomments", "nclog", FormMethod.Post, new { id = "comment-nclogForm" }))
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="modal-title" style="color:green">@Model.ProjectName</h4>
+            </div>
+            <div class="col-md-5 text-right">
+                <h4 class="modal-title" style="font-size:15px">
+                    @(Model.Status == (byte)Enums.ProjectAuditStatus.Open ? Model.FollowUpDate : Model.Status == (byte)Enums.ProjectAuditStatus.Completed ? Model.CompletedDate : Model.ClosedDate) [@((Enums.ProjectAuditStatus)Model.Status)]
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body">
+
+        <div id="NotificationMessage"></div>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <label>Audit Cycle :</label>
+                @Model.AuditCycle <b style="color:#e99701">[@Model.AuditType]</b>
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.ProjectAuditPA) :
+                @Model.ProjectAuditPA
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.AuditorName) :
+                @Model.AuditorName
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.AuditDate) :
+                @Html.Raw(Model.AuditDate)
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.AuditeeName) :
+                @Model.AuditeeName
+            </div>
+            @if (Model.CompletedDate.HasValue())
+            {
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.CompletedDate) :
+                    @Model.CompletedDate
+                </div>
+            }
+        </div>
+
+        @Html.LabelFor(model => model.AuditDesc)
+        <div class="form-group">
+            @Html.Raw(Model.AuditDesc.NewLineToHtmlBreak())
+        </div>
+
+        @Html.LabelFor(model => model.RootCause)
+        <div class="form-group">
+            @if (Model.EditAllowed)
+                {
+                @Html.TextAreaFor(model => model.RootCause, 2, 5, htmlAttributes: new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.Raw(Model.RootCause.NewLineToHtmlBreak())
+            }
+        </div>
+
+        @Html.LabelFor(model => model.AuditAction)
+        <div class="form-group">
+            @if (Model.EditAllowed)
+                {
+                @Html.TextAreaFor(model => model.AuditAction, 2, 5, htmlAttributes: new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.Raw(Model.AuditAction.NewLineToHtmlBreak())
+            }
+        </div>
+
+        @if (Model.EditAllowed)
+        {
+            <div class="row">
+                <div class="col-md-2 form-group">
+                    @Html.LabelFor(model => model.CompletedDate)
+                </div>
+                <div class="col-md-4 form-group">
+                    @Html.TextBoxFor(x => x.CompletedDate, htmlAttributes: new { @class = "form-control", data_msg_required = "Complete date field is required", data_rule_required = "false" })
+                </div>
+
+                <div class="col-md-2 form-group">
+                    @Html.LabelFor(model => model.Status)
+                </div>
+                <div class="col-md-4 form-group">
+                    @Html.DropDownListFor(x => x.Status, Model.AuditStatusList, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        }
+
+        @if (Model.CloseAllowed)
+        {
+            <div class="row">
+                <div class="col-md-2 form-group">
+                    @Html.LabelFor(model => model.ClosedDate)
+                </div>
+                <div class="col-md-4 form-group">
+                    @Html.TextBoxFor(x => x.ClosedDate, htmlAttributes: new { @class = "form-control", data_msg_required = "Closed date field is required", data_rule_required = "true" })
+                </div>
+            </div>
+        }
+    </div>
+
+    if (Model.EditAllowed)
+    {
+        Html.RenderPartial("_ModalFooter", new ModalFooter());
+    }
+
+    else if (Model.CloseAllowed)
+    {
+        <div class="modal-footer">
+            <button data-dismiss="modal" id="btn-cancel" class="btn btn-custom pull-right" type="button">Cancel</button>
+            <button class="btn btn-custom pull-right margin-right10" id="btn-closeLog" type="submit" style="background-color:#249507"><i class="fa fa-check"></i> Close Log</button>
+        </div>
+    }
+}

@@ -1,0 +1,699 @@
+@media screen and (max-width: 1600px) {
+    .performace-block {
+        padding-top: 25px;
+    }
+
+    .section-title h2 {
+        font-size: 18px;
+    }
+
+    .emp-pro-col label, .emp-info-col label {
+        font-size: 14px;
+    }
+
+    .emp-pro-col p, .emp-info-col p {
+        font-size: 18px;
+        padding-bottom: 10px;
+    }
+
+    .emp-info-col-outer {
+        margin-top: 10px;
+    }
+
+    .emp-pro-col i {
+        font-size: 18px;
+        bottom: 14px;
+    }
+
+    .emp-info-col h3 {
+        font-size: 16px;
+        top: -10px;
+    }
+}
+
+@media only screen and (max-width:1400px) {
+    .login-logo {
+        margin: 0 auto;
+        width: 200px
+    }
+
+    .login-outer-box {
+        max-width: 450px;
+        padding: 15px
+    }
+
+    .login-inner-box {
+        margin: 15px 0 0
+    }
+
+    .login-hd {
+        font-size: 20px;
+        padding: 8px 0
+    }
+
+    .login_inr {
+        padding: 20px
+    }
+
+    .login-inner-box, body, .check-custom input[type="checkbox"] + label {
+        font-size: 13px
+    }
+
+    .menu > ul > li > a {
+        font-size: 13px;
+        padding: 9px 20px
+    }
+
+    .dashboard-box h2 {
+        padding: 25px 0
+    }
+
+    .check-box-outer .check-custom input[type="checkbox"] + label {
+        width: 15%;
+    }
+
+    .browse-btn {
+        font-size: 15px;
+        height: 38px;
+        line-height: 38px;
+        width: 100%;
+        padding: 0 18px;
+    }
+
+    .create-form-outer-box .form-control, .create-form-outer-box select, .create-form-outer-box select.form-control {
+        height: 38px;
+    }
+
+    .search-library-col.lib-col {
+        max-width: calc(33.33% - 30px);
+        flex: 0 0 33.33%;
+    }
+
+    .cus-modal .modal-xl {
+        max-width: 1120px;
+    }
+
+    .radio-custom input[type="radio"] + label {
+        margin-bottom: 5px;
+    }
+}
+
+@media only screen and (max-width:1199px) {
+    .form-control, select, select.form-control {
+        font-size: 13px;
+        height: 34px;
+        padding: 5px 8px
+    }
+
+    .btn-custom, .btn-lg {
+        font-size: 13px;
+        padding: 7px 15px;
+    }
+
+    .right_header br {
+        display: none
+    }
+
+    .right_header {
+        width: 40%
+    }
+
+    .menu > ul > li > a {
+        font-size: 13px;
+        padding: 5px 15px
+    }
+
+    .menu > ul > li.project-status-btn a {
+        font-size: 14px;
+        padding: 4px 15px
+    }
+
+    .dashboard-box h1, .dashboard-box h2 {
+        font-size: 20px
+    }
+
+    #main_container {
+        padding: 0 15px
+    }
+
+    .total-working-hours {
+        font-size: 16px
+    }
+
+    .wdth1 {
+        width: 120px
+    }
+
+    .wdth2 {
+        width: 200px
+    }
+
+    .table .form-control.inpt-wd3 {
+        width: 130px
+    }
+
+    .table .form-control.inpt-wd1 {
+        width: 100px
+    }
+
+    .table .form-control.inpt-wd4 {
+        width: 75px
+    }
+
+    .table .form-control.inpt-wd2 {
+        width: 150px
+    }
+
+    .main_content .full-wdth.clearfix.padding20 {
+        padding: 15px
+    }
+
+    .note-box p {
+        font-size: 12px;
+        line-height: 16px
+    }
+
+    .menu > ul > li > ul > li > a {
+        font-size: 12px
+    }
+
+    .rem_box {
+        margin-top: 7px
+    }
+
+    a.forgot-pwd {
+        font-size: 11px
+    }
+
+    .footer {
+        padding: 10px
+    }
+
+    .table-responsive > .table {
+        margin-bottom: 15px
+    }
+
+    .check-box-outer .check-custom input[type="checkbox"] + label {
+        width: 18%;
+    }
+
+    .browse-btn {
+        font-size: 14px;
+        height: 34px;
+        line-height: 34px;
+        padding: 0 15px;
+    }
+
+    .create-form-outer-box .form-control, .create-form-outer-box select, .create-form-outer-box select.form-control {
+        height: 34px;
+    }
+
+    .cus-modal .modal-xl {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .scroll4, .img-block {
+        width: 100% !important;
+    }
+
+    .search-row .adv-srch {
+        width: 49%;
+    }
+
+    .industry {
+        margin-right: 0;
+    }
+
+    .search-row .srch-box {
+        width: 100%;
+        order: 3;
+        margin: 10px 0 0;
+    }
+
+        .search-row .srch-box .form-control {
+            font-size: 15px;
+            background-size: 18px;
+            padding-left: 45px;
+        }
+
+    .industry-block {
+        z-index: 9;
+    }
+}
+
+@media only screen and (max-width:991px) {
+    .right_header {
+        width: 38%
+    }
+
+    .hdr-top-part {
+        padding: 8px 0
+    }
+
+    .menu > ul > li > a {
+        font-size: 12px;
+        padding: 4px 12px
+    }
+
+    .menu > ul > li.project-status-btn a {
+        font-size: 13px;
+        padding: 3px 10px
+    }
+
+    .menu > ul > li > ul > li > a {
+        font-size: 12px;
+        padding: 4px 10px
+    }
+
+    .dashboard-box h2 {
+        padding: 15px 0
+    }
+
+    .box1, .box2 {
+        margin: 10px 0 0
+    }
+
+    .table .form-control.inpt-wd5 {
+        width: 200px
+    }
+
+    .table-big > thead > tr > th, .table-big > tbody > tr > td, .table-big > thead > tr > th, .table-big > tbody > tr > td {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .check-box-outer .check-custom input[type="checkbox"] + label {
+        width: 23%;
+    }
+
+    .form-group, .form-wdth1 .radio-custom, .check-box-outer, .form-wdth1 .row .col-md-12.margin-bottom20 {
+        margin-bottom: 15px;
+    }
+
+    .create-form-outer-box {
+        margin: 0;
+    }
+
+    .check-box-outer {
+        padding: 15px 15px 8px;
+    }
+
+    .browse-btn {
+        max-width: 200px;
+    }
+
+    .search-library-col.lib-col {
+        max-width: calc(50% - 30px);
+        flex: 0 0 50%;
+    }
+
+    .detail-modal-popup {
+        display: block;
+    }
+
+    .dtl-lt, .dtl-rt {
+        max-width: 100%;
+    }
+
+    .file-upload-box {
+        margin: 10px 15px 0 0;
+    }
+
+    .all-upload-btn {
+        margin-top: 10px;
+    }
+}
+
+@media only screen and (max-width:767px) {
+    /*************mobile-menu-start***************/
+    .menuImage {
+        float: right;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        z-index: 9
+    }
+
+        .menuImage img {
+            background: 0;
+            display: block;
+            padding: 10px
+        }
+
+    .iphon_navigation {
+        background: #333 none repeat scroll 0 0;
+        border-top: medium none;
+        left: 0;
+        margin: 0;
+        position: absolute;
+        right: 0;
+        text-shadow: none;
+        top: 100%;
+        width: 100%;
+        z-index: 9999
+    }
+
+        .iphon_navigation ul {
+            margin: 0;
+            padding: 0
+        }
+
+            .iphon_navigation ul li {
+                background: none repeat scroll 0 0 transparent;
+                border-top: 1px solid #444;
+                margin: 0;
+                padding: 0 !important;
+                text-align: left;
+                width: 100%
+            }
+
+    .parentMenu > div.subItem {
+        width: 50px;
+        height: 34px;
+        float: right;
+        background: url(../images/faq-arrowup.png) no-repeat center;
+        cursor: pointer
+    }
+
+    .parentMenuActive > div.subItem {
+        background: url(../images/faq-arrowdown.png) no-repeat scroll right center transparent !important;
+        cursor: pointer;
+        float: none;
+        height: 34px;
+        position: absolute;
+        width: 100%;
+        z-index: 3
+    }
+
+    .parentMenu > div.subItem {
+        background: url(../images/faq-arrowup.png) no-repeat scroll right center transparent;
+        cursor: pointer;
+        float: right;
+        height: 34px;
+        position: relative;
+        width: 50px;
+        z-index: 3
+    }
+
+    .iphon_navigation ul li a {
+        background: #333 none repeat scroll 0 0;
+        color: #fff;
+        display: block;
+        font-size: 13px;
+        font-weight: normal;
+        list-style: outside none none;
+        margin: 0;
+        padding: 8px 10px;
+        text-decoration: none;
+        text-transform: uppercase
+    }
+
+        .iphon_navigation ul li a:hover {
+            color: #ffa500;
+            text-shadow: inherit;
+            text-decoration: none
+        }
+
+    .iphon_navigation > ul ul {
+        padding: 0;
+        width: 100%;
+        display: none;
+        margin: 0
+    }
+
+    .iphon_navigation ul ul li {
+        border-color: #333;
+        margin: 0;
+        padding: 0 !important;
+        text-align: left;
+        width: 100%
+    }
+
+        .iphon_navigation ul ul li a {
+            background: #444 none repeat scroll 0 0;
+            padding: 8px 10px 8px 15px;
+            text-transform: none
+        }
+
+    .iphon_navigation ul ul ul {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        width: 100%;
+        list-style: none
+    }
+
+        .iphon_navigation ul ul ul li a {
+            background: #555;
+            padding: 8px 10px 8px 20px;
+            text-transform: none
+        }
+
+        .iphon_navigation ul ul ul ul li a {
+            background: #555;
+            padding: 8px 10px 8px 25px;
+            text-transform: none
+        }
+
+    .sub-menu.subMenu {
+        background: none repeat scroll 0 0 #000
+    }
+    /*************mobile-menu-end***************/
+    .nav-part-outer {
+        padding: 0
+    }
+
+    .dashboard-box h2 i {
+        font-size: 10px;
+        margin: 0 5px
+    }
+
+    .logo, .login-logo {
+        width: 170px
+    }
+
+    .logout {
+        background: #fff none repeat scroll 0 0;
+        bottom: -33px;
+        padding: 5px 10px;
+        position: absolute;
+        right: 5px;
+        z-index: 1
+    }
+
+    .dashboard-box h1, .dashboard-box h2 {
+        font-size: 18px
+    }
+
+    .footer {
+        font-size: 11px;
+        padding: 8px
+    }
+
+    .menuImage {
+        float: left
+    }
+
+    .table .form-control.inpt-wd5 {
+        width: 100%
+    }
+
+    .check-box-outer .check-custom input[type="checkbox"] + label {
+        width: 31%;
+    }
+
+    .search-library-col.lib-col {
+        max-width: calc(100% - 30px);
+        flex: 0 0 100%;
+    }
+
+    .main_content {
+        min-height: inherit !important
+    }
+
+    .cus-modal .modal-xl {
+        width: auto;
+        padding: 0;
+    }
+}
+
+@media only screen and (max-width:639px) {
+    .reportbug {
+        display: none
+    }
+
+    .right_header {
+        width: 60%
+    }
+
+    .box1, .box2 {
+        display: block;
+        float: none !important;
+        width: 100%
+    }
+
+    .box1 {
+        margin: 0
+    }
+
+    .box2 {
+        margin: 8px -1% 0
+    }
+
+        .wdth1, .wdth2, .box2 .btn.btn-custom.pull-left {
+            display: block;
+            margin: 1%;
+            width: 48%
+        }
+
+    .total-working-hours {
+        display: inline-block;
+        margin: 0 0 0 10px;
+        vertical-align: middle
+    }
+
+    .check-box-outer .check-custom input[type="checkbox"] + label {
+        width: 48%;
+    }
+
+    .browse-btn {
+        max-width: 150px;
+    }
+}
+
+@media only screen and (max-width:479px) {
+    .login-hd {
+        font-size: 16px;
+        padding: 6px 0
+    }
+
+    .login_inr {
+        padding: 15px
+    }
+
+    .login-inner-box, body, .check-custom input[type="checkbox"] + label {
+        font-size: 12px
+    }
+
+    .note-box p, .export-btn {
+        font-size: 11px
+    }
+
+    .table {
+        font-size: 12px
+    }
+
+    .table-big > thead > tr > th, .table-big > tbody > tr > td, .table-big > thead > tr > th, .table-big > tbody > tr > td {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .login_inr .form-group .form-control {
+        background-position: 8px center;
+        background-repeat: no-repeat;
+        background-size: 24px auto;
+        border-radius: 4px;
+        height: 36px;
+        padding: 6px 6px 6px 40px
+    }
+
+    .login_inr .form-group {
+        margin: 0 0 10px
+    }
+
+    .login-inner-box {
+        margin: 10px 0 0
+    }
+
+    .logo {
+        float: none !important;
+        margin: 0 auto
+    }
+
+    .right_header {
+        float: none !important;
+        margin: 5px 0 0;
+        text-align: center;
+        width: 100%
+    }
+
+    .main_content .full-wdth.clearfix.padding20 {
+        padding: 10px
+    }
+
+    .dashboard-box h1 {
+        padding: 5px 0 10px
+    }
+
+    .dashboard-box h2 {
+        padding: 10px 0
+    }
+
+    .dashboard-box h1, .dashboard-box h2 {
+        font-size: 16px
+    }
+
+    .total-working-hours {
+        display: block;
+        margin: 5px 0 0
+    }
+
+    .browse-btn2 {
+        position: relative;
+    }
+
+    .file-name {
+        padding: 0;
+    }
+
+        .file-name ul {
+            display: block;
+            margin-right: 5px;
+        }
+
+    .browse-btn2 {
+        height: 28px;
+        margin: 0 0 5px 5px;
+    }
+
+    .sltd-box {
+        margin: 0 15px 0 0;
+    }
+
+    .search-row .srch-box {
+        display: block !important;
+    }
+
+    .search-for {
+        width: 100%;
+    }
+
+        .search-for::after {
+            width: 100%;
+            height: 1px;
+            bottom: 0;
+            top: auto;
+        }
+
+    .srch-box .lib-srch-btn {
+        width: 100%;
+    }
+
+    .search-row .adv-srch {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .select-type {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width:356px) {
+    .check-box-outer .check-custom input[type="checkbox"] + label {
+        display: block;
+        margin: 0 0 8px;
+        width: 100%;
+    }
+}

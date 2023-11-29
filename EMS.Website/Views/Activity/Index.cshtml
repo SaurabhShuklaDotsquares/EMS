@@ -1,0 +1,520 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.ActivityDto
+@using EMS.Core
+
+@section styles{
+    <style>
+        .clsSmallFont {
+            font-size: xx-small;
+        }
+
+        .agreen {
+            color: green !important;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .ared {
+            color: red !important;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        tr.freeuser, tr.freeuser td {
+            background: #FFBABA !important;
+            color: #000 !important;
+            font-weight: normal;
+        }
+
+        tr.working, tr.working td {
+            background: #caffab !important;
+            color: #000 !important;
+            font-weight: normal;
+        }
+
+        tr.nologin, tr.nologin td {
+            background: #f1f1f1 !important;
+            color: #000 !important;
+            font-weight: normal;
+        }
+
+        tr.addassigned, tr.addassigned td {
+            background: #FAC957 !important;
+            color: #000 !important;
+            font-weight: normal;
+        }
+
+        /*.space-br .space {
+            margin-top: 20px;
+        }*/
+
+        .black-theme-table {
+            background: #fefcf9;
+        }
+
+            .black-theme-table > thead > tr > th, .black-theme-table > tbody > tr > th {
+                background: #333333 none repeat scroll 0 0;
+                color: #fff;
+                text-transform: uppercase;
+            }
+
+            .black-theme-table > thead > tr > th, .black-theme-table > tbody > tr > th {
+                background: #333333 none repeat scroll 0 0;
+                color: #fff;
+                text-transform: uppercase;
+            }
+
+        .field_box_new {
+            background: #fbfaf5 none repeat scroll 0 0;
+            border: 1px solid #dddddd;
+            float: left;
+            padding: 0 10px;
+        }
+
+        legend {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
+            border-radius: 0 !important;
+            color: #333333 !important;
+            font-size: 14px;
+            font-weight: 600 !important;
+            padding: 0 0 5px !important;
+            text-align: left;
+        }
+
+            legend.searchbtn {
+                position: absolute;
+                bottom: -12px;
+                right: 0px;
+            }
+
+
+        .ablue {
+            color: Blue !important;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        fieldset {
+        }
+
+            fieldset .fieldset {
+                background: #f5f5f5 none repeat scroll 0 0;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+            }
+
+        legend {
+            border: 0;
+            margin-bottom: 0;
+        }
+        input#chboxNoticePeriod {
+            margin: 10px 2px 0px 0px;
+        }
+        /*.hds {
+            display: block;
+            color: #e99701;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 0 0 0;
+            border-bottom: 1px solid #ddd;
+            margin: 0 0 5px;
+        }*/
+        .create-form-outer-box label {
+            font-weight: 400;
+        }
+
+        .wrongproject {
+            color: #da7c0c;
+            font-weight: bold;
+        }
+
+        .blue {
+            color: Blue;
+            font-weight: bold;
+        }
+
+        .red {
+            color: #F00;
+            float: left;
+        }
+
+        .pad_emp {
+            /*padding: 0 15px 10px 0;*/
+        }
+
+        .custom-btn, .button, .orange {
+            background-color: #e99701;
+            border: medium none;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.42857;
+            margin: 0;
+            outline: medium none;
+            padding: 8px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .marR7 {
+            margin-right: 7px !important;
+        }
+
+        b, strong {
+            font-weight: 600;
+        }
+
+        .chosen-container {
+            width: 100% !important;
+        }
+
+        .team-summary {
+            border-collapse: collapse;
+            width: 100%;
+            color: #100;
+            border: 2px solid darkgray;
+        }
+
+            .team-summary tfoot td {
+                font-weight: bold;
+            }
+
+            .team-summary tfoot tr:first-child {
+                border-top: 2px solid darkgray;
+            }
+
+            .team-summary td, #TeamSummary th {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+                vertical-align: top;
+                border-bottom: 1px solid #bbb;
+            }
+
+
+            .team-summary th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .team-summary.indidual td:first-child {
+                font-weight: bold;
+                width: 35%;
+            }
+
+        .RunningInfo {
+            background: lightgreen;
+        }
+
+        .EmployeeInfo {
+            background: #fbca95;
+        }
+
+        .SupportInfo {
+            background: lightgoldenrodyellow;
+        }
+
+        .red-bg {
+            background-color: #FF6347;
+        }
+
+        .orange-bg {
+            background-color: orange;
+        }
+
+        .blue-bg {
+            background-color: lightblue;
+        }
+
+        .team-summary thead {
+            border-bottom: 2px solid darkgray;
+            font-weight: 600;
+        }
+
+        .notice {
+            color: #F32A06;
+            font-weight: 600;
+            padding-left: 5px;
+        }
+
+        .RunningMain {
+            background: #32CD32;
+        }
+
+        .EmployeeMain {
+            background: #f8b56e;
+        }
+
+        .SupportMain {
+            background-color: #EEE8AA;
+        }
+
+        .filter, .filter2 {
+            cursor: pointer;
+            color: #283aff;
+            text-decoration: underline
+        }
+
+            .filter.active {
+                -moz-box-shadow: inset 0 0 10px #000000;
+                -webkit-box-shadow: inset 0 0 10px #000000;
+                box-shadow: inset 0px 0px 7px #7d7979;
+                text-shadow: 0 0 0 #7d7979;
+                background-color: #eee;
+            }
+
+        .add-support-label {
+            font-weight: 600;
+            background-color: #ddd;
+            padding: 4px 10px;
+            color: #fff;
+            font-size: 11px;
+            margin-top: 5px;
+            border-radius: 11px;
+            display: inline-block;
+        }
+
+            .add-support-label.success {
+                background-color: #22a70e;
+                color: #fff;
+            }
+
+            .add-support-label.danger {
+                background-color: red;
+                color: #fff;
+            }
+
+            .add-support-label.warning {
+                background-color: orange;
+                color: #fff;
+            }
+    </style>
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div id="divNoti">
+            @Html.Partial("_Notification")
+        </div>
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>
+                Employee Activity
+                <span class="sm_btn marR7 pull-right">
+                    <a class="custom-btn" id="MainContent_btnrefresh" href="javascript:void(0);">Refresh</a>
+                    <span class="sm_btn marR7 pull-right" style="padding-left: 10px;">
+                        <input type="image" id="MainContent_btnExcel" title="Export to Excel" src="@SiteKey.DomainName/images/icons/excel.png" style="height:26px;width:26px;">
+                    </span>
+                </span>
+            </h2>
+
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="filter-btn" style="cursor:pointer;">Advance Search <i class="fa fa-angle-down"></i></div>
+                                <div class="filter-outer clearfix" style="display:none;">
+                                    <fieldset>
+                                        <legend>
+                                            <div class="col-md-12">
+                                                <div class="col-md-2">
+                                                    Technology  & Specility:
+                                                </div>
+
+                                                @if (Model.SpecTypeList != null) {
+                                                    <div class="col-md-10">
+                                                        @foreach (var scType in Model.SpecTypeList) {
+                                                            <input type="checkbox" class="checkboxspecility" name="Specility" id="Specility_chkSpec_@scType.Id" data-id="@scType.Id" value="@scType.Text" />
+                                                            <label for="Specility_chkSpec_@scType.Id">   &nbsp;@scType.Text</label>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </legend>
+
+
+                                        <div class="col-md-12 fieldset">
+                                            @if (Model.Technologies != null) {
+
+                                                int te = 1;
+                                                foreach (var tech in Model.Technologies) {
+
+                                                    <div class="col-md-3 checkList technology @(te>4?"technology_less":"")" style="display:@(te>4?"none":"block")">
+                                                        <input type="checkbox" class="checkboxtechnology" name="Technology" id="Technology_chkTech_@tech.Id" data-id="@tech.Id" value="@tech.Name" />
+                                                        <label for="Technology_chkTech_@tech.Id">   &nbsp;@tech.Name</label>
+                                                    </div>
+                                                    te++;
+                                                }
+
+
+                                            }
+                                            <div class="col-md-12 checkList">
+                                                <a class="moreTech pull-left" id="technology_more" data-id="technology" style="color:#e18f00;font-size:12px;text-decoration:underline;" href="javascript:void(0)">Show More</a>
+                                            </div>
+                                            <div class="col-md-12 checkList" style="display:none;">
+                                                <a class="lessTech pull-left" id="technology_less" data-id="technology_less" data-more="technology" style="color:#e18f00;font-size:12px;text-decoration:underline;" href="javascript:void(0)">Show Less</a>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="pull-left">
+                                                    <label for="chkOtherTech">Other Technology ( if not available in above list )</label>
+                                                </div>
+                                                <div>
+                                                    @Html.TextBoxFor(x => x.OtherTechnology, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Enter technology name." })
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </fieldset>
+                                    <fieldset>
+                                        <legend>Domain Experience:</legend>
+                                        <div class="col-md-12 fieldset">
+                                            @if (Model.DomainExpert != null) {
+                                                int sp = 1;
+                                                foreach (var domain in Model.DomainExpert) {
+
+                                                    <div class="col-md-3 checkList domainExpert @(sp>4?"domainExpert_less":"")" style="display:@(sp>4?"none":"block")">
+                                                        <input type="checkbox" class="checkboxdomainexpert" name="Domain" id="chkDom_@domain.DomainId" data-id="@domain.DomainId" value="@domain.DomainId"
+                                                               @(Model.DomainExpert.Any(s => s.DomainId == domain.DomainId && s.Selected) ? "checked" : "") />
+                                                        <label for="chkDom_@domain.DomainId">&nbsp;@domain.DomainName</label>
+                                                    </div>
+                                                    sp++;
+                                                }
+                                            }
+
+                                            <div class="col-md-12 checkList">
+                                                <a class="moreTech pull-left" id="domainExpert_more" data-id="domainExpert" style="color:#e18f00;font-size:12px;text-decoration:underline;" href="javascript:void(0)">Show More</a>
+                                            </div>
+                                            <div class="col-md-12 checkList" style="display:none;">
+                                                <a class="lessTech pull-left" id="domainExpert_less" data-id="domainExpert_less" data-more="domainExpert" style="color:#e18f00;font-size:12px;text-decoration:underline;" href="javascript:void(0)">Show Less</a>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <legend>Department:</legend>
+                                        <div class="col-md-12 fieldset">
+                                            @if (Model.Department != null) {
+                                                int sp = 1;
+                                                foreach (var tech in Model.Department) {
+
+                                                    <div class="col-md-3 checkList department @(sp>4?"department_less":"")" style="display:@(sp>4?"none":"block")">
+                                                        <input type="checkbox" class="checkboxdepartment" name="Department" id="Department_chkTech_@tech.Id" data-id="@tech.Id" value="@tech.Id" />
+                                                        <label for="Department_chkTech_@tech.Id">   &nbsp;@tech.Name</label>
+                                                    </div>
+                                                    sp++;
+                                                }
+                                            }
+
+                                            <div class="col-md-12 checkList">
+                                                <a class="moreTech pull-left" id="department_more" data-id="department" style="color:#e18f00;font-size:12px;text-decoration:underline;" href="javascript:void(0)">Show More</a>
+                                            </div>
+                                            <div class="col-md-12 checkList" style="display:none;">
+                                                <a class="lessTech pull-left" id="department_less" data-id="department_less" data-more="department" style="color:#e18f00;font-size:12px;text-decoration:underline;" href="javascript:void(0)">Show Less</a>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend>Availability:</legend>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_Running" data-id="Running" value="Running" />
+                                            <label for="Availability_Running">   &nbsp;Running</label>
+                                        </div>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_WorkingOverRun" value="Working-Overrun" />
+                                            <label for="Availability_WorkingOverrun">   &nbsp;Working-Overrun</label>
+                                        </div>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_AssignedAddon" value="Additional Support" />
+                                            <label for="Availability_AssignedAddon">   &nbsp;Additional Support</label>
+                                        </div>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_SupportTeam" value="Support Team" />
+                                            <label for="Availability_SupportTeam">   &nbsp;Support Team</label>
+                                        </div>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_Free" data-id="Free" value="Free" />
+                                            <label for="Availability_Free">   &nbsp;Free</label>
+                                        </div>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_NotLoggedIn" value="Not Logged-In">
+                                            <label for="Availability_NotLoggedIn">   &nbsp;Not Logged-In</label>
+                                        </div>
+                                        <div class="col-md-3 checkList">
+                                            <input type="checkbox" class="checkboxavailability" name="Availability" id="Availability_Leave" value="Leave">
+                                            <label for="Availability_Leave">   &nbsp;Leave</label>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="pull-right text-right">
+                                <a class="btn btn-custom" id="btn_search" href="javascript:void(0);">Search</a>
+                            </div>
+
+                            <div class="col-md-2 pull-right text-right">
+                                <input type="text" class="form-control" id="txtsearch" placeholder="Project / Employee">
+                            </div>
+
+                            <div class="col-lg-2 col-md-3 pull-right text-right">
+                                @Html.DropDownList("ddl_tl", Model.TeamLead as IEnumerable<SelectListItem>, "--Select--", new { @class = "form-control" })
+                            </div>
+
+                            @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP || CurrentUser.RoleId == (int)Enums.UserRoles.Director) {
+                                <div class="col-lg-2 col-md-3 pull-right text-right">
+                                    @Html.DropDownList("ddl_pm", Model.PmFilter as IEnumerable<SelectListItem>, "--Select--", new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-2 pull-right">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control datepicker" id="txtActivityDate" placeholder="Activity Date" readonly="readonly" />
+                                        <span id="clrActivityDate" class="input-group-addon" style="border: 1px solid #999 !important;border-left-width: 0px !important;cursor:pointer;border-radius: 0;">
+                                            <i class="fa fa-close"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        <div class="pull-right text-right">
+                            <input type="checkbox" class="checkboxNoticePeriod" name="NoticePeriod" id="chboxNoticePeriod" value="NoticePeriod">
+                            <label for="chboxNoticePeriod">Exclude Notice Period</label>
+                        </div>
+
+                        </div>
+
+                       
+                        <div class="row">
+                            <div class="col-md-12 table-responsive">
+                                <div id="tbl_grid">
+                                    @{Html.RenderPartial("_ActivityList", Model.DataGrid);}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-project-detail", AreaLabeledId = "modal-project-detail-label", Size = Enums.ModalSize.Large });
+}
+
+<div class="divoverlay hide">
+</div>
+@section scripts{
+ @*<script src="~/bundles/Activity/activity.js" asp-append-version="true"></script>*@
+    <script src="~/Scripts/CustomJS/Activity.js" asp-append-version="true"></script>
+}

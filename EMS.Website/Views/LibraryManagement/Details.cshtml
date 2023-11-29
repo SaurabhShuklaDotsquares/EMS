@@ -1,0 +1,543 @@
+﻿@model LibraryDto
+@Html.HiddenFor(model => model.Id)
+@{
+
+    string bannerImage = "images/no-image.jpg";
+    if (Model.ImageFiles != null && Model.ImageFiles.Count > 0)
+    {
+        if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", Model.ImageFiles[0])))
+        {
+            bannerImage = Model.ImageFiles[0];
+        }
+    }
+}
+@*<link href="~/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css" rel="stylesheet" />*@
+<style>
+    /*-------Detail PopUp--------*/
+    .detail-popup {
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: absolute;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    .detail-overlay {
+        background-color: rgba(0,0,0,0.3);
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 8000;
+    }
+
+    .detail-popupin {
+        margin: 118px auto 0;
+        max-width: 1120px;
+        width: 100%;
+    }
+
+    .detail-cont {
+        position: relative;
+    }
+
+    .modal-content {
+        box-shadow: 18px 18px 114px 0px rgba(0,0,0,0.06);
+        border-radius: 0;
+    }
+
+    .detail-col {
+        border: 1px solid #e8e8e8;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .detail-cont h4 {
+        /*border-bottom: 1px solid #e8e8e8;*/
+        font-size: 18px;
+        /*margin-bottom: 15px;
+        padding-bottom: 15px;*/
+        padding-right: 15px;
+    }
+
+    .detail-cont div.author {
+        border-bottom: 1px solid #e8e8e8;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .close-dt-btn {
+        position: absolute;
+        right: 35px;
+        top: 35px;
+    }
+
+    .dt-desc {
+        color: #707070;
+        padding: 30px 35px;
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+        .dt-desc .cont-lib-btm {
+            padding-top: 25px;
+        }
+
+        .dt-desc p {
+            line-height: 28px;
+            padding-bottom: 25px;
+        }
+
+    .date-txt {
+        font-size: 14px;
+        padding-bottom: 15px;
+    }
+
+    .color-black {
+        color: #000;
+    }
+
+    .owl-dots {
+        display: none;
+    }
+
+    .modal-body.library-detail-popup {
+        padding: 0;
+    }
+
+        .modal-body.library-detail-popup .close {
+            background-color: transparent !important;
+            border: none;
+            height: 25px;
+            width: 25px;
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            opacity: 1
+        }
+
+    .owl-prev, .owl-next {
+        background-color: rgba(255,255,255,0.5) !important;
+        border-radius: 50% !important;
+        font-size: 18px !important;
+        text-align: center !important;
+        line-height: 40px !important;
+        position: absolute !important;
+        top: 50% !important;
+        margin-top: -20px !important;
+        width: 40px !important;
+        padding: 0 !important;
+        cursor: pointer;
+    }
+
+    .owl-prev {
+        left: 10px;
+    }
+
+    .owl-next {
+        right: 10px;
+    }
+
+    .owl-theme .owl-nav {
+        margin-top: 0;
+    }
+
+    .library-detail-popup .owl-stage {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+
+    /*17-01-2020*/
+    .active-img-show-col {
+        padding: 15px;
+        justify-content: center;
+    }
+
+        .active-img-show-col .active-img-box img {
+            /*height: 430px;
+            width: 100%;
+            object-fit: cover;*/
+            max-height: 430px;
+            width: auto;
+        }
+
+    .dt-desc .desc-text-box {
+        max-height: 135px;
+        overflow-y: auto;
+        margin-bottom: 15px;
+        text-align: justify;
+        padding-right: 6px;
+    }
+
+    .popup-dtl-thumb-outer {
+        padding: 15px;
+        overflow-y: auto;
+        max-height: 250px;
+    }
+
+        .popup-dtl-thumb-outer::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+        }
+
+    .style-11::-webkit-scrollbar {
+        width: 10px;
+        background-color: #F5F5F5;
+    }
+
+    /**  STYLE 11 */
+    .style-11::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background: rgba(0,0,0,0.1);
+        border: 1px solid #ccc;
+    }
+
+    .style-11::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: linear-gradient(left, #fff, #e4e4e4);
+        border: 1px solid #aaa;
+    }
+
+        .style-11::-webkit-scrollbar-thumb:hover {
+            background: #fff;
+        }
+
+        .style-11::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(left, #22ADD4, #1E98BA);
+        }
+
+
+    .popup-dtl-thumb-outer .popup-dtl-thumb {
+        margin: 0 -12px;
+    }
+
+        .popup-dtl-thumb-outer .popup-dtl-thumb li {
+            width: 25%;
+            padding: 0 7.5px 15px;
+        }
+
+            .popup-dtl-thumb-outer .popup-dtl-thumb li .dtl-thumb-img {
+                border: 1px solid #ddd;
+                padding: 5px;
+            }
+
+                .popup-dtl-thumb-outer .popup-dtl-thumb li .dtl-thumb-img img {
+                    width: 100%;
+                    display: block;
+                    height: 65px;
+                    object-fit: cover;
+                }
+
+            .popup-dtl-thumb-outer .popup-dtl-thumb li a {
+                display: block;
+                text-align: center;
+                text-transform: capitalize;
+                padding: 5px 5px 0;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .popup-dtl-thumb-outer .popup-dtl-thumb li.active .dtl-thumb-img {
+                border: 1px solid #000;
+            }
+    /*17-01-2020*/
+    .file-thumbnail {
+        cursor: pointer;
+    }
+
+    .file-name-bottom {
+        padding-bottom: 3px;
+    }
+
+    .detail-edit {
+        background: rgba(0, 0, 0, 0) url(../images/edit.png) 0 center no-repeat;
+        color: #e18f00;
+        padding-left: 26px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .Link {
+        color: #e18f00;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+@*<div class="library-detail-popup-header">
+        @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Library Details" })
+    </div>*@
+
+<div class="modal-body library-detail-popup">
+    <div class="detail-cont d-flex flex-wrap">
+        <div class="detail-col d-flex align-items-center justify-content-center active-img-show-col">
+
+            <div class="active-img-box">
+                @if (bannerImage == "images/no-image.jpg")
+                {
+                    <img src="@bannerImage" id="bannerImage1" alt="" class="bannerImage1 main-image" />
+                }
+                else
+                {
+                    <a id="btnBannerPreview1" class="btnBannerPreview1" href="javascript:void(0);" data-toggle="modal">
+                        <img src="@bannerImage" id="bannerImage1" alt="" class="bannerImage1 main-image" />
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="detail-col dt-desc">
+            <h4 class="modal-title" id="exampleModalLabel">
+                @Model.Title
+            </h4>
+            @if (Model.LibraryTypeId == (byte)Enums.LibraryType.Design)
+            {
+                <hr style="margin: 7px 0px;" />
+                <p style="font-size: 14px;line-height: 22px;padding-bottom: 5px;">
+                    <b>Layouts:</b>
+                    @{
+                        var libraryFile = Model.LibraryFileDtos.Where(x => x.LibraryLayoutTypeId.HasValue).ToList();
+                        var v = string.Join(", ", libraryFile.Select(x => x.LibraryLayoutType.Name));
+                    }
+                    @v
+                </p>
+            }
+            <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                <img src="~/images/close-black.png" />
+            </button>
+            @if (!string.IsNullOrEmpty(Model.Author))
+            {
+                <div class="author">
+                    <span style="font-size:11px;text-transform: capitalize;">Author: <span class="color-black">@Model.Author</span></span>
+                </div>
+            }
+            <div class="date-txt d-flex flex-wrap justify-content-between" style="margin-top:10px">
+                <span><b>Created Date:</b> <span class="color-black">@Model.CreatedDate</span></span>
+                <span><b>Last Modified:</b> <span class="color-black">@Model.ModifyDate</span></span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.LibraryTechnologiesComma))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">Technology:</b> <span class="color-black">@Model.LibraryTechnologiesComma</span></span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.LibraryIndustriesComma))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">Industry:</b> <span class="color-black">@Model.LibraryIndustriesComma</span></span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.Version))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">Version:</b> @Model.Version</span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.TLName))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">TL Name:</b> @Model.TLName</span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.BAName))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">BA Name:</b> @Model.BAName</span>
+                </div>
+            }
+            <div class="desc-text-box style-11">
+                <div style="padding: 0px;">
+                    <p>@Model.Description</p>
+                </div>
+
+            </div>
+            <div class="col-md-12" style="padding: 0px;">
+                @if (CurrentUser.Uid == Model.AddedBy)
+                {
+                    <div class="pull-right">
+                        @*<span class="fa fa-pencil-square-o" style="color: #e18f00;"></span>*@
+                        @Html.ActionLink("Edit", "AddEdit", "LibraryManagement", new { Guid = Model.KeyId }, new { Class = "Link", target = "_blank" })
+                    </div>
+                }
+            </div>
+
+            @if (Model.LibraryFileDtos != null && Model.LibraryFileDtos.Count > 0)
+            {
+                int i = 0;
+                <hr />
+                <div class="popup-dtl-thumb-outer style-11">
+
+
+                    @*@if (Model.LibraryTypeId == (byte)Enums.LibraryType.Website ||
+                Model.LibraryTypeId == (byte)Enums.LibraryType.Design ||
+                Model.LibraryTypeId == (byte)Enums.LibraryType.MobileApp)*@
+                    @{
+                        List<LibraryFileDto> images = null;
+                        List<LibraryFileDto> others = null;
+
+                        images = Model.LibraryFileDtos.Where(lf => Common.ImageExtensions.
+                                Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                        if (Model.LibraryTypeId == (byte)Enums.LibraryType.Design)
+                        {
+                            others = Model.LibraryFileDtos.Where(lf => !Common.ImageExtensions.
+                                                Contains(System.IO.Path.GetExtension(lf.PSDFilePath.ToLower()))).ToList();
+                        }
+                        else
+                        {
+                            others = Model.LibraryFileDtos.Where(lf => !Common.ImageExtensions.
+                                                Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                        }
+                        if (images != null)
+                        {
+                            <ul class="d-flex flex-wrap popup-dtl-thumb">
+                                @foreach (var fileDto in images)
+                                {
+                                    string tempImage = "images/no-image.jpg";
+                                    if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                    {
+                                        tempImage = fileDto.FilePath;
+                                    }
+                                    <li class="file-thumbnail @(i==0 ? "active" : "")" data-image="@tempImage">
+                                        <div class="dtl-thumb-img">
+                                            <img src="@tempImage" alt="">
+                                        </div>
+                                        <a class="lnkDownload" href="javascript:void(0);" data-id="@fileDto.Id">
+                                            @if (fileDto?.LibraryLayoutType?.Name != null)
+                                            {
+                                                @fileDto.LibraryLayoutType.Name;
+                                            }
+                                            else
+                                            {
+                                                <span>Download</span>
+                                            }
+
+                                        </a>
+                                    </li>
+                                    i++;
+                                }
+                            </ul>
+                        }
+
+
+                        if (others != null)
+                        {
+                            @foreach (var fileDto in others)
+                            {
+                                string extension = System.IO.Path.GetExtension(fileDto.FilePath.ToLower());
+                                string tempImage = "images/no-image.jpg";
+                                if (Common.ImageExtensions.Contains(extension))
+                                {
+                                    tempImage = "images/no-image.jpg";
+                                }
+                                else if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(fileDto.FilePath.ToLower())) && !string.IsNullOrWhiteSpace(extension))
+                                {
+                                    tempImage = string.Format("{0}{1}{2}", "images/FileTypes/", extension.Remove(0, 1), ".png");
+                                }
+                                if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                {
+                                    @if (Common.ImageExtensions.Contains(System.IO.Path.GetExtension(fileDto.FilePath.ToLower())))
+                                    {
+                                        tempImage = string.Format("{0}{1}{2}", SiteKey.DomainName, "", fileDto.FilePath);
+                                    }
+                                }
+                                if (Model.LibraryTypeId != (byte)Enums.LibraryType.Design)
+                                {
+                                    <div class="file-name-bottom">
+                                        <a class="lnkDownload" href="javascript:void(0);" data-id="@fileDto.Id">
+                                            <img src="@tempImage" alt="" class=""> @fileDto.FileShortName
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    string psdExtension = System.IO.Path.GetExtension(fileDto.PSDFilePath.ToLower());
+                                    string psdTempImage = "images/no-image.jpg";
+                                    if (fileDto.PSDFilePath != null)
+                                    {
+                                        if (Common.ImageExtensions.Contains(psdExtension))
+                                        {
+                                            psdTempImage = "images/no-image.jpg";
+                                        }
+                                        else if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(fileDto.PSDFilePath.ToLower())) && !string.IsNullOrWhiteSpace(psdExtension))
+                                        {
+                                            psdTempImage = string.Format("{0}{1}{2}", "images/FileTypes/", extension.Remove(0, 1), ".png");
+                                        }
+                                        if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.PSDFilePath)))
+                                        {
+                                            @if (Common.ImageExtensions.Contains(System.IO.Path.GetExtension(fileDto.PSDFilePath.ToLower())))
+                                            {
+                                                psdTempImage = string.Format("{0}{1}{2}", SiteKey.DomainName, "", fileDto.PSDFilePath);
+                                            }
+                                        }
+                                        <div class="file-name-bottom">
+                                            <a class="lnkDownload" href="javascript:void(0);" data-id="@fileDto.Id">
+                                                <img src="@psdTempImage" alt="" class="">@fileDto.PsdFileShortName
+                                            </a>
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    @*else
+                {
+                    @foreach (var libraryFileDto in Model.LibraryFileDtos)
+                    {
+                        string extension = System.IO.Path.GetExtension(libraryFileDto.FilePath);
+
+                        string tempImage = "document.svg";
+                        @if (new List<string> { ".jpg", ".png", ".jpeg", ".gif" }.Contains(System.IO.Path.GetExtension(libraryFileDto.FilePath)))
+                        {
+                            tempImage = string.Format("{0}{1}{2}", SiteKey.DomainName, "", libraryFileDto.FilePath);
+                        }
+                        else if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(libraryFileDto.FilePath)) && !string.IsNullOrWhiteSpace(extension))
+                        {
+                            tempImage = string.Format("{0}{1}{2}", "images/FileTypes/", extension.Remove(0, 1), ".png"); ;
+                        }
+                        <li class="file-thumbnail @(i==0 ? "active" : "")" data-image="@tempImage">
+                            <div class="dtl-thumb-img">
+                                <img src="@tempImage" alt="">
+                            </div>
+                            <a class="lnkDownload" href="javascript:void(0);" data-id="@libraryFileDto.Id">
+                                Download
+                            </a>
+                        </li>
+                        i++;
+                    }
+                }*@
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@*<script src="~/owlcarousal/js/owl.carousel.min.js"></script>*@
+@*<script src="~/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>*@
+
+
+<script>
+    $(document).ready(function () {
+        $(".file-thumbnail").click(function () {
+            var image = $(this).data("image");
+            //console.log(image);
+            $(".main-image").attr("src", image);
+            $(".file-thumbnail").removeClass("active");
+            $(this).addClass("active");
+        })
+
+        $('.btnBannerPreview1').on('click', function () {
+            $('#modalForLayoutImage').fadeIn();
+            var imgPath = $(this).find('.bannerImage1').attr("src");
+            $('#modalForLayoutImagePreviewImage').attr("src", imgPath);
+        });
+        $('.close').on('click', function () {
+            $('#modalForLayoutImage').fadeOut("slow");
+        });
+    });
+</script>

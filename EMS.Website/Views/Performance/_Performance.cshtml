@@ -1,0 +1,397 @@
+﻿@model PerformanceDto
+@await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "User Performance" })
+<style>
+    #modal-performance-detail .modal-body {
+        padding: 0px 15px; /*to remove padding on Employee Activity Report page */
+    }
+    #modal-performance-detail .modal-header {
+        border-bottom: none; /*to remove border bottom on Employee Activity Report page when this page opens as popup */
+    }
+</style>
+
+<div class="modal-body">
+<div class="performace-block">
+    <div class="row performace-col-outer">
+        <div class="col-sm-12">
+            <div class="section-title">
+                <h2>Personal Information</h2>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Employee Name</label>
+                        <p>@Model.Name</p>
+                        <i class="fa fa-user"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Employee Code</label>
+                        <p>@Model.EmployeeCode</p>
+                        <i class="fa fa-code"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Position</label>
+                        <p>@Model.Position</p>
+                        <i class="fa fa-magic"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Department</label>
+                        <p>@Model.DepartmentName</p>
+                        <i class="fa fa-building"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Date of Joining</label>
+                        <p>@Model.DateOfJoining</p>
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Reporting Person</label>
+                        <p>@Model.ReportingPerson</p>
+                        <i class="fa fa-user-secret"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Phone No.</label>
+                        <p>@Model.PhoneNumber</p>
+                        <i class="fa fa-mobile"></i>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="emp-pro-col">
+                        <label>Address</label>
+                        <p>@Model.Address</p>
+                        <i class="fa fa-map-marker"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row performace-col-outer">
+        <div class="col-sm-12">
+            <div class="section-title">
+                <h2>Activity Information</h2>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="row emp-info-col-outer">
+                <div class="col-lg-3 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Organization Revenue</h3>
+                                <div class="emp-info">
+                                    <label>No. of Working Days in Duration</label>
+                                    <p>
+                                        <a href=@Url.Action("GetDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,activityDetail="All" })
+                                           data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfWorkingDays</a>
+                                    </p>
+                                </div>
+                                <div class="emp-info">
+                                    <label>Paid Days</label>
+                                    @if (Model.NoOfTotalWorkingDays > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,activityDetail="Paid" })
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfTotalWorkingDays</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>Free Days</label>
+                                    @if (Model.NoOfFreeDays > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,activityDetail="Free" })
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfFreeDays</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Client Feedbacks</h3>
+                                <div class="emp-info">
+                                    <label>Appreciation Received</label>
+                                    @if (Model.Appreciation > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetAppraiseDetail",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.Appreciation</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>Complaint Received</label>
+                                    @if (Model.NoOfComplaints > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetComplaintDetail",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfComplaints</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Project Performance</h3>
+                                <div class="emp-info">
+                                    <label>No. of Project Working</label>
+                                    @if (Model.NoOfProjectWorking > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetProjectsDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfProjectWorking</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>No. of Project Closed</label>
+                                    @if (Model.NoOfUniqueProjectClosed > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetProjectClosed",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,type="unique"})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfUniqueProjectClosed</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>No. of Project Closed ( Non -Unique )</label>
+                                    @if (Model.NoOfProjectClosed > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetProjectClosed",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,type="all"})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.NoOfProjectClosed</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Org. Improvement</h3>
+                                <div class="emp-info">
+                                    <label>Organizational Improvement</label>
+                                    @if (Model.OrgImprovements > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetImprovements",
+                               new {uid=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,typeId=Enums.ImprovementType.Organization})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.OrgImprovements</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>Individual Improvement</label>
+                                    @if (Model.IndividualImprovements > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetImprovements",
+                                            new {uid=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,typeId=Enums.ImprovementType.Individual})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.IndividualImprovements</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Punctuality</h3>
+                                <div class="emp-info">
+                                    <label>Urgent Leaves</label>
+                                    @if (Model.UrgentLeaves > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetLeaves",new {uid=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,typeId=Enums.LeaveType.Urgent})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">
+                                                @Model.UrgentLeaves @(Model.UrgentLeaves == 1 ? "Day" : "Days")
+                                            </a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>Normal Leaves</label>
+                                    @if (Model.NormalLeaves > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetLeaves",new {uid=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,typeId=Enums.LeaveType.Normal})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">
+                                                @Model.NormalLeaves @(Model.NormalLeaves == 1 ? "Day" : "Days")
+                                            </a>
+                                        </p>
+
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>Tentative Arrival Time</label>
+                                    @if (!string.IsNullOrWhiteSpace(Model.TentativeArrivalTime))
+                                    {
+                                        <p>@Model.TentativeArrivalTime</p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Sales Involvement</h3>
+                                <div class="emp-info">
+                                    <label>No. of Estimate Given</label>
+                                    @if (Model.EstimateGiven > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetPerformanceEstimateDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,type="all"})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.EstimateGiven</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                                <div class="emp-info">
+                                    <label>No. of Estimate Awarded</label>
+                                    @if (Model.EstimateAwarded > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetPerformanceEstimateDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate,type="converted"})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.EstimateAwarded</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Additional Support</h3>
+                                <div class="emp-info">
+                                    <label>Additional Support Recevied</label>
+                                    @if (Model.AdditionalSupportReceived > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetPerformanceAdditionalSupportDetails",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.AdditionalSupportReceived</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>Seniority</h3>
+                                <div class="emp-info">
+                                    <label>Years In Company</label>
+                                    <p>@Model.YearsInCompany</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="emp-info-col">
+                                <h3>TO-DO</h3>
+                                <div class="emp-info">
+                                    <label>Pending TO-DO Assignments</label>
+                                    @if (Model.Assignments > 0)
+                                    {
+                                        <p>
+                                            <a href=@Url.Action("GetAssignment",new {id=Model.Uid,startDate=Model.StartDate,endDate=Model.EndDate})
+                                               data-target="#modal-perf-extra-detail" data-backdrop="static" data-toggle="modal" class="btn-link">@Model.Assignments</a>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

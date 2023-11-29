@@ -1,0 +1,61 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model ProductLandingIndexDto
+@{
+    ViewBag.Title = "Product Landing Page List";
+}
+
+@section styles{
+    <style>
+        form label {
+            font-weight: 600;
+        }
+
+        .btn-sm {
+            padding: 3px 5px;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+
+        @{ Html.RenderPartial("_Notification"); }
+
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Product Landing Page List</h2>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-md-2 col-sm-6 pull-right">
+                        <a class="btn btn-custom btn-block" href="@Url.Action("addedit")">Add New</a>
+                    </div>
+                    <div class="col-md-2 col-sm-6 pull-right">
+                        <button type="button" id="btnSearch" class="btn btn-custom btn-block">Search</button>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 pull-right">
+                        @Html.DropDownList("Status", Model.ProductLandingPageStatusList, "All Status", htmlAttributes: new { @class = "form-control" })
+                    </div>
+
+                    @if (Model.IsMainTeamUser)
+                    {
+                        <div class="col-md-3 col-sm-6 pull-right">
+                            @Html.DropDownList("PMId", Model.PMUserList, "All PM", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <table id="grid-requestList" class="table table-stats"></table>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@section scripts{
+    <script src="~/bundles/ProductLandingPage/index"></script>
+}

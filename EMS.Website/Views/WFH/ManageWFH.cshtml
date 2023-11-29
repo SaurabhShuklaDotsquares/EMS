@@ -1,0 +1,347 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.WFHActivityDto
+@using EMS.Core
+
+
+@{
+    ViewBag.Title = "Manage WFH";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string returnview = ((bool)ViewBag.ReturntoListView) ? "index" : "calendar";
+    var isEmployee = (@Model.selectEmployeeList != null ? @Model.selectEmployeeList.Count > 1 ? 1 : 0 : 0);
+}
+
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .no-padding {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .lbldayCountmessage {
+        /*background-color:#fcfae9;
+                border:1px #e9e6c7 solid;*/
+        color: red;
+        display: block;
+        font-weight: 200 !important;
+        padding: 5px 15px 5px 25px;
+        position: relative;
+    }
+
+        .lbldayCountmessage::before {
+            content: "\f0a9";
+            font-family: 'FontAwesome';
+            position: absolute;
+            color: red;
+            left: 5px;
+            top: 5px;
+        }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Manage WFH</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform" id="WFHform">
+                        @using (Html.BeginForm("ManageWFH", "WFH", FormMethod.Post, new { id = "Form1" }))
+                        {
+                            var attendId = SiteKey.AttendenceId.Split(',');
+                            @Html.HiddenFor(x => x.WFHId)
+                            @Html.HiddenFor(x => x.userId)
+
+                            if ((RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM ||
+                            CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                            || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM) && isEmployee == 1)
+                            {
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="col-md-6">
+                                            <label>Is this your own WFH?</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <b>
+                                                <label>
+                                                    @Html.CheckBoxFor(x => x.IsSelfWFH) @CurrentUser.Name
+                                                </label>
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                            {
+                                <div class="row dvuser" data-userId="@CurrentUser.Uid">
+                                    <div class="col-md-4">
+                                        <div class="col-md-6">
+                                            <label>Project Manager:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(x => x.PMid, (List<SelectListItem>)ViewBag.PMList, "-Select-", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            if ((RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                            || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+                            || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM) && isEmployee == 1)
+                            {
+                                <div class="row dvuser" data-userId="@CurrentUser.Uid">
+                                    <div class="col-md-4">
+                                        <div class="col-md-6">
+                                            <label>Employee Name:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(x => x.Uid, new SelectList(Model.selectEmployeeList, "Value", "Text"), null, new { @class = "form-control" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label for="IsHalf">Only for Half Day?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <b>@Html.CheckBoxFor(x => x.IsHalf) Half Day</b>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row hide" id="workingHalf">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>Select Half</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.HiddenFor(x => x.FirstHalf)@Html.HiddenFor(x => x.SecondHalf)
+                                        @Html.DropDownListFor(x => x.HalfValue, new SelectList(Model.HalfType, "Value", "Text"), null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 ">
+                                    <div class="col-md-6">
+                                        <label>Start Date:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-3">
+                                        <label> End Date:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.EndDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row dvleavestatus1">
+                                <div class="col-md-2">
+                                    <div class="col-md-12">
+                                        <label>Comment:</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    @Html.TextAreaFor(x => x.Comment, 0, 0, new { @class = "form-control", @style = "height:60px" })
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="col-md-12">
+                                        <label>Want to Cancel?</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <b>@Html.CheckBoxFor(l => l.IsCancel) Cancel</b>
+                                </div>
+                            </div>
+                            @*if ((Model.WFHId > 0) && (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId != (int)Enums.UserRoles.PM || CurrentUser.RoleId != (int)Enums.UserRoles.PMO
+                        || !RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+                        || !RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+                        ) && isEmployee == 1)
+                        {
+                        <div class="row">
+                        <div class="col-md-2">
+                        <div class="col-md-12">
+                        <label>Want to Cancel?</label>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                        <b>@Html.CheckBoxFor(l => l.IsCancel) Cancel</b>
+                        </div>
+                        </div>
+
+                        }*@
+
+                            if ((RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                                    || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+                                    || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM || (CurrentUser.RoleId == (int)Enums.UserRoles.UKPM && Model.Uid != CurrentUser.Uid)) && isEmployee == 1)
+                            {
+                                if (Model.IsAllowWFH)
+                                {
+                                    <div class="row dvleavestatus">
+                                        <div class="col-md-2">
+                                            <div class="col-md-12">
+                                                <label>Request Status:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="col-md-2 no-padding">
+                                                <b>
+                                                    @Html.RadioButtonFor(l => l.Status, (int)Enums.WFHStatus.Pending, Model.Status == (int)Enums.WFHStatus.Pending ? new { @checked = "Checked" } : null)
+                                                    @Enum.GetName(typeof(Enums.WFHStatus), Enums.WFHStatus.Pending)
+                                                </b>
+                                            </div>
+                                            <div class="col-md-2 no-padding">
+                                                <b>
+                                                    @Html.RadioButtonFor(l => l.Status, (int)Enums.WFHStatus.Approved, Model.Status == (int)Enums.WFHStatus.Approved ? new { @checked = "Checked" } : null)
+                                                    @Enum.GetName(typeof(Enums.WFHStatus), Enums.WFHStatus.Approved)
+                                                </b>
+                                            </div>
+                                            <div class="col-md-2 no-padding">
+                                                <b>
+                                                    @Html.RadioButtonFor(l => l.Status, (int)Enums.WFHStatus.Cancelled, Model.Status == (int)Enums.WFHStatus.Cancelled ? new { @checked = "Checked" } : null)
+                                                    @Enum.GetName(typeof(Enums.WFHStatus), Enums.WFHStatus.Cancelled)
+                                                </b>
+                                            </div>
+                                            <div class="col-md-2 no-padding">
+                                                <b>
+                                                    @Html.RadioButtonFor(l => l.Status, (int)Enums.WFHStatus.UnApproved, Model.Status == (int)Enums.WFHStatus.UnApproved ? new { @checked = "Checked" } : null)
+                                                    @Enum.GetName(typeof(Enums.WFHStatus), Enums.WFHStatus.UnApproved)
+                                                </b>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row dvleavestatus1">
+                                        <div class="col-md-2">
+                                            <div class="col-md-12">
+                                                <label>Any Comment:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            @Html.TextAreaFor(x => x.AnyComment, 0, 0, new { @class = "form-control", @style = "height:60px" })
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    @if (!(Model.WFHId > 0 && (Model.Status == (int)Enums.WFHStatus.Cancelled || Model.Status == (int)Enums.WFHStatus.Approved) && (Model.Uid == CurrentUser.Uid)))
+                                    {
+                                        <a href="@Url.Action(returnview,"wfh")" class="btn btn-custom">Cancel</a>
+                                        <button type="submit" class="btn btn-custom  margin-right10" id="btnSave" name="Save">Save</button>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action(returnview,"wfh")" class="btn btn-custom">Back</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@*@{
+
+        var domain = SiteKey.DomainName;
+        Html.RenderPartial("_Modal", new Modal { ID = "modal-view-leave-balance", AreaLabeledId = "modal-view-leave-balance-label", Size = Enums.ModalSize.Medium });
+    }*@
+
+@section scripts
+    {
+    <script type="text/javascript">
+        var domain = '@(SiteKey.DomainName)';
+        var currentuserid = @CurrentUser.Uid;
+        var isEdit = @Model.WFHId== null || @Model.WFHId== 0 ? false : true;
+        var isRoleUKPM = @((CurrentUser.RoleId == (int)(int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)(int)Enums.UserRoles.UKBDM || CurrentUser.RoleId == (int)(int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)(int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)(int)Enums.UserRoles.HRBP) ? 1 : 0);
+        var isRoleUKAUPM = @((CurrentUser.RoleId == (int)(int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)(int)Enums.UserRoles.UKBDM || CurrentUser.RoleId == (int)(int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)(int)Enums.UserRoles.AUPM || CurrentUser.RoleId == (int)(int)Enums.UserRoles.PMOAU) ? 1 : 0);
+        var isAllowedBackDate = @(((CurrentUser.RoleId == (int)(int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)(int)Enums.UserRoles.PM || RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM
+        || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+        ) && isEmployee == 1) ? 1 : 0);
+        var isPmHrTl = @(((CurrentUser.RoleId == (int)(int)Enums.UserRoles.PM || RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId)
+        || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_AccountsandAdmin_DesignationIds.Contains(CurrentUser.DesignationId)
+        || RoleValidator.TL_HR_DesignationIds.Contains(CurrentUser.DesignationId)
+        ) && isEmployee == 1) ? 1 : 0);
+    </script>
+    <script src="~/Scripts/CustomJS/WFH/ManageWFH.js" asp-append-version="true"></script>
+}
+
+
+

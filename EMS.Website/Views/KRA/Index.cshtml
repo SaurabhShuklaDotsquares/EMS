@@ -1,0 +1,130 @@
+﻿@model EMS.Dto.KraDto
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .menuaccuss_editable {
+        margin-top: 20px;
+    }
+
+    .customCombobox {
+        width: 200px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        align-content: center;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div class="timesheet-page full-wdth clearfix">
+            <div id="KRAMessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+            <div id="MessageDiv"></div>
+            <h2> Manage KRA </h2>
+            <div class="validation-summary"></div>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form checkList-outer dis-block clearfix">
+                        @using (Html.BeginForm("SaveRecords", "KRA", FormMethod.Post, new { @id = "form1" }))
+                        {
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Role Category:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => model.RoleCateGoryId, new SelectList(Model.roleCategoryList, "Id", "Text"), "-Select-", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                        <span asp-validation-for="RoleCateGoryId" class="text-danger validRoleCate"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Role Name:</label>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        @Html.DropDownList("RoleId", Enumerable.Empty<SelectListItem>(), "--Select --", new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true" })
+                                        <span asp-validation-for="RoleId" class="text-danger validRole"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Designation :</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownList("DesignationId", Enumerable.Empty<SelectListItem>(), new { @class = "form-control", @data_msg_required = "* Required", @data_rule_required = "true", Text = "-Select-", Value = "0" })
+                                        <span asp-validation-for="DesignationId" class="text-danger validDesi"></span>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="card-body table-responsive">
+                                    <table id="grid-title" class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>S N.</th>
+                                                <th>Title</th>
+                                                <th>Display Order </th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodykra">
+
+                                            @{
+                                                var i = 0;
+                                            }
+                                            <tr id="trlen_@i">
+                                                <td>1</td>
+                                                <td>
+                                                    <input type="text" name="Title_@i" class="form-control" id="Title_@i" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@i"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="KRAOrderno_@i" class="form-control" id="KRAOrderno_@i" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@i"></span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn" id="addmore" href="javascript:void(0);">Add More</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="@Url.Action("ManageUser","User")" class="btn btn-custom pull-right">Cancel</a>
+                                    <button type="button" class="btn btn-custom pull-right margin-right10" name="Save" id="btn-submit">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/KRA/KRA.js">
+    </script>
+}

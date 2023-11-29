@@ -1,0 +1,41 @@
+﻿@model EMS.Web.Models.Others.Modal
+@{
+    Layout = null;
+}
+
+<div aria-hidden="true" aria-labelledby="@Model.AreaLabeledId" role="dialog" tabindex="-1" id="@Model.ID" class="modal fade">
+    <div class="modal-dialog @Model.ModalSizeClass">
+
+        <div style="position: relative; background-color: #fff; -webkit-background-clip: padding-box; background-clip: padding-box; border: 1px solid #999; border: 1px solid rgba(0,0,0,.2); border-radius: 6px; outline: 0;-webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5); box-shadow: 0 3px 9px rgba(0,0,0,.5);">
+            <div class="modal-body library-detail-popup">
+                <div class="detail-cont flex-wrap">
+
+                    <div class="dt-desc">
+                        @if (!string.IsNullOrWhiteSpace(Model.ModelHeading))
+                        {
+                            <h4 class="modal-title">
+                                @Model.ModelHeading
+                            </h4>
+                            <hr />
+                        }
+
+                        <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                            <img src="~/images/close-black.png" />
+                        </button>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12 modal-content-message" style="padding: 10px; margin-left: 10px;min-height: 50px;word-wrap: break-word;">
+                                 <!--message here-->                             
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

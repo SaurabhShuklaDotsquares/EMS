@@ -1,0 +1,63 @@
+﻿@model StudyDocumentsUnapprovedReasonDto
+@{
+    Layout = null;
+}
+
+<div class="modal-body library-detail-popup">
+    <div class="detail-cont flex-wrap">
+
+        <div class="row form-group" style="margin:0px">
+            <div class="col-sm-11">
+
+                <div id="validation-summary-unapprovedreason"></div>
+
+            </div>
+        </div>
+
+        <div class="dt-desc">
+            <h4 class="modal-title" id="exampleModalLabel">
+                Reason for un-approved
+            </h4>
+            <hr />
+
+            <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                <img src="~/images/close-black.png" />
+            </button>
+
+            <div class="ems-form create-form-outer-box">
+                <form id="frmunapprovedreason" asp-action="ApproveStudyDocuments" asp-controller="StudyDocuments" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+
+                    <input type="hidden" id="StudyDocumentIds" name="StudyDocumentIds" value="" />
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-10">
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Reason</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea asp-for="UnapprovedReason" rows="3" class="form-control" style="height:70px;width: 400px;"></textarea>
+                                    <span asp-validation-for="UnapprovedReason" class="text-red"></span>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="row">
+                                <div class="col-md-5">
+                                </div>
+                                <div class="col-sm-5">
+                                    <button type="submit" class="btn btn-custom">Submit</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

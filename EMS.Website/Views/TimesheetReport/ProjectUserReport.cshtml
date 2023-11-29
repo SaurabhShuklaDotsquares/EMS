@@ -1,0 +1,159 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core;
+
+@section styles{ 
+    <style>
+        /*tr.alternate td { background: #f7efef; }*/
+        tr.alternate td { background: #fff; }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{await Html.RenderPartialAsync("_Notification");}
+
+        <div class="row margin-bottom20">
+            <div class="col-sm-3">
+                <h2>Time Sheet Report</h2>
+            </div>
+            <div class="col-sm-9">
+                <div class="row">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                @Html.TextBox("txt_dateFrom", null, new { @class = "form-control dtfrom", @placeholder = "From Date", @readonly = "readonly" })
+                                <span class="input-group-addon clrFilterDate" style="cursor:pointer;border-radius: 0;">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                @Html.TextBox("txt_dateTo", null, new { @class = "form-control dtTo", @placeholder = "TO Date", @readonly = "readonly" })
+                                <span class="input-group-addon clrFilterDate" style="cursor:pointer;border-radius: 0;">
+                                    <i class="fa fa-close"></i>
+                                </span>
+                            </div>
+                        </div>
+                        if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                        {
+                            <div class="col-sm-2">
+                                @Html.DropDownList("ddl_Pm", ViewBag.pmList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        }
+                        <div class="col-sm-2">
+                            @Html.DropDownList("ddl_project", ViewBag.ProjectList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                        if (CurrentUser.RoleId != (int)Enums.UserRoles.PMO && CurrentUser.RoleId != (int)Enums.UserRoles.UKPM && CurrentUser.RoleId != (int)Enums.UserRoles.UKBDM)
+                        {
+                            <div class="col-sm-2">
+                                @Html.DropDownList("ddl_virtualdeveloper", ViewBag.virtualDeveloperList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                            </div>
+                        }
+                        <div class="col-sm-2">
+                            @Html.DropDownList("ddl_user", ViewBag.UserList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                        if (CurrentUser.RoleId != (int)Enums.UserRoles.HRBP)
+                        {
+                            <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                        }
+                    }
+                </div>
+            </div>
+            @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+            {
+                <div class="col-sm-12" style="margin-top: 7px;">
+                    <div class="row">
+                        <div class="col-sm-11">
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+       
+        <div id="summary_stats" class="hidden">
+            <div class="clearfix full-wdth margin-bottom15">
+                <fieldset style="border: 1px">
+                    <legend class="actualtop">Summary</legend>
+                    <div class="dis-block" style="color: #000; border-bottom: solid 1px #fff; text-align: left;">
+                        <div class="dis-inline pull-left" style="width: 49%; ">
+                            <table id="tblDevWorkingHr" class="table table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 44%;">
+                                            Name
+                                        </th>
+                                        <th class="" width="14%" style="text-align: center;">
+                                            Total Working Hr.
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="dis-inline pull-left" style="width: 2%;">
+                            &nbsp;
+                        </div>
+                        <div id="dvbeforedetail" class="dis-inline pull-left" style="width: 49%;">
+                            <table id="tblVirDevWorkingHr" class="table table-stats">
+                                <thead>
+                                    <tr class="alternate">
+                                        <th style="width: 44%;">
+                                            Virtual Developer
+                                        </th>
+                                        <th width="14%" style="text-align: center;">
+                                            Total Working Hr.
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div style="visibility:visible !important;float: right;padding-right:27px;">
+                            <span id="btnMore" class="more showmoreless" style="width: 100%; float: right; cursor: pointer; text-decoration: underline; color: navy; border: 0px; background: none; box-shadow: none; border-radius: 0px; display: block;">More</span>
+                            <span id="btnLess" class="less showmoreless" style="width:100%;float:right;cursor:pointer;text-decoration:underline;color:navy;border:0px;background:none;box-shadow: none; border-radius: 0px; display: none;">Less</span>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div id="loading_stats" class="text-center hidden" style="height:100px;background-color:#f0f0f0;color:#000;font-size:25px;padding:25px">
+            Loading ...
+        </div>
+
+        <div class="row  margin-bottom20">
+            <div class="col-sm-7">
+                <a class="export-btn" data-href="@Url.Action("ExportProjectUserReportToExcel","TimesheetReport")" href="@Url.Action("ExportProjectUserReportToExcel","TimesheetReport")" style="display:none">
+                    <img src="content/images/excel.png" alt="" /> Export To Excel
+                </a>
+            </div>
+            <div class="col-sm-5">
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                {
+                    <div id="div_delete" style="display:none;">
+                        <input id="btn_delete" type="button" value="Delete" class="btn btn-custom pull-right orange" />
+                        <input type="hidden" value="1" id="hdn_PM" />
+                    </div>
+                }
+                <div class="workingHours" style="display:none;">
+                    <h5 class="pull-right margin-top10 margin-right10">Total Working Hours: <span id="totalWorkingHours"></span></h5>
+                </div>
+            </div>
+        </div>
+
+        <table id="grid-timesheet" class="display postable table table-stats table-condensed"></table>
+
+    </div>
+</div>
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-edit-projectuserreport", AreaLabeledId = "modal-edit-projectuserreport-label", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+    <script src="~/Scripts/datepicker/moment.js"></script>
+    <script src="~/Scripts/masked-input/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/CustomJS/projectUserReport.js" asp-append-version="true"></script>
+    <script src="~/Scripts/datepicker/jquery.inputmask.js"></script>
+    <script src="~/Scripts/datepicker/jquery.inputmask.date.extensions.js"></script>
+}

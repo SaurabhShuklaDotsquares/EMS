@@ -1,0 +1,67 @@
+﻿@model EMS.Dto.DepartmentDto
+@using EMS.Web.Models.Others
+@{
+    Layout = null;
+}
+
+<div class="cmxform addedit-department" style="width:600px;height:100%;margin-top:10%">
+    @using (Html.BeginForm("AddEditDepartment", "Department", FormMethod.Post, new { @id = "frm-department" }))
+    {
+        @Html.HiddenFor(model => model.DeptId)
+        <div class="row bg-white">
+            <div class="popup-top text-left">
+                @if (Model.DeptId == null)
+                {
+                    <h3 style="color:#fff;margin-top:15px;" class="text-center">Add Department</h3>
+                }
+                else
+                {
+                    <h3 style="color:#fff;margin-top:15px;" class="text-center">Edit Department</h3>
+                }
+            </div>
+            <div class="popup-container" id="popup-container">
+                <div id="department-validation-summary"></div>
+                <div class="form-horizontal">
+                    <p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.Name)
+                            </div>
+                            <div class="col-md-7">
+                                @Html.TextBoxFor(model => model.Name,  null, new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                    </p>
+                    <p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.Deptcode)
+                            </div>
+                            <div class="col-md-7">
+                                @Html.TextBoxFor(model => model.Deptcode,  null, new { @class = "form-control", @style = "text-transform:uppercase", @maxlength = "5" })
+                            </div>
+
+                        </div>
+                    </p>
+                    @if (Model.DeptId == null)
+                    {
+                        <p>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.IsActive)
+                                </div>
+                                <div class="col-md-1">
+                                    @Html.CheckBoxFor(model => model.IsActive)
+                                </div>
+                            </div>
+                        </p>
+                    }
+                </div>
+
+                @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonText = "Submit", CancelButtonText = "Cancel", SubmitButtonID = "btn-submit" })
+
+            </div>
+        </div>
+    }
+</div>

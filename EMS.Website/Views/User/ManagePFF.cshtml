@@ -1,0 +1,55 @@
+﻿@using EMS.Core
+@section styles{
+    <link type="text/css" href="~/Content/css/toggle-switch.css" />
+    <link type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
+    <link type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" />
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="dis-block clearfix">
+                    <h2 class="pull-left">
+                        Employees for PF Account
+                    </h2>
+
+                    @Html.Hidden("hdnIsPMPMO", CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                </div>
+                <div class="box marR7 flotR margin-top20" id="div_verified">
+
+                    <button type="button" class="btn btn-custom pull-right orange" id="btn_search">Search</button>
+                    <div class="wdth2 margin-right10 pull-right">
+                        <input id="txtusername" placeholder="Enter Name.." class="pull-right margin-right10 form-control" style="height:36px;" />
+                    </div>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body ">
+                    <section id="no-more-tables">
+                        <table id="grid-manageuser" class="display postable table table-bordered table-striped table-condensed"></table>
+                    </section>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+    {
+    <script src="~/bundles/jquery"></script>
+    <script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/jqueryval"></script>
+    <script src="~/Scripts/additional-methods.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/global.js"></script>
+    <script src="~/bundles/otherjs"></script>
+
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+    <script src="@(SiteKey.DomainName)Scripts/CustomJS/managepff.js" asp-append-version="true"></script>
+}

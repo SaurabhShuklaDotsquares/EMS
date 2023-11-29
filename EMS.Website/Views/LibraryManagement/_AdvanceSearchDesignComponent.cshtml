@@ -1,0 +1,68 @@
+﻿@model LibraryManagementDto
+
+@if (Model.libraries != null && Model.libraries.Count > 0)
+{
+    <div class="sub-heading-lib d-flex flex-wrap justify-content-between align-items-center padding-top20 padding-bottom15">
+        <h3>Search Results</h3>
+        @if (Model.libraryManagementSearchFilterDto == null || (Model.libraryManagementSearchFilterDto != null &&
+      Model.libraryManagementSearchFilterDto.KeyId == null || Model.libraryManagementSearchFilterDto.KeyId == Guid.Empty))
+        {
+            <span class="tooltip">
+                <button class="btn btn-primary library-top-copylink" id="CopyLink">
+                    <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                    <i class="glyphicon glyphicon-link"></i> Copy Link
+                </button>
+            </span>
+        }
+    </div>
+
+    if (Model.libraries.Count > 0)
+    {
+        <div class="listing-sec">
+            @foreach (var library in Model.libraries)
+            {
+                <div class="SearchFile lib-col">
+                    <div class="cont-lib">
+                        <h4>@library.Title</h4>
+                        <p>@library.Description</p>
+
+                        @*<div class="bannerbottom-row">
+                            <p>
+                                @if (!string.IsNullOrEmpty(library.LibraryTechnologiesComma))
+                                {
+                                    <span><b style="color:#e18f00">Technology:</b> @library.LibraryTechnologiesComma</span><br />
+                                }
+                                @if (!string.IsNullOrEmpty(library.Version))
+                                {
+                                    <span><b>Version:</b>  @library.Version</span><br />
+                                }
+                                <b>Created Date:</b> @library.CreatedDate
+                                @if (library.LibraryTypeId == (byte)Enums.LibraryType.Component && library.IntegrationHours.HasValue)
+                                {
+                                    <br /><b>Integration Time (In Hrs):</b> @library.IntegrationHours
+                                }
+                            </p>
+                        </div>*@s
+                        @if (library.LibraryFileDtos.Count > 0)
+                        {
+                            <div class="cont-lib-btm d-flex flex-wrap justify-content-between">
+                                @foreach (var libraryFileDto in library.LibraryFileDtos)
+                                {
+                                    <a class="@libraryFileDto.FileImage lnkDownloadRarOrZip color-orange download-link" href="javascript:void(0);" data-id="@libraryFileDto.Id">
+                                        <img src="~/images/@libraryFileDto.FileImage" />
+                                        Download @libraryFileDto.FileTypeName File
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    <h3>Search Results</h3>
+    <span>No libraries found</span>
+}

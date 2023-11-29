@@ -1,0 +1,339 @@
+﻿@model StudyDocumentsSearchResultDto
+@{
+    Layout = null;
+}
+
+<style>
+    /*-------Detail PopUp--------*/
+    .detail-popup {
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: absolute;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    .detail-overlay {
+        background-color: rgba(0,0,0,0.3);
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 8000;
+    }
+
+    .detail-popupin {
+        margin: 118px auto 0;
+        max-width: 1120px;
+        width: 100%;
+    }
+
+    .detail-cont {
+        position: relative;
+    }
+
+    .modal-content {
+        box-shadow: 18px 18px 114px 0px rgba(0,0,0,0.06);
+        border-radius: 0;
+    }
+
+    .detail-col {
+        border: 1px solid #e8e8e8;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .detail-cont h4 {
+        /*border-bottom: 1px solid #e8e8e8;*/
+        font-size: 18px;
+        /*margin-bottom: 15px;
+                                                                                                    padding-bottom: 15px;*/
+        padding-right: 15px;
+    }
+
+    .detail-cont div.author {
+        border-bottom: 1px solid #e8e8e8;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .close-dt-btn {
+        position: absolute;
+        right: 35px;
+        top: 35px;
+    }
+
+    .dt-desc {
+        color: #707070;
+        padding: 30px 35px;
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+        .dt-desc .cont-lib-btm {
+            padding-top: 25px;
+        }
+
+        .dt-desc p {
+            line-height: 28px;
+            padding-bottom: 25px;
+        }
+
+    .date-txt {
+        font-size: 14px;
+        padding-bottom: 15px;
+    }
+
+    .color-black {
+        color: #000;
+    }
+
+    .owl-dots {
+        display: none;
+    }
+
+    .modal-body.library-detail-popup {
+        padding: 0;
+    }
+
+        .modal-body.library-detail-popup .close {
+            background-color: transparent !important;
+            border: none;
+            height: 25px;
+            width: 25px;
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            opacity: 1
+        }
+
+    .owl-prev, .owl-next {
+        background-color: rgba(255,255,255,0.5) !important;
+        border-radius: 50% !important;
+        font-size: 18px !important;
+        text-align: center !important;
+        line-height: 40px !important;
+        position: absolute !important;
+        top: 50% !important;
+        margin-top: -20px !important;
+        width: 40px !important;
+        padding: 0 !important;
+        cursor: pointer;
+    }
+
+    .owl-prev {
+        left: 10px;
+    }
+
+    .owl-next {
+        right: 10px;
+    }
+
+    .owl-theme .owl-nav {
+        margin-top: 0;
+    }
+
+    .library-detail-popup .owl-stage {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+
+    /*17-01-2020*/
+    .active-img-show-col {
+        padding: 15px;
+        justify-content: center;
+    }
+
+        .active-img-show-col .active-img-box img {
+            /*height: 430px;
+                                                                                                        width: 100%;
+                                                                                                        object-fit: cover;*/
+            max-height: 430px;
+            width: auto;
+        }
+
+    .dt-desc .desc-text-box {
+        max-height: 135px;
+        overflow-y: auto;
+        margin-bottom: 15px;
+        text-align: justify;
+        padding-right: 6px;
+    }
+
+    .popup-dtl-thumb-outer {
+        padding: 15px;
+        overflow-y: auto;
+        max-height: 250px;
+    }
+
+        .popup-dtl-thumb-outer::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+        }
+
+    .style-11::-webkit-scrollbar {
+        width: 10px;
+        background-color: #F5F5F5;
+    }
+
+    /**  STYLE 11 */
+    .style-11::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background: rgba(0,0,0,0.1);
+        border: 1px solid #ccc;
+    }
+
+    .style-11::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: linear-gradient(left, #fff, #e4e4e4);
+        border: 1px solid #aaa;
+    }
+
+        .style-11::-webkit-scrollbar-thumb:hover {
+            background: #fff;
+        }
+
+        .style-11::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(left, #22ADD4, #1E98BA);
+        }
+
+
+    .popup-dtl-thumb-outer .popup-dtl-thumb {
+        margin: 0 -12px;
+    }
+
+        .popup-dtl-thumb-outer .popup-dtl-thumb li {
+            width: 25%;
+            padding: 0 7.5px 15px;
+        }
+
+            .popup-dtl-thumb-outer .popup-dtl-thumb li .dtl-thumb-img {
+                border: 1px solid #ddd;
+                padding: 5px;
+            }
+
+                .popup-dtl-thumb-outer .popup-dtl-thumb li .dtl-thumb-img img {
+                    width: 100%;
+                    display: block;
+                    height: 65px;
+                    object-fit: cover;
+                }
+
+            .popup-dtl-thumb-outer .popup-dtl-thumb li a {
+                display: block;
+                text-align: center;
+                text-transform: capitalize;
+                padding: 5px 5px 0;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .popup-dtl-thumb-outer .popup-dtl-thumb li.active .dtl-thumb-img {
+                border: 1px solid #000;
+            }
+    /*17-01-2020*/
+    .file-thumbnail {
+        cursor: pointer;
+    }
+
+    .file-name-bottom {
+        padding-bottom: 3px;
+    }
+
+    .detail-edit {
+        background: rgba(0, 0, 0, 0) url(../images/edit.png) 0 center no-repeat;
+        color: #e18f00;
+        padding-left: 26px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .Link {
+        color: #e18f00;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="modal-body library-detail-popup">
+    <div class="detail-cont flex-wrap">
+
+        <div class="dt-desc">
+            <h4 class="modal-title" id="exampleModalLabel" style="padding-bottom: 5px;">
+                @Model.Title
+            </h4>
+
+            <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                <img src="~/images/close-black.png" />
+            </button>
+
+            @if (!string.IsNullOrEmpty(Model.AddedBy))
+            {
+                <div class="author">
+                    <span style="font-size:12px;text-transform: capitalize;">Author: <span class="color-black">@Model.AddedBy</span></span>
+                </div>
+            }
+
+            <div class="date-txt d-flex flex-wrap justify-content-between" style="margin-top:10px">
+                <span><b>Created Date:</b> <span class="color-black">@Model.AddedDate</span></span>
+                <span><b>Last Modified:</b> <span class="color-black">@Model.UpdatedDate</span></span>
+            </div>
+
+            <div class="date-txt d-flex flex-wrap justify-content-between" style="margin-top:10px">
+                <span><b>Technology:</b> <span class="color-black">@Model.Technology</span></span>
+            </div>
+
+            <div class="desc-text-box style-11">
+                <div style="padding: 0px;">
+                    <p>@Html.Raw(Model.Description)</p>
+                </div>
+
+            </div>
+
+            @if (Model.studyDocumentFiles.Any())
+            {
+                <hr />
+                <div class="popup-dtl-thumb-outer style-11" style="margin-top: -35px;">
+
+                    @{
+                        if (Model.IsApproved && Model.HasPermission)
+                        {
+                            <div class="cont-lib-btm d-flex flex-wrap">
+
+                                <table border="1" class="table" style="width:100%;">
+
+                                    @for (int i = 0; i < Model.studyDocumentFiles.Count; i++)
+                                    {
+                                        <tr>
+                                            <td style="width:10%;text-align:center;">@(i + 1)</td>
+                                            <td style="width: 90%;padding-left: 15px;"><a style="color:blue;" href='@Url.Action("OnlyView", "studydocuments", new { id = Model.KeyId, keyId = Model.studyDocumentFiles[i].KeyId })' target="_blank">@Model.studyDocumentFiles[i].DisplayName</a></td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="cont-lib-btm d-flex flex-wrap">
+                                @if (Model.IsExtend)
+                                {
+                                    <button type="button" class="clsreqtoapprove btn btn-custom btn-sm" data-keyid="@Model.KeyId">Request for Extend Access Duration</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="clsreqtoapprove btn btn-custom btn-sm" data-keyid="@Model.KeyId">Request for Access</button>
+                                }
+                            </div>
+                        }
+                    }
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

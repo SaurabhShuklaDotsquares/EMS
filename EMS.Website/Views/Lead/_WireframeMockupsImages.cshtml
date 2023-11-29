@@ -1,0 +1,108 @@
+﻿@model PagedList.Core.IPagedList<WireframeMockupsImage>
+@{
+    Layout = null;
+}
+<style>
+    .DownloadWMDoc {
+        padding: 8px 12px;
+    }
+
+    .DeleteWMDoc {
+        padding: 8px 12px;
+    }
+
+    .EditWMDoc {
+        padding: 8px 12px;
+    }
+</style>
+<div class="container full-wdth">
+
+    <div class="row">
+        @if (Model.Count > 0)
+        {
+            foreach (var estimate in Model)
+            {
+                <div class="col-md-3">
+                    <div class="thumbnail wireframe-item">
+                        <a class="colorboxGallery" title="@estimate.Title" href="@String.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", estimate.WireformMockupDoc)"> <img src="@String.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", estimate.WireformMockupDoc)" style="width:100%;height:220px" /></a>
+                        @Html.HiddenFor(x => estimate.id)
+                        <div class="caption">
+                            <span class="clearfix">@estimate.Title</span>
+                            <div class="full-wdth clearfix">
+                                @if (!String.IsNullOrEmpty(estimate.EstimateTimeinDays))
+                                {
+                                    <span class="margin-right10 pull-left"><b>Est. Time</b>: @estimate.EstimateTimeinDays</span>
+                                }
+                                @if (estimate.LeadId > 0)
+                                {
+                                    <span class="pull-left"><b>LeadId</b>: @estimate.LeadId</span>
+                                }
+                            </div>
+
+                            <span class="clearfix"><b>Tags</b>: @estimate.Tags</span>
+                            <div class="clearfix">
+                                <span class="pull-left margin-right10"><b>Created On</b>: @estimate.Created</span>
+
+                                @if (!String.IsNullOrEmpty(estimate.UploadedBy))
+                                {
+                                    <span class="pull-left"><b>(@estimate.UploadedBy)</b></span>
+                                }
+                            </div>
+                            <b></b>
+
+                        </div>
+                        <div class="clearfix">
+                            <span><a class="btn btn-custom DownloadWMDoc" href="@String.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", estimate.WireformMockupDoc)" download="@estimate.Title">Download</a></span>
+
+                            @if (estimate.Uid == CurrentUser.Uid || CurrentUser.Uid == SiteKey.AshishTeamPMUId || CurrentUser.RoleId == (int)Enums.UserRoles.PM || RoleValidator.BA_RoleIds.Contains(CurrentUser.RoleId))
+                            {
+                                <span><a href="@Url.Action("UploadDocument","Lead",new { id = estimate.id})" data-target="#modal-AddEditEstimateDocument" data-toggle="modal" class="btn btn-custom EditWMDoc">Edit</a></span>
+                            }
+
+                            @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM && CurrentUser.Uid == SiteKey.AshishTeamPMUId)
+                            {
+                                <span><button class="btn btn-custom DeleteWMDoc" data-attr="@estimate.id">Delete</button></span>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-4">
+                <div class="thumbnail">
+
+                    <div class="caption">
+                        <b>No Record to Display</b>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    <br />
+    <div id="myPager" class="pull-right">
+        <pager class="pager-container"
+               asp-action="GetWireframeMockupImages" asp-controller="Lead"
+               list="@Model" options="PagedListRenderOptions.Bootstrap4" />
+
+        @*@Html.PagedListPager(Model, page => Url.Action("GetWireframeMockupImages", new
+            {
+                humanID = ViewBag.HumanID,
+                page = page
+            }
+                                ),
+                                  new PagedListRenderOptions
+                                  {
+                                      LinkToFirstPageFormat = "<<",
+                                      LinkToPreviousPageFormat = "prev",
+                                      LinkToNextPageFormat = "next",
+                                      LinkToLastPageFormat = ">>"
+                                  }
+                                )*@
+
+    </div>
+</div>
+<script type="text/javascript" src="~/Scripts/CustomJS/Lead.js"></script>

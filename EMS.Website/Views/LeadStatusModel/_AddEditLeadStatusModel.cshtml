@@ -1,0 +1,85 @@
+﻿@model LeadStatusModelDto
+@using EMS.Web.Models.Others
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.StatusId)
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Create Lead Status" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group required">
+                    @Html.LabelFor(model => model.StatusName, htmlAttributes: new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.TextBoxFor(model => model.StatusName, htmlAttributes: new { @class = "form-control", @placeholder = "Enter Status Name", @maxlength = 300, @autocomplete = "off" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    @*<input type="hidden" name="ParentId" class="control-label" />*@
+                    @Html.LabelFor(model => model.ParentId, htmlAttributes: new { @class = "control-label" })
+                 </div>
+                </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.ParentId, Model.LeadStatusModelList, "Select Status...", new { @class = "form-control" })
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.FromEmail, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.FromEmail,  htmlAttributes: new { @class = "form-control", @placeholder = "Enter From Email", @maxlength = 100, @autocomplete = "off" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.To,  htmlAttributes: new { @class = "form-control", @placeholder = "Enter To Email", @maxlength = 1000, @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.CC, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.CC,  htmlAttributes: new { @class = "form-control", @placeholder = "Enter CC Email", @maxlength = 1000, @autocomplete = "off" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BCC, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.BCC,  htmlAttributes: new { @class = "form-control", @placeholder = "Enter BCC Email", @maxlength = 1000, @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MailContent, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.MailContent, 5, 10, new { @id = "MailContent", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+
+
+
+

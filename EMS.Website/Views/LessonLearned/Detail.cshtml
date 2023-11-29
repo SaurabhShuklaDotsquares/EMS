@@ -1,0 +1,78 @@
+﻿@model ProjectLessonDto
+@{
+    ViewBag.Title = "Lesson learned from "+ Model.ProjectName;
+}
+@section styles{
+    <style type="text/css">
+        .bg-gray {
+            background-color: #ddd;
+        }
+    </style>
+}
+<div class="full-wdth padding20">
+    <h2 class="text-upper">Lessons Learned from Project : @Model.ProjectName</h2>
+
+    @{ Html.RenderPartial("_Notification"); }
+    
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="margin-bottom20">
+                <b>Added By : </b> @Model.CreateByName <span class="text-info">(@Model.CreateDate)</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-stats">
+                    <thead>
+                        <tr>
+                            <td width="4%">S.No.</td>
+                            <td width="20%">Topic</td>
+                            <td width="19%">What Went Good?</td>
+                            <td width="19%">What Went Wrong?</td>
+                            <td width="19%">What Learned?</td>
+                            <td width="19%">What Impacted?</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var lessonsGroups = Model.LearnedLessons.GroupBy(x => x.TopicGroup).OrderBy(x => x.Key);
+
+                            foreach (var group in lessonsGroups)
+                            {
+                                int srNo = 1;
+                                <tr>
+                                    <td colspan="6" class="text-upper bg-gray"><b>@(group.FirstOrDefault()?.TopicGroupName)</b></td>
+                                </tr>
+                                foreach (var lesson in group)
+                                {
+                                    <tr>
+                                        <td>@(srNo++)</td>
+                                        <td>
+                                            @lesson.ProjectLessonTopicName
+                                        </td>
+                                        <td>
+                                            @lesson.WhatWentGood
+                                        </td>
+                                        <td>
+                                            @lesson.WhatWentBad
+                                        </td>
+                                        <td>
+                                            @lesson.WhatLearned
+                                        </td>
+                                        <td>
+                                            @lesson.WhatImpacted
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <div class="text-left margin-top20"><a href="@Url.Action("Index")" class="btn btn-custom"><i class="fa fa-chevron-left"></i> Back</a></div>
+        </div>
+    </div>
+</div>

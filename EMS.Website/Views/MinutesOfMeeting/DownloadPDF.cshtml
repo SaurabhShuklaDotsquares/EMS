@@ -1,0 +1,125 @@
+﻿@model MomMeetingDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Model.MeetingTitle</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #table-meetingDetails.table-striped > tbody > tr:nth-of-type(2n+1) {
+            background-color: #e9e9e9;
+        }
+
+        /*#table-meetingTasks.table-striped > tbody > tr:nth-of-type(2n+1) {
+            background-color: #e9e9e9;
+        }*/
+
+        #table-meetingDetails td, table-meetingTasks td {
+            padding: 10px 7px;
+        }
+
+        #table-meetingDetails, #table-meetingTasks {
+            font-size: 17px;
+        }
+
+            #table-meetingTasks, #table-meetingTasks th, #table-meetingTasks td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding-left:5px;
+            }
+                #table-meetingTasks th{
+                    background-color:black;
+                    color:white;
+                }
+
+                body {
+                    box-sizing: border-box;
+                }
+    </style>
+</head>
+<body>
+    <div>
+        <h2 style="text-align:center;">@($"Minutes of Meeting ({@Model.MeetingMasterTitle})")</h2>
+        <table id="table-meetingDetails" class="table table-striped table-no-border" style="width:100%;">
+            <tr>
+                <td style="width:17%;"><strong>Meeting Title : </strong></td>
+                <td style="width:33%;">@Model.MeetingTitle</td>
+                <td style="width:17%;"><strong>Venue : </strong></td>
+                <td style="width:33%;">@Model.VenueName</td>
+            </tr>
+            <tr>
+                <td style="width:17%;"><strong>Date Of Meeting : </strong></td>
+                <td style="width:33%;">@Model.DateOfMeetings</td>
+                <td style="width:17%;"><strong>Start Time : </strong></td>
+                <td style="width:33%;">@Model.MeetingStartTime <b>(24:00 hours format)</b></td>
+            </tr>
+            <tr>
+                <td style="width:18%;"><strong>Duration : </strong></td>
+                <td style="width:32%;">@Model.MeetingTime <b>Minutes</b></td>
+                <td style="width:18%;"><strong>Participant Type : </strong></td>
+                <td style="width:32%;">@(((EMS.Core.Enums.MomMeetingParticipantType)Model.ParticipantType))</td>
+            </tr>
+            <tr>
+                <td style="width:17%;"><strong>@(((EMS.Core.Enums.MomMeetingParticipantType)Model.ParticipantType)) : </strong></td>
+                <td style="width:83%;" colspan="3">@Model.StrPaticipant</td>
+            </tr>
+            <tr>
+                <td style="width:17%;"><strong>Chaired By : </strong></td>
+                <td style="width:33%;">@Model.ChairedName</td>
+                <td style="width:17%;"><strong>Author By : </strong></td>
+                <td style="width:33%;">@Model.AuthorName</td>
+            </tr>
+
+
+
+            @if (!string.IsNullOrWhiteSpace(Model.Agenda))
+            {
+                <tr>
+                    <td style="width:17%;"><strong>Meeting Agenda : </strong></td>
+                    <td style="width:83%;" colspan="3">@Html.Raw(Model.Agenda)</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div>
+
+        @if (Model.MomMeetingTasks.Count > 0)
+        {
+            <table id="table-meetingTasks" style="width:100%;" class="table table-bordered">
+                <thead>
+                    <tr role="row">
+                        <th style="text-align:left;width:2%;">#</th>
+                        <th style="text-align:left;width:48%;">Task</th>
+                        <th style="text-align:left;width:17%;">Status/Priority</th>
+                        <th style="text-align:left;width:33%;">Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int count = 1;
+                    }
+
+                    @foreach (var item in Model.MomMeetingTasks)
+                    {
+
+                    <tr>
+                        <td style="width:2%;">@(count++)</td>
+                        <td style="width:48%;">
+                            <strong>@item.Task</strong> <br />
+                            @item.PaticipantsList
+                        </td>
+                        <td style="width:17%;">@((byte)item.Status == 5 ? "Future Action" : Convert.ToString(item.Status)) @(item.Priority > 0 ? "/" + item.Priority.GetDescription() : string.Empty)</td>
+                        <td style="width:33%;">@item.Remark </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</body>
+</html> 

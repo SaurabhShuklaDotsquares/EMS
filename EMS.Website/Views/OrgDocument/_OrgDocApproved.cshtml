@@ -1,0 +1,23 @@
+﻿@using EMS.Web.Models.Others
+@model OrgDocumentApproveDto
+<div>
+    @using (Html.BeginForm("orgdocapprove", "orgdocument", FormMethod.Post, new { @id = "approve-doc-form" }))
+    {
+        @Html.HiddenFor(model => model.OrgDocId)
+        Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Approve Document" });
+
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label">Document :</label> <span id="selectedDoc"></span>
+            </div>
+            <div class="form-group required">
+                <label class="control-label " for="Comments">Comments</label>
+                @Html.TextAreaFor(model => model.Comments,  10, 10, new { @class = "form-control", @data_rule_required = "true", @data_msg_required = " *required" })
+            </div>
+        </div>
+
+        Html.RenderPartial("_ModalFooter", new ModalFooter { SubmitButtonText = "Approve" });
+    }
+</div>
+
+

@@ -1,0 +1,117 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model DocumentLibraryIndexDto
+@{
+    ViewBag.Title = "Document Library List";
+}
+
+@section styles{
+    <style>
+        form label {
+            font-weight: 600;
+        }
+
+        .btn-sm {
+            padding: 3px 5px;
+        }
+
+        .sorting_disabled {
+            padding: 5px !important;
+        }
+
+        .btn-excel {
+            background-color: #3f8c09;
+        }
+    </style>
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+}
+
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{
+            Html.RenderPartial("_Notification");
+        }
+
+        <div class="row margin-bottom20">
+            <div class="col-lg-2">
+                <h2>Document Library List</h2>
+            </div>
+            <div class="col-lg-10">
+                <div class="row">
+                    @*
+                    <div class="col-md-2 col-sm-6 form-group">
+                    @if (Model.IsApprover)
+                    {
+                    @Html.DropDownList("UserId", Model.UserList, "All Users", htmlAttributes: new { @class = "form-control" })
+                    }
+                    </div>*@
+
+
+                    @*<div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                    @Html.TextBoxFor(model => model.DateTo, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly", @placeholder = "End Date" })
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                    @Html.TextBoxFor(model => model.DateFrom, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly", @placeholder = "Start Date" })
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                    <button type="button" id="btnSearch" class="btn btn-custom" style="padding:7px 8px">Search</button>
+                    <button type="button" id="btnReset" class="btn btn-custom" style="padding:7px 8px">Reset</button>
+                    </div>*@
+                   @* <div class="col-md-2 col-sm-3 col-xs-6 form-group pull-right">
+                        <a class="btn btn-custom btn-block" href="@Url.Action("addedit")">Add New</a>
+                    </div>*@
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row">                   
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group pull-right">
+                        <button type="button" id="btnSearch" class="btn btn-custom" style="padding:7px 8px">Search</button>
+                        <button type="button" id="btnReset" class="btn btn-custom" style="padding:7px 8px">Reset</button>
+                        <a class="btn btn-success" href="@Url.Action("addedit")">Add New</a>
+                    </div>
+                    <div class="col-md-2 col-sm-6 form-group  pull-right">
+                        @Html.DropDownList("IsApprover", Model.StatusList, null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table id="grid-expenseList" class="table table-stats"></table>
+
+
+    </div>
+</div>
+<div class="modal fade" id="modalTurnOff" tabindex="-1" role="dialog" aria-labelledby="modalTurnOff" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Active/Deactive Document</h5>
+            </div>
+            <div class="modal-body" style="height: 115px;">
+                <input type="hidden" id="idStatus" />
+                <b>Are you sure, you want to change status for this document ?</b>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btn-Acticedeactive" data-type='0'>Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="btn-ActicedeactiveNo">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-expense", AreaLabeledId = "modal-add-expense-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        var isPMStatus = @((CurrentUser.Uid == SiteKey.AshishTeamPMUId && CurrentUser.RoleId == (int)(int)Enums.UserRoles.PM) ? 1 : 0);
+    </script>
+    <script src="~/Scripts/knockout-3.3.0.js"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/Scripts/CustomJS/DocumentLibrary/index.js" asp-append-version="true"></script>
+}

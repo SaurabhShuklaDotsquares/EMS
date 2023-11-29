@@ -1,0 +1,876 @@
+﻿@model CVBuilderDto
+@{
+    ViewBag.Title = "CV(s) for Client";
+    bool isPMUser = CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.PM;
+    int currentUserId = CurrentUser.Uid;    
+    //var isUser = Model.Id > 0 ? (CurrentUser.Uid == Model.CreatedBy || CurrentUser.Uid == SiteKey.AshishTeamPMUId ? 1 : 0) : 1;
+}
+@section styles{
+        <link href="~/css/select2.css" rel="stylesheet" asp-append-version="true" />
+        <style>
+            .select2-container .select2-choice {
+                height: 36px !important;
+                line-height: 36px !important;
+                border: 1px solid #ddd !important;
+                border-radius: 0 !important;
+            }
+
+            .select2-container .select2-arrow {
+                background: none !important;
+                border-left: none !important;
+            }
+
+            .select2-container .select2-choice .select2-arrow b {
+                background: #fff url(~/PdfTemplates/images/arrowdown.png) no-repeat scroll center center !important;
+            }
+
+            select.no-border {
+                border: 0px;
+                background-image: none !important;
+                background-color: transparent !important;
+                cursor: auto !important;
+                padding: 0 !important;
+                height: auto !important;
+            }
+
+            a.ReviewHistory {
+                color: #e99701;
+                text-decoration: underline;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .table-striped > tbody > tr:nth-of-type(2n+1) {
+                background-color: #e9e9e9;
+            }
+
+            table-striped tr {
+                color: #333;
+            }
+
+            table-striped td {
+                padding: 10px 7px;
+            }
+
+            .comments {
+                margin-bottom: 5px;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5px;
+                font-size: 13px;
+            }
+
+                .comments i {
+                    color: #757575;
+                    font-size: 12px;
+                    text-decoration: dotted;
+                    margin-top: 8px;
+                    display: block;
+                }
+                
+                .cvbuilder-tbl thead tr th:first-child,
+                .cvbuilder-tbl tbody tr td:first-child {
+                    width:45px;
+                    min-width:45px;
+                    text-align: center;
+                }
+
+                .cvbuilder-tbl thead tr th:last-child,
+                .cvbuilder-tbl tbody tr td:last-child {
+                    width: 120px;
+                    min-width: 120px;
+                    text-align:center;
+                }
+                .cv-select{
+                    display:flex;
+                    flex-wrap:wrap;
+                    justify-content:space-between;
+                }
+
+        .cv-select  select{width:49%;
+            min-width:70px;
+        }
+
+        @@media(max-width:991px){
+             .cv-select  select{width:100%;
+                margin: 2px 0;
+        }
+        }
+        </style>
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+
+        <div class="form-group clearfix">
+            <h2>CV(s) for Client</h2>
+        </div>
+        <div id="validation-summary"></div>
+        @Html.HiddenFor(model => model.Id)
+        
+        <div class="row form-group clearfix">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Name :</label>
+                            </div>
+                            <div class="col-md-10">
+                            <label>@Model.UserName</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <label>Designation :</label>
+                            </div>
+                            <div class="col-md-9">
+                            <label>@Model.Designation</label>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                 <div class="row form-group clearfix">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Email :</label>
+                            </div>
+                            <div class="col-md-10">
+                            <label>@Model.Email</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <label>Phone :</label>
+                            </div>
+                            <div class="col-md-9">
+                            <label>@Model.Phone</label>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row clearfix">
+                    <div class="col-md-6 form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>LinkedIn :</label>
+                            </div>
+                            <div class="col-md-6">
+                             @Html.TextBoxFor(model => model.Linkedin, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Enter Linkedin id........" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <label>Languages Known :</label>
+                            </div>
+                            <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.Languages, new { @class = "form-control", @style = "min-height:20px;", @placeholder = "Hindi,English,Urdu" })
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row form-group clearfix">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Experience Type :</label>
+                            </div>
+                            <div class="col-md-6">
+                               @Html.DropDownListFor(model => model.ExperienceType,  (List<SelectListItem>)ViewBag.ExperienceTypeList, "Select Experience", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                       
+                    </div>
+                </div> 
+                 <div class="row form-group clearfix">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>About me :</label>
+                            </div>
+                            <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Title, 2, 20, new { @class = "form-control", @style = "min-height:100px;", @placeholder = "Title Write here....." })
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                        <div class="row">
+                            <label><strong>Example</strong></label>
+                        </div>
+                        <div class="row">
+                           <img src="~/pdftemplates/aboutme.png" />
+                        </div>
+                    </div>
+                </div>               
+                <div class="row form-group clearfix">                    
+                     <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Profile Summary :</label>
+                            </div>
+                            <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.ProfileSummary, 2, 20, new { @class = "form-control", @style = "min-height:100px;", @placeholder = "Profile Summary Write here....." })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label><strong>Example</strong></label>
+                        </div>
+                        <div class="row">
+                           <img src="~/pdftemplates/profilesummary.png" />
+                        </div>
+                    </div>
+                </div>               
+                 <div class="row form-group clearfix">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Technical Skills :</label>
+                            </div>
+                            <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.TechnicalSkills, 2, 20, new { @class = "form-control", @style = "min-height:100px;", @placeholder = "Technical Skills Write here....." })
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                         <div class="row">
+                            <label><strong>Example</strong></label>
+                        </div>
+                        <div class="row">
+                           <img src="~/pdftemplates/technicalskills.png" />
+                        </div>
+                    </div>
+                </div>                 
+                <div class="row form-group clearfix">                   
+                     <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Work Experience :</label>
+                            </div>
+                            <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.WorkExperience, 2, 20, new { @class = "form-control", @style = "min-height:100px;", @placeholder = "Work Experience Write here....." })
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                         <div class="row">
+                            <label><strong>Example</strong></label>
+                        </div>
+                        <div class="row">
+                           <img src="~/pdftemplates/workexp.png" style="height: 250px;width: 804px;"/>
+                        </div>
+                    </div>
+                </div>                 
+                 <div class="row form-group clearfix">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                            <label>Roles Across The Career :</label>
+                            </div>
+                            <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.RolesAcross, 2, 20, new { @class = "form-control", @style = "min-height:100px;", @placeholder = "Roles Across The Career Write here....." })
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                         <div class="row">
+                            <label><strong>Example</strong></label>
+                        </div>
+                        <div class="row">
+                           <img src="~/pdftemplates/roleacross.png" />
+                        </div>
+                    </div>
+                </div>
+                 <div class="row form-group clearfix">
+                 <div class="row col-md-12 my-spacing industryRow" style=display:block id="divIndustry">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Industries, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-10">
+                            @foreach (var item in Model.Industries)
+                            {
+                                <div class="col-md-3">
+                                    <div class="chk pull-left">
+                                        <input type="checkbox" name="Industry" id="chkIndustry_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") />
+                                        <label for="chkIndustry_@item.Value">&nbsp;@item.Text</label>
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-md-3">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" id="chkOtherIndustry" @(!string.IsNullOrWhiteSpace(Model.OtherIndustry) ? "checked" : "") />
+                                    <label for="chkOtherIndustry">&nbsp;Other Industry</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="divOtherIndustry" @(string.IsNullOrWhiteSpace(Model.OtherIndustry) ? "style=display:none" : "")>
+                                <div class="chk pull-left">
+                                    @Html.TextBoxFor(model => model.OtherIndustry, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter industry name" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="row form-group clearfix">
+            <div class="row col-md-12 my-spacing" id="techParentSpan" style=display:block)>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.TechnologyParents, htmlAttributes: new { @class = "control-label" })
+                    <span></span>
+                    <label id="TechnologyParent-error" class="error" style="" for="TechnologyParent"></label>
+                </div>
+                <div class="col-md-10" id="techParent">
+                    @foreach (var item in Model.TechnologyParents)
+                    {
+                        <div class="col-md-3">
+                            <div class="chk pull-left">
+                                <input type="checkbox" name="TechnologyParent" id="chkTechnologyParent_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "")  />
+                                <label for="chkTechnologyParent_@item.Value">&nbsp;@item.Text</label>
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-3">
+                        <div class="chk pull-left">
+                            <input type="checkbox" id="chkOtherTechnologyParent" @(!string.IsNullOrWhiteSpace(Model.OtherTechnologyParent) ? "checked" : "") />
+                            <label for="chkOtherTechnologyParent">&nbsp;Other Technology Parent</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="divOtherTechnologyParent" @(string.IsNullOrWhiteSpace(Model.OtherTechnologyParent) ? "style=display:none" : "")>
+                        <div class="chk">
+                            @Html.TextBoxFor(model => model.OtherTechnologyParent, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter technology parent name" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="row form-group clearfix">
+            <div class="row col-md-12 my-spacing" id="techVisibility" @((Model.Id > 0 && Model.LibraryTypeId != (byte)Enums.LibraryType.Design) ? "style=display:block" : "style=display:none")>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Technologies, htmlAttributes: new { @class = "control-label" })
+                    <span>*</span>
+                    <label id="Technology-error" class="error" style="" for="Technology"></label>
+                </div>
+                <div class="col-md-10" id="techIds">
+                    @if (Model.Id > 0)
+                    {
+                        @foreach (var item in Model.Technologies)
+                        {
+                            <div class="col-md-3 parentTechId_@item.Group.Name">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" name="Technology" id="chkTechnology_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") />
+                                    <label for="chkTechnology_@item.Value">&nbsp;@item.Text</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="col-md-3" style="padding-left: 5px;">
+                            <div class="chk pull-left">
+                                <input type="checkbox" id="chkOtherTechnology" @(!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "checked" : "") />
+                                <label for="chkOtherTechnology">&nbsp;Other Technology</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3" id="divOtherTechnology" @(string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "style=display:none" : "")>
+                            <div class="chk pull-left">
+                                @Html.TextBoxFor(model => model.OtherTechnology, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter technology name" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="row form-group clearfix">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label><strong>Core Competencies</strong></label>
+                        <div class="card-body table-responsive">
+                        <table id="grid-title" class="table table-bordered table-striped table-condensed cvbuilder-tbl">
+                                <thead>
+                                    <tr>
+                                        <th>S N.</th>
+                                        <th>Title</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodykra">
+
+                                @{
+                                    var i = 0;
+                                }
+                                @if (Model.dataList != null && Model.dataList.Count > 0)
+                                {
+                                    foreach (var item in Model.dataList)
+                                    {
+                                        var sn = i + 1;
+                                        if (i == 0)
+                                        {
+                                            <tr id="trlen_@i">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="Title_@i" class="form-control" id="Title_@i" value="@item.Title"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@i"></span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn" id="addmore" href="javascript:void(0);">Add More</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr id="trlen_@i">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="Title_@i" class="form-control" id="Title_@i" value="@item.Title"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@i"></span>
+                                                </td>
+                                                <td>
+                                                    <a href='javascript:void (0);' class='RemoveRow'><i class='text-danger fa fa-trash'></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        i = i + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr id="trlen_@i">
+                                        <td>1</td>
+                                        <td>
+                                            <input type="text" name="Title_@i" class="form-control" id="Title_@i" />
+                                            <span asp-validation-for="Value" class="text-danger" id="validt_@i"></span>
+                                        </td>
+                                        <td>
+                                            <a class="btn" id="addmore" href="javascript:void(0);">Add More</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group clearfix">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label><strong>Education</strong></label>
+                        <div class="card-body table-responsive">
+                        <table id="grid-title" class="table table-bordered table-striped table-condensed cvbuilder-tbl">
+                                <thead>
+                                    <tr>
+                                        <th>S N.</th>
+                                        <th>Education</th>
+                                        <th>University</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyEducation">
+
+                                    @{
+                                        var y = 0;
+                                    }
+                                @if (Model.Education != null && Model.Education.Count > 0)
+                                {
+                                    foreach (var item in Model.Education)
+                                    {
+                                        var sn = y + 1;
+                                        if (y == 0)
+                                        {
+                                            <tr id="trlen_@y">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="EduTitle_@y" class="form-control" id="EduTitle_@y" value="@item.Title" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@y"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="EduUniversity_@y" class="form-control" id="EduUniversity_@y" value="@item.University" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@y"></span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn" id="addmoreEducation" href="javascript:void(0);">Add More</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr id="trlen_@y">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="EduTitle_@y" class="form-control" id="EduTitle_@y" value="@item.Title" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@y"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="EduUniversity_@y" class="form-control" id="EduUniversity_@y" value="@item.University" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@y"></span>
+                                                </td>
+                                                <td>
+                                                    <a href='javascript:void (0);' class='RemoveRow'><i class='text-danger fa fa-trash'></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        y = y + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr id="trlen_@y">
+                                        <td>1</td>
+                                        <td>
+                                            <input type="text" name="EduTitle_@y" class="form-control" id="EduTitle_@y" />
+                                            <span asp-validation-for="Value" class="text-danger" id="validt_@y"></span>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="EduUniversity_@y" class="form-control" id="EduUniversity_@y" />
+                                            <span asp-validation-for="Value" class="text-danger" id="valido_@y"></span>
+                                        </td>
+                                        <td>
+                                            <a class="btn" id="addmoreEducation" href="javascript:void(0);">Add More</a>
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row form-group clearfix">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label><strong>Certifications</strong></label>
+                        <div class="card-body table-responsive">
+                        <table id="grid-title" class="table table-bordered table-striped table-condensed cvbuilder-tbl">
+                                <thead>
+                                    <tr>
+                                        <th>S N.</th>
+                                        <th>Certification Name</th>
+                                        <th>Certification Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyCertifications">
+
+                                    @{
+                                        var x = 0;
+                                    }
+                                @if (Model.Certifications != null && Model.Certifications.Count > 0)
+                                {
+                                    foreach (var item in Model.Certifications)
+                                    {
+                                        var sn = x + 1;
+                                        if (x == 0)
+                                        {
+                                            <tr id="trlen_@x">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="CTitle_@x" class="form-control" id="CTitle_@x" value="@item.Title"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@x"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="KRAOrderno_@x" class="form-control" id="KRAOrderno_@x" value="@item.CertificationsNumber"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@x"></span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn" id="addmoreCertifications" href="javascript:void(0);">Add More</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr id="trlen_@x">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="CTitle_@x" class="form-control" id="CTitle_@x" value="@item.Title" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@x"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="KRAOrderno_@x" class="form-control" id="KRAOrderno_@x" value="@item.CertificationsNumber"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@x"></span>
+                                                </td>
+                                                <td>
+                                                    <a href='javascript:void (0);' class='RemoveRow'><i class='text-danger fa fa-trash'></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        x = x + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr id="trlen_@x">
+                                        <td>1</td>
+                                        <td>
+                                            <input type="text" name="CTitle_@x" class="form-control" id="CTitle_@x" />
+                                            <span asp-validation-for="Value" class="text-danger" id="validt_@x"></span>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="KRAOrderno_@x" class="form-control" id="KRAOrderno_@x" />
+                                            <span asp-validation-for="Value" class="text-danger" id="valido_@x"></span>
+                                        </td>
+                                        <td>
+                                            <a class="btn" id="addmoreCertifications" href="javascript:void(0);">Add More</a>
+                                        </td>
+                                    </tr>
+                                }
+
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="row form-group clearfix">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label><strong>Previous Experience</strong></label>
+                        <div class="card-body table-responsive">
+                            <table id="grid-title" class="table table-bordered table-striped table-condensed cvbuilder-tbl">
+                                <thead>
+                                    <tr>
+                                        <th>S N.</th>
+                                        <th>Organization Name</th>
+                                        <th>Designation</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyPreviousExperience">
+
+                                @{
+                                    var P = 0;
+                                }
+                                @if (Model.PreviousExperience != null && Model.PreviousExperience.Count > 0)
+                                {
+                                    foreach (var item in Model.PreviousExperience)
+                                    {
+                                        var sn = P + 1;
+                                        if (P == 0)
+                                        {
+                                            <tr id="trlen_@P">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="OrganizationName_@P" class="form-control" id="OrganizationName_@P" value="@item.OrganizationName" />
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@P"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="Designation_@P" class="form-control" id="Designation_@P" value="@item.Designation"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@P"></span>
+                                                </td>
+                                                <td>
+                                                    <div class="cv-select">
+                                                    <select id="FromMonth_@P" class="form-control" >
+                                                        @foreach (var items in @ViewBag.Months)
+                                                        {
+                                                            if (items.Text == item.FromMonth)
+                                                            {
+                                                                <option value="@items.Value" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Value">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <select id="FromDate_@P" class="form-control" >
+                                                        @foreach (var items in @ViewBag.fYears)
+                                                        {
+                                                            if (items.Text == item.FromDate)
+                                                            {
+                                                                <option value="@items.Text" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Text">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>      
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cv-select">
+                                                    <select id="ToMonth_@P" class="form-control" >
+                                                        @foreach (var items in @ViewBag.Months)
+                                                        {
+                                                            if (items.Text == item.ToMonth)
+                                                            {
+                                                                <option value="@items.Value" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Value">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <select id="ToDate_@P" class="form-control selectdates" >
+                                                        @foreach (var items in @ViewBag.Years)
+                                                        {
+                                                            if (items.Text == item.ToDate)
+                                                            {
+                                                                <option value="@items.Text" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Text">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>  
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a class="btn" id="addmorePreviousExperience" href="javascript:void(0);">Add More</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr id="trlen_@P">
+                                                <td>@sn</td>
+                                                <td>
+                                                    <input type="text" name="OrganizationName_@P" class="form-control" id="OrganizationName_@P" value="@item.OrganizationName"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="validt_@P"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="Designation_@P" class="form-control" id="Designation_@P" value="@item.Designation"/>
+                                                    <span asp-validation-for="Value" class="text-danger" id="valido_@P"></span>
+                                                </td>
+                                                <td>
+                                                    <div class="cv-select">
+                                                    <select id="FromMonth_@P" class="form-control" >
+                                                        @foreach (var items in @ViewBag.Months)
+                                                        {
+                                                            if (items.Text == item.FromMonth)
+                                                            {
+                                                                <option value="@items.Value" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Value">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                        <select id="FromDate_@P" class="form-control selectdateAddmoreUpdate">
+                                                        @foreach (var items in @ViewBag.fYears)
+                                                        {
+                                                            if (items.Text == item.FromDate)
+                                                            {
+                                                                <option value="@items.Text" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Text">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select> 
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="cv-select">
+                                                    <select id="ToMonth_@P" class="form-control" >
+                                                        @foreach (var items in @ViewBag.Months)
+                                                        {
+                                                            if (items.Text == item.ToMonth)
+                                                            {
+                                                                <option value="@items.Value" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Value">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                        <select id="ToDate_@P" class="form-control selectdatesUpdate">
+                                                        @foreach (var items in @ViewBag.Years)
+                                                        {
+                                                            if (items.Text == item.ToDate)
+                                                            {
+                                                                <option value="@items.Text" selected>@items.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@items.Text">@items.Text</option>
+                                                            }
+                                                        }
+                                                    </select>  
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a href='javascript:void (0);' class='RemoveRow'><i class='text-danger fa fa-trash'></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                        P = P + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr id="trlen_@P">
+                                        <td>1</td>
+                                        <td>
+                                            <input type="text" name="OrganizationName_@P" class="form-control" id="OrganizationName_@P" />
+                                            <span asp-validation-for="Value" class="text-danger" id="validt_@P"></span>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="Designation_@P" class="form-control" id="Designation_@P" />
+                                            <span asp-validation-for="Value" class="text-danger" id="valido_@P"></span>
+                                        </td>
+                                        <td>
+                                            <div class="cv-select">
+                                            <select id="FromMonth_@P" class="form-control" asp-items="@ViewBag.Months" ></select>
+                                            <select id="FromDate_@P" class="form-control selectdates" asp-items="@ViewBag.fYears" ></select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="cv-select">
+                                            <select id="ToMonth_@P" class="form-control" asp-items="@ViewBag.Months" ></select>
+                                            <select id="ToDate_@P" class="form-control selectdates" asp-items="@ViewBag.Years" ></select>
+                                            </div>
+                                        </td>
+                                       @* <td>                                            
+                                            <input asp-for="FromDate" id="fromDate" type="text" class="form-control" placeholder='MM/YYYY'  readonly="readonly"/>                                            
+                                        </td>
+                                        <td>
+                                            <input asp-for="ToDate" id="toDate" type="text" class="form-control" placeholder='MM/YYYY' readonly="readonly" />
+                                        </td>*@
+                                        <td>
+                                            <a class="btn" id="addmorePreviousExperience" href="javascript:void(0);">Add More</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+                <div class="text-right">                
+                    <button type="button" class="btn btn-custom" name="Save" id="btn-submit">Save</button>
+                    <a class="btn btn-custom" href="@Url.Action("index")" name="Save">Cancel</a>                    
+                </div>
+        
+      
+    </div>
+    <div class="divoverlay hide"></div>
+</div>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+        <script src="~/ckeditor/ckeditor.js" asp-append-version="true"></script>
+        <script src="~/scripts/select2.min.js" asp-append-version="true"></script>
+        <script src="~/scripts/CustomJS/CVBuilder/CVBuilder-Create.js" asp-append-version="true"></script>
+   
+}

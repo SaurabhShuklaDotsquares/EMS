@@ -1,0 +1,326 @@
+﻿@model ProjectClosureDto
+@{
+    ViewBag.Title = "Project Closure";
+    bool isPMUser = CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.PM;
+    int currentUserId = CurrentUser.Uid;
+}
+@section styles{
+    <link href="~/css/select2.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        .select2-container .select2-choice {
+            height: 36px !important;
+            line-height: 36px !important;
+            border: 1px solid #ddd !important;
+            border-radius: 0 !important;
+        }
+
+        .select2-container .select2-arrow {
+            background: none !important;
+            border-left: none !important;
+        }
+
+        .select2-container .select2-choice .select2-arrow b {
+            background: #fff url(images/arrowdown.png) no-repeat scroll center center !important;
+        }
+
+        select.no-border {
+            border: 0px;
+            background-image: none !important;
+            background-color: transparent !important;
+            cursor: auto !important;
+            padding: 0 !important;
+            height: auto !important;
+        }
+    </style>
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+
+        <div class="form-group clearfix">
+            <h2>Project Closure </h2>
+        </div>
+
+        @using (Html.BeginForm("add", "projectclosure", FormMethod.Post, new { @id = "createEditProjectClosure" }))
+        {
+            <div id="validation-summary"></div>
+
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.Status)
+            @Html.HiddenFor(m => m.isAshishTeamMember)
+            <input type="hidden" name="Referrer" value="@Model.Referrer" />
+            <div class="row form-group clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Date of Closing : </label>
+                        </div>
+                        <div class="col-md-5">
+                            @Html.TextBoxFor(model => model.DateOfClosing, htmlAttributes: new { @class = "form-control", @id = "dateOfClosing", @autocomplete = "off", placeholder = "Date Of Closing*", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-3  ">
+                            <label>Client Quality : </label>
+                        </div>
+                        <div class="col-md-3">
+                            <select asp-for="ClientQuality" asp-items="Html.GetEnumSelectList(typeof (Enums.ClientQualtiy))"></select>
+                        </div>
+                        @if (Model.Id > 0 && CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                        {
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.ChangeStatusId) :
+                            </div>
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(model => model.ChangeStatusId, Model.ChangeStatus, new { @class = "form-control" })
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Project Status : </label>
+                        </div>
+                        <div class="col-md-5 ">
+                            @if (Model.Id == 0)
+                            {
+                                @Html.DropDownListFor(model => model.CRMStatusId, Model.CRMStatus, "--Select Status--", new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.CRMStatusId, Model.CRMStatus, "--Select Status--", new { @class = "form-control no-border", @disabled = "" })
+                                @Html.HiddenFor(x => x.CRMStatusId)
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label style="color:red;"><strong>Impact of COVID 19</strong> : </label>
+                        </div>
+                        <div class="col-md-3 form-check">
+                            <input asp-for="IsCovid19" type="checkbox" class="form-check-input">
+                        </div>
+                        <div class="col-md-6" >
+                            <div class="row"  id="DeadResponseDateRow" style="display:@(Model.ChangeStatusId == 3 ? "" : "none")">
+                                <div class="col-md-6">
+                                    <label for="IsPermanentDead">Dead Response Till</label>
+                                </div>
+                                <div class="col-md-6" id="DeadResponseDateCol">
+                                    @if (Model.IsPermanentDead)
+                                    {
+                                        @Html.TextBoxFor(model => model.DeadResponseDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @class = "form-control", @id = "DeadResponseDate", @autocomplete = "off", placeholder = "Dead Response Date", style = "display:none" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.DeadResponseDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @class = "form-control", @id = "DeadResponseDate", @autocomplete = "off", placeholder = "Dead Response Date", style = "display:" })
+                                    }
+
+
+                                    @Html.CheckBoxFor(model => model.IsPermanentDead)&nbsp;<span for="IsPermanentDead">Permanent Dead</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Select Project : </label>
+                        </div>
+                        <div class="col-md-8 ">
+                            @if (Model.Id > 0)
+                            {
+                                @Html.HiddenFor(x => x.ProjectID)
+                                @Html.DropDownListFor(model => model.ProjectID, Model.ProjectList, "--Select Project--", new { @class = "select2", disabled = "disabled", })
+
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.ProjectID, Model.ProjectList, "--Select Project--", new { @class = "select2 Project-closure-history" })
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-3 ">
+                            <label>Next Engagement Date :</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.NextStartDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @class = "form-control", @id = "nextStartDate", @autocomplete = "off", placeholder = "Next Date", @readonly = "readonly" })
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group clearfix">
+
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>BA Name :</label>
+                        </div>
+                        <div class="col-md-8">
+                            @if (isPMUser || Model.Uid_BA == 0 || Model.Uid_BA != currentUserId)
+                            {
+                                @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "--Select BA--", htmlAttributes: new { @class = "form-control" })
+                            }
+                            else if (Model.Uid_BA == currentUserId)
+                            {
+                                @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "--Select BA--", htmlAttributes: new { @class = "form-control no-border", @disabled = "disabled" })
+                                @Html.HiddenFor(model => model.Uid_BA)
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Actual Lead Developer:</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.Uid_Dev, Model.ActualLeadDevelopers, "--Actual Developer--", new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-3">
+                            <label>Other Actual Developer: </label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.OtherActualDeveloper, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group clearfix">
+
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>TL Name :</label>
+                        </div>
+                        <div class="col-md-8">
+                            @if (isPMUser || Model.Uid_TL == 0 || Model.Uid_TL != currentUserId)
+                            {
+                                @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "--Select TL--", htmlAttributes: new { @class = "form-control" })
+                            }
+                            else if (Model.Uid_TL == currentUserId)
+                            {
+                                @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "--Select TL--", htmlAttributes: new { @class = "form-control no-border", @disabled = "disabled" })
+                                @Html.HiddenFor(model => model.Uid_TL)
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Is Project Live: </label>
+                        </div>
+                        <div class="col-md-3 text-left">
+                            <input type="radio" class="LiveUrl" name="LiveUrl" value="true" @(Model.ProjectLiveUrl != null || Model.Id == 0 || (Model.ProjectLiveUrl == null && Model.ProjectUrlAbsenseReason == null) ? "checked" : "") /> YES
+                            <input type="radio" class="LiveUrl" name="LiveUrl" value="false" @(Model.ProjectUrlAbsenseReason != null ? "checked" : "") /> NO
+                        </div>
+                        <div class="col-md-6">
+                            @if (Model.Id == 0)
+                            {
+                                @Html.TextBoxFor(model => model.ProjectLiveUrl, htmlAttributes: new { @class = (Model.ProjectLiveUrl != null && Model.Id > 0) || Model.Id == 0 ? "form-control" : "form-control hidden", @autocomplete = "off", @placeholder = "Add URL here....." })
+                                @Html.TextAreaFor(model => model.ProjectUrlAbsenseReason, new { @class = (Model.ProjectUrlAbsenseReason != null && Model.Id > 0) ? "form-control " : "form-control hidden", @placeholder = "Reason here....." })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.ProjectLiveUrl, htmlAttributes: new { @class = (Model.ProjectLiveUrl != null && Model.Id > 0) || Model.Id == 0 ? "form-control" : "form-control hidden", @autocomplete = "off", @placeholder = "Add URL here....." })
+                                @Html.TextAreaFor(model => model.ProjectUrlAbsenseReason, new { @class = (Model.ProjectUrlAbsenseReason != null && Model.Id > 0) ? "form-control " : "form-control hidden", @placeholder = "Reason here....." })
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row form-group clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4 ">
+                            <label>Client Country :</label>
+                        </div>
+                        <div class="col-md-5">
+                            <select asp-for="Country" asp-items="Html.GetEnumSelectList(typeof (Enums.ClientCountry))"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group clearfix" id="abortedPMListDIV">
+            </div>
+
+            <div class="row form-group clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Reason of Closing :</label>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.Reason, 2, 20, new { @class = "form-control", @style = "min-height:100px;", @placeholder = "Reason Of Closing Write here....." })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Suggestions :</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextAreaFor(model => model.Suggestion, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-right">
+                @if (CurrentUser.RoleId != (int)Enums.UserRoles.UKBDM)
+                {<button type="submit" class="btn btn-custom" name="Save">@(Model.Id > 0 ? (Model.CRMUpdated ? "Update" : "Approve and Update CRM") : "Save")</button>}
+                <a href="@Model.Referrer" class="btn btn-custom" name="Save">Cancel</a>
+            </div>
+        }
+
+        <div id="dvProjectClosureHistory" class="hide">
+            <br />
+            <h2>Project Closure History</h2>
+            <table class="table table-stats">
+                <thead>
+                    <tr>
+                        <th width="5%">Sr. No.</th>
+                        <th width="10%">Date</th>
+                        <th width="25%">Reason of closing</th>
+                        <th width="35%">Suggestion</th>
+                        <th width="15%">BA / TL </th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="divoverlay hide"></div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-detail-projectClosure", AreaLabeledId = "modal-detail-projectClosure-label", Size = Enums.ModalSize.Large })
+@section scripts{
+    <script src="~/ckeditor/ckeditor.js" asp-append-version="true"></script>
+     <script src="~/scripts/select2.min.js" asp-append-version="true"></script>
+     <script src="~/scripts/CustomJS/ProjectClosure/projectClosure-create.js" asp-append-version="true"></script>
+}

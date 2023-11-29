@@ -1,0 +1,304 @@
+﻿@model bool
+@{
+    
+    ViewBag.Title = "Fill Daily Timesheet";
+}
+<div class="full-wdth clearfix padding20">
+
+    <div ng-app="myapp" ng-controller="MyController">
+        <!-- Modal -->
+        <!-- Modal Popup-->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Edit Timesheet</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group clearfix">
+                                    <input type="text" class="form-control clsdatepicker" name="editDate" id="editDate" ng-model="editDate" required />
+                                    <div ng-show="formPopup.$submitted">
+                                        <div ng-show="formPopup.editDate.$error.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group clearfix">
+                                    <select name="ddlEditProject" id="ddlEditProject" class="form-control" ng-model="selectedEditProjectId" ng-change="onProjectChangeEdit()" required>
+                                        <option value="0">Select Project</option>
+                                        <option data-ng-repeat="p in project" value="{{p.id}}">{{p.name}}</option>
+                                    </select>
+                                    <div ng-show="submitted && formPopup.ddlEditProject.$invalid">
+                                        <label ng-show="formPopup.ddlEditProject.$error.required" class="error">Required</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group clearfix">
+                                    <select name="ddlEditDeveloper" class="form-control" id="ddlEditDeveloper" ng-model="editDeveloperId">
+                                        <option value="0">Select </option>
+                                        <option data-ng-repeat="d in develoers" ng-selected="{{editDeveloperId==d.id}}" value="{{d.id}}">{{d.name}}</option>
+                                    </select>
+                                    <div ng-show="submitted && formPopup.ddlEditDeveloper.$invalid">
+                                        <div ng-show="formPopup.ddlEditDeveloper.$error.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group clearfix">
+                                    <input type="text" class="form-control clstimepicker " name="txtEditTime" id="txtUpdateTime" ng-model="editTime" required />
+                                    <div ng-show="formPopup.$submitted || formPopup.txttime.$touched">
+                                        <div ng-show="formPopup.txtEditTime.$error.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group clearfix">
+                                    <textarea class="form-control msg" placeholder="Description" ng-model="editDescription" required></textarea>
+                                    @*<textarea class="form-control" name="txtEditDescription" ng-model="editDescription" />*@
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary1" data-ng-click="UpdateTimeSheet()">Save changes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- End Modal -->
+
+        <form name="userForm" class="css-form" novalidate>
+            <div class="timesheet-page full-wdth clearfix">
+                <h2> Time Sheet </h2>
+                <div class="dis-block clearfix" style="margin-top:-40px;">
+                    <div class="pull-right box2">
+
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.TextBox("txt_dateFrom", null, new { @class = "form-control dtfrom", @placeholder = "From Date", style = "width: 150px;" })
+
+                        </div>
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.TextBox("txt_dateTo", null, new
+                       {
+                           @class = "form-control dtTo",
+                           @placeholder = "TO Date",
+                           style = "width: 150px;"
+                       })
+                        </div>
+
+                        <button type="button" class="btn btn-custom pull-left" data-ng-click="SearchTimeSheet()" id="btn_search">Search</button>
+
+                    </div>
+                </div>
+                @if (Model != true)
+                {
+                    @if (CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.PMO || CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.UKBDM)
+                    {
+                        <div class="note-box dis-block padding-top15 clearfix"></div>
+                    }
+                    else
+                    {
+                        <div class="note-box dis-block padding-top15 clearfix">
+                            <p>
+
+                                Note : If you are working on any project as a paid developer then please select
+                                virtual developer instead of Designer, Tester, I Helped, Managing, Free (Bug Fixing / R &amp; D / Learning) and
+                                Estimation, Mockup &amp; Wireframing at the time of fill timesheet. If virtual developer will not come on virtual
+                                developer dropdown list of any project then please contact to your team leader or
+                                project manager to add virtual developer into this.
+                            </p>
+                            <p style="font-size:19px;"><b>Note: From Now - you need to fill timesheet of projects under CMMi through PMS only. So you are unable to select the projects in timesheet. Please contact your PM for more information.</b><input type="hidden" value="from 14oct2019" /></p>
+                        </div>
+                    }
+                }
+                else
+                { <div class="note-box dis-block padding-top15 clearfix"></div>}
+                <div class="table-custom timesheet-table table-responsive clearfix" data-ng-cloak="">
+                    <table class="table">
+                        <thead>
+                            @if (Model != false)
+                            {
+                                <tr>
+                                    <th style="width:100%;" class="text-center" colspan="8">
+                                        <p style="font-size:16px;color:red;text-transform: capitalize"><b>Note: From Now - you need to fill timesheet of projects through PMS only. So you are unable to select the projects in timesheet. Please contact your PM for more information.</b></p>
+                                    </th>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th style="width:2%;">#</th>
+                                    <th style="width:10%;">
+                                        <input type="text" class="form-control inpt-wd1 clsdatepicker" name="addedDate" id="addedDate" ng-model="addedDate" required />
+
+                                    </th>
+                                    <th style="width:15%;">
+                                        <select class="form-control inpt-wd2" name="ddlProject" id="ddlProject" ng-model="selectedProjectId" ng-change="onProjectChange()" required>
+                                            <option value="0">Select Project</option>
+                                            <option data-ng-repeat="p in project" ng-selected="{{selectedProjectId == p.id}}" value="{{p.id}}">{{p.name}}</option>
+                                        </select>
+
+                                    </th>
+                                    <th style="width:15%;">
+                                        <select class="form-control inpt-wd3" name="ddlDeveloper" id="ddlDeveloper" ng-model="developerId" required>
+                                            <option value="0">Select</option>
+                                            <option data-ng-repeat="d in develoers" ng-selected="{{developerId == d.id}}" value="{{d.id}}">{{d.name}}</option>
+                                        </select>
+
+                                    </th>
+                                    <th style="width:10%;">
+                                        <input type="text" class="form-control inpt-wd4 clstimepicker " name="txttime" id="WorkHours" ng-model="time" placeholder="00:00" required />
+                                        <span class="time-inst">(Use "00:30" for half an hour)</span>
+                                    </th>
+                                    <th colspan="2" style="width:38%;">
+                                        <input type="text" class="form-control inpt-wd5" ng-model="description" />
+                                    </th>
+                                    <th style="width:5%;" class="text-center">
+                                        <button type="submit" data-ng-click="AddTimeSheet()" class="btn btn-custom" name="add">Add</button>
+                                    </th>
+                                </tr>
+                            }
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in tables" ng-style="setRowColor(x.isReviewed)">
+                                <td style="width:2%;" ng-style="setRowColor(x.isReviewed)">{{x.sNo}}</td>
+                                <td style="width:10%;" ng-style="setRowColor(x.isReviewed)">{{x.addedDate}}</td>
+                                <td style="width:20%;">
+                                    <strong>
+                                        {{x.project}}
+                                    </strong> <br />
+                                    Added On {{x.insertDate}}
+                                </td>
+                                <td style="width:15%;">{{x.name}}</td>
+                                <td style="width:8%;">{{x.workHours}}</td>
+                                <td style="width:28%;"><p ng-bind-html="x.description|trustAsHtml"></p></td>
+                                <td style="width:10%;">
+                                    <span ng-show="{{x.isReviewed}}">
+                                        <strong>{{x.reviewedBy}}</strong><br /> On {{x.reviewedDate}}
+                                    </span>
+                                    <span ng-hide="{{x.isReviewed}}">Pending</span>
+                                </td>
+
+                                <td style="width:5%;" class="text-center"><button type="button" ng-if="!(x.isRelatedProjectCMMI ||x.isReviewed ||x.isNotWithin10DaysRange)" ng-click="editItem(x)" data-toggle="modal" data-target="#myModal" class="trans-btn clspopup"><i class="fa fa-edit"></i></button></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="custom-pagination dis-block clearfix">
+                    @await Html.PartialAsync("_Paging")
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/masked-input/jquery.maskedinput.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/angularJS/angular.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pagination.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/Scripts/CustomJS/timesheet.js" asp-append-version="true"></script>
+
+    <script type="text/javascript" language="javascript">
+        @{
+
+            int TimesheetEditdays = ViewBag.TimeSheetEditableDays;
+        }
+        
+        $(document).ready(function () {
+            $("#myModal").addClass("hide");
+            $(document).on("click", ".clspopup", function () {
+                $("#myModal").removeClass("hide");
+            });
+
+
+            $(".clstimepicker").mask("99:99", { clearIncomplete: false });
+            $(".clstimepicker").blur(function () {
+                var currentMask = '';
+                var arr = $(this).val().split('');
+                if (arr[1] == '_' && arr[0] != '_') {
+                    arr[1] = arr[0];
+                    arr[0] = '0';
+                }
+
+                if (arr[4] == '_' && arr[3] != '_') {
+                    arr[4] = arr[3];
+                    arr[3] = '0';
+                }
+
+                $(arr).each(function (index, value) {
+                    if (value == '_')
+                        arr[index] = '0';
+                    currentMask += arr[index];
+                });
+                var time = currentMask.split(':');
+                if (time[0] == "" || time[0] == 'undefined' || time[0] == '__' || parseInt(time[0]) > 23 && (time[1] == "" || time[1] == 'undefined' || time[1] == '__' || parseInt(time[1]) > 59)) {
+                    alert("Please enter correct working time");
+                }
+                else {
+                    if (time[0] == "" || time[0] == 'undefined' || time[0] == '__' || parseInt(time[0]) > 23)
+                        alert("Please enter correct working hours");
+                    //time[0] = '00';
+                    if (time[1] == "" || time[1] == 'undefined' || time[1] == '__' || parseInt(time[1]) > 59)
+                        alert("Please enter correct working minutes");
+                    //time[1] = '00';
+                }
+                var newVal = time[0] + ":" + time[1];
+                if (newVal.indexOf("undefined") != -1) {
+                    newVal = "00:00";
+                }
+                $(this).val(newVal);
+                //$(".clstimepicker").val(newVal);
+
+
+            });
+
+
+            var date = new Date();
+            var newdate = new Date(date);
+            newdate.setDate(newdate.getDate() - @TimesheetEditdays);
+            $(".clsdatepicker").datepicker({
+            dateFormat: "dd/mm/yy",
+                minDate: newdate,
+                maxDate: 0
+
+            });
+            $(".clsdatepicker").datepicker("setDate", date);
+            // Bind datepicker from date
+            $("#txt_dateFrom").datepicker({
+            dateFormat: "dd/mm/yy",
+                maxDate: 0,
+                onClose: function (selectedDate) {
+                    $("#txt_dateTo").datepicker("option", "minDate", selectedDate);
+                    $("#txt_dateTo").datepicker("option", "defaultDate", selectedDate);
+                }
+            });
+            // Bind datepicker dateTO
+            $("#txt_dateTo").datepicker({
+            defaultDate: "+1w",
+                dateFormat: "dd/mm/yy",
+                numberOfMonths: 1,
+                maxDate: 0,
+                onClose: function (selectedDate) {
+                    $("#txt_dateFrom").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+        });
+
+    </script>
+}

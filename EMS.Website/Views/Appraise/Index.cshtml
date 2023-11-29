@@ -1,0 +1,88 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model AppraiseDto
+@{
+    ViewBag.Title = "Appraise";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{
+            Html.RenderPartial("_Notification");
+        }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Appraise</h2>
+            </div>
+            @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP || CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+            {
+                <div class="col-sm-8 text-right">
+                    <a class="btn btn-custom" href="@Url.Action("add")" data-target="#modal-add-edit-appraise" data-toggle="modal" data-backdrop="static">Add New</a>
+                </div>
+            }
+        </div>
+        <div class="row" style="padding-top:2%">
+            <div class="col-sm-12">
+                <div class="col-md-3 form-group pull-right">
+                    <div class="form-group" id="projectSelect">
+                        @Html.DropDownListFor(model => model.ProjectId, ViewBag.ProjectList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP || CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                {
+                    <div class="col-md-3 form-group pull-right">
+                        <div class="form-group" id="techSelect">
+                            @Html.DropDownListFor(model => model.EmployeeId, ViewBag.EmployeeList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 form-group pull-right">
+                        <div class="form-group" id="techSelect">
+                            @Html.DropDownListFor(model => model.PriorityId, Model.Priority, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="col-md-12" style="padding-top:1%">
+                <div class="filter-sec">
+                    <div class="filter-grp">
+                        @Html.CheckBox("Internal")
+                        <label for="InternalChecks" class="control-label" value="1">Internal</label>
+                    </div>
+                    <div class="filter-grp">
+                        @Html.CheckBox("Client")
+                        <label for="ClientChecks" class="control-label" value="2">Client</label>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="col-md-12 form-group">
+                <div class="form-group text-right">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+
+        <table id="grid-appraise-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-appraise", AreaLabeledId = "lbl-delete-appraise", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-edit-appraise", AreaLabeledId = "modal-add-edit-appraise-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script src="~/scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/bundles/Appraise/index"></script>
+
+}
+

@@ -1,0 +1,269 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.PreferenceDto
+@using EMS.Core
+
+@{
+    ViewBag.Title = "Manage Preferences";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/hint.css" rel="stylesheet" />
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Manage Preferences</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform">
+                        @using (Html.BeginForm("index", "preference", FormMethod.Post, new { enctype = "multipart/form-data",@id="pref_Form" }))
+                        {
+                            <div class="row">
+                                <div class="col-md-4 ">
+                                    <div class="col-md-6">
+                                        <label>How many days in advance do you need information of leave?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.PriorLeaveDay, null, new { @class = "form-control number" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 ">
+                                    <div class="col-md-2">
+                                        <label><label></label></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <b>@Html.CheckBoxFor(l => l.IsAllowLeave) Check to disable leave option for TL</b>
+                                    </div>
+                                </div>                                   
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>How many days Allowed For Timesheet?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.TimeSheetDay, null, new { @class = "form-control number" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 ">
+                                    <div class="col-md-2">
+                                        <label><label></label></label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <b>@Html.CheckBoxFor(l => l.IsAllowWFH) Check to disable WFH option for TL</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>
+
+                                            Set auto refresh time for employee activity:
+                                            <a href="javascript:void(0)" class="hint--right help" data-hint="Should be in seconds">
+                                                <img src="~/images/whaticon.png" />
+
+                                            </a>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.ActivityRefreshTime, null, new { @class = "form-control number" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>
+
+                                            Set days count for auto half day for employee late activity:
+                                            <a href="javascript:void(0)" class="hint--right help" data-hint="Should be in day">
+                                                <img src="~/images/whaticon.png" />
+
+                                            </a>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.ELActTimeLimit, null, new { @class = "form-control number" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            if (CurrentUser.IsSuperAdmin)
+                            {
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="col-md-3">
+                                            <label>
+                                                Email (From):
+                                            </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(x => x.EmailFrom, null, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(model => model.EmailFrom)
+                            }
+
+                            <div class="row br_bule2">
+                                <div class="col-md-8">
+                                    <div class="col-md-3">
+                                        <label>
+                                            Email (Project Manager):
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(x => x.EmailPM, null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="col-md-3">
+                                        <label>
+                                            Email (HR):
+                                        </label>
+
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(x => x.EmailHR, null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            if (CurrentUser.IsSuperAdmin)
+                            {
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="col-md-3">
+                                            <label>Email (Developer):</label>
+                                            <a href="javascript:void(0)" class="hint--right help" data-hint="Multiple email separated by ;">
+                                                <img src="~/images/whaticon.png" />
+
+                                            </a>
+                                        </div>
+                                        <div class="col-md-9">
+                                            @Html.TextBoxFor(x => x.EmailDeveloper, null, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="col-md-3">
+                                        <label>TimeSheet Email (CC):</label><a href="javascript:void(0)" class="hint--right help" data-hint="Multiple email separated by ;">
+                                            <img src="~/images/whaticon.png" />
+
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(x => x.TimeSheetEmail, null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="col-md-3">
+                                        <label>Project Closure Email:</label><a href="javascript:void(0)" class="hint--right help" data-hint="Multiple email separated by ;">
+                                            <img src="~/images/whaticon.png" />
+
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(x => x.ProjectClosureEmail, null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-2">
+                                        <label>
+                                            Induction Document:<a href="javascript:void(0)" class="hint--right help" data-hint="pdf, doc, docx">
+                                                <img src="~/images/whaticon.png" />
+
+                                            </a>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-4">
+                                            <label>
+                                                <a href='@Model.DeveloperDocLink' target='_blank'
+                                                   title="Developer">For Developer</a>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(m => m.DeveloperFile, new { @type = "file", @class = "fileUpload" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <label>
+                                                <a href='@Model.SeniorDeveloperDocLink' target='_blank'
+                                                   title="Senoir">For Senior</a>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(m => m.SenDeveloperFile, new { type = "file", @class="fileUpload" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-custom  margin-right10" name="Save" >Save</button>
+                                    <a href="@Url.Action("index","preference")" class="btn btn-custom">Cancel</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$("#txtCRMProjectID")
+            $(".number").keydown(function (event) {
+                // Allow: backspace, delete, tab, escape, and enter
+                if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                    // Allow: Ctrl+A
+            (event.keyCode == 65 && event.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+            (event.keyCode >= 35 && event.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                else {
+                    // Ensure that it is a number and stop the keypress
+                    if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                        event.preventDefault();
+                    }
+                }
+            });
+            $('.fileUpload').attr('data-msg-pattern', '*Invalid File');
+            $('.fileUpload').attr('data-rule-pattern', '^.*\.(pdf|PDF|doc|DOC|docx|DOCX)$');
+            new Global.FormValidationReset('#pref_Form', { ignore: '.validated' });
+           
+        });
+    </script>   
+}
+
+
+

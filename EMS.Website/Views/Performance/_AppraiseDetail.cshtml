@@ -1,0 +1,42 @@
+﻿@model List<AppraiseDto>
+
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Appraise Details" }); }
+
+<div class="modal-body">
+    @if (Model != null)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <td style="width:5%">S.No.</td>
+                    <td style="width:10%">Type</td>
+                    <td style="width:15%">Client Comment Date</td>
+                    <td style="width:28%">Client Comment</td>
+                    <td style="width:27%">TL/PM Comment</td>
+                    <td style="width:15%">Add Date</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                <tr>
+                    <td>@(++index)</td>
+                    <td>@item.AppraiseType.ToString()</td>
+                    <td>@item.ClientDate</td>
+                    <td>@item.ClientComment</td>
+                    <td>@item.TlComment</td>
+                    <td>@item.AddedDate</td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

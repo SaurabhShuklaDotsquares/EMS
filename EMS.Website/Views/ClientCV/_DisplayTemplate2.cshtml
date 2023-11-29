@@ -1,0 +1,516 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.CVViewDto
+
+@if (Model != null)
+{
+    <div class="ManageDepartment-page full-wdth clearfix">
+        <div id="frm-leave-detail">
+            <div class="modal-body form-horizontal fontsize12 clearfix padding20">
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal-header" style="clear:both;">
+                            <button data-dismiss="modal" id="Close" class="btn btn-custom pull-right" type="button">Close</button>
+                        </div>
+                        <table width="97%" border="0" align="center" cellpadding="0" cellspacing="0" style=" margin-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; font-family: Arial, Helvetica, sans-serif; -webkit-print-color-adjust: exact; background-color: #fff;">
+                            <tr>
+                                <!-- left side -->
+                                <td style="width:30.5%; background-color: #d8d8d8; vertical-align: top;">
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <!-- user  -->
+                                        <tr>
+                                            <td style="text-align: center; padding: 15px;">
+                                                <img style="max-height: 218px;" src="@Model.ProfilePicture" alt="user" />
+                                            </td>
+                                        </tr>
+                                        <!-- user  -->
+                                        <!-- contact us -->
+                                        <tr>
+                                            <td style="background-color: #006ea7;padding: 15px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td>
+                                                            <!-- heading box -->
+                                                            <table width="80%" cellpadding="0" cellspacing="0" style="padding:0 0 15px; margin-left: auto;">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #fff; font-size: 18px; padding: 0 0 3px 0;text-align: right;">
+                                                                        <strong> CONTACT </strong>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #fff; text-align: right;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-white.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>                                                    
+                                                    <tr>
+                                                        <td style="padding-top: 15px;">
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td style="text-align: right; padding-right: 12px;">
+                                                                        <a style="color:#fff; text-decoration: none;" href="#">@Model.Email</a>
+                                                                    </td>
+                                                                    <td style="width:40px; text-align: center;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/mail-icon.png" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- contact us -->
+                                        <tr>
+                                            <td style="height:30px; display: block;"></td>
+                                        </tr>
+
+                                        <!-- education -->
+                                        <tr>
+                                            <td>
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="text-transform: uppercase; color: #fff; background-color: #006ea7; font-size: 18px;     padding: 10px 15px; text-align: right;">
+                                                            <strong> EDUCATION </strong><img style="position: relative; top: 2px;" src="PdfTemplates/Template2/images/edu-icon.jpg"
+                                                                                         alt="user" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.Education))
+                                        
+                                      
+                                        <!-- education -->
+                                        <!-- IT SKILLS -->
+
+                                        <tr>
+                                            <td style="padding:25px 15px 15px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-bottom: 20px;">
+                                                            <!-- heading box -->
+                                                            <table width="90%" cellpadding="0" cellspacing="0" style="margin-left: auto;">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0; text-align: right;">
+                                                                        <strong> SKILLS </strong> <img style="position: relative; top: 0px;"
+                                                                                                      src="PdfTemplates/Template2/images/skill-icon.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #006ea7; text-align: right;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img-01.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.TechnicalSkills))</td>
+                                                    </tr>
+                                                   
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- IT SKILLS -->
+                                        <!-- CORE COMPETENCIES -->
+
+                                        <tr>
+                                            <td style="padding:0 15px 15px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-bottom: 20px;">
+                                                            <!-- heading box -->
+                                                            <table width="90%" cellpadding="0" cellspacing="0" style="margin-left: auto;">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0; text-align: right;">
+                                                                        <strong> CORE COMPETENCIES </strong> <img style="position: relative; top: 0px;"
+                                                                                                              src="PdfTemplates/Template2/images/core-compitance.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #006ea7; text-align: right;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img-01.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.CoreCompetencies))
+                                                               
+
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- CORE COMPETENCIES -->
+                                        <!-- EXPERTISE-->
+                                        @if (!string.IsNullOrEmpty(Model.technology))
+                                        {
+                                            <tr>
+                                                <td style="padding: 5px 15px 15px;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td style="padding-bottom: 30px;">
+                                                                <!-- heading box -->
+                                                                <table width="90%" cellpadding="0" cellspacing="0" style="margin-left: auto;">
+                                                                    <tr>
+                                                                        <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0; text-align: right;">
+                                                                            <strong> EXPERTISE </strong> <img style="position: relative; top: 0px;"
+                                                                                                      src="PdfTemplates/Template2/images/expertise.png" alt="user" />
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="border-bottom: 1px solid #006ea7; text-align: right;">
+                                                                            <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img-01.jpg" alt="user" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <!-- heading box -->
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #000; border-bottom:0; border-collapse: initial;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="border-bottom: 1px solid #000 !important; text-align: left; padding: 10px; font-size: 16px; line-height: 25px;">
+                                                                                S.No
+                                                                            </th>
+                                                                            <th style="border: 1px solid #000 !important; border-top: 0 !important; text-align: left; padding: 10px; font-size: 16px; line-height: 25px;">
+                                                                                Technology Name
+                                                                            </th>
+                                                                            <th style="border-bottom: 1px solid #000 !important; text-align: left; padding: 10px; font-size: 16px; line-height: 25px;">
+                                                                                Experience
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.technology))
+
+                                                                    </tbody>
+
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        }
+                                        <!-- EXPERTISE -->
+                                        <!-- EXPERTISE-->
+                                        <!-- PERSONAL DETAILS -->
+                                        <tr>
+                                            <td style="padding: 20px 15px 15px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-bottom: 20px;">
+                                                            <!-- heading box -->
+                                                            <table width="90%" cellpadding="0" cellspacing="0" style="margin-left: auto;">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0; text-align: right;">
+                                                                        <strong> PERSONAL DETAILS </strong> <img style="position: relative; top: 0px;"
+                                                                                                             src="PdfTemplates/Template2/images/personal-detail-icon.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #006ea7; text-align: right;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img-01.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td>
+                                                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                                                           @* <tr>
+                                                                                <td style="font-size: 16px; line-height: 25px; color: #000; padding-bottom: 8px; vertical-align: top;">
+                                                                                    Address:
+                                                                                </td>
+                                                                                <td style="font-size: 16px; line-height: 25px; color: #000; padding-bottom: 8px; vertical-align: top;">
+                                                                                    S 132, Narayan vihar, mansrovar, Jaipur
+                                                                                </td>
+                                                                            </tr>*@
+                                                                            <tr>
+                                                                                <td style="font-size: 16px; line-height: 25px; color: #000; padding-bottom: 8px; vertical-align: top;">
+                                                                                    Date of Birth:
+                                                                                </td>
+                                                                                <td style="font-size: 16px; line-height: 25px; color: #000; padding-bottom: 8px; vertical-align: top;">
+                                                                                    @Model.DateOfBirth
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td style="font-size: 16px; line-height: 25px; color: #000; padding-bottom: 8px; vertical-align: top;">
+                                                                                    Languages Known:
+                                                                                </td>
+                                                                                <td style="font-size: 16px; line-height: 25px; color: #000; padding-bottom: 8px; vertical-align: top;">
+                                                                                    @Model.Languages
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!--PERSONAL DETAILS -->
+
+
+
+
+
+                                    </table>
+                                </td>
+                                <!-- left side end-->
+                                <!-- right side -->
+                                <td style="width:69.5%; background-color: #eaeaec; vertical-align: top">
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="padding:40px 0 20px 20px">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="text-transform: uppercase; color: #000; font-size: 32px;">
+                                                            @Model.UserName
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.Certifications))
+                                                       @* <td style="padding-top: 97px;">                                                            
+                                                            <img style="margin-right: 10px; margin-bottom: 5px; " src="PdfTemplates/Template2/images/brand-01.jpg" alt="img" />
+                                                            <img style="margin-right: 10px; margin-bottom: 5px;" src="PdfTemplates/Template2/images/brand-02.jpg" alt="img" />
+                                                            <img style="margin-right: 10px; margin-bottom: 5px;" src="PdfTemplates/Template2/images/brand-03.jpg" alt="img" />
+                                                        </td>*@
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-transform: uppercase; background-color: #2d2e33; padding: 10px; color: #87cffd; font-size: 18px;">
+                                                            @Model.Designation
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:20px; background-color: #006ea7; ">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="text-transform: uppercase; color: #fff; font-size: 18px; padding-bottom: 10px;">
+                                                            OBJECTIVE
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="color: #fff; font-size: 16px; line-height: 20px;">
+                                                            @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.Title))
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+
+                                            </td>
+                                        </tr>
+                                        <!-- PROFILE SUMMARY -->
+                                        <tr>
+                                            <td style="padding:0 20px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-top: 21px;">
+                                                            <!-- heading box -->
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0;">
+                                                                        <img style="position: relative; top: 0px;" src="PdfTemplates/Template2/images/user-icon.jpg" alt="user" /> <strong>
+                                                                            PROFILE SUMMARY
+                                                                        </strong>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #000;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top: 16px;">
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td>
+                                                                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.ProfileSummary))
+                                                                    </td>
+                                                                </tr>
+                                                             
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- PROFILE SUMMARY -->
+                                        <!-- CAREER TIMELINE -->
+                                        <tr>
+                                            <td style="padding:0 20px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-top: 12px;">
+                                                            <!-- heading box -->
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 9px 0 3px 0;">
+                                                                        <img style="position: relative; top: 0px;" src="PdfTemplates/Template2/images/career-icon.jpg" alt="user" /> <strong>
+                                                                            CAREER TIMELINE
+                                                                        </strong>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #000;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding-top: 16px;">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.CAREERTIMELINE))
+                                                               
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                         <!-- CAREER TIMELINE -->
+                                        <!--  WORK EXPERIENCE -->
+                                        <tr>
+                                            <td style="padding:0 20px;">
+                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td style="padding-top: 21px;">
+                                                            <!-- heading box -->
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0;">
+                                                                        <img style="position: relative; top: 0px;" src="PdfTemplates/Template2/images/work-icon.jpg" alt="user" /> <strong>
+                                                                           PROJECTS & WORK
+                                                                            EXPERIENCE
+                                                                        </strong>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border-bottom: 1px solid #000;">
+                                                                        <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img.jpg" alt="user" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <!-- heading box -->
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height:20px; display: block;">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:10px 15px; background-color: #006ea7; color: #fff; font-size: 16px; line-height: 20px;">
+                                                            @Model.Designation
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height:10px; display: block;">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.WorkExperience))</td>
+                                                    </tr>
+                                                   
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!--  WORK EXPERIENCE -->
+                                        <!--  PREVIOUS EXPERIENCE -->
+                                        @if (!string.IsNullOrEmpty(Model.RolesAcross))
+                                        {
+                                            <tr>
+                                                <td style="padding:0 20px;">
+                                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td style="padding-top: 21px;">
+                                                                <!-- heading box -->
+                                                                <table width="100%" cellpadding="0" cellspacing="0">
+                                                                    <tr>
+                                                                        <td style="text-transform: uppercase; color: #000; font-size: 18px; padding: 0 0 3px 0;">
+                                                                            <img style="position: relative; top: 0px;" src="PdfTemplates/Template2/images/role-career.png" alt="user" /> <strong>
+                                                                                ROLES ACROSS THE CAREER
+                                                                            </strong>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="border-bottom: 1px solid #000;">
+                                                                            <img style="position: relative; top:3px;" src="PdfTemplates/Template2/images/bar-img.jpg" alt="user" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <!-- heading box -->
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="height:20px; display: block;">&nbsp;</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.RolesAcross))
+                                                            </td>
+                                                        </tr>                                                
+                                                        <tr>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        }
+                                        <!--  PREVIOUS EXPERIENCE -->
+                                       
+                                    </table>
+                                </td>
+                            </tr>        
+                        </table>
+                    </div>
+                </div>      
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div>
+        No Data Found!
+    </div>
+}

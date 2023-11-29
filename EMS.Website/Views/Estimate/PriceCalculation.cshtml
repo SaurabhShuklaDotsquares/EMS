@@ -1,0 +1,89 @@
+﻿@model EstimateCalculationDto
+@using EMS.Core
+@{
+    ViewData["Title"] = "Estimate Calculator";
+    var isCollapse = Model.CalculationResult.Where(x => x.IsCollapsePrice == true).FirstOrDefault() != null;
+    var headerTitle = "Estimate Calculator" + (string.IsNullOrEmpty(Model.CRMLeadId) ? "" : $" (CRM Lead Id : {Model.CRMLeadId} )");
+
+    var hidesection = (CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM || CurrentUser.RoleId == (int)Enums.UserRoles.AUPM) ? "hide" : "";
+
+}
+<style>
+    .fontbold {
+        font-weight: bold;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .package-box {
+        border: 1px solid #e8e8e8;
+        padding-top: 10px;
+    }
+
+    .package-box-body {
+        border: 1px solid #e8e8e8;
+        padding: 15px;
+        margin-bottom: 15px;
+        min-height: 400px;
+        max-height: 400px;
+        overflow-y: scroll;
+    }
+
+        .package-box-body hr {
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+
+    .pre-line {
+        white-space: pre-line;
+    }
+
+    .package-box-header {
+        border: 1px solid #e8e8e8;
+        padding: 15px;
+        background-color: #e0ded773;
+    }
+
+    .ahref {
+        border-bottom: 1px solid #6363e8;
+        color: #6363e8;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .modelsection .active {
+        color: #fff;
+        background-color: #e99701;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <partial name="_Notification" />
+        <div class="addEditlead-page full-wdth clearfix">
+            <h2>
+                <span id="headername">@headerTitle</span>
+                @*<a href="/estimate/ExportToExcel" target="_blank" class=" btn btn-custom pull-right" style="background-color: #3f8c09;"><i class="fa fa-file-excel-o"></i> Export</a>*@
+                <a id="btnSearch" class="btn btn-custom pull-right margin-right10" style="background-color: #e99701"><i class="fa fa-search"></i> Search</a>
+                <input type="text" asp-for="SearchCRMLeadId" class="form-control pull-right margin-right10" placeholder="Search By CRM Lead Id" style="width:185px;" />
+            </h2>
+            <div id="estimate-main">
+                <partial name="_PriceCalculationForm" model="Model" />
+            </div>
+            <div id="serverhosting-section" class="hide">
+                @*<partial name="_EstimateHostingPackageList" model="Model.EstimateHostingPackage" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        var graphJson = @Html.Raw(Json.Serialize(Model.EstimateGraph));
+    </script>
+    <script src="~/Scripts/highcharts.js"></script>
+    <script src="~/Scripts/CustomJS/Estimate/calculation.js" asp-append-version="true"></script>
+}
+

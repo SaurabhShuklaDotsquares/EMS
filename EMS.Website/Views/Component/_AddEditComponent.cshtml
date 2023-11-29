@@ -1,0 +1,168 @@
+﻿@model ComponentDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    Layout = null;
+}
+<div class="addEditComponent">    
+    <div id="ModelSubmit" style="display:none;" class="alert alert-danger">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <span id="SuccessMessage"></span>
+    </div>
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Add/Edit Component" })
+    <div class="modal-body">
+        @Html.Partial("_ModalPopupErrNotification")
+        @using (Html.BeginForm("AddEditComponent", "Component", FormMethod.Post, new { id = "componentForm", @enctype = "multipart/form-data" }))
+        {
+        @Html.Hidden("hdnIsSuperAdmin", Model.IsSuperAdmin)
+        @Html.Hidden("CreatedByUid", Model.CreatedByUid)
+        if (Model.Id > 0)
+        {
+        @Html.HiddenFor(model => model.ImageName)
+        @Html.HiddenFor(model => model.DesignImages)
+        }
+        if (Model.Id != 0)
+        {
+        @Html.HiddenFor(model => model.Id)
+        }          
+        <div class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Title, new { @style = "font-weight:bold;" })
+            </div>
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.Title,  null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Type, new { @style = "font-weight:bold;" })
+            </div>
+            <div class="col-md-9">
+                <div>
+                    @foreach (var item in Model.TypeList)
+                    {
+                    if (Model.Type == byte.Parse(item.Value))
+                    {
+                    <span style="margin-right:3%;"> <input type="radio" name="type" value="@item.Value" checked="checked" class="radio radiobtn" , style="display: inline; " /><span style="margin-left:0.3%;">@item.Text</span></span>
+                    }
+                    else
+                    {
+                    <span style="margin-right:3%;"><input type="radio" name="type" value="@item.Value" class="radio radiobtn" style="display: inline;" /><span style="margin-left:0.3%;">@item.Text</span> </span>
+                    }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ComponentCategoryId, new { @style = "font-weight:bold;" })
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(model => model.ComponentCategoryId,  Model.CategoryList, "Select Category", new { @class = "form-control ComponentCategoryIdC" })
+            </div>
+        </div>
+
+        <div class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Tags, new { @style = "font-weight:bold;" })
+            </div>
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.Tags, 0,0, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div id="divDesignImages" class="row margin-bottom10" style="display:@(Model.Type==1 || Model.Type==3 ?" none":"block");">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.DesignImages, new { @style = "font-weight:bold;" })
+            </div>
+            <div class="col-md-9">
+                <div class="full-wdth clearfix">
+                    <input style="float:left;" type="file" name="DesignImageName" id="DesignImageName" data_rule_required="true" , data_msg_required="*required" />
+                    @if (!String.IsNullOrEmpty(Model.DesignImages))
+                    {
+                    <div class="divUploadedFile">
+                        <b><a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/ComponentImage/",Model.DesignImages)' download>@Model.DesignImages</a></b>
+                        @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                        {                       
+                           
+                        }
+                    </div>
+                    }
+                </div>
+                <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only(.gif, jpg, jpeg, png,psd)</span>
+            </div>
+        </div>
+
+        <div id="DataUrlId" class="row margin-bottom10" style="display:@(Model.DataUrl!=null?" block":"none");">
+            <div class="col-md-2">
+                <label for="DataUrl" id="DataUrlhtmllabel" style="display:@(Model.Type==1?" block":"none");"><b>URL</b></label>
+                <label for="DataUrl" id="DataUrlJSlabel" style="display:@(Model.Type==3?" block":"none");"><b>URL</b></label>
+                <span class="clearfix" style="font-size:smaller;font-style:italic;">(Html / JS URL)</span>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.DataUrl,  null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div id="divpsdimage" class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.PsdImages, new { @style = "font-weight:bold;" })
+                <span class="clearfix" style="font-size:smaller;font-style:italic;">(PSD Image)</span>
+            </div>
+            <div class="col-md-9">
+                <div class="full-wdth clearfix">
+                    <input style="float:left;" type="file" name="PsdImageName" id="PsdImageName" data_rule_required="true" , data_msg_required="*required" />
+                    @if (!String.IsNullOrEmpty(Model.PsdImages))
+                    {
+                    <div class="divUploadedFile">
+                        <b><a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/ComponentImage/",Model.PsdImages)' download>@Model.PsdImages</a></b>
+                        @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                        {
+                        @*<span> &nbsp;&nbsp; <a href="javascript:void(0)" id="lnkDelMockupDoc" style="color:red;font-size:18px; float:left" title="Delete Document" class="fa fa-remove"></a></span>*@
+                        <span><a href="javascript:void(0)" id="lnkDelPsdImageDoc" style="color:red;font-size:18px; float:left" title="Delete Document"></a></span>
+                        <span><a href="javascript:void(0)" id="lnkDelPsdImageDoc" style="color:red;font-size:18px; float:left" title="Delete Document"></a></span>
+                        }
+                    </div>
+                    }
+                </div>
+                <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only(PSD)</span>
+            </div>
+        </div>
+
+        <div class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ImageName, new { @style = "font-weight:bold;" })
+                <span class="clearfix" style="font-size:smaller;font-style:italic;">( zip or rar file )</span>
+            </div>
+            <div class="col-md-9">
+                <div class="full-wdth clearfix">
+                    <input style="float:left;" type="file" name="ImageName" id="ImageName" data_rule_required="true" , data_msg_required="*required" />
+                    @if (!String.IsNullOrEmpty(Model.ImageName))
+                    {
+                    <div class="divUploadedFile">
+                        <b><a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/ComponentImage/",Model.ImageName)' download>@Model.ImageName</a></b>
+                        @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                        {
+                      
+                        <span><a href="javascript:void(0)" id="lnkDelMockupDoc" style="color:red;font-size:18px; float:left" title="Delete Document"></a></span><span><a href="javascript:void(0)" id="lnkDelMockupDoc" style="color:red;font-size:18px; float:left" title="Delete Document"></a></span>
+                        }
+                    </div>
+                    }
+                </div>
+                <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only(zip, rar)</span>
+            </div>
+        </div>
+
+        <div class="row margin-bottom10">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Description, new { @style = "font-weight:bold;" })
+            </div>
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.Description,  0, 0, new { @class = "form-control", style = "min-height:100px; resize:none;" })
+            </div>
+        </div>
+        @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonID = "btnComponentSubmit", SubmitButtonText = "Submit", CancelButtonText = "Cancel", DefaultButtonCss = true })
+        }
+    </div>
+</div>

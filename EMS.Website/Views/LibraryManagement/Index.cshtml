@@ -1,0 +1,973 @@
+﻿@model LibraryManagementIndexDto
+<link href="~/css/fSelect.css" rel="stylesheet" />
+<link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="~/Content/css/font-awesome.min.css" />
+<link rel="stylesheet" href="~/Content/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/Content/css/bootstrap-multiselect.css" />
+<link rel="stylesheet" href="~/Content/css/style.css" />
+<link rel="stylesheet" href="~/Content/css/responsive.css" />
+
+<style>
+    /*------library management--------*/
+    .listing-sec,
+    .filter-lib {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .li {
+        width: 100px;
+        padding: 0 0 0 0;
+    }
+
+    .flex {
+        flex: 1 0 0;
+    }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+    }
+
+    .flex-wrap {
+        -ms-flex-wrap: wrap !important;
+        flex-wrap: wrap !important;
+    }
+
+    .justify-content-between {
+        -webkit-box-pack: justify !important;
+        -ms-flex-pack: justify !important;
+        justify-content: space-between !important;
+    }
+
+    .align-items-center {
+        -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+        align-items: center !important;
+    }
+
+    .download-link {
+        margin: 5px 0px;
+        font-size: 16px;
+    }
+
+    .option-box {
+        background-color: #f2f2f2;
+        position: relative;
+        font-size: 14px;
+        z-index: 2;
+    }
+
+    .close {
+        right: 15px;
+        top: 15px;
+        opacity: 0.5;
+    }
+
+    .type-title,
+    .adv-srch-title {
+        padding: 9px 15px;
+        cursor: pointer;
+    }
+
+    .option-box::after {
+        background: rgba(0, 0, 0, 0) url(../images/select-arrow.png) 0 0 no-repeat;
+        content: "";
+        height: 8px;
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        width: 13px;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        z-index: -1;
+    }
+
+    .option-box img {
+        margin-right: 12px;
+    }
+
+    .type-sec {
+        width: 170px;
+    }
+
+    .adv-srch {
+        width: 249px;
+        height: 53px;
+    }
+
+    .srch-box {
+        position: relative;
+        margin: 0 30px 0 0;
+        flex: 1 0 0;
+        box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.15);
+    }
+
+        .srch-box .form-control {
+            background: rgba(0, 0, 0, 0) url(../images/icon-search.png) 17px center no-repeat;
+            border-color: #fff;
+            border-right: none;
+            font-size: 16px;
+            height: 52px;
+            padding-left: 52px;
+        }
+
+            .srch-box .form-control::-webkit-input-placeholder {
+                color: #252525;
+                opacity: 1;
+            }
+
+            .srch-box .form-control::-moz-placeholder {
+                color: #252525;
+                opacity: 1;
+            }
+
+            .srch-box .form-control:-ms-input-placeholder {
+                color: #252525;
+                opacity: 1;
+            }
+
+            .srch-box .form-control::-ms-input-placeholder {
+                color: #252525;
+                opacity: 1;
+            }
+
+            .srch-box .form-control::placeholder {
+                color: #252525;
+                opacity: 1;
+            }
+
+    .lib-srch-btn {
+        background-color: #e18f00;
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+        height: 53px;
+        text-align: center;
+        width: 122px;
+        border: none;
+    }
+
+        .lib-srch-btn:hover {
+            background-color: #000;
+        }
+
+    .sub-heading-lib h3 {
+        font-size: 20px;
+        font-weight: 300;
+    }
+
+    .lib-col {
+        border: 1px solid #e8e8e8;
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: calc(25% - 30px);
+        margin: 0 15px 30px;
+    }
+
+        .lib-col figure {
+            display: block;
+        }
+
+            .lib-col figure img {
+                width: 100%;
+            }
+
+    .cont-lib {
+        padding: 12px 18px 15px;
+    }
+
+    .lib-col h4 {
+        font-size: 16px;
+        line-height: 21px;
+    }
+
+    .lib-col p {
+        color: #717171;
+        font-weight: 300;
+    }
+
+    .cont-lib-btm {
+        border-top: 1px solid #e8e8e8;
+        padding-top: 15px;
+        margin-top: 5px;
+        align-items: center;
+    }
+
+    .hideimage-banner {
+        padding-bottom: 50px;
+    }
+
+    .copy-link,
+    .detail-link,
+    .zip-link {
+        background: rgba(0, 0, 0, 0) url(../images/icon-link.png) 0 center no-repeat;
+        color: #e18f00;
+        font-size: 16px;
+        padding-left: 26px;
+        display: inline-block;
+        line-height: 22px;
+    }
+
+    .detail-link {
+        background: rgba(0, 0, 0, 0) url(../images/icon-detail.png) 0 center no-repeat;
+    }
+
+    .zip-link {
+        background: rgba(0, 0, 0, 0) url(../images/icon-zip.png) 0 center no-repeat;
+        padding: 6px 0 6px 32px;
+        word-break: break-word;
+    }
+
+    .rar-link {
+        background: rgba(0, 0, 0, 0) url(../images/icon-rar.png) 0 center no-repeat;
+        padding: 6px 0 6px 32px;
+        color: #e18f00;
+        word-break: break-word;
+        font-size: 16px;
+    }
+
+    .copy-link:hover,
+    .detail-link:hover {
+        color: #333;
+    }
+
+    .copy-link:focus {
+        opacity: 0.5;
+    }
+
+    .lib-link {
+        margin-right: 10px;
+    }
+
+    .drop-sec {
+        position: absolute;
+        top: 100%;
+    }
+
+    .drop-in {
+        background-color: #fafafa;
+        padding: 15px 0 15px 15px;
+        position: relative;
+        font-size: 14px;
+    }
+
+        .drop-in::before {
+            background: rgba(0, 0, 0, 0) url(../images/drp-arrow.png) 0 center no-repeat;
+            content: "";
+            height: 9px;
+            position: absolute;
+            top: -9px;
+            width: 18px;
+        }
+
+    .type-sec .drop-sec {
+        display: none;
+        width: 730px;
+        left: 0;
+    }
+        /*.type-sec:hover .drop-sec {
+               display: block;
+               }*/
+        .type-sec .drop-sec .drop-in::before {
+            left: 20px;
+        }
+
+    .type-label {
+        width: 132px;
+    }
+
+    .type-sec .radio-custom {
+        display: inline-block;
+    }
+
+        .type-sec .radio-custom input[type="radio"] + label {
+            background: rgba(0, 0, 0, 0) url(../images/radio-lib.png) no-repeat left top;
+            color: #333;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 24px;
+            min-height: 24px;
+            margin: 0 15px 0 0;
+            padding: 0 0 0 32px;
+            vertical-align: middle;
+        }
+
+        .type-sec .radio-custom input[type="radio"]:checked + label {
+            background-image: url(../images/radio-lib-select.png);
+        }
+
+    .type-sec .radio-custom {
+        margin-right: 20px;
+    }
+
+    .adv-srch .drop-sec {
+        display: none;
+        width: 100%;
+        right: 0;
+        z-index: 6;
+    }
+
+        .adv-srch .drop-sec .drop-in::before {
+            right: 20px;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .adv-srch .drop-sec label {
+        margin-bottom: 5px;
+    }
+
+    #CopyLink:focus {
+        opacity: 0.5;
+    }
+    /*-------Detail PopUp--------*/
+    .detail-popup {
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: absolute;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    .detail-overlay {
+        background-color: rgba(0, 0, 0, 0.3);
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 8000;
+    }
+
+    .detail-popupin {
+        margin: 118px auto 0;
+        max-width: 1120px;
+        width: 100%;
+    }
+
+    .detail-cont {
+        background-color: #fff;
+        box-shadow: 18px 18px 114px 0px rgba(0, 0, 0, 0.06);
+    }
+
+    .fs-wrap,
+    .fs-dropdown {
+        width: 100% !important;
+    }
+
+    .fs-label-wrap .fs-label {
+        padding: 11px 22px 11px 11px !important;
+    }
+
+    .fs-arrow {
+        right: 12px !important;
+        opacity: 0.5;
+    }
+
+    .search-row {
+        position: relative;
+        /*z-index: 5;*/
+    }
+
+    #CopyLink {
+        background-color: transparent;
+        border: none;
+        color: #e18f00;
+        padding: 0;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        opacity: 100;
+        z-index: 0 !important;
+    }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 145px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+            .tooltip .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    .lnkDownload img {
+        width: 24px;
+    }
+
+    .lnkDownloadComponent img {
+        width: 24px;
+    }
+
+    .lnkDownloadRarOrZip img {
+        width: 24px;
+    }
+
+    .lnkDownload {
+        color: #e18f00;
+    }
+
+    .lnkDownloadComponent {
+        color: #e18f00;
+    }
+
+    .color-orange {
+        color: #e18f00;
+    }
+
+    .btn-reset {
+        margin: -8px 0 15px 0;
+        display: inline-block;
+    }
+
+    @@media only screen and (max-width:1400px) {
+        .copy-link, .detail-link, .zip-link, .rar-link {
+            font-size: 13px;
+            line-height: 22px;
+        }
+    }
+
+    .sub-heading-lib .tooltip {
+        z-index: 5 !important;
+        padding-bottom: 15px;
+        margin-left: 15px;
+    }
+    /*---loadre css---*/
+    .lds-roller {
+        display: block;
+        position: absolute;
+        width: auto;
+        height: auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+        .lds-roller div {
+            animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            transform-origin: 40px 40px;
+        }
+
+            .lds-roller div:after {
+                content: " ";
+                display: block;
+                position: absolute;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: rgba(0, 0, 0, 0.5);
+                margin: -4px 0 0 -4px;
+            }
+
+            .lds-roller div:nth-child(1) {
+                animation-delay: -0.036s;
+            }
+
+                .lds-roller div:nth-child(1):after {
+                    top: 63px;
+                    left: 63px;
+                }
+
+            .lds-roller div:nth-child(2) {
+                animation-delay: -0.072s;
+            }
+
+                .lds-roller div:nth-child(2):after {
+                    top: 68px;
+                    left: 56px;
+                }
+
+            .lds-roller div:nth-child(3) {
+                animation-delay: -0.108s;
+            }
+
+                .lds-roller div:nth-child(3):after {
+                    top: 71px;
+                    left: 48px;
+                }
+
+            .lds-roller div:nth-child(4) {
+                animation-delay: -0.144s;
+            }
+
+                .lds-roller div:nth-child(4):after {
+                    top: 72px;
+                    left: 40px;
+                }
+
+            .lds-roller div:nth-child(5) {
+                animation-delay: -0.18s;
+            }
+
+                .lds-roller div:nth-child(5):after {
+                    top: 71px;
+                    left: 32px;
+                }
+
+            .lds-roller div:nth-child(6) {
+                animation-delay: -0.216s;
+            }
+
+                .lds-roller div:nth-child(6):after {
+                    top: 68px;
+                    left: 24px;
+                }
+
+            .lds-roller div:nth-child(7) {
+                animation-delay: -0.252s;
+            }
+
+                .lds-roller div:nth-child(7):after {
+                    top: 63px;
+                    left: 17px;
+                }
+
+            .lds-roller div:nth-child(8) {
+                animation-delay: -0.288s;
+            }
+
+                .lds-roller div:nth-child(8):after {
+                    top: 56px;
+                    left: 12px;
+                }
+
+    @@keyframes lds-roller {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .lds-roller .loader-text {
+        display: block;
+        width: 100%;
+        position: relative;
+        margin-top: 90px;
+    }
+    /*---loadre css---*/
+    .loader-row {
+        display: block;
+        text-align: center;
+        padding: 10px 15px;
+        position: relative;
+        min-height: 100px;
+    }
+
+        .loader-row .view-list-link {
+            display: inline-block;
+            padding: 10px 15px;
+        }
+
+    .no-border {
+        background-color: transparent;
+        border: none;
+        color: #e18f00;
+        padding: 0;
+        margin-bottom: 10px;
+    }
+
+    .bannerbottom-row img {
+        max-width: 100%;
+        height: 37px;
+        display: inline-block;
+    }
+
+    .cross-icon-label {
+        padding-right: 3px;
+        font-weight: bold;
+    }
+
+    .cross-label {
+        padding-right: 3px;
+        font-weight: bold;
+        padding-left: 3px;
+        padding-top: 8px;
+    }
+
+    .filter-display img {
+        height: 15px;
+    }
+
+    .div-inline {
+        float: left;
+    }
+
+    .clearBoth {
+        clear: both;
+    }
+
+    .Close1 {
+        cursor: pointer;
+    }
+
+    .cross-element label {
+        margin-bottom: 0px;
+    }
+
+    .badge {
+        padding: 5px 7px;
+        cursor: pointer;
+    }
+
+    .badge-secondary {
+        background-color: #e8e8e8;
+        color: black;
+    }
+
+    .fs-label {
+        background: #fff url(images/arrowdown.png?v=wx2vNf6l9h9GU9FHIBivOpQ_CmM) no-repeat scroll right center !important;
+    }
+
+    .fs-arrow {
+        display: none;
+    }
+
+    .yelllow-background {
+        background-color: #e18f00;
+        color: #fff;
+    }
+
+    .industry-togle .industry-listing, #divAdvancedFilters .scroll2 {
+        width: 100% !important;
+    }
+
+    .filter-display {
+        margin-top: 10px;
+    }
+
+    .industry-block {
+        z-index: 99;
+    }
+
+    .filter-display .cross-label {
+        padding-top: 0;
+    }
+
+    .search-row .adv-srch .fs-label {
+        padding: 18px 22px 18px 11px !important;
+    }
+
+    .listing-sec .banner-col .bannerbottom-row {
+        padding: 0 0 15px !important;
+    }
+
+    .hideimage-banner .ribbon-panel .ribbon {
+        right: -20px;
+        top: -20px;
+    }
+
+    .reset_btn {
+        display: flex;
+        justify-content: flex-end;
+        margin: 5px 0 0;
+        align-items: center;
+    }
+
+        .reset_btn img {
+            margin-right: 10px;
+        }
+
+        .reset_btn .btn-reset {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+</style>
+
+
+
+@{
+    ViewBag.Title = "Library Management";
+
+    var isDesigner = CurrentUser.RoleId == (int)Enums.UserRoles.UIUXDesigner|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXDeveloper|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXFrontEndDeveloper|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXManagerial|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXMeanStackDeveloper;
+}
+
+<div class="full-wdth clearfix padding20">
+    <div class="full-wdth padding-left15 padding-right15 clearfix">
+        <input id="hdnDetailid" name="hdnDetailid" type="hidden" value="" />
+        @Html.Hidden("loginUserType", isDesigner)
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <h2>Library Management</h2>
+
+            <select id="LibraryTypeId" name="LibraryTypeId" class="form-control library-type select-type ">
+                @*<option value="">Select State</option>*@
+                @foreach (var item in Model.LibraryTypes)
+                {
+                    <!option value="@item.Value" selected="@(item.Selected)">@item.Text</!option>
+                }
+            </select>
+
+
+
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between search-row">
+
+
+            <div class="industry ind-option adv-srch">
+                @Html.DropDownList("industries", Model.Industries, null, new { @class = "form-control select2Industries ", @multiple = "multiple" })
+            </div>
+
+            @*<div class="industry ind-option adv-srch industry-togle">
+                    <div class="ind-title"> Industry </div>
+
+
+                    <div class="industry-block">
+                    <div class="industry-listing">
+                        <ul>
+                            @foreach (var item in Model.Industries)
+                            {
+                                <li>
+                                    <a class="active">@item.Text</a>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+                </div>*@
+
+            <div class="srch-box d-flex flex-wrap justify-content-between">
+                <div class="search-for layout designType" id="designType">
+                    @Html.DropDownList("designTypes", Model.DesignTypes, "Design Types", new { @class = "form-control select2designTypes" })
+                </div>
+
+                <div class="search-for layout salesKitType" id="salesKitType">
+                    @Html.DropDownList("salesKitTypes", Model.SalesKitTypes, "Sales Kit Types", new { @class = "form-control select2SalesKitTypes" })
+                </div>
+                <div class="search-for layout cvsType" id="cvsType">
+                    @Html.DropDownList("cvsTypes", Model.CvsTypes, "CVs Types", new { @class = "form-control select2CvsTypes" })
+                </div>
+
+                <div class="flex">
+                    <input type="text" name="text" id="search_box" placeholder="Search for..." class="form-control" />
+                    <span style="color:red; display:none" id="reqSearch">Please select any filter from advance search or type text inside search field for desired results.</span>
+                </div>
+                <button type="button" id="btntext_search" name="btntext_search" class="lib-srch-btn">Search</button>
+            </div>
+
+            <div class="adv-srch option-box">
+                <div class="adv-srch-title">
+                    <img src="~/images/icon-type.png" alt=""> Advance Search
+                </div>
+                <div class="drop-sec" id="divAdvancedFilters" style="display: none;">
+                    <div class="drop-in">
+                        <button type="button" class="close">&times;</button>
+                        <div class="scroll2">
+                            <div class="scroll2-pad">
+                                <div class="layout layout-filter">
+                                    <label class="layoutLabel">Layout</label>
+                                    <div class="form-group">
+                                        @Html.DropDownList("layouts", Model.Layouts, null, new { @class = "form-control select2Layouts", @multiple = "multiple" })
+                                    </div>
+                                </div>
+                                <div class="technology">
+                                    <label class="technologyLabel">Technology</label>
+                                    <div class="form-group" id="techSelect">
+                                        @Html.DropDownList("technologies", Model.Technologies, null, new { @class = "form-control select2Technologies", @multiple = "multiple" })
+                                    </div>
+                                </div>
+                                <div style="margin: 0px;" class="row">
+                                    <label class="ndaStatusLabel">NDA Status</label>
+                                    <a class="clearControl" data-control="IsNda" href="javascript:void(0)" style="float: right;color: #e99e00;font-size: 14px;text-decoration: underline;">Clear</a>
+                                    <div class="form-group">
+                                        <div class="dis-inline margin-right10">
+                                            @Html.RadioButtonFor(model => model.IsNda, "1")
+                                            Yes
+                                        </div>
+                                        <div class="dis-inline">
+                                            @Html.RadioButtonFor(model => model.IsNda, "0")
+                                            No
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin: 0px;" class="row">
+                                    <label class="featuredStatusLabel">Featured Status</label>
+                                    <a class="clearControl" data-control="Featured" href="javascript:void(0)" style="float: right;color: #e99e00;font-size: 14px;text-decoration: underline;">Clear</a>
+
+                                    <div class="form-group">
+                                        <div class="dis-inline margin-right10">
+                                            @Html.RadioButtonFor(model => model.Featured, "1")
+                                            Yes
+                                        </div>
+                                        <div class="dis-inline">
+                                            @Html.RadioButtonFor(model => model.Featured, "0")
+                                            No
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="apply-filter">
+                                    <button type="button" id="btnApplyFilter" class="btn btn-secondary yelllow-background">Apply Filter</button>
+                                </div>
+                                <div style="clear: both;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="reset_btn">
+            <a href="javascript:void(0)" class="btn-reset">
+                <img src="~/images/refresh.svg" style="width:16px; height:16px" />
+            </a>
+            <button type="button" class="btn-reset no-border">Reset All</button>
+        </div>
+        <div class="d-block clearfix lds-roller-outer" id="SearchResult">
+            @if (Model.libraryManagementDto != null)
+            { await Html.RenderPartialAsync("_AdvanceSearch", Model.libraryManagementDto); }
+        </div>
+
+        <!-- Load More-->
+        <div class="loader-row" style="display:none" id="load-more">
+            <div class="lds-roller" style="top:0%; display:block">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="loader-row" style="display:none" id="noRecordFound">
+            <h5>No records found</h5>
+        </div>
+        <!-- Load More-->
+        <div class="text-center" id="getLoadMoreData" style="display:none">
+            <a class="btn btn-custom btn-sm">Load More</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts{
+    @*<script src="~/Scripts/CustomJS/LibraryManagement/LibraryManagement-index.js"></script>
+        <script src="~/Scripts/CustomJS/LibraryManagement/LibraryManagement-AdvanceSearch.js"></script>*@
+    @*<script src="~/bundles/LibraryManagement/Index" asp-append-version="true"></script>*@
+    @*<script src="~/bundles/LibraryManagement/AdvanceSearch" asp-append-version="true"></script>*@
+    <script type="text/javascript">
+
+        var isBA = @((RoleValidator.BA_RoleIds.Contains(CurrentUser.RoleId)) ?1:0);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/js/fSelect.js"></script>
+
+    @*<script src="~/Scripts/CustomJS/LibraryManagement/LibraryManagement-index.js"></script>
+        <script src="~/Scripts/CustomJS/LibraryManagement/LibraryManagement-AdvanceSearch.js"></script>*@
+
+    <script src="~/Scripts/CustomJS/LibraryManagement/bootstrap.min.js"></script>
+    <script src="~/Scripts/enscroll-0.6.2.min.js"></script>
+    <script src="~/Scripts/CustomJS/LibraryManagement/LibraryManagement-index.js" asp-append-version="true"></script>
+    <script src="~/Scripts/CustomJS/LibraryManagement/LibraryManagement-AdvanceSearch.js" asp-append-version="true"></script>
+
+    @*<script src="~/bundles/LibraryManagement/Index" asp-append-version="true"></script>
+        <script src="~/bundles/LibraryManagement/AdvanceSearch" asp-append-version="true"></script>*@
+}
+
+
+
+@*<script type="text/javascript">
+        $(window).on('load', function () {
+
+            if (isPM) {
+                $.get(domain + "user/SetProjectStatus", function (result) {
+                    if (result != null) {
+                        var status = result.userstatus;
+                        if (status == '' || status == null) {
+                            $("#projectstatus").html('(Not logged-In Ems Desktop)');
+
+                            $('#btnprojectStatus').trigger('click');
+                        }
+                        else {
+                            $("#projectstatus").html('(' + status + ')');
+                        }
+
+                        $("#projectName").html(result.projectname);
+                    }
+                    $("#ProgressBar_Status").hide();
+                });
+            }
+            else {
+                $("#projectstatus").html('');
+                $("#projectName").html('');
+            }
+        });
+    </script>*@
+@*<script type="text/javascript">
+            $(window).on('load', function () {
+
+                if (isPM) {
+                    $.get(domain + "user/SetProjectStatus", function (result) {
+                        if (result != null) {
+                            var status = result.userstatus;
+                            if (status == '' || status == null) {
+                                $("#projectstatus").html('(Not logged-In Ems Desktop)');
+
+                                $('#btnprojectStatus').trigger('click');
+                            }
+                            else {
+                                $("#projectstatus").html('(' + status + ')');
+                            }
+
+                            $("#projectName").html(result.projectname);
+                        }
+                        $("#ProgressBar_Status").hide();
+                    });
+                }
+                else {
+                    $("#projectstatus").html('');
+                    $("#projectName").html('');
+                }
+            });
+    </script>*@

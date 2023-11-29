@@ -1,0 +1,97 @@
+﻿@using EMS.Web.Models.Others
+@model AssignDeviceDto
+
+@using (Html.BeginForm())
+{
+    await Html.RenderPartialAsync("_ModalHeader", new ModalHeader { Heading = "Assign Device" });
+<div class="modal-body">
+    <div id="NotificationMessage"></div>
+    @Html.HiddenFor(model => model.Id)
+
+    @{
+        var modelId = Model.Id;
+
+        if (modelId > 0)
+        {
+            <div class="form-group clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Condition, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(model => model.Condition, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="form-group required clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.DeviceType, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.DeviceType, Model.DeviceTypeList, "Select Type", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group required clearfix sim">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.DeviceId, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.DeviceId, Model.DeviceNameList, "Select Device", htmlAttributes: new { @class = "form-control" })
+                        <span id="spnQuanityError" class="error"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group required clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.AssignedToUid, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.AssignedToUid, Model.AssignedUserList, "Select User", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group required clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.AssignedDateTime, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AssignedDateTime, htmlAttributes: new { @class = "form-control", @placeholder = "dd/mm/yyyy", @autoComplete = "off", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group required clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.SerialNumber, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" name="SerialNumber" asp-for="SerialNumber" maxlength="100" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Condition, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(model => model.Condition, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+</div>
+    await Html.RenderPartialAsync("_ModalFooter", new ModalFooter());
+}

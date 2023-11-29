@@ -1,0 +1,964 @@
+﻿@model LibraryDto
+@{
+    var currentUserRole = (CurrentUser.RoleId == (int)Enums.UserRoles.UIUXDesigner|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXDeveloper|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXFrontEndDeveloper|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXManagerial|| CurrentUser.RoleId == (int)Enums.UserRoles.UIUXMeanStackDeveloper).ToString();
+    if (Model.Id == 0)
+    {
+        ViewData["Title"] = "Create Library";
+    }
+    else
+    {
+        ViewData["Title"] = "Update Library";
+    }
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int imageNo = 0;
+    int imgNo = Model.LibraryFileList.Where(x => x.PsdfilePath == null).ToList().Count;
+    var componentCount = Model.LibraryComponentTypes.Count;
+    var layoutCount = Model.LayoutTypes.Count;
+    var techCount = Model.Technologies.Count;
+    int designCount = Model.LibraryFileList.Where(x => x.PsdfilePath != null).ToList().Count;
+    string designLayoutTypes = string.Empty;
+    if (designCount > 0)
+    {
+        foreach (var item in Model.LibraryFileList.Where(x => x.PsdfilePath != null).ToList())
+        {
+            designLayoutTypes += item.LibraryLayoutTypeId + ",";
+        }
+        designLayoutTypes = designLayoutTypes.TrimEnd(',');
+    }
+}
+@section styles{
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" />
+    <link rel="stylesheet" href="~/css/fSelect.css" />
+    <style>
+        .preview_image {
+            height: 100px;
+            width: 100%;
+        }
+
+        .preview_desc_image {
+            height: 100px;
+            width: 100%;
+        }
+
+        #previewImage {
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            #previewImage .link {
+                display: block;
+            }
+
+            #previewImage .col-md-2 {
+                margin-bottom: 10px;
+            }
+
+
+        #previewDescImage {
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            #previewDescImage .link {
+                display: block;
+            }
+
+            #previewDescImage .col-md-2 {
+                margin-bottom: 10px;
+            }
+
+        .preview_doc {
+            height: 70px;
+            min-width: 65px;
+        }
+
+        .radio-custom input[type="radio"] + label {
+            background: url("") !important;
+        }
+
+        .error {
+            color: red !important;
+        }
+
+        .my-spacing {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .my-spacing-top {
+            /*margin-top: 15px;*/
+            margin-bottom: 15px;
+        }
+
+        .link {
+            color: #337ab7 !important;
+            text-decoration: underline !important;
+        }
+
+        fieldset {
+            border: 1px solid #979797;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            padding: 0.2em 0.5em;
+            border: 1px solid #979797;
+            font-size: 90%;
+            text-align: right;
+            width: auto;
+            margin-bottom: 0px;
+        }
+
+        /*.design-type-0 .remove-design-type {
+            display: none;
+        }*/
+        input[type="file"] {
+            white-space: normal;
+            word-wrap: break-word;
+            width: 240px;
+            overflow: auto;
+        }
+
+        #name {
+            position: relative;
+            z-index: 10000;
+        }
+
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <h2>@((Model.Id == 0) ? "Create" : "Update") Library</h2>
+            </div>
+        </div>
+        @Html.Partial("_Notification")
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("AddEdit", "LibraryManagement", FormMethod.Post, new { @id = "createLibrary_form", @autocomplete = "off", @enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+            <input type="hidden" id="image_no" value="@imgNo" />
+            <input type="hidden" id="componentCount" value="@componentCount" />
+            <input type="hidden" id="layoutCount" value="@layoutCount" />
+            <input type="hidden" id="techCount" value="@techCount" />
+            <input type="hidden" id="designTypeCount" value="@designCount" />
+            <input type="hidden" id="designCount" value="0" />
+            <input type="hidden" id="layoutTypes" value="@designLayoutTypes" />
+            <input type="hidden" id="currentUserRoleIsDesigner" value="@currentUserRole" />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row col-md-12 my-spacing-top">
+                        <div class="col-md-5">
+                            <div class="row ">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.LibraryTypes, htmlAttributes: new { @class = "control-label" })
+                                    <span>*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("LibraryTypeId", Model.LibraryTypes, new { @class = "form-control library-type" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="row" id="txt_crmuser" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design || Model.LibraryTypeId == (byte)Enums.LibraryType.SalesKit || Model.LibraryTypeId == (byte)Enums.LibraryType.CVs) ? "style=display:none" : "style=display:block")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.CRMUserId, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.CRMUserId, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12 my-spacing" id="designType" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "style=display:block" : "style=display:none")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.DesignTypes, htmlAttributes: new { @class = "control-label" })
+                                    @*<span>*</span>*@
+                                    <label id="DesignTypeId-error" class="error" style="" for="DesignTypeId"></label>
+                                </div>
+                                <div class="col-md-10">
+                                    @foreach (var item in Model.DesignTypes)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="chk pull-left">
+                                                <input type="radio" name="DesignTypeId" class="DesignType" id="rdDesignType_@item.Value" data-id="@item.Value" value="@item.Value" @(Convert.ToInt32(item.Value) == Model.DesignTypeId ? "checked" : "") required />
+                                                <label for="rdDesignType_@item.Value">&nbsp;@item.Text</label>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+                            <div class="row" id="txt_sales_kit_type" @((Model.LibraryTypeId == (byte)Enums.LibraryType.SalesKit) ? "style=display:block" : "style=display:none")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.SalesKitTypes, htmlAttributes: new { @class = "control-label" })
+
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownList("SalesKitId", Model.SalesKitTypes, new { @class = "form-control" })
+                                </div>
+                                @if (CurrentUser.Uid == SiteKey.AshishTeamPMUId && CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                                {
+                                    <div class="col-md-4">
+                                        <a data-toggle="modal" data-target="#modal-action-saleskit" href="@Url.Action("AddEditSalesKit", "LibraryManagement")" class="btn btn-link pull-right btn-addSalesKit">Add New Sales Kit Type</a>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="row" id="txt_csv_type" @((Model.LibraryTypeId == (byte)Enums.LibraryType.CVs) ? "style=display:block" : "style=display:none")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.CvsTypes, htmlAttributes: new { @class = "control-label" })
+
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownList("CvsId", Model.CvsTypes, new { @class = "form-control" })
+                                </div>
+                                @if (CurrentUser.Uid == SiteKey.AshishTeamPMUId && CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                                {
+                                    <div class="col-md-4">
+                                        <a data-toggle="modal" data-target="#modal-action-cvs" href="@Url.Action("AddEditCVs", "LibraryManagement")" class="btn btn-link pull-right btn-addCVs">Add New CVs Type</a>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row col-md-12 my-spacing-top">
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+                                    <span>*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.Title, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                                    <label id="UniqueTitle-error" class="error" style="display:none">This library title already exist</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row col-md-12" style="margin-bottom:15px;">
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.keywords, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.keywords, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Type Keywords (Comma Separator)" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.Users, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownList("AuthorUid", Model.Users, "Select Author", new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row col-md-12" style="margin-bottom:15px;">
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                                    <span>*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Description", @rows = "2" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="col-md-7">
+                        <div class="row" id="txt_crmuser" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design ||Model.LibraryTypeId == (byte)Enums.LibraryType.SalesKit ||Model.LibraryTypeId == (byte)Enums.LibraryType.CVs) ? "style=display:none" : "style=display:block")>
+                            <div class="col-md-2">
+                                @Html.LabelFor(model => model.CRMUserId, htmlAttributes: new { @class = "control-label" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(model => model.CRMUserId, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                            </div>
+                        </div>
+
+                        <div class="row col-md-12 my-spacing" id="designType" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "style=display:block" : "style=display:none")>
+                            <div class="col-md-2">
+                                @Html.LabelFor(model => model.DesignTypes, htmlAttributes: new { @class = "control-label" })-->
+                        @*<span>*</span>*@
+                        <!--<label id="DesignTypeId-error" class="error" style="" for="DesignTypeId"></label>
+                            </div>
+                            <div class="col-md-10">
+                                @foreach (var item in Model.DesignTypes)
+                                {
+                                    <div class="col-md-3">
+                                        <div class="chk pull-left">
+                                            <input type="radio" name="DesignTypeId" class="DesignType" id="rdDesignType_@item.Value" data-id="@item.Value" value="@item.Value" @(Convert.ToInt32(item.Value) == Model.DesignTypeId ? "checked" : "") required />
+                                            <label for="rdDesignType_@item.Value">&nbsp;@item.Text</label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+
+                         <div class="row" id="txt_sales_kit_type"  @((Model.LibraryTypeId == (byte)Enums.LibraryType.SalesKit) ? "style=display:block" : "style=display:none")>
+                            <div class="col-md-2">
+                                @Html.LabelFor(model => model.SalesKitTypes, htmlAttributes: new { @class = "control-label" })
+
+                            </div>
+                            <div class="col-md-6">
+                                @Html.DropDownList("SalesKitId", Model.SalesKitTypes, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                         <div class="row" id="txt_csv_type"  @((Model.LibraryTypeId == (byte)Enums.LibraryType.CVs) ? "style=display:block" : "style=display:none")>
+                            <div class="col-md-2">
+                                @Html.LabelFor(model => model.CvsTypes, htmlAttributes: new { @class = "control-label" })
+
+                            </div>
+                            <div class="col-md-6">
+                                @Html.DropDownList("CvsId", Model.CvsTypes, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>-->
+                    </div>
+
+                    <div class="row col-md-12" id="liveURl" style="margin-bottom:15px;">
+                        <div class="col-md-5">
+                            <div class="row" @((Model.LibraryTypeId == (byte)Enums.LibraryType.CVs || Model.LibraryTypeId == (byte)Enums.LibraryType.SalesKit) ? "style=display:none" : "style=display:block")>
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.IsLive, htmlAttributes: new { @class = "control-label" })
+                                    <span>*</span>
+                                </div>
+                                <div class="col-md-9 radio-custom">
+                                    <label>
+                                        @Html.RadioButton("IsLive", "true", new { @id = "IsLive0", @class = "IsLive", @style = "display: inline;" })
+                                        Yes
+                                    </label>
+                                    <label>
+                                        @Html.RadioButton("IsLive", "false", new { @id = "IsLive1", @class = "IsLive", @style = "display: inline;" })
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <div class="row" id="div_liveURL" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design || Model.LibraryTypeId == (byte)Enums.LibraryType.CVs || Model.LibraryTypeId == (byte)Enums.LibraryType.SalesKit) ? "style=display:none" : "style=display:block")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.LiveURL, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.LiveURL, htmlAttributes: new { @class = "form-control", @id = "liveUrl", @autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row col-md-12 my-spacing">
+                        <div class="col-md-5">
+
+                            <div class="row my-spacing">
+                                <div class="col-md-6 ndaRow" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Website || Model.LibraryTypeId == (byte)Enums.LibraryType.MobileApp) ? "style=display:block;padding:0px" : "style=display:none;padding:0px")>
+                                    <div class="col-md-6">
+                                        @Html.LabelFor(model => model.IsNDA, htmlAttributes: new { @class = "control-label" })
+                                        <span>*</span>
+                                    </div>
+                                    <div class="col-md-6 radio-custom">
+                                        <label>
+                                            @Html.RadioButton("IsNDA", "true", new { @id = "IsNDA0", @class = "", @style = "display: inline;" })
+                                            Yes
+                                        </label>
+                                        <label>
+                                            @Html.RadioButton("IsNDA", "false", new { @id = "IsNDA1", @class = "", @style = "display: inline;" })
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="padding:0px">
+                                    <div class="col-md-6">
+                                        @Html.LabelFor(model => model.IsFeatured, htmlAttributes: new { @class = "control-label" })
+                                        <span>*</span>
+                                    </div>
+                                    <div class="col-md-6 radio-custom">
+                                        <label>
+                                            @Html.RadioButton("IsFeatured", "true", new { @id = "IsFeatured0", @class = "", @style = "display: inline;" })
+                                            Yes
+                                        </label>
+                                        <label>
+                                            @Html.RadioButton("IsFeatured", "false", new { @id = "IsFeatured1", @class = "", @style = "display: inline;" })
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 teamRow" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Website || Model.LibraryTypeId == (byte)Enums.LibraryType.MobileApp) ? "style=display:block;padding:0px" : "style=display:none;padding:0px")>
+                                    <div class="col-md-6">
+                                        @Html.LabelFor(model => model.Team, htmlAttributes: new { @class = "control-label" })
+                                        <span>*</span>
+                                    </div>
+                                    <div class="col-md-6 radio-custom">
+                                        <label>
+                                            @Html.RadioButton("Team", "true", new { @id = "Team0", @class = "", @style = "display: inline;" })
+                                            Internal
+                                        </label>
+                                        <label>
+                                            @Html.RadioButton("Team", "false", new { @id = "Team1", @class = "", @style = "display: inline;" })
+                                            External
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row my-spacing liveRow" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Website || Model.LibraryTypeId == (byte)Enums.LibraryType.MobileApp) ? "style=display:block" : "style=display:none")>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            @Html.LabelFor(model => model.IsGoodToShow, htmlAttributes: new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-md-6 radio-custom">
+                                            <label>
+                                                @Html.RadioButton("IsGoodToShow", "true", new { @id = "IsGoodToShow0", @class = "", @style = "display: inline;" })
+                                                Yes
+                                            </label>
+                                            <label>
+                                                @Html.RadioButton("IsGoodToShow", "false", new { @id = "IsGoodToShow1", @class = "", @style = "display: inline;" })
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-7">
+
+                            <div class="row col-md-12 my-spacing" id="layoutType" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "style=display:none" : "style=display:none")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.LayoutTypes, htmlAttributes: new { @class = "control-label" })
+                                    @*<span>*</span>*@
+                                </div>
+                                <div class="col-md-10">
+                                    <div id="layoutList">
+                                        <div class="col-md-6">
+                                            <select asp-for="LayoutType" class="test layoutClass" multiple="multiple" name="LayoutType" id="selectLayoutList">
+                                                <option value=""></option>
+                                                @foreach (var item in Model.LayoutTypes)
+                                                {
+                                                    <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                                }
+                                            </select>
+                                            <label id="layoutList-error" class="error" style="display:none" for="selectLayoutList">This field is required.</label>
+                                        </div>
+
+                                        <div class="col-md-6" style="margin-top: 4px;">
+                                            <a id="newLayout" title="Create" class="link" href="@Url.Action("AddLayoutType","LibraryManagement")" data-toggle="modal"
+                                               data-target="#modal-add-layout" data-backdrop="static" style="text-decoration: none !important;">
+                                                Add New Layout Type <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12 my-spacing" id="componentType" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Component) ? "style=display:block" : "style=display:none")>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(model => model.LibraryComponentTypes, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div id="componentList">
+                                            <div class="col-md-6">
+                                                <select asp-for="LibraryComponent" class="test componentClass" multiple="multiple" name="LibraryComponent" required id="selectComponentList">
+                                                    <option value="">Select component</option>
+                                                    @foreach (var item in Model.LibraryComponentTypes)
+                                                    {
+                                                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                                    }
+                                                </select>
+                                                <span id="componentList-error" class="error" style="display:none">This field is required.</span>
+                                            </div>
+
+                                            <div class="col-md-6" style="margin-top: 4px;">
+                                                <a id="newComponent" title="Create" class="link" href="@Url.Action("AddComponent","LibraryManagement")" data-toggle="modal"
+                                                   data-target="#modal-add-component" data-backdrop="static" style="text-decoration: none !important;">
+                                                    Add New Component <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="col-md-12">
+                                            @Html.CheckBoxFor(m => m.IsReadyToUse)
+                                            <label for="IsReadyToUse">
+                                                Is Ready To Use
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(model => model.IntegrationHours, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.IntegrationHours, htmlAttributes: new { @class = "form-control", @id = "IntegrationHours", @autocomplete = "off", @placeholder = "Integration Hours" })
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(model => model.ReDevelopmentHours, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.ReDevelopmentHours, htmlAttributes: new { @class = "form-control", @id = "ReDevelopmentHours", @autocomplete = "off", @placeholder = "Re-Development Hours" })
+                                        <small id="ReDevelopmentMsg">*Re-Development Hours Default Value is 30% of Integration Hours</small>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(model => model.EstimatedHours, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.EstimatedHours, htmlAttributes: new { @class = "form-control", @id = "EstimatedHours", @autocomplete = "off", @placeholder = "Estimated Hours" })
+                                        <small id="EstimatedMsg">*Estimated Hours Default Value is 50% of Integration Hours</small>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(model => model.UploadDescription, htmlAttributes: new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input style="float:left;" type="file" name="ComponentFiles" id="ComponentFiles" />
+                                        @*<span id="upload-error" class="error" style="display:none">max file upload limit.</span>*@
+                                        <span id="upload-error" class="error" style="display:none"></span>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding: 35px 0px 0px 0px">
+                                    <div id="previewDescImage">
+                                        @if (Model.LibraryComponentFileList.Count > 0)
+                                        {
+                                            @foreach (var item in Model.LibraryComponentFileList.ToList())
+                                            {
+                                                <div class='col-md-2' id="imageid@(item.Id)">
+                                                    @if (new List<string> { ".jpg", ".png", ".jpeg", ".gif" }.Contains(System.IO.Path.GetExtension(item.FilePath.ToLower())))
+                                                    {
+                                                        <img id='img' class='preview_desc_image' src='@string.Format("{0}{1}{2}", SiteKey.DomainName, "", item.FilePath)'>
+                                                        <br>
+                                                        <a href="javascript:void(0)" data-id="@item.Id" onclick="DeleteLibraryComponentFile(@item.Id, false)" id="lnkDelImage" style="color:black;font-size:18px" title="Delete Image" class="fa fa-remove"></a>
+                                                        <label><input type='radio' name='CoverImage' value='@imageNo' @((Model.CoverImage == imageNo) ? "checked" : "") /> Is Banner?</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        string extension = System.IO.Path.GetExtension(item.FilePath.ToLower());
+                                                        string fileName = System.IO.Path.GetFileName(item.FilePath);
+                                                        if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(item.FilePath.ToLower())) && !string.IsNullOrWhiteSpace(extension))
+                                                        {
+                                                            extension = string.Format("{0}{1}", extension.Remove(0, 1), ".png");
+                                                        }
+                                                        else
+                                                        {
+                                                            extension = "document.svg";
+                                                        }
+                                                        <a target="_blank" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "", item.FilePath)" class="link">
+                                                            @*<img id='img' class='preview_doc' src='~/images/document.svg'>*@
+                                                            <img id='img' class='preview_desc_doc' src='~/images/FileTypes/@extension'>
+                                                        </a>
+
+                                                        @*<p>@fileName</p>*@
+
+                                                        <a href="javascript:void(0)" data-id="@item.Id" onclick="DeleteLibraryComponentFile(@item.Id, false)" id="lnkDelImage" style="color:black;font-size:18px" title="Delete Image" class="fa fa-remove"></a>
+                                                        @*<label><input type='radio' name='CoverImage' value='@imageNo' @( (Model.CoverImage == imageNo) ? "checked" : "") /> Is Banner?</label>*@
+                                                    }
+                                                </div>
+                                                imageNo++;
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-md-12 my-spacing" id="templateType" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Template) ? "style=display:block" : "style=display:none")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.LibraryTemplateTypes, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    <div id="templateList">
+                                        <div class="col-md-6">
+                                            <select asp-for="LibraryTemplate" class="test templateClass" multiple="multiple" name="LibraryTemplate" required id="selectTemplateList">
+                                                <option value="">Select template</option>
+                                                @foreach (var item in Model.LibraryTemplateTypes)
+                                                {
+                                                    <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                                }
+                                            </select>
+                                            <span id="templateList-error" class="error" style="display:none">This field is required.</span>
+                                        </div>
+
+                                        <div class="col-md-6" style="margin-top: 4px;">
+                                            <a id="newTemplate" title="Create" class="link" href="@Url.Action("AddTemplate","LibraryManagement")" data-toggle="modal"
+                                               data-target="#modal-add-template" data-backdrop="static" style="text-decoration: none !important;">
+                                                Add New Template <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row col-md-12" style="margin-bottom:15px;" id="divBATL">
+                        <div class="col-md-5">
+                            <div class="row ba-row" @((Model.LibraryTypeId != (byte)Enums.LibraryType.Component && Model.LibraryTypeId != (byte)Enums.LibraryType.Design && Model.LibraryTypeId != (byte)Enums.LibraryType.CVs && Model.LibraryTypeId != (byte)Enums.LibraryType.SalesKit) ? "style=display:block;" : "style=display:none;")>
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.BAUsers, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.DropDownList("UidBA", Model.BAUsers, "Select BA", new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="row tl-row" @((Model.LibraryTypeId != (byte)Enums.LibraryType.Design && Model.LibraryTypeId != (byte)Enums.LibraryType.CVs && Model.LibraryTypeId != (byte)Enums.LibraryType.SalesKit) ? "style=display:block;" : "style=display:none;")>
+                                <div class="col-md-2">
+                                    @Html.LabelFor(model => model.TLUsers, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownList("UidTL", Model.TLUsers, "Select TL", new { @class = "form-control", })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing industryRow" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Component || Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "style=display:none" : "style=display:block") id="divIndustry">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Industries, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-10">
+                            @foreach (var item in Model.Industries)
+                            {
+                                <div class="col-md-3">
+                                    <div class="chk pull-left">
+                                        <input type="checkbox" name="Industry" id="chkIndustry_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") />
+                                        <label for="chkIndustry_@item.Value">&nbsp;@item.Text</label>
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-md-3">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" id="chkOtherIndustry" @(!string.IsNullOrWhiteSpace(Model.OtherIndustry) ? "checked" : "") />
+                                    <label for="chkOtherIndustry">&nbsp;Other Industry</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="divOtherIndustry" @(string.IsNullOrWhiteSpace(Model.OtherIndustry) ? "style=display:none" : "")>
+                                <div class="chk pull-left">
+                                    @Html.TextBoxFor(model => model.OtherIndustry, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter industry name" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing" id="techParentSpan" @((Model.LibraryTypeId != (byte)Enums.LibraryType.Design) ? "style=display:block" : "style=display:none")>
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.TechnologyParents, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                            <label id="TechnologyParent-error" class="error" style="" for="TechnologyParent"></label>
+                        </div>
+                        <div class="col-md-10" id="techParent">
+                            @foreach (var item in Model.TechnologyParents)
+                            {
+                                <div class="col-md-3">
+                                    <div class="chk pull-left">
+                                        <input type="checkbox" name="TechnologyParent" id="chkTechnologyParent_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "" : "required") />
+                                        <label for="chkTechnologyParent_@item.Value">&nbsp;@item.Text</label>
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-md-3">
+                                <div class="chk pull-left">
+                                    <input type="checkbox" id="chkOtherTechnologyParent" @(!string.IsNullOrWhiteSpace(Model.OtherTechnologyParent) ? "checked" : "") />
+                                    <label for="chkOtherTechnologyParent">&nbsp;Other Technology Parent</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="divOtherTechnologyParent" @(string.IsNullOrWhiteSpace(Model.OtherTechnologyParent) ? "style=display:none" : "")>
+                                <div class="chk">
+                                    @Html.TextBoxFor(model => model.OtherTechnologyParent, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter technology parent name" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing" id="techVisibility" @((Model.Id > 0 && Model.LibraryTypeId != (byte)Enums.LibraryType.Design) ? "style=display:block" : "style=display:none")>
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Technologies, htmlAttributes: new { @class = "control-label" })
+                            <span>*</span>
+                            <label id="Technology-error" class="error" style="" for="Technology"></label>
+                        </div>
+                        <div class="col-md-10" id="techIds">
+                            @if (Model.Id > 0)
+                            {
+                                @foreach (var item in Model.Technologies)
+                                {
+                                    <div class="col-md-3 parentTechId_@item.Group.Name">
+                                        <div class="chk pull-left">
+                                            <input type="checkbox" name="Technology" id="chkTechnology_@item.Value" data-id="@item.Value" value="@item.Value" @(item.Selected ? "checked" : "") />
+                                            <label for="chkTechnology_@item.Value">&nbsp;@item.Text</label>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="col-md-3" style="padding-left: 5px;">
+                                    <div class="chk pull-left">
+                                        <input type="checkbox" id="chkOtherTechnology" @(!string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "checked" : "") />
+                                        <label for="chkOtherTechnology">&nbsp;Other Technology</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" id="divOtherTechnology" @(string.IsNullOrWhiteSpace(Model.OtherTechnology) ? "style=display:none" : "")>
+                                    <div class="chk pull-left">
+                                        @Html.TextBoxFor(model => model.OtherTechnology, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter technology name" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing">
+                        <div class="col-md-2">
+                            <label class="control-label" for="IsActive">Active</label>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="col-md-3">
+                                <div class="chk pull-left">
+                                    <label for="IsActive">
+                                        @Html.CheckBoxFor(m => m.IsActive)
+                                        @*<input type="checkbox" name="IsActive" id="IsActive" data-id="@Model.IsActive" value="" @(Model.IsActive ? "checked" : "") />*@
+                                        &nbsp;Active
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Version, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-10">
+                            <div class="col-md-3">
+                                <div class="chk pull-left">
+                                    @Html.TextBoxFor(model => model.Version, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @placeholder = "Enter version" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing" id="FileUpload" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "style=display:none" : "style=display:block")>
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-9">
+                            <div class="full-wdth clearfix">
+                                <div>
+                                    <input style="float:left;" type="file" name="LibraryFiles" id="LibraryFiles" multiple />
+                                    @*<span id="upload-error" class="error" style="display:none">max file upload limit.</span>*@
+                                    <span id="upload-error" class="error" style="display:none"></span>
+                                </div>
+                                <div class="row" style="padding: 35px 0px 0px 0px">
+                                    <div id="previewImage">
+                                        @if (Model.LibraryFileList.Count > 0)
+                                        {
+                                            @foreach (var item in Model.LibraryFileList.Where(x => x.PsdfilePath == null).ToList())
+                                            {
+                                                <div class='col-md-2' id="imageid@(item.Id)">
+                                                    @if (new List<string> { ".jpg", ".png", ".jpeg", ".gif" }.Contains(System.IO.Path.GetExtension(item.FilePath.ToLower())))
+                                                    {
+                                                        <img id='img' class='preview_image' src='@string.Format("{0}{1}{2}", SiteKey.DomainName, "", item.FilePath)'>
+                                                        <br>
+                                                        <a href="javascript:void(0)" data-id="@item.Id" onclick="DeleteLibraryFile(@item.Id, false)" id="lnkDelImage" style="color:black;font-size:18px" title="Delete Image" class="fa fa-remove"></a>
+                                                        <label><input type='radio' name='CoverImage' value='@imageNo' @((Model.CoverImage == imageNo) ? "checked" : "") /> Is Banner?</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        string extension = System.IO.Path.GetExtension(item.FilePath.ToLower());
+                                                        string fileName = System.IO.Path.GetFileName(item.FilePath);
+                                                        if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(item.FilePath.ToLower())) && !string.IsNullOrWhiteSpace(extension))
+                                                        {
+                                                            extension = string.Format("{0}{1}", extension.Remove(0, 1), ".png");
+                                                        }
+                                                        else
+                                                        {
+                                                            extension = "document.svg";
+                                                        }
+                                                        <a target="_blank" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "", item.FilePath)" class="link">
+                                                            @*<img id='img' class='preview_doc' src='~/images/document.svg'>*@
+                                                            <img id='img' class='preview_doc' src='~/images/FileTypes/@extension'>
+                                                        </a>
+                                                        <br>
+                                                        @*<p>@fileName</p>*@
+                                                        <br>
+                                                        <a href="javascript:void(0)" data-id="@item.Id" onclick="DeleteLibraryFile(@item.Id, false)" id="lnkDelImage" style="color:black;font-size:18px" title="Delete Image" class="fa fa-remove"></a>
+                                                        @*<label><input type='radio' name='CoverImage' value='@imageNo' @( (Model.CoverImage == imageNo) ? "checked" : "") /> Is Banner?</label>*@
+                                                    }
+                                                </div>
+                                                imageNo++;
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-md-12 my-spacing only-design-type" @((Model.LibraryTypeId == (byte)Enums.LibraryType.Design) ? "style=display:block" : "style=display:none")>
+                        <div class="col-md-2">
+                            <label class="control-label" for="DesignFiles">Design Files</label>
+                            <img src="~/images/more.svg" class="addDesignType" style="width:20px;margin-left: 10px;cursor:pointer;" />
+                        </div>
+                        <div class="col-md-9 design-type-clones">
+                            @if (Model.LibraryFileList.Count > 0 && Model.LibraryTypeId == (byte)Enums.LibraryType.Design)
+                            {
+                                int i = 0;
+                                @*@foreach (var item in Model.LibraryFileList.Where(x => x.PsdfilePath != null).ToList())*@
+                                @foreach (var item in Model.LibraryFileList.ToList())
+                                {
+                                    <fieldset id="designLayout@(item.Id)">
+                                        <legend>Design Files</legend>
+                                        <div class="col-md-11">
+                                            <div class="full-wdth clearfix">
+                                                <div class="col-md-3">
+                                                    <label><b>Design Type:</b> @(item.DesignUnitType != null ? (bool)item.DesignUnitType ? Html.Raw("Theme") : Html.Raw("Component") : Html.Raw("") )</label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label><b>Layout Type:</b> @item.LibraryLayoutType.Name</label>
+                                                    <input type="hidden" id="hdesign@(item.Id)" value="@item.LibraryLayoutType.Id" data-name="@item.LibraryLayoutType.Name" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    @if (new List<string> { ".jpg", ".png", ".jpeg", ".gif" }.Contains(System.IO.Path.GetExtension(item.FilePath.ToLower())))
+                                                    {
+                                                        <img id='img' class='preview_image' src='@string.Format("{0}{1}{2}", SiteKey.DomainName, "", item.FilePath)'>
+                                                    }
+                                                </div>
+                                                <div class="col-md-2">
+                                                    @if (new List<string> { ".jpg", ".png", ".jpeg", ".gif", ".psd" }.Contains(System.IO.Path.GetExtension(item.PsdfilePath.ToLower())))
+                                                    {
+                                                        <a target="_blank" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "", item.PsdfilePath)"><img id='img' style="width:40px;" src='~/images/FileTypes/psd.png'></a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <img src="~/images/minus.svg" style="width:20px; float:right; cursor:pointer;" data-id="@item.Id" onclick="DeleteLibraryFile(@item.Id, true)" />
+                                        </div>
+                                    </fieldset>
+                                    i++;
+                                }
+                            }
+
+                            <fieldset class="design-type-0 new-design-type" @(designCount > 0 ? "style=display:none" : "style=display:block")>
+                                <legend>Design Files</legend>
+                                <div class="col-md-11">
+                                    <div class="full-wdth clearfix">
+                                        <div class="col-md-3 radio-custom">
+                                            <label>
+                                                @Html.RadioButton("DesignFiles[0].DesignUnitType", true, new { @class = "DesignFiles_DesignUnitType1", @checked = true, @style = "display: inline;", @required = "required" })
+                                                Theme
+                                            </label>
+                                            <label>
+                                                @Html.RadioButton("DesignFiles[0].DesignUnitType", false, new { @class = "DesignFiles_DesignUnitType2", @style = "display: inline;", @required = "required" })
+                                                Component
+                                            </label>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            @{
+                                                if (!string.IsNullOrWhiteSpace(designLayoutTypes))
+                                                {
+                                                    List<int> layoutIds = designLayoutTypes.Split(',').Select(int.Parse).ToList();
+                                                    Model.DesignLayoutTypes.RemoveAll(x => layoutIds.Contains(Convert.ToInt32(x.Value)) && x.Text != "Others");
+                                                }
+                                            }
+                                            @Html.DropDownList("DesignFiles[0].DesignLayoutType", Model.DesignLayoutTypes, "-Select layout type-", new { @class = "form-control design_layout ", @required = "required" })
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            @Html.TextBox("DesignFiles[0].Image.File", "", new { @type = "file", @required = "required", @class = "FileUploaderSizeLimit" })
+                                            <span>(jpg, jpeg, png, gif files only)</span>
+                                            <span id="upload-error" class="error" style="display:none"></span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            @Html.TextBox("DesignFiles[0].PSD.File", "", new { @type = "file", @class = "FileUploaderSizeLimit" })
+                                            <span>(psd file only)</span>
+                                            <span id="upload-error" class="error" style="display:none"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <img src="~/images/minus.svg" class="remove-design-type" style="width:20px; float:right; cursor:pointer; display:none;" />
+                                </div>
+                            </fieldset>
+                            @*  } *@
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" id="btnsave" class="btn btn-custom pull-right margin-right10" name="Save">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@Html.Partial("_Modal", new Modal { ID = "modal-add-component", AreaLabeledId = "modal-add-component-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-add-template", AreaLabeledId = "modal-add-template-label", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-action-saleskit", AreaLabeledId = "modal-action-lblSalesKit", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-action-cvs", AreaLabeledId = "modal-action-lblCVs", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-add-layout", AreaLabeledId = "modal-add-layout-label", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <script src="~/Scripts/CustomJS/LibraryManagement/addEdit.js" asp-append-version="true"></script>
+    <script src="~/js/fSelect.js"></script>
+    <script>
+        (function ($) {
+            $(function () {
+                window.fs_test = $('.test').fSelect();
+            });
+        })(jQuery);
+    </script>
+}

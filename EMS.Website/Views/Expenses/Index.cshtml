@@ -1,0 +1,129 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model ExpenseIndexDto
+@{
+    ViewBag.Title = "Expenses List";
+}
+
+@section styles{
+    <style>
+        form label {
+            font-weight: 600;
+        }
+
+        .btn-sm {
+            padding: 3px 5px;
+        }
+
+        .sorting_disabled {
+            padding: 5px !important;
+        }
+
+        .btn-excel {
+            background-color: #3f8c09;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+
+        <div class="row margin-bottom20">
+            <div class="col-lg-2">
+                <h2>Expenses List</h2>
+            </div>
+            <div class="col-lg-10">
+                <div class="row">
+
+                    <div class="col-md-2 col-sm-6 form-group">
+                        @if (Model.IsApprover)
+                        {
+                            @Html.DropDownList("UserId", Model.UserList, "All Users", htmlAttributes: new { @class = "form-control" })
+                        }
+                    </div>
+                    <div class="col-md-2 col-sm-6 form-group">
+                        @Html.DropDownList("Status", Model.StatusList, "All Status", htmlAttributes: new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                        @Html.TextBoxFor(model => model.DateTo, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly", @placeholder = "End Date" })
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                        @Html.TextBoxFor(model => model.DateFrom, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly", @placeholder = "Start Date" })
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                        <button type="button" id="btnSearch" class="btn btn-custom" style="padding:7px 8px">Search</button>
+                        <button type="button" id="btnReset" class="btn btn-custom" style="padding:7px 8px">Reset</button>
+                    </div>
+                    <div class="col-md-2 col-sm-3 col-xs-6 form-group">
+                        <a class="btn btn-custom btn-block" href="@Url.Action("addedit")" data-target="#modal-add-expense" data-toggle="modal" data-backdrop="static">Add New</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.IsApprover)
+        {
+            <div class="btn-group pull-right margin-left10">
+                <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Update Claims <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="updateStatus" style="cursor:pointer;" data-val="1">Approve Claims</a></li>
+                    <li><a class="updateStatus" style="cursor:pointer;" data-val="2">Reject Claims</a></li>
+                    <li><a class="markAsPaid" data-toggle='modal' data-target='#modal-mark-reimbursed' href="@Url.Action("MarkAsReimbursed","Expenses")" style="cursor:pointer;" data-val="3">Paid Approved Claims</a></li>
+                </ul>
+            </div>
+        }
+
+        <a href="@Url.Action("downloadreport")" class="pull-right btn btn-custom btn-excel" target="_blank"><i class="fa fa-file-excel-o"></i> Export to Excel</a>
+
+        <table id="grid-expenseList" class="table table-stats"></table>
+
+        <div id="expenseSummary" class="margin-top20" data-bind="visible: showSummary">
+            <h5>Expenses Summary</h5>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <table class="table table-stats">
+                        <thead>
+                            <tr>
+                                <td>Status</td>
+                                <td>Company Card</td>
+                                <td>Cash/ Personal Card</td>
+                                <td width="30%">Total Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: summaries">
+                            <tr>
+                                <td data-bind="text: Status"></td>
+                                <td data-bind="text: CompanyCardSummary"></td>
+                                <td data-bind="text: CashOrPersonalCardSummary"></td>
+                                <td width="30%" data-bind="text: TotalSummary"></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-expense", AreaLabeledId = "modal-add-expense-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-mark-reimbursed", AreaLabeledId = "modal-mark-reimbursed-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-mark-reimbursed", AreaLabeledId = "modal-mark-reimbursed-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script>
+        var isApprover = @Model.IsApprover.ToString().ToLower();
+    </script>
+    <script src="~/Scripts/knockout-3.3.0.js"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/Scripts/CustomJS/Expenses/index.js" asp-append-version="true"></script>
+}

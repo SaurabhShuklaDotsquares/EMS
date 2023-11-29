@@ -1,0 +1,53 @@
+﻿@model EventDto
+@{
+    ViewBag.Title = "Manage Event";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="validation-summary"></div>
+
+        <div class="row form-group">
+            <div class="col-sm-12"><h2>@string.Format("{0} Event", Model.LeaveId > 0 ? "Edit" : "Add")</h2></div>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            <input type="hidden" name="LeaveId" value="@Model.LeaveId" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LeaveDate, htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(x => x.LeaveDate, htmlAttributes: new { @class = "form-control datepicker", @id = "clientComplaintDate", @autocomplete = "off", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a href="@Url.Action("index")" class="btn btn-custom pull-right">Cancel</a>
+                            <button class="btn btn-custom btn-pink pull-right margin-right10" id="SubmitComplaint" type="submit">SUBMIT</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>                    
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/CustomJS/Event/addEdit.js" asp-append-version="true"></script>
+}

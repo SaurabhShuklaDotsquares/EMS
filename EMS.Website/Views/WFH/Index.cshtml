@@ -1,0 +1,85 @@
+﻿@using EMS.Data;
+@using EMS.Core;
+@model IEnumerable<Wfhactivity>
+@{
+    ViewBag.Title = "Manage WFH";
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="row margin-bottom20">
+            <div class="col-sm-3">
+                <h2>Manage - Work From Home</h2>
+            </div>
+            <div class="col-sm-9 pull-right">
+                <div class="row">
+                    @Html.ActionLink("Apply WFH", "manageWFH", "WFH", null, new { @class = "btn btn-custom pull-right margin-right10 btnlistview" })
+
+                    <div class="col-md-2 pull-right"></div>
+                    <div class="col-md-2 pull-right">@Html.DropDownList("status", (List<SelectListItem>)ViewBag.Status, "-Status-", new { @class = "m-wrap medium form-control searchfilter" })</div>
+                                       
+                    
+                    @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                      || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                      //|| RoleValidator.DV_RoleIds.Contains(CurrentUser.RoleId) 
+                      || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                    {
+                        if (ViewBag.Users != null)
+                        {
+                            if (ViewBag.Users.Count > 0)
+                            {
+                               <div class="col-md-2 pull-right">
+                                   @Html.DropDownList("user", (List<SelectListItem>)ViewBag.Users, "All Employee", new { @class = "m-wrap medium form-control searchfilter" })
+                               </div>
+
+                                if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                                {
+                            <div class="col-md-2 pull-right">
+                                @Html.DropDownList("pm", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })
+                            </div>
+                                }
+
+                        <div class="col-md-2 pull-right text-right padding-top5">
+                            <label>
+                                @Html.CheckBox("selfWFH", false, new { @class = "m-wrap medium searchfilter", @value = CurrentUser.Uid })
+                                <b class="text-blue">My Request </b>
+                            </label>
+                        </div>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-2 pull-right text-right padding-top5 hidden">
+                            <label>
+                                @Html.CheckBox("selfWFH", true, new { @class = "m-wrap medium searchfilter", @value = CurrentUser.Uid })
+                                <b class="text-blue">My Request</b>
+                            </label>
+                        </div>
+                    }
+                </div>
+
+
+            </div>
+
+        </div>
+       @* <div id="LeaveBalance">
+        </div>*@
+        @*<div id="div_holidayType" class="form-group clearfix">
+
+        </div>*@
+        <table id="grid-NormalWFH" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="~/Scripts/CustomJS/WFH/Index.js" asp-append-version="true"></script>
+}

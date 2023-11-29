@@ -1,0 +1,182 @@
+﻿@model EMS.Dto.UploadDocumentDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<div class="addEditEstimateDocument">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Add/Edit Estimate Document" })
+    <div class="modal-body">
+        <div id="error-ModalMessage"></div>
+        @await Html.PartialAsync("_ModalPopupErrNotification")
+
+        @using (Html.BeginForm("UploadDocument", "Lead", FormMethod.Post, new { id = "uploadDocumentForm", @enctype = "multipart/form-data" }))
+        {
+            if (Model.EstimateDocumentId != 0)
+            {
+                @Html.HiddenFor(model => model.EstimateDocumentId)
+            }
+            <div class="row margin-bottom10">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Title)
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Title, null, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-bottom10">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Tags)
+                </div>
+                <div class="col-md-9">
+                    @Html.TextAreaFor(model => model.Tags, 0, 0, new { @class = "form-control", style = "min-height:100px; resize:none;" })
+                </div>
+            </div>
+
+            <div class="row margin-bottom10">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Industry)
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Industry, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row margin-bottom10">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Technology)
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Technology, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row margin-bottom20">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.EstimateTimeinDays)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.EstimateTimeinDays, new { @class = "form-control", @maxlength = "4" })
+                </div>
+                <div class="col-md-1">
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.IsSpam)
+                </div>
+                <div class="col-md-1">
+                    @Html.CheckBoxFor(model => model.IsSpam)
+                </div>
+            </div>
+            <div class="row margin-bottom20">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.EstimateDocPath)
+                </div>
+                <div class="col-md-9">
+                    <div class="full-wdth clearfix">
+                        <input style="float:left;" type="file" name="EstimateDocPath" id="EstimateDocPath" />
+                        @if (!String.IsNullOrEmpty(Model.EstimateDocPath))
+                        {
+                            <div class="divUploadedFile">
+                                <b> <a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/EstimateDocument/",Model.EstimateDocPath)' target="_blank">@Model.EstimateDocPath</a></b>
+                                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                                {
+                                    <span> &nbsp;&nbsp; <a id="lnkDelProposalDoc" href="javascript:void(0)" style="color:red;font-size:18px;float:left" title="Delete Document" class="fa fa-remove"></a></span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only (txt, doc, docx, pdf, zip, rar, xlsx, xls)</span>
+                </div>
+            </div>
+
+            <div class="row margin-bottom20">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.WireformMockupDoc)
+                </div>
+                <div class="col-md-9">
+                    <div class="full-wdth clearfix">
+                        <input style="float:left;" type="file" name="WireformMockupDoc" id="WireformMockupDoc" />
+                        @if (!String.IsNullOrEmpty(Model.WireformMockupDoc))
+                        {
+                            <div class="divUploadedFile">
+                                <b> <a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/EstimateDocument/",Model.WireformMockupDoc)' target="_blank">@Model.WireformMockupDoc</a></b>
+                                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                                {
+                                    <span> &nbsp;&nbsp; <a id="lnkDelWireframeMockupDoc" href="javascript:void(0)" style="color:red;font-size:18px;float:left" title="Delete Document" class="fa fa-remove"></a></span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only (.gif, jpg, jpeg, png)</span>
+                </div>
+            </div>
+            <div class="row margin-bottom20">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.OtherDoc)
+                </div>
+                <div class="col-md-9">
+                    <div class="full-wdth clearfix">
+                        <input style="float:left;" type="file" name="OtherDoc" id="OtherDoc" />
+                        @if (!String.IsNullOrEmpty(Model.OtherDoc))
+                        {
+                            <div class="divUploadedFile">
+                                <b> <a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/EstimateDocument/",Model.OtherDoc)' target="_blank">@Model.OtherDoc</a></b>
+                                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                                {
+                                    <span> &nbsp;&nbsp; <a href="javascript:void(0)" id="lnkDelOtherDoc" style="color:red;font-size:18px;float:left" title="Delete Document" class="fa fa-remove"></a></span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only(txt, doc, docx, pdf, zip, rar, xlsx, xls)</span>
+
+                </div>
+            </div>
+
+            <div class="row margin-bottom30">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MockupDoc)
+                </div>
+                <div class="col-md-9">
+                    <div class="full-wdth clearfix">
+                        <input style="float:left;" type="file" name="MockupDoc" id="MockupDoc" />
+                        @if (!String.IsNullOrEmpty(Model.MockupDoc))
+                        {
+                            <div class="divUploadedFile">
+                                <b><a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/EstimateDocument/",Model.MockupDoc)' target="_blank">@Model.MockupDoc</a></b>
+                                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                                {
+                                    <span> &nbsp;&nbsp; <a href="javascript:void(0)" id="lnkDelMockupDoc" style="color:red;font-size:18px; float:left" title="Delete Document" class="fa fa-remove"></a></span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only(txt, doc, docx, pdf, zip, rar, xlsx, xls)</span>
+                </div>
+            </div>
+            <div class="row margin-bottom30">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Flowcharts)
+                </div>
+                <div class="col-md-9">
+                    <div class="full-wdth clearfix">
+                        <input style="float:left;" type="file" name="FlowchartsDoc" id="FlowchartsDoc" />
+                        @if (!String.IsNullOrEmpty(Model.Flowcharts))
+                        {
+                            <div class="divUploadedFile">
+                                <b><a style="font-size:smaller;text-decoration:underline;float:left;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"upload/EstimateDocument/",Model.Flowcharts)' target="_blank">@Model.Flowcharts</a></b>
+                                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                                {
+                                    <span> &nbsp;&nbsp; <a href="javascript:void(0)" id="lnkDelFlowcharts" style="color:red;font-size:18px; float:left" title="Delete Document" class="fa fa-remove"></a></span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <span class="clearfix" style="font-size:smaller;font-style:italic;">Upload only(txt, doc, docx, pdf, zip, rar, xlsx, xls)</span>
+
+                </div>
+            </div>
+            @await Html.PartialAsync("_ModalFooter", new ModalFooter { SubmitButtonID = "btnDocSubmit", SubmitButtonText = "Submit", CancelButtonText = "Cancel", DefaultButtonCss = false });
+        }
+    </div>
+
+
+</div>

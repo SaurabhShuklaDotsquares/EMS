@@ -1,0 +1,156 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model EMS.Dto.LeaveActivityDto
+@{
+    ViewBag.Title = "Leave Calendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="~/css/select2.css" rel="stylesheet" />
+    <link href="~/content/scroll/skins.css" rel="stylesheet" />
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @await Html.PartialAsync("_Notification")
+
+        <div class="ManageDepartment-page full-wdth clearfix">
+            <div class="box-body">
+                <div class="row">
+                    <div class="full">
+                        <div class="pull-left col-md-2">
+                            <h2>Leaves Calender</h2>
+                        </div>
+                        <div class="col-md-10 search-filter pull-right">
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.ActionLink("Apply Leave", "manageleave", "leave", new { returnview = "calendar" }, new { @class = "btn btn-custom pull-right margin-right10" })
+                                    <a href="@Url.Action("index", "leave")" class="btn btn-custom pull-right margin-right10">List View</a>
+                                    <div class="col-md-2 pull-right">
+                                        <select id="leaveType" class="form-control leaveType">
+                                            <option value="0" selected="selected">Normal and Urgent Leave</option>
+                                            <option value="15">Normal Leave</option>
+                                            <option value="16">Urgent Leave</option>
+                                            @if (CurrentUser.RoleId == (int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM@*|| CurrentUser.RoleId == (int)Enums.UserRoles.PM*@)
+{
+<option value="1">Late Hour</option>
+<option value="2">UnAuthorized</option>
+}
+                                        </select>
+                                    </div>
+                                    @if (ViewBag.UnderEmployeeList != null)
+                                    {
+                                        if (ViewBag.UnderEmployeeList.Count > 0)
+                                        {
+                                        <div class="col-md-2 pull-right @ViewBag.UnderEmployeeList!=null' ">
+
+                                            <select id="Uid" class="form-control">
+                                                <option value="0">All Employee</option>
+                                                @foreach (var item in ViewBag.UnderEmployeeList)
+                                                {
+                                                    <text>
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    </text>
+                                                }
+                                            </select>
+
+                                        </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Html.Hidden("Uid")
+                                    }
+
+                                    @if (CurrentUser.RoleId != (int)Enums.UserRoles.UKBDM && CurrentUser.RoleId != (int)Enums.UserRoles.UKPM && CurrentUser.RoleId != (int)Enums.UserRoles.AUPM && CurrentUser.RoleId != (int)Enums.UserRoles.PMOAU && CurrentUser.RoleId != (int)Enums.UserRoles.PMO)
+                                    {
+                                        @if (ViewBag.LeaveCategory != null)
+                                        {
+                                            <div class="col-md-2 pull-right @ViewBag.LeaveCategory!=null' ">
+
+                                                <select id="leaveCategory" class="form-control">
+                                                    <option value="0">All Leave</option>
+                                                    @foreach (var item in ViewBag.LeaveCategory)
+                                                    {
+                                                        <text>
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        </text>
+                                                    }
+                                                </select>
+
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            @Html.Hidden("LeaveCategory")
+                                        }
+                                    }
+                                    @if (ViewBag.PmList != null)
+                                    {
+                                        <div class="col-md-2 pull-right">
+                                            <select id="PmId" class="form-control ">
+                                                <option value="0">All PM</option>
+                                                @foreach (var item in ViewBag.PmList)
+                                                {
+                                                    <text>
+                                                        <option value="@item.Uid">@item.Name</option>
+                                                    </text>
+                                                }
+                                            </select>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.Hidden("PmId", (Object)ViewBag.PmId)
+                                    }                                    
+                                    @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                                       || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                                       //|| RoleValidator.DV_RoleIds.Contains(CurrentUser.RoleId) 
+                                       || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                                    {
+                                        <div class="col-md-1 pull-right text-right padding-top5">
+                                            <label>
+                                                @Html.CheckBox("selfleave", false, new { @class = "m-wrap medium searchfilter", @value = CurrentUser.Uid }) <b class="text-blue">My Leave</b>
+                                            </label>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-1 pull-right text-right padding-top5 hidden">
+                                            <label>
+                                                @Html.CheckBox("selfleave", true, new { @class = "m-wrap medium searchfilter", @value = CurrentUser.Uid }) <b class="text-blue">My Leave</b>
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="LeaveBalance">
+                </div>
+            </div>
+            <div id="calendardiv">
+                @await Component.InvokeAsync("LeaveCalender", new { leaveType = 0 })
+            </div>
+        </div>
+        <div class="divoverlay">
+            @*<img src="@(SiteKey.DomainName+"images/ProgressWheel.gif")" />*@
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-leave-detail", AreaLabeledId = "modal-leave-detail-label", Size = Enums.ModalSize.Large })
+
+@section scripts{
+    <script src="~/Content/scroll/baron.js"></script>
+    <script src="~/Content/scroll/script.js"></script>
+    <script src="~/Scripts/CustomJS/leave/leaveCalender.js" asp-append-version="true"></script>
+}

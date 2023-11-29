@@ -1,0 +1,42 @@
+﻿
+@model IEnumerable<TimeSheetReviewDto>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="roundedL"></th>
+            <th>Added Date</th>
+            <th>Project Name</th>
+            <th>Developer Name/Type</th>
+            <th>Work Hours</th>
+            <th>Description</th>
+            <th>  Verify All @Html.CheckBox("chkAll", new { @class = "chkAll" })</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null && Model.Count() > 0)
+        {
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count = count + 1;
+                <tr>
+                    <td style="width: 2%;text-align:center;vertical-align:top;">@count</td>
+                    <td>@item.AddedDate</td>
+                    <td>@item.ProjectName</td>
+                    <td>@item.DeveloperName</td>
+                    <td>@item.WorkHoours</td>
+                    <td style="width:35%">@item.Description</td>
+                    <td style="text-align:center;width:10%">@Html.CheckBox("chkSheet_" + item.UserTimeSheetID, new { @value = item.UserTimeSheetID, @class = "select-checkbox" })</td>
+                </tr>
+
+            }
+        }
+        else
+        {
+            <tr class="tr-norecord">
+                <td colspan="7" style="font-size:larger; text-align:center;">No Record Found !!</td>
+            </tr>
+        }
+    </tbody>
+</table>

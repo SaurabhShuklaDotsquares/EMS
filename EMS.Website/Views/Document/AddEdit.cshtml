@@ -1,0 +1,148 @@
+﻿@model DocumentDto
+@{
+    ViewBag.Title = "Add/Edit Document";
+}
+@section styles{
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" />
+    @*<style>
+            form label {
+                font-weight: 600;
+            }
+
+            .btn-sm {
+                padding: 3px 5px;
+            }
+
+            .sorting_disabled {
+                padding: 5px !important;
+            }
+
+            .btn-excel {
+                background-color: #3f8c09;
+            }
+
+            .myclas {
+                margin-top: 8px;
+            }
+
+            .doc-list {
+                border-left: 1px solid rgba(0,0,0,0.1);
+                border-top: 1px solid rgba(0,0,0,0.1);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+                .doc-list li {
+                    width: 50%;
+                    padding: 10px 15px;
+                    border-right: 1px solid rgba(0,0,0,0.1);
+                    border-bottom: 1px solid rgba(0,0,0,0.1);
+                }
+
+                    .doc-list li a {
+                        word-break: break-all;
+                    }
+        </style>*@
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="validation-summary"></div>
+        <div id="MessageDiv"></div>
+        <div class="row form-group">
+            <div class="col-sm-12"><h2>@string.Format("{0} Document", Model.Id > 0 ? "Edit" : "Add")</h2></div>
+        </div>
+        @using (Html.BeginForm("Add", "Document", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DepartmentId, htmlAttributes: new { @class = "control-label" })
+                            @if (Model.Id > 0)
+                            {
+                                @Html.DropDownListFor(x => x.DepartmentId[0], (List<SelectListItem>)ViewBag.DepartmentList, "-Select Department-", new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(x => x.DepartmentId, (List<SelectListItem>)ViewBag.DepartmentList, "-Select Department-", new { @class = "form-control" })
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DocumentName, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(x => x.DocumentName, new { @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        @*<div class="form-group">*@
+
+                            <div class="col-md-2">
+                                <label class="control-label">Upload file</label>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.TextBoxFor(x => x.Document, htmlAttributes: Model.Id == 0 ? new { @type = "file", @name = "Document" } :
+                                                new { @type = "file" } as object)
+                            </div>
+
+                        @*</div>*@
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                @if (Model.Id > 0 && !string.IsNullOrWhiteSpace(Model.DocumentPath))
+                {
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            @*<div class="form-group">
+                                <div class="col-md-12">*@
+                                    <table cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px;margin-bottom:10px;">
+                                        <tr>
+                                            <td style="border:solid 1px #f7a643;padding:2px 10px 10px 10px;width:25%;">
+
+                                                <b>Document:</b>
+
+                                            </td>
+                                            <td style="border:solid 1px #f7a643;padding:2px 10px 10px 10px;">
+                                                <a href="@Model.DocumentPath" class="btn btn-link" target="_blank">@Model.DocumentName</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                @*</div>
+                            </div>*@
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                }
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="hidden" name="DocumentPath" value="@Model.DocumentPath" />
+                            <input type="hidden" name="CreatedDate" value="@Model.CreatedDate" />
+                            <a href="@Url.Action("index")" class="btn btn-custom pull-right">Cancel</a>
+                            <button class="btn btn-custom btn-pink pull-right margin-right10" type="submit">SUBMIT</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
+}

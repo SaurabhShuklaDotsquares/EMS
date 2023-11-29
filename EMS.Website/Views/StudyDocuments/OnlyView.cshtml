@@ -1,0 +1,31 @@
+﻿@using EMS.Website.Models.StudyDocuments;
+@model OnlyViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "Study Center View";
+}
+
+<!--pdf css-->
+<link href="~/css/pdfjs-viewer.min.css" rel="stylesheet" />
+
+
+<input type="hidden" asp-for="FileName" />
+<input type="hidden" asp-for="ContentType" />
+<input type="hidden" asp-for="Data" />
+
+
+<div id="pdf-container" class="pdfpages" style="display:none;background-color: gray;padding: 10px;"></div>
+<div id="word-container" class="" style="display:none;"></div>
+
+<script src="~/bundles/jquery"></script>
+<!--pdf js-->
+<script src="~/scripts/pdf.js"></script>
+<script src="~/scripts/pdf.worker.js"></script>
+<script src="~/scripts/pdfjs-viewer.min.js"></script>
+<!--docx js-->
+<script src="~/scripts/jszip.min.js"></script>
+<script src="~/scripts/docx-preview.js"></script>
+<!--sweet alert-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<!--page js-->
+<script src="~/scripts/customjs/studydocuments/onlyview.js" asp-append-version="true"></script>

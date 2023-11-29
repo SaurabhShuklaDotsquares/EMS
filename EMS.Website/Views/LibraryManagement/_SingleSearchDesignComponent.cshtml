@@ -1,0 +1,27 @@
+﻿@model LibraryManagementDto
+
+@if (Model.libraries != null && Model.libraries.Count > 0)
+{
+    @foreach (var library in Model.libraries)
+    {
+        <div class="SearchFile lib-col">
+            <div class="cont-lib">
+                <h4>@library.Title</h4>
+                <p>@library.Description</p>
+                @if (library.LibraryFileDtos.Count > 0)
+                {
+                    <div class="cont-lib-btm d-flex flex-wrap justify-content-between">
+                        @foreach (var libraryFileDto in library.LibraryFileDtos)
+                        {
+                            <a class="@libraryFileDto.FileImage lnkDownloadRarOrZip color-orange download-link" href="javascript:void(0);" data-id="@libraryFileDto.Id">
+                                <img src="~/images/@libraryFileDto.FileImage" />
+                                Download @libraryFileDto.FileTypeName File
+                            </a>
+                        }
+                    </div>
+                }
+                </div>
+        </div>
+    }
+}
+

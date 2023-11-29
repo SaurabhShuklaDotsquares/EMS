@@ -1,0 +1,93 @@
+﻿@using EMS.Data;
+@using EMS.Core;
+@model IEnumerable<LeaveActivity>
+@{
+    ViewBag.Title = "Manage Leave";
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="row margin-bottom20">
+            <div class="col-sm-2">
+                <h2>Manage Leave</h2>
+            </div>
+            <div class="col-sm-10 pull-right">
+                <div class="row">
+                    @*@Html.ActionLink("Apply Leave", "manageleave", "leave", null, new { @class = "btn btn-custom pull-right margin-right10 btnlistview" })
+                    <a href="@Url.Action("calendar", "leave")" class="btn btn-custom pull-right margin-right10">Calendar View</a>*@
+                    <div class="col-md-2 pull-right">@Html.DropDownList("leavetype", (List<SelectListItem>)ViewBag.LeaveType, "Normal and Urgent Leave", new { @class = "m-wrap medium form-control searchfilter" })</div>
+                    <div class="col-md-2 pull-right">@Html.DropDownList("status", (List<SelectListItem>)ViewBag.Status, "-Status-", new { @class = "m-wrap medium form-control searchfilter" })</div>
+
+                    @if (CurrentUser.RoleId != (int)Enums.UserRoles.UKBDM && CurrentUser.RoleId != (int)Enums.UserRoles.UKPM && CurrentUser.RoleId != (int)Enums.UserRoles.AUPM && CurrentUser.RoleId != (int)Enums.UserRoles.PMOAU && CurrentUser.RoleId != (int)Enums.UserRoles.PMO)
+                    {
+                        <div class="col-md-2 pull-right">@Html.DropDownList("leavecatagory", (List<SelectListItem>)ViewBag.LeaveCategory, "All Leaves", new { @class = "m-wrap medium form-control searchfilter" })</div>
+                    }
+                    @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO
+                      || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+                      || RoleValidator.TL_Sales_DesignationIds.Contains(CurrentUser.DesignationId)
+                      //|| RoleValidator.DV_RoleIds.Contains(CurrentUser.RoleId)
+                      || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)
+                    {
+                        if (ViewBag.Users != null)
+                        {
+                            if (ViewBag.Users.Count > 0)
+                            {
+                                <div class="col-md-2 pull-right">
+                                    @Html.DropDownList("user", (List<SelectListItem>)ViewBag.Users, "All Employee", new { @class = "m-wrap medium form-control searchfilter" })
+                                </div>
+                            }
+                        }
+
+                        if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                        {
+                            <div class="col-md-2 pull-right">
+                                @Html.DropDownList("pm", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })
+                            </div>
+                        }
+                        <div class="col-md-1 pull-right text-right padding-top5">
+                            <label>
+                                @Html.CheckBox("selfleave", false, new { @class = "m-wrap medium searchfilter", @value = CurrentUser.Uid })
+                                <b class="text-blue">My Leave</b>
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-1 pull-right text-right padding-top5 hidden">
+                            <label>
+                                @Html.CheckBox("selfleave", true, new { @class = "m-wrap medium searchfilter", @value = CurrentUser.Uid })
+                                <b class="text-blue">My Leave</b>
+                            </label>
+                        </div>
+                    }
+                </div>
+
+
+            </div>
+            
+            <div class="col-sm-12 pull-right">
+                <div class="row">
+                    @Html.ActionLink("Apply Leave", "manageleave", "leave", null, new { @class = "btn btn-custom pull-right margin-right10 btnlistview" })
+                    <a href="@Url.Action("calendar", "leave")" class="btn btn-custom pull-right margin-right10">Calendar View</a>
+                    
+                </div>
+            </div>
+        </div>
+        <div id="LeaveBalance">
+        </div>
+        @*<div id="div_holidayType" class="form-group clearfix">
+
+            </div>*@
+        <table id="grid-NormalLeaves" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/Leave/Index.js" asp-append-version="true"></script>
+}

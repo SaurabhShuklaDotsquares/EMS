@@ -1,0 +1,152 @@
+﻿@model ActivitySearch
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "<div class='col-2 pull-left'><h4>Specilization Legends</h4></div><div class='col-10 pull-right'><ul class='badges-block'><li class='badge-success'>Expert</li><li class='badge-primary'>Intermediate</li><li class='badge-warning'>Beginner</li>    <li class='badge-dark'>Interested</li></ul></div>" }); }
+<style>
+    .tech-block1, .tech-block2 {
+        border-bottom: 1px solid #dddddd;
+        padding: 20px;
+    }
+
+    .tech-block-outer h2 {
+        font-size: 24px;
+    }
+
+    .tech-block-outer h3 {
+        font-size: 20px;
+    }
+
+    .tech-block-outer p {
+        padding: 0 0 10px;
+    }
+
+    .bdr0 {
+        border: medium none !important;
+    }
+
+    .badges-block li {
+        border-radius: 30px;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+        display: inline-block;
+        font-size: 13px;
+        height: 24px;
+        line-height: 22px;
+        margin: 0 10px 10px 0;
+        padding: 0 6px;
+        vertical-align: top;
+    }
+
+    .badge-primary {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    .badge-secondary {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #ffffff;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .badge-info {
+        background-color: #17a2b8;
+        color: #ffffff;
+    }
+
+    .badge-light {
+        background-color: #eef1f3;
+        color: #212529;
+    }
+
+    .badge-dark {
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .round-block li {
+        border-right: 1px solid #cccccc;
+        display: inline-block;
+        margin: 10px 6px 0 0;
+        padding: 0 10px 0 0;
+        vertical-align: top;
+    }
+
+        .round-block li:last-child {
+            border: none;
+        }
+
+    .round-b {
+        border-radius: 50%;
+        display: inline-block;
+        height: 12px;
+        margin: -2px 0 0 2px;
+        vertical-align: middle;
+        width: 12px;
+    }
+
+    .badges-block li a {
+        color: #fff;
+    }
+</style>
+<div class="modal-body">
+    <div class="tech-block-outer">
+
+        @*<div class="col-12">
+        <div class="col-2 pull-left">
+            <h4>Technology Specilization</h4>
+        </div>*@
+        @*<div class="col-10 pull-right">
+                <ul class="badges-block">
+                    <li class="badge-success">Expert</li>
+                    <li class="badge-primary">Intermediate</li>
+                    <li class="badge-warning">Beginner</li>
+                    <li class="badge-dark">Interested</li>
+                </ul>
+            </div>
+        </div>*@
+
+        <div class="tech-block1">
+            <h4>Technology Specilization</h4>
+            <ul class="round-block">
+                <li>
+                    @Html.Raw(Model.technologies.ToCombinedString(delimiter: " | "))
+                </li>
+
+            </ul>
+        </div>
+        <div class="tech-block2">
+            <h4>Other Technology</h4>
+            <ul class="round-block">
+                <li>
+                    @(!string.IsNullOrEmpty(Model.othertechnology) ? Model.othertechnology : "N/A")
+                </li>
+            </ul>
+
+        </div>
+        <div class="tech-block2 bdr0">
+            <h4>Domain Experts</h4>
+            <ul class="round-block">
+                <li>
+                    @(Model.domainexpert.ToCombinedString().Length > 0 ? Model.domainexpert.ToCombinedString(delimiter: " | ") : "N/A")
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+  
+</div>
+
+
+

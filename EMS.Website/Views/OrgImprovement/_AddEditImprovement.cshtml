@@ -1,0 +1,77 @@
+﻿@using EMS.Web.Models.Others
+@model OrgImprovementDto
+
+<form asp-controller="OrgImprovement" asp-action="Add" method="post">
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "ADD/EDIT Org Improvement" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label">Title</label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="Title" class="form-control" required maxlength="500" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label">Type</label>
+                </div>
+                <div class="col-md-9">
+                    <select asp-for="TypeId" asp-items="@Model.ImprovementTypes" class="form-control" required>
+                        <option value="">--Select Type-- </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM 
+            || RoleValidator.TL_Technical_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_QualityAnalyst_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_DigitalMarketing_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_UIUX_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_ARVRUnityGaming_DesignationIds.Contains(CurrentUser.DesignationId)
+            || RoleValidator.TL_ITInfra_DesignationIds.Contains(CurrentUser.DesignationId)
+            )
+        {
+            <div class="form-group clearfix">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Employee</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select asp-for="EmployeeUid" asp-items="@Model.Users" class="form-control" required>
+                            <option value="">--Select User-- </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label">Description</label>
+                </div>
+                <div class="col-md-9">
+                    <textarea asp-for="Description" class="form-control" rows="2" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label">Improvement Date</label>
+                </div>
+                <div class="col-md-9">
+                    <input asp-for="ImprovementDate" class="form-control" readonly required />
+                </div>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+</form>

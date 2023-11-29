@@ -1,0 +1,380 @@
+﻿@model EMS.Dto.EmployeeFeedback.UserNocDto
+@{
+    ViewData["Title"] = "UserNoc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string Yes = "Yes";
+    string No = "No";
+    string Voluntaryhide = "";
+    string Rehirehide = "";
+}
+<style>
+    .color-orange {
+        color: #e99701;
+    }
+</style>
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20" id="frm-create-edit-employeefeedback">
+        @Html.Partial("_Notification")
+
+        <div class="timesheet-page full-wdth clearfix">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+                    <h2> Employee Exit Status </h2>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6">
+                    <a href="/onnotice" class="btn btn-custom pull-right margin-right10" name="Save">Back</a>
+                </div>
+            </div>
+            <div class="validation-summary"></div>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        @using (Html.BeginForm("UserNoc", "onnotice", FormMethod.Post))
+                        {
+                            var disabledOnallformalities = Model.IsExitFormalitiesCompleted == true ? "allowdisabled" : "";
+                            <input type="hidden" class="checkcompletedhidden" value="@Model.IsExitFormalitiesCompleted" />
+                            <div class="row">
+                                <div class="col-padding">
+                                    <div><b><span class="color-orange">Employee Details</span></b></div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Name : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Label(Model.Name ?? "")
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Email : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>@(Model.EmailOffice ?? "")</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Employee Code : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Label(Model.EmpCode ?? "")
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Manager Name : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Label(Model.PMName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Designation : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Label(Model.Designation)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Department : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Label(Model.Department)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Resignation Date : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="font-weight600">
+                                            @string.Format("{0:d}", Model.ResignationDate)
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Relieving Date : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="font-weight600">
+                                            @string.Format("{0:d}", Model.RelieveDate)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-padding">
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-padding">
+                                    <div><b><span class="color-orange">Social Media/Email/Skype Acccounts Setting</span></b></div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label> LinkedIn/FaceBook Profile changed? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.LFProfile", true, Model.LFProfile == true, new { @class = "" + disabledOnallformalities + "" }) @Yes
+                                        @Html.RadioButton("Model.LFProfile", false, Model.LFProfile == false, new { @class = "" + disabledOnallformalities + "" }) @No
+                                        @*<input type="radio" name="LFProfile" class="" @(Model.LFProfile == true ? "checked" : "") value="true" required />
+                                            @Yes
+                                            <input type="radio" name="LFProfile" class="" @(!Model.LFProfile == true ? "checked" : "") value="false" />
+                                            @No*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label>Email/ Skype Password Reseted? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.EmailSkypePassReset", true, Model.EmailSkypePassReset == true, new { @class = "" + disabledOnallformalities + "" }) @Yes
+                                        @Html.RadioButton("Model.EmailSkypePassReset", false, Model.EmailSkypePassReset == false, new { @class = "" + disabledOnallformalities + "" }) @No
+
+                                        @*<input type="radio" name="EmailSkypePassReset" class="" @(Model.EmailSkypePassReset == true ? "checked" : "") value="true" required /> @Yes
+                                            <input type="radio" name="EmailSkypePassReset" class="" @(!Model.EmailSkypePassReset == true ? "checked" : "") value="false" /> @No*@
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-padding">
+                                    <div><b><span class="color-orange">Exit Process Steps</span></b></div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label> Feedback Email Sent?</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.IsFeedbackEmailSent", true, Model.IsFeedbackEmailSent == true, new { @class = "" + disabledOnallformalities + "" }) @Yes
+                                        @Html.RadioButton("Model.IsFeedbackEmailSent", false, Model.IsFeedbackEmailSent == false, new { @class = "" + disabledOnallformalities + "" }) @No
+
+                                        @*<input type="radio" name="IsFeedbackEmailSent" class="" @(Model.IsFeedbackEmailSent == true ? "checked" : "") value="true" required />
+                                            @Yes
+                                            <input type="radio" name="IsFeedbackEmailSent" class="" @(!Model.IsFeedbackEmailSent == true ? "checked" : "") value="false" />
+                                            @No*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label> Feedback Received? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.IsFeedbackReceived", true, Model.IsFeedbackReceived == true, new { @class = "" + disabledOnallformalities + "" }) @Yes
+                                        @Html.RadioButton("Model.IsFeedbackReceived", false, Model.IsFeedbackReceived == false, new { @class = "" + disabledOnallformalities + "" }) @No
+
+                                        @*<input type="radio" name="IsFeedbackReceived" class="" @(Model.IsFeedbackReceived == true ? "checked" : "") value="true" required /> @Yes
+                                            <input type="radio" name="IsFeedbackReceived" class="" @(!Model.IsFeedbackReceived == true ? "checked" : "") value="false" /> @No*@
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label> ID Card Submitted? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.IsIdCardSubmitted", true, Model.IsIdCardSubmitted == true, new { @class = "" + disabledOnallformalities + "" }) @Yes
+                                        @Html.RadioButton("Model.IsIdCardSubmitted", false, Model.IsIdCardSubmitted == false, new { @class = "" + disabledOnallformalities + "" }) @No
+
+                                        @*<input type="radio" name="IsIdCardSubmitted" class="" @(Model.IsIdCardSubmitted == true ? "checked" : "") value="true" required /> @Yes
+                                            <input type="radio" name="IsIdCardSubmitted" class="" @(!Model.IsIdCardSubmitted == true ? "checked" : "") value="false" /> @No*@
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label>Release Document Prepared? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.ReleaseDocPrepared", true, Model.ReleaseDocPrepared == true, new { @class = "" + disabledOnallformalities + "" }) @Yes
+                                        @Html.RadioButton("Model.ReleaseDocPrepared", false, Model.ReleaseDocPrepared == false, new { @class = "" + disabledOnallformalities + "" }) @No
+
+                                        @*<input type="radio" name="ReleaseDocPrepared" class="" @(Model.IsEligibleForRehire == true ? "checked" : "") value="true" required /> @Yes
+                                            <input type="radio" name="ReleaseDocPrepared" class="" @(!Model.IsEligibleForRehire == true ? "checked" : "") value="false" /> @No*@
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label> Voluntary Exit? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.IsVoluntaryExit", true, Model.IsVoluntaryExit == true, new { @class = "IsVoluntaryExit " + disabledOnallformalities + "", @onclick = "checkvoluntary()" }) @Yes
+                                        @Html.RadioButton("Model.IsVoluntaryExit", false, Model.IsVoluntaryExit == false, new { @class = "IsVoluntaryExit " + disabledOnallformalities + "", @onclick = "checkvoluntary()" }) @No
+
+                                        @*<input type="radio" name="IsVoluntaryExit" class="@(Model.Id>0?"disabled-radio":"")" @(Model.IsVoluntaryExit == true ? "checked" : "") value="true" required />
+                                            @Yes
+                                            <input type="radio" name="IsVoluntaryExit" class="@(Model.Id>0?"disabled-radio":"")" @(!Model.IsVoluntaryExit == true ? "checked" : "") value="false" />
+                                            @No*@
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label>Eligible For Rehire? </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.RadioButton("Model.IsEligibleForRehire", true, Model.IsEligibleForRehire == true, new { @class = "IsEligibleForRehire " + disabledOnallformalities + "", @onclick = "checkrehire()" }) @Yes
+                                        @Html.RadioButton("Model.IsEligibleForRehire", false, Model.IsEligibleForRehire == false, new { @class = "IsEligibleForRehire " + disabledOnallformalities + "", @onclick = "checkrehire()" }) @No
+
+                                        @*<input type="radio" name="IsEligibleForRehire" class="@(Model.Id > 0 ? "disabled-radio" : "")" @(Model.IsEligibleForRehire == true ? "checked" : "") value="true" required /> @Yes
+                                            <input type="radio" name="IsEligibleForRehire" class="@(Model.Id > 0 ? "disabled-radio" : "")" @(!Model.IsEligibleForRehire == true ? "checked" : "") value="false" /> @No*@
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    @if (Model.IsVoluntaryExit == true)
+                                    {
+                                        Voluntaryhide = "hide";
+                                    }
+                                    <div class="col-md-6 VoluntaryExitstoggle @Voluntaryhide">
+                                        <label>Reason for Non-Voluntary Exit</label>
+                                    </div>
+                                    <div class="col-md-6 VoluntaryExitstoggle @Voluntaryhide">
+                                        @*@Html.TextAreaFor(x => x.VoluntaryComment, 5, 10, new { @class = "form-control" })*@
+                                        <span id="setVoluntaryComment" class="hide">@Model.VoluntaryComment</span>
+                                        @if (Model.IsVoluntaryExit == false)
+                                        {
+                                            @if (Model.IsExitFormalitiesCompleted == true)
+                                            {
+                                                @Html.TextArea("Model.VoluntaryComment", null, 20, 10, new { @class = "form-control setvoluntaryrequired", @style = "height:80px;", @readonly = "readonly" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextArea("Model.VoluntaryComment", null, 20, 10, new { @class = "form-control setvoluntaryrequired", @style = "height:80px;" })
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @Html.TextArea("Model.VoluntaryComment", null, 20, 10, new { @class = "form-control setvoluntaryrequired", @style = "height:80px;" })
+                                        }
+                                        @*<textarea name="VoluntaryComment" class="form-control" id="VoluntaryComment" placeholder="Reason for Voluntary Exit" rows="5" cols="5"></textarea>*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    @if (Model.IsEligibleForRehire == true)
+                                    {
+                                        Rehirehide = "hide";
+                                    }
+                                    <div class="col-md-6 RehireToggle @Rehirehide">
+                                        <label>Comments for Rehire</label>
+                                    </div>
+                                    <div class="col-md-6 RehireToggle @Rehirehide">
+                                        <span id="setRehireComment" class="hide">@Model.RehireComment</span>
+                                        @if (Model.IsExitFormalitiesCompleted == true)
+                                        {
+                                            @Html.TextArea("Model.RehireComment", null, 20, 10, new { @class = "form-control setrehirerequired", @style = "height:80px;", @readonly = true })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextArea("Model.RehireComment", null, 20, 10, new { @class = "form-control setrehirerequired", @style = "height:80px;" })
+                                        }
+                                        @*@Html.TextAreaFor(x => x.RehireComment, 5, 10, new { @class = "form-control" })
+                                            <textarea name="RehireComment" value="" class="form-control" id="RehireComment" placeholder="Reason for Rehire" rows="5" cols="5"></textarea>*@
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="reasoncheckbox">
+                                <div class="col-padding">
+                                    <div><span class="color-orange"><b>Employee NOC's</b><span class="red"></span></span></div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                @if (Convert.ToInt32(Model.UserNocList.Count()) > 0)
+                                {
+                                    @for (int i = 0; i < Model.UserNocList.Count(); i++)
+                                    {
+                                        <div class="col-md-6 form-group usernoclists" data-isclear="@Model.UserNocList[i].IsClear">
+                                            <div class="col-md-6">
+                                                @if (Model.UserNocList[i].IsClear == true)
+                                                {
+                                                    <label>@Model.UserNocList[i].Name <span class="red">*</span></label>
+                                                }
+                                                else
+                                                {
+                                                    <label>@Model.UserNocList[i].Name</label>
+                                                }
+                                            </div>
+                                            <div class="col-md-6 chkBox">
+                                                @Html.Hidden("Model.UserNocList[" + i + "].Id", Model.UserNocList[i].Id)
+                                                @Html.RadioButton("Model.UserNocList[" + i + "].Value", true, Model.UserNocList[i].Value == true, new { @class = "NocListEle" + disabledOnallformalities + "" }) @Yes
+                                                @Html.RadioButton("Model.UserNocList[" + i + "].Value", false, Model.UserNocList[i].Value == false, new { @class = "NocListEle" + disabledOnallformalities + "" }) @No
+                                                <p class="NocError" style="padding: 0;line-height:0px;display: inline-block;"></p>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            @if (Model.IsExitFormalitiesCompleted != true)
+                            {
+                                <div class="row" style="display:block;">
+                                    <div class="col-md-6">
+
+                                        @Html.CheckBox("Model.IsExitFormalitiesCompleted", new { @class = "checkcompleted" })
+                                        @*<input type="checkbox" name="checkbox" value="" onchange="checkcompleted()"/>*@
+                                        <strong>
+                                            All exit formalities completed?
+                                        </strong>
+                                        <span class="help-block" style="font-size:11px;padding-left:15px;">Please clear  required (<span class="red" style="float:none">*</span>) NOC's, if you would like to proceed to complete all formalities.</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Hidden("Model.Uid", Model.Uid)
+                                        @Html.Hidden("Model.Id", Model.Id)
+                                        <button type="submit" class="btn btn-custom pull-right margin-right10" name="Save" id="btnsubmit">Submit</button>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/OnNotice/UserNoc.js"></script>
+    <script>
+
+        function checkvoluntary() {
+            var chkevent = $(event.target).val();
+            if (chkevent == 'False') {
+                $('.setvoluntaryrequired').prop('required', 'required');
+            }
+        }
+                                                                //function checkrehire() {
+                                                                //    var chkevent = $(event.target).val();
+                                                                //    if (chkevent == 'False') {
+                                                                //        $('.setrehirerequired').prop('required', 'required');
+                                                                //    }
+                                                                //}
+    </script>
+}

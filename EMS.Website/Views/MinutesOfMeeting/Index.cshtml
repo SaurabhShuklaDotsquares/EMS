@@ -1,0 +1,76 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Minutes of Meeting List";
+}
+@section styles{
+    <link href="~/css/select2.css" rel="stylesheet" />
+    <link href="~/Scripts/plugin/Datepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <style>
+        #divMessage {
+            position: absolute;
+            z-index: 9;
+            left: 35%;
+        }
+
+        .form-control, .control-label {
+            color: #000000;
+        }
+
+        #grid-minutesOfMeeting tbody tr > td, grid-minutesOfMeeting tbody tr > th {
+            color: #000000;
+            padding: 0px;
+        }
+
+        .m2 {
+            margin: 2px;
+        }
+
+        .m5 {
+            margin: 5px;
+        }
+
+        .i-icon i {
+            /*font-size: 30px;*/
+            margin: 2px;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+
+        <div id="divMessageMail" alert-dismissable"="" class="alert alert-success hide">Mail sent successfully</div>
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <h2>Minutes of Meeting List</h2>
+            </div>
+            <div class="col-md-6 text-right">
+                <a class="btn btn-custom" data-target="#modal-add-topic" data-toggle="modal" data-backdrop="static" href="@Url.Action("addedit", "minutesOfMeeting")">Add New Meeting Topic</a>
+            </div>
+        </div>
+
+        <table id="grid-minutesOfMeeting" class="table table-stats table-hover table-responsive"></table>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-add-topic", AreaLabeledId = "modal-add-topic-label", Size = Enums.ModalSize.Medium })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-add-mom", AreaLabeledId = "modal-add-mom-label", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-view-mom", AreaLabeledId = "modal-view-mom-label", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-mom-agenda", AreaLabeledId = "modal-mom-label-agenda", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-mom-participants", AreaLabeledId = "modal-mom-label-participant", Size = Enums.ModalSize.Large })
+@await Html.PartialAsync("_Modal", new Modal { ID = "modal-delete-mom", AreaLabeledId = "modal-delete-mom-label", Size = Enums.ModalSize.Medium })
+
+@section scripts{
+    <script src="~/ckeditor/ckeditor.js" asp-append-version="true"></script>
+    <script src="~/bundles/Select2" asp-append-version="true"></script>
+    @*<script src="~/Scripts/masked-input/jquery.maskedinput.min.js" asp-append-version="true"></script>*@
+    <script src="~/bundles/DataTimePicker" asp-append-version="true"></script>
+    <script src="~/Scripts/masked-input/jquery.maskedinput.min.js" asp-append-version="true"></script>
+    <script src="~/bundles/MOM/index" asp-append-version="true"></script>
+    @*<script src="~/Scripts/CustomJS/MOM/index.js"></script>*@
+}

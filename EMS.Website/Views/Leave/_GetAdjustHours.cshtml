@@ -1,0 +1,41 @@
+﻿@using EMS.Core
+@model AdjustHoursDto
+@{
+    int value = 1;
+    for (int i = 0; i < Model.EmployeeList.Count(); i++)
+    {
+        @Html.HiddenFor(model => Model.EmployeeList[i].Id)
+        @Html.HiddenFor(model => Model.EmployeeList[i].Uid)
+        @Html.HiddenFor(model => Model.EmployeeList[i].Name)
+        <tr>
+            <td>@(value++)</td>
+            <td>@Model.EmployeeList[i].Name</td>
+            <td>
+                <div class="rem_box width140">
+                    <input type="checkbox" name="LateStartTime" value="1" class="chkLatestart" @(Model.EmployeeList[i].LateStartTime != "00:00" && Model.EmployeeList[i].LateStartTime != null ? "checked" : "") @(Model.EmployeeList[i].Id > 0 && Model.EmployeeList[i].LeaveType == 2 ? "disabled" : "") /> Late Start
+                    @Html.TextAreaFor(model => model.EmployeeList[i].LateReason, new { @class = (Model.EmployeeList[i].LateStartTime != "00:00" && Model.EmployeeList[i].LateStartTime != null) ? "form-control txtLateReason width200" : "form-control txtLateReason width200 hidden", @maxlength = "2000", @autocomplete = "off", @placeholder = "Reason here ..." })
+                </div>
+                <div class="rem_box width140">
+                    @Html.TextBoxFor(model => Model.EmployeeList[i].LateStartTime, new { @class = (Model.EmployeeList[i].LateStartTime != "00:00" && Model.EmployeeList[i].LateStartTime != null) ? "form-control inpt-wd4 clstimepicker txtLateStarttime" : "form-control inpt-wd4 clstimepicker txtLateStarttime hidden", @autocomplete = "off", @placeholder = "hh:mm", }) &nbsp;
+                </div>
+                <div class="rem_box width140">
+                    <input type="checkbox" name="EarlyLeaveTime" value="2" class="chkEarlyleave" @(Model.EmployeeList[i].EarlyLeaveTime != "00:00" && Model.EmployeeList[i].EarlyLeaveTime != null ? "checked" : "") @(Model.EmployeeList[i].Id > 0 && Model.EmployeeList[i].LeaveType == 2 ? "disabled" : "") /> Early Leave
+                    @Html.TextAreaFor(model => model.EmployeeList[i].EarlyReason, new { @class = (Model.EmployeeList[i].EarlyLeaveTime != "00:00" && Model.EmployeeList[i].EarlyLeaveTime != null) ? "form-control txtEarlyReason width200" : "form-control txtEarlyReason width200 hidden", @maxlength = "2000", @autocomplete = "off", @placeholder = "Reason here ..." })
+                </div>
+                <div class="rem_box width125">
+                    @Html.TextBoxFor(model => Model.EmployeeList[i].EarlyLeaveTime, new { @class = (Model.EmployeeList[i].EarlyLeaveTime != "00:00" && Model.EmployeeList[i].EarlyLeaveTime != null) ? "form-control inpt-wd4 clstimepicker txtEarlyLeavetime" : "form-control inpt-wd4 clstimepicker txtEarlyLeavetime hidden", @autocomplete = "off", @placeholder = "hh:mm" }) &nbsp;
+                </div>
+                <div class="rem_box width110">
+                    <input type="checkbox" name="WorkAtHome" value="2" class="chkWorkAtHome" @(Model.EmployeeList[i].LeaveType == 2 ? "checked" : "") />UnAthorized
+
+                    @Html.TextAreaFor(model => model.EmployeeList[i].WorkAtHome, new { @class = (Model.EmployeeList[i].LeaveType == 2 ? "form-control txtReasonWorkAtHome width200" : "form-control txtReasonWorkAtHome width200 hidden"), @maxlength = "2000" })
+                </div>
+                <div class="rem_box width125">
+                    <input type="checkbox" name="WorkFromHome" value="3" class="chkWorkFromHome" @(Model.EmployeeList[i].LeaveType == 3 ? "checked" : "") />Work At Home
+
+                    @Html.TextAreaFor(model => model.EmployeeList[i].WorkFromHome, new { @class = (Model.EmployeeList[i].LeaveType == 3 ? "form-control txtReasonWorkFromHome width200" : "form-control txtReasonWorkFromHome width200 hidden"), @maxlength = "2000" })
+                </div>
+            </td>
+        </tr>
+    }
+}

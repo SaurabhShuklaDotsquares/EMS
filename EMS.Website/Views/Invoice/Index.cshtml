@@ -1,0 +1,85 @@
+﻿@model InvoiceFilterDto
+@using EMS.Web.Models.Others
+@using EMS.Core;
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="validation-summary"></div>
+        @Html.Partial("_Notification")
+
+        <div class="row form-group clearfix">
+            <div class="col-md-6">
+                <h2>
+                    Unpaid Invoices
+                </h2>
+            </div>
+            <div class="col-md-6 text-right ">
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.PM)
+                {
+                <a href="@Url.Action("ProjectInvoiceList","Invoice")" class="btn btn-custom" id="btn_search">View Pending Invoices</a>
+                <a data-toggle="modal" href="@Url.Action("AddEditInvoice","Invoice")" data-target="#modal-AddEditInvoice" class="btn btn-custom">
+                    Add New
+                </a>
+                }
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-2">
+                @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Invoice no/ Client Project name" })
+            </div>
+            <div class="col-md-2">
+                @Html.TextBox("txt_From", null, new { @class = "form-control", @placeholder = "From", @autoComplete = "off" })
+            </div>
+            <div class="col-md-2">
+                @Html.TextBox("txt_To", null, new { @class = "form-control", @placeholder = "To", @autoComplete = "off" })
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownList("ddl_BaList", Model.BAList, "--Select BA--", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownList("ddl_TlList", Model.TLList, "--Select TL--", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-custom" id="CustomSearch">Search</button>
+                <button type="button" class="btn btn-custom " id="btn_reset">Reset</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 red">
+                <span id="textDescription"></span>
+            </div>
+            <div class="col-md-6 info-block2 text-right">
+                <i class="invoicecreated"></i><span>Normal</span>
+                <i class="invoicemediumrisk"></i><span>Feedback Required</span>
+                <i class="invoicehighrisk"></i><span>Chase Required</span>
+                <a href="@(SiteKey.DomainName + "Invoice/ExportToExcel")">
+                    <img src="~/images/icons/excel.png" alt="ExportToExcel" Height="21" Width="21" /> Export To Excel
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="grid-invoice" class="table table-stats"></table>
+        </div>
+
+    </div>
+</div>
+
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-chaseInvoice", AreaLabeledId = "lbl-chaseInvoice", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-deleteInvoice", AreaLabeledId = "lbl-deleteInvoice", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-invoiceStatus", AreaLabeledId = "lbl-invoiceStatus", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-ViewInvoice", AreaLabeledId = "lbl-ViewInvoice", Size = Enums.ModalSize.Large });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-AddEditInvoice", AreaLabeledId = "lbl-AddEditInvoice", Size = Enums.ModalSize.Large });
+}
+
+@section scripts{
+
+    <script>
+        var isPMUser = "@((CurrentUser.RoleId==(int)Enums.UserRoles.PM).ToString().ToLower())";
+    </script>
+    <script src="~/bundles/Invoice/index"></script>    
+}

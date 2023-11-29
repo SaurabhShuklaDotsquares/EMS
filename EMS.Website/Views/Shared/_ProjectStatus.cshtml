@@ -1,0 +1,94 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.UserProjectStatusDto
+
+<style type="text/css">
+    #cbProjectsListAdditional_chosen {
+        width: 100% !important;
+    }
+
+    .chosen-container-multi .chosen-choices {
+        padding: 8px 5px;
+    }
+</style>
+
+<div id="frm-modal-projectStatus" class="modal-body" style="height:318px;padding:0">
+
+    @using (Html.BeginForm())
+    {
+
+        @Html.Hidden("currentUserPMUID", CurrentUser.PMUid);
+        @Html.Hidden("AshishTeamPMUID", SiteKey.AshishTeamPMUId);
+
+        @Html.AntiForgeryToken()
+        <div class="bg-white">
+            <div class="popup-top text-left">
+                <span class="top-icons">
+                </span> <span class="close">
+                    <a id="anctopclose" href="javascript:void(0);" data-dismiss="modal">
+                        <img id="imgtopclose" src="@SiteKey.DomainName/images/popup/closeRed.png" />
+                    </a>
+                </span>
+            </div>
+
+            <div class="popup-container" id="popup-container">
+                <label class="employee-name text-left">
+                    Hi&nbsp;@CurrentUser.Name
+                </label>
+                <div style="color:#000;font-size:15px;margin-top:5px;">
+                    <input type="radio" id="rdo_working" name="workstatus" value="working" checked="checked" />
+                    <label for="rdo_working">Project is Running / Giving Extra Support</label><br />
+
+                    <input type="radio" name="workstatus" value="free" id="rdo_free">
+                    <label for="rdo_free">No Project Assigned Yet</label><br />
+
+                    <input type="radio" id="rdo_additional" name="workstatus" value="additional" />
+                    <label for="rdo_additional">Additional Support (e.g. Non Dedicated, QA, Designer)</label>
+                    @if (CurrentUser.PMUid == SiteKey.AshishTeamPMUId)
+                    {
+                        <br /><input type="radio" id="rdo_managingproject" name="workstatus" value="managingproject" />
+                        <label for="rdo_managingproject">Managing Project (Team Lead, Sr. Developer, QA, Designer and BA)</label>
+                    }
+                </div>
+                <div class="input-area">
+                    <div>
+                        <select asp-for="ProjectId" asp-items="@((List<SelectListItem>)ViewData["ProjectList"])" class="form-control chosen-select" id="cbProjectsList"></select>
+                        <select asp-for="ProjectIdAdditional" asp-items="@((List<SelectListItem>)ViewData["ProjectListAdditional"])" class="form-control chosen-select" id="cbProjectsListAdditional"></select>
+                        @if (CurrentUser.PMUid == SiteKey.AshishTeamPMUId)
+                        {
+                            <select asp-for="ManagingProjects" asp-items="@((List<SelectListItem>)ViewData["ProjectListAdditional"])" class="form-control chosen-select" multiple="" id="ManagingProject"></select>
+                        }
+                        @*@Html.DropDownListFor(model => model.ProjectId,true,  (List<SelectListItem>)ViewData["ProjectList"], null, new { @id = "cbProjectsList", @class = "form-control chosen-select" })*@
+                        @*@Html.DropDownListFor(model => model.ProjectIdAdditional, true, (List<SelectListItem>)ViewData["ProjectListAdditional"], null, new { @id = "cbProjectsListAdditional", @class = "form-control chosen-select" })*@
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="pull-right">
+                        <span class="button-area">
+                            <img id="pbGo" src="@SiteKey.DomainName/images/popup/btnGo.png" />
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <br />
+
+            </div>
+
+            <div id="dialogfree">
+                <i class="fa fa-close"></i>
+                <div class="dialog-text">
+                    Please enter the text what you are doing.
+                </div>
+                @Html.TextAreaFor(x => x.FreeText, new { @id = "txtFree", @maxlength = "500", @class = "form-control" })
+                <br />
+                <img id="pbFree" src="@SiteKey.DomainName/images/popup/btnGo.png" class="pull-right" />
+            </div>
+
+        </div>
+    }
+</div>
+@*<script src="~/bundles/jquery"></script>*@
+@*<script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/jqueryval"></script>*@
+<script src="~/bundles/layoutjs"></script>
+
+<script src="@(SiteKey.DomainName)Scripts/plugin/SearchDropdown/choosen.js" asp-append-version="true"></script>
+<script src="@(SiteKey.DomainName)Scripts/CustomJS/projectstatus.js" asp-append-version="true"></script>

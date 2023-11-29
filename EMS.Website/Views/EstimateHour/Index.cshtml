@@ -1,0 +1,97 @@
+﻿@model EstimateHourIndexDto
+@{
+    ViewData["Title"] = "Estimation List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+    <style>
+        .FilterPadding {
+            padding: 4px !important;
+        }
+    </style>
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+
+        <div class="row form-group" style="margin:0px">
+            <div class="col-sm-12">
+                <partial name="_Notification" />
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+
+        <div class="manage-Project-page full-wdth">
+            <div class="row">
+                <div class="col-sm-3"><h2>Estimate Hour</h2></div>
+
+                <div class="col-sm-9">
+                    <div class="pull-right">
+                        <a href="@Url.Action("DownloadEstimateHourExcel")" target="_blank" class="margin-right10">
+                            <img src="~/images/icons/excel.png" alt="ExportToExcel" Height="21" Width="21" /> Export To Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-3 col-lg-2 form-group FilterPadding" style="display:none;">
+                        <div class="input-group">
+                            @Html.TextBox("EstimateDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date Range", @style = "background-color: #fff;" })
+                            <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                                <i class="fa fa-close"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    @*<div class="col-sm-6 col-md-3 col-lg-2 form-group">
+            @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "Select BA", new { @class = "form-control" })
+        </div>
+        <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+            @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "Select TL", new { @class = "form-control" })
+        </div>*@
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group FilterPadding">
+                        @Html.DropDownListFor(model => model.TechnologyId, Model.TechnologyList, "Select Technology", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group FilterPadding">
+                        @Html.DropDownListFor(model => model.IndustryId, Model.IndustryList, "Select Industry", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group FilterPadding">
+                        @Html.DropDownListFor(model => model.FileName, Model.FileNameList, "Select File Name", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-12 col-md-3 col-lg-1 form-group txtSearch FilterPadding" style="width:220px;">
+                        @Html.TextBox("txtSearch", null, new { @class = "form-control", @placeholder = "Req. Name/CRM ID" })
+                    </div>
+                    @*<div class="col-sm-12 col-md-3 col-lg-1 form-group">
+            <select asp-for="Country" asp-items="Html.GetEnumSelectList(typeof (Enums.ClientCountry))" class="form-control">
+                <option value=" ">Select Country</option>
+            </select>
+        </div>*@
+                    <div class="col-sm-6 col-md-3 col-lg-3 form-group text-right div-btn-footer FilterPadding pull-right">
+                        <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                        <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                        <a href="@Url.Action("AddEdit","EstimateHour")" class="btn btn-custom" style="margin-right:10px">Add New</a>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-EstimateHourlist" class="table default-table black-theme-table"></table>
+                </section>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+@*@Html.Partial("_Modal", new Modal { ID = "modal-ImportLibrary", AreaLabeledId = "lbl-ImportLibrary", Size = Enums.ModalSize.Medium })*@
+@*@Html.Partial("_Modal", new Modal { ID = "modal-delete-library", AreaLabeledId = "modal-delete-library-label", Size = Enums.ModalSize.Medium });*@
+@section scripts{
+
+    <script src="/Scripts/plugin/FullCalender/Js/moment.min.js"></script>
+    <script src="/Scripts/plugin/DateRangePicker/daterangepicker.js"></script>
+    <script src="~/Scripts/CustomJS/EstimateHour/estimateHourlist.js"></script>
+}

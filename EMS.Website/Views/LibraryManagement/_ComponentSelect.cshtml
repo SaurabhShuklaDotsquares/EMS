@@ -1,0 +1,12 @@
+﻿@model LibraryManagementIndexDto
+
+<label class="componentLabel">Component</label>
+<div class="form-group">
+    @Html.DropDownList("components", Model.Components, null, new { @class = "form-control select2Components", @multiple = "multiple" })
+</div>
+
+
+@*<script src="~/js/fSelect.js"></script>
+<script>
+    $('.select2Components').fSelect({ placeholder: "Select Component" });
+</script>*@

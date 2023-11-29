@@ -1,0 +1,580 @@
+﻿@model LibraryDto
+@Html.HiddenFor(model => model.Id)
+@{
+
+    string bannerImage = "images/no-image.jpg";
+    if (Model.ImageFiles != null && Model.ImageFiles.Count > 0)
+    {
+        if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", Model.ImageFiles[0])))
+        {
+            bannerImage = Model.ImageFiles[0];
+        }
+    }
+
+    string bannerPSD = "";
+    var bannerPsdId = 0;
+    if (Model.PSDFiles != null && Model.PSDFiles.Count > 0)
+    {
+        if (!string.IsNullOrEmpty(Model.PSDFiles[0]) && System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", Model.PSDFiles[0])))
+        {
+            bannerPSD = Model.PSDFiles[0];
+            bannerPsdId = (Model.LibraryFileDtos == null || Model.LibraryFileDtos.Count == 0) ? 0 : Convert.ToInt32(Model.LibraryFileDtos[0].Id);
+        }
+    }
+}
+@*<link href="~/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css" rel="stylesheet" />*@
+<style>
+    .preview_image {
+        height: 100px;
+        width: 100%;
+    }
+
+    #previewImage {
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        #previewImage .link {
+            display: block;
+        }
+
+        #previewImage .col-md-2 {
+            margin-bottom: 10px;
+        }
+
+    .preview_doc {
+        height: 70px;
+        min-width: 65px;
+    }
+    .preview_desc_doc {
+        height: 70px;
+        min-width: 65px;
+    }
+
+    .error {
+        color: red !important;
+    }
+
+    .my-spacing {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .link {
+        color: #337ab7 !important;
+        text-decoration: underline !important;
+    }
+
+    fieldset {
+        border: 1px solid #979797;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    legend {
+        padding: 0.2em 0.5em;
+        border: 1px solid #979797;
+        font-size: 90%;
+        text-align: right;
+        width: auto;
+        margin-bottom: 0px;
+    }
+    /*.design-type-0 .remove-design-type {
+         display: none;
+         }*/
+    input[type="file"] {
+        white-space: normal;
+        word-wrap: break-word;
+        width: 240px;
+        overflow: auto;
+    }
+
+    #name {
+        position: relative;
+        z-index: 10000;
+    }
+
+    .ui-autocomplete {
+        z-index: 9999 !important;
+    }
+
+    .modal-body.library-detail-popup {
+        padding: 0;
+        border: 0;
+    }
+
+    .detail-modal-popup .dtl-lt {
+        padding: 20px 20px 56px 20px;
+    }
+
+    .detail-modal-popup .img-btn-block {
+        position: inherit;
+        left: inherit;
+        right: inherit;
+        bottom: inherit;
+        top: inherit;
+    }
+
+    .detail-modal-popup .active-img-box {
+        max-height: 510px;
+        overflow: auto;
+    }
+
+        .detail-modal-popup .active-img-box img {
+            width: 100%
+        }
+
+    .detail-modal-popup .img-btn-block ul {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -36px;
+        z-index: 99;
+    }
+</style>
+<style>
+    /*progress bar*/
+    .windowbackground {
+        background: url("'../../images/overlay.png") repeat scroll 0 0 transparent;
+        clear: both;
+        color: Red;
+        display: table-cell;
+        font-size: 12px;
+        font-weight: bold;
+        height: 100%;
+        left: 0;
+        padding-top: 20%;
+        position: fixed;
+        text-align: center;
+        top: 0;
+        vertical-align: middle;
+        width: 100%;
+    }
+
+    .progressbar {
+        background-color: #fff;
+        border: 2px solid #333;
+        border-radius: 15px;
+        color: #000000;
+        display: block;
+        left: 41%;
+        padding: 20px;
+        position: absolute;
+        text-align: center;
+        width: 220px;
+    }
+</style>
+@*<div class="library-detail-popup-header">
+        @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Library Details" })
+    </div>*@
+
+<div class="modal-body library-detail-popup">
+
+    <div class="modal-content">
+        <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+            <img src="~/images/close-black.png">
+        </button>
+        <div class="modal-body detail-modal-popup">
+            <div class="dtl-lt">
+                @*<div class="img-block"><img src="@bannerImage" alt="" /></div>*@
+                <div class="img-btn-block">
+
+                    <div class="active-img-box">
+                        @if (bannerImage == "images/no-image.jpg")
+                        {
+                            <img src="@bannerImage" id="bannerImage1" alt="" class="bannerImage1 main-image" />
+                        }
+                        else
+                        {
+                            <a id="btnBannerPreview1" class="btnBannerPreview1" href="javascript:void(0);" data-toggle="modal">
+                                <img src="@bannerImage" id="bannerImage1" alt="" class="bannerImage1 main-image" />
+                            </a>
+
+                            @*<a class="zoom-btn btnBannerPreview1" id="btnBannerPreview1" href="javascript:void(0);" data-toggle="modal">
+                                    <img src="~/images/zoom-icon.png" id="bannerImage1" alt="" class="bannerImage1 main-image" />
+                                </a>*@
+                        }
+
+                    </div>
+
+
+                    <ul>
+                        <li><a class="btn btn-custom btn-download-psd" data-psdId="@bannerPsdId">Download PSD</a></li>
+                        <li><a class="btn btn-custom btn-black btn-download-jpeg" href="@bannerImage" download>Download JPEG</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="dtl-rt">
+                <h2>@Model.Title </h2>
+
+                <div class="block1">
+                    <div class="dt-lt"><span>Created Date:</span> <img src="~/content/images/calender.png" alt="" /> @Model.CreatedDate</div>
+                    <div class="dt-rt"><span>Last Modified:</span> <img src="~/content/images/calender.png" alt="" /> @Model.ModifyDate</div>
+                </div>
+                <h3>Description</h3>
+                <p> @Model.Description </p>
+
+                @{
+                    int i = 0;
+                    List<LibraryFileDto> images = null;
+                    List<LibraryFileDto> others = null;
+
+                    images = Model.LibraryFileDtos.Where(lf => Common.ImageExtensions.
+                    Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                    if (Model.LibraryTypeId == (byte)Enums.LibraryType.Design)
+                    {
+                        others = Model.LibraryFileDtos.Where(lf => !Common.ImageExtensions.
+                        Contains(System.IO.Path.GetExtension(lf.PSDFilePath.ToLower()))).ToList();
+                    }
+                    else
+                    {
+                        others = Model.LibraryFileDtos.Where(lf => !Common.ImageExtensions.
+                        Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                    }
+
+                    <div class="block2 mrg0">
+
+                        @if (images != null)
+                        {
+                            var themeImage = images.Where(x => x.DesignUnitType);
+                            string AllThemePSDfiles = "";
+                            string AllThemeFileId = "";
+                            <h3>Theme Pages</h3>
+                            <a class="psd-link downloadthemepsdfile"><img src="~/images/psd-icon.png" alt="" /> <strong>All PSD</strong></a>
+                            <div class="scroll4">
+                                <ul>
+
+                                    @foreach (var fileDto in themeImage)
+                                    {
+                                        string tempImage = "images/no-image.jpg";
+                                        string tempPSD = "";
+
+                                        if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                        {
+                                            tempImage = fileDto.FilePath;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(fileDto.PSDFilePath) && System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.PSDFilePath)))
+                                        {
+                                            tempPSD = fileDto.PSDFilePath;
+                                            AllThemePSDfiles += tempPSD + ",";
+                                            AllThemeFileId += fileDto.Id + ",";
+                                        }
+                                        <li>
+                                            <a class="file-thumbnail @(i == 0 ? "active" : "")" data-id="@fileDto.Id" data-image="@tempImage" data-psd="@tempPSD">
+                                                <img src="@tempImage" alt="">
+                                                @if (fileDto?.LibraryLayoutType?.Name != null)
+                                                {
+                                                    @fileDto.LibraryLayoutType.Name;
+                                                }
+                                                else
+                                                {
+                                                    <span>Download</span>
+                                                }
+                                            </a>
+                                        </li>
+
+                                        i++;
+                                    }
+                                </ul>
+                                @Html.Hidden("allThemePSD", AllThemePSDfiles)
+                                @Html.Hidden("allThemeFileId", AllThemeFileId)
+                            </div>
+                        }
+                    </div>
+                    <div class="block2">
+
+                        @if (images != null)
+                        {
+                            var componentImage = images.Where(x => !x.DesignUnitType);
+                            string AllComponentPSDfiles = "";
+                            string AllComponentFileId = "";
+                            <h3>Component </h3>
+                            <a class="psd-link downloadcomponentpsdfile"><img src="~/images/psd-icon.png" alt="" /> <strong>All PSD</strong></a>
+
+                            <div class="scroll4">
+                                <ul>
+
+                                    @foreach (var fileDto in componentImage)
+                                    {
+                                        string tempImage = "images/no-image.jpg";
+                                        string tempPSD = "";
+
+
+                                        if (System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                        {
+                                            tempImage = fileDto.FilePath;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(fileDto.PSDFilePath) && System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.PSDFilePath)))
+                                        {
+                                            tempPSD = fileDto.PSDFilePath;
+                                            AllComponentPSDfiles += tempPSD + ",";
+                                            AllComponentFileId += fileDto.Id + ",";
+                                        }
+
+                                        <li>
+                                            <a class="file-thumbnail" data-id="@fileDto.Id" data-image="@tempImage" data-psd="@tempPSD">
+                                                <img src="@tempImage" alt="">
+                                                @if (fileDto?.LibraryLayoutType?.Name != null)
+                                                {
+                                                    @fileDto.LibraryLayoutType.Name;
+                                                }
+                                                else
+                                                {
+                                                    <span>Download</span>
+                                                }
+                                            </a>
+                                        </li>
+                                        i++;
+                                    }
+                                </ul>
+                                @Html.Hidden("allComponentPSD", AllComponentPSDfiles)
+                                @Html.Hidden("allComponentFileId", AllComponentFileId)
+                            </div>
+                        }
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@*<script src="~/owlcarousal/js/owl.carousel.min.js"></script>*@
+@*<script src="~/OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>*@
+
+
+<script>
+    $(document).ready(function () {
+        //debugger;
+        //if ($(".file-thumbnail").prop('href') == "") {
+        //    $('.btn-download-psd').hide();
+        //}
+        //else {
+        //    $('.btn-download-psd').show();
+        //}
+
+        $(".file-thumbnail").click(function () {
+            //debugger;
+            var image = $(this).data("image");
+            var psd = $(this).data("psd");
+            var psdId = $(this).data("id");
+            //console.log(image);
+            $(".main-image").attr("src", image);
+            $(".file-thumbnail").removeClass("active");
+            $(this).addClass("active");
+            $('.btn-download-jpeg').attr("href", image);
+
+            if (psd == "") {
+                $('.btn-download-psd').hide();
+            }
+            else {
+                $('.btn-download-psd').show();
+                $('.btn-download-psd').attr("data-psdId", psdId);
+            }
+
+        })
+
+        $('.btnBannerPreview1').on('click', function () {
+            $('#modalForLayoutImage').fadeIn();
+            var imgPath = $(this).find('.bannerImage1').attr("src");
+            $('#modalForLayoutImagePreviewImage').attr("src", imgPath);
+        });
+        $('.close').on('click', function () {
+            $('#modalForLayoutImage').fadeOut("slow");
+        });
+
+
+        $('.downloadthemepsdfile1').on('click', function () {
+            //debugger;
+
+
+            var psdFiles = $('#allThemePSD').val();
+
+            //$.ajax({
+            //    url: domain + 'LibraryManagement/ConvertToZip',
+            //    type: 'POST',
+            //    data: { filePath: psdFiles },
+            //    success: function (data) {
+            //        $('.downloadthemepsdfile').show();
+            //        CustomAlerts.info("Information !!!", "Your file saved in download folder");
+            //    }
+            //});
+
+
+            id = $(this).data("id");
+            $.ajax({
+                url: "LibraryManagement/DownloadPermission",
+                type: "Post",
+                data: { id: id },
+                success: function (result) {
+                    if (result.isSuccess) {
+
+
+                        var psdData = psdFiles.split(',');
+
+                        var link = document.createElement('a');
+
+                        document.body.appendChild(link);
+
+                        $.each(psdData, function (i) {
+
+                            if (psdData[i] != "") {
+                                link.setAttribute('download', psdData[i].substring(psdData[i].lastIndexOf("/") + 1));
+                                link.setAttribute('href', psdData[i]);
+                                link.click();
+                            }
+                        });
+                        document.body.removeChild(link);
+
+
+                    }
+                    else {
+                        swal({
+                            title: "Alert!",
+                            text: result.message,
+                            icon: "error",
+                        });
+                    }
+                }
+            });
+
+
+
+            //$(this).hide();
+        });
+
+        $('.downloadcomponentpsdfile').on('click', function () {
+            //debugger;
+            var psdFileId = $('#allComponentPSD').val();
+
+            //$.ajax({
+            //    url: domain + 'LibraryManagement/ConvertToZip',
+            //    type: 'POST',
+            //    data: { filePath: psdFiles },
+            //    success: function (data) {
+            //        $('.downloadthemepsdfile').show();
+            //        CustomAlerts.info("Information !!!", "Your file saved in download folder");
+            //    }
+            //});
+
+            //$(this).hide();
+
+
+
+            var psdData = psdFileId.split(',');
+
+            $.each(psdData, function (i) {
+
+                var id = psdData[i];
+
+                if (id != "") {
+                    setTimeout(function () {
+                        $.ajax({
+                            url: "LibraryManagement/DownloadPermission",
+                            type: "Post",
+                            data: { id: id },
+                            success: function (result) {
+                                if (result.isSuccess) {
+                                    window.location = '/LibraryManagement/Download/' + id;
+                                }
+                                else {
+                                    swal({
+                                        title: "Alert!",
+                                        text: result.message,
+                                        icon: "error",
+                                    });
+                                }
+                            }
+                        });
+                    }, 1000)
+
+
+                }
+            });
+
+        });
+
+        $('.downloadthemepsdfile').on('click', function () {
+            //debugger;
+            var psdFileId = $('#allThemeFileId').val();
+
+
+            var psdData = psdFileId.split(',');
+
+            $.each(psdData, function (i) {
+
+                var id = psdData[i];
+
+                if (id != "") {
+                    setTimeout(function () {
+                        $.ajax({
+                            url: "LibraryManagement/DownloadPermission",
+                            type: "Post",
+                            data: { id: id },
+                            success: function (result) {
+                                if (result.isSuccess) {
+                                    window.location = '/LibraryManagement/Download/' + id;
+                                }
+                                else {
+                                    swal({
+                                        title: "Alert!",
+                                        text: result.message,
+                                        icon: "error",
+                                    });
+                                }
+                            }
+                        });
+                    }, 1000)
+
+
+                }
+            });
+
+
+
+
+
+
+        });
+
+
+        $('.btn-download-psd').on('click', function () {
+
+            var id = $(this).data("psdId");
+
+            if (id != "") {
+                setTimeout(function () {
+                    $.ajax({
+                        url: "LibraryManagement/DownloadPermission",
+                        type: "Post",
+                        data: { id: id },
+                        success: function (result) {
+                            if (result.isSuccess) {
+                                window.location = '/LibraryManagement/Download/' + id;
+                            }
+                            else {
+                                swal({
+                                    title: "Alert!",
+                                    text: result.message,
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    });
+                }, 1000)
+
+
+            }
+
+        });
+
+    });
+
+</script>

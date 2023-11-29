@@ -1,0 +1,20 @@
+﻿@model ModalFooter
+
+<div class="modal-footer">
+    @if (!Model.DefaultButtonCss)
+    {
+        <button type="button" id="@Model.CancelButtonID" class="btn btn-custom pull-right" data-dismiss="modal">@Model.CancelButtonText</button>
+        @if (!Model.OnlyCancelButton)
+        {
+            <button type="submit" class="btn btn-custom btn-pink pull-right margin-right10" id="@Model.SubmitButtonID">@Model.SubmitButtonText</button>
+        }
+    }
+    else
+    {
+        <button type="button" id="@Model.CancelButtonID" class="btn-sm btn-secondary" data-dismiss="modal">@Model.CancelButtonText</button>
+        @if (!Model.OnlyCancelButton)
+        {
+            <button type="submit" class="btn-sm btn-primary" id="@Model.SubmitButtonID">@Model.SubmitButtonText</button>
+        }
+    }
+</div>

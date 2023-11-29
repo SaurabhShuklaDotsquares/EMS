@@ -1,0 +1,81 @@
+﻿@model EMS.Dto.ConclusionDto
+@using EMS.Web.Models.Others
+
+
+@using (Html.BeginForm("Conclusion", "Estimate", FormMethod.Post))
+{
+    await Html.RenderPartialAsync("_ModalHeader", new ModalHeader { Heading = "Conclusion Detail" });
+    <div class="modal-body">
+        <div id="MessageNotification"></div>
+
+        @Html.HiddenFor(model => model.LeadId)
+        @Html.HiddenFor(model => model.Owner)
+        @Html.HiddenFor(model => model.Conclusion)
+
+        <div class="row form-group clearfix">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.LeadId, new { @class = "control-label" })
+            </div>
+            <div class="col-md-3">
+                @Html.DisplayFor(model => model.LeadId)
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Owner, new { @class = "control-label" })
+            </div>
+            <div class="col-md-3">
+                @Html.DisplayFor(model => model.Owner)
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Communicator, new { @class = "control-label" })
+            </div>
+            <div class="col-md-3">
+                @Html.DisplayFor(model => model.Communicator)
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Conclusion, new { @class = "control-label" })
+            </div>
+            <div class="col-md-9">
+                @Html.DisplayFor(model => model.Conclusion)
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Status, new { @class = "control-label" })
+            </div>
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.Status, Model.StatusList, "--Select Status--", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row form-group clearfix" id="ReasonChildStatus" style="display:@(string.IsNullOrEmpty(Model.ChildStatus)?"none":"")">
+            <div class="col-md-2">
+                <label class="control-label">Reason</label>
+            </div>
+            <div class="col-md-7">
+                <div id="ChildStatus">
+                    @Html.Raw(Model.ChildStatus)
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group required clearfix">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.StatusUpdateDate, new { @class = "control-label" })
+            </div>
+            <div class="col-md-7">
+                @Html.TextBoxFor(model => model.StatusUpdateDate, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+    </div>
+    await Html.RenderPartialAsync("_ModalFooter", new ModalFooter { SubmitButtonID = "btn-conclusionSubmit", SubmitButtonText = "Submit", CancelButtonID = "frm-cancel", CancelButtonText = "Cancel" });
+}
+
+<script src="~/Scripts/CustomJS/Estimate/conclusion.js" asp-append-version="true"></script>
+

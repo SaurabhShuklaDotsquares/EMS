@@ -1,0 +1,121 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model ProjectClosureIndexDto
+@{
+    ViewBag.Title = "Project Closure Report";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+    <style>
+        label.converted {
+            font-size: 13px;
+            margin-bottom: 0;
+            display: inline-block;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        .filter {
+            cursor: pointer;
+            color: #283aff;
+            text-decoration: underline
+        }
+
+            .filter.active {
+                -moz-box-shadow: inset 0 0 25px #e99701;
+                -webkit-box-shadow: inset 0 0 25px #e99701;
+                box-shadow: inset 0px 0px 25px #e99701;
+                text-shadow: 0 0 0 #7d7979;
+                background-color: #eee;
+            }
+    </style>
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+        @Html.Partial("_Notification")
+
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="pull-left">Abroad PM Closure Report</h2>
+                </div>
+                <div class="col-md-6 text-right info-block1">
+                    @*<a href="@Url.Action("DownloadReportExcel")" target="_blank" class="margin-right10">
+                            <img src="~/images/icons/excel.png" alt="ExportToExcel" Height="21" Width="21" /> Export To Excel
+                        </a>*@
+                    <span class="color-info"><i class="darkredbg"></i>Not Approved</span>
+                    <span class="color-info"><i class="convertedbg" style="background-color:#dbfbdb"></i>Converted</span>
+                    <span class="color-info"><i class="actionbg" style="background-color:#99f3f0"></i>Not Reviewed</span>
+                    @*@if (CurrentUser.RoleId != (int)Enums.UserRoles.UKBDM)
+                        {
+                            <a class="btn btn-custom margin-left20" href="@Url.Action("add", "projectclosure")">Add New</a>
+                        }*@
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+                    @Html.TextBox("txtSearch", null, new { @class = "form-control", @placeholder = "CRM ID/Client/Project name" })
+                </div>
+
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+                    <div class="input-group">
+                        @Html.TextBox("ReportDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date Range", @style = "background-color: #fff;" })
+                        <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </div>
+                </div>
+                @if (Model.IsDirector)
+                {
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                        @Html.DropDownListFor(model => model.PMUid, Model.PMList, "Select PM", new { @class = "form-control" })
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                        @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "Select BA", new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                        @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "Select TL", new { @class = "form-control" })
+                    </div>
+                }
+
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownListFor(model => model.CRMStatusId, Model.CRMStatus, "Projet CRM Status", new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group text-left">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+
+        <div id="div_baconversion" class="form-group clearfix">
+
+        </div>
+
+        <table id="grid-projectcloser" class="table table-stats"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-history-projectClosure", AreaLabeledId = "modal-history-projectClosure-label", Size = Enums.ModalSize.Large });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-detail-projectClosure", AreaLabeledId = "modal-detail-projectClosure-label", Size = Enums.ModalSize.Large });
+
+
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-status-projectClosure", AreaLabeledId = "modal-status-projectClosure-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-chase-projectClosure", AreaLabeledId = "modal-chase-projectClosure-label", Size = Enums.ModalSize.Medium });
+    
+
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-review-projectClosure", AreaLabeledId = "modal-review-projectClosure-label", Size = Enums.ModalSize.Large });
+}
+@section scripts{
+    <script src="~/Scripts/plugin/FullCalender/Js/moment.min.js" asp-append-version="true"></script>
+    <script src="~/Scripts/plugin/DateRangePicker/daterangepicker.js" asp-append-version="true"></script>
+    <script src="~/Scripts/CustomJS/ProjectClosure/projectClosure-countryReport.js" asp-append-version="true"></script>
+}

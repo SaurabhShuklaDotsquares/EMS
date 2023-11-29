@@ -1,0 +1,89 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model ReminderDto
+@{
+    ViewBag.Title = "Reminder";
+}
+<link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+
+<div class="main_content">
+    <div class="full-wdth padding20">       
+        @{
+            await Html.RenderPartialAsync("_Notification");
+        }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Manage Reminders</h2>
+            </div>
+
+            <div class="col-sm-8 text-right">
+                <a class="btn btn-custom" href="@Url.Action("add")" data-target="#modal-add-edit-reminder" data-toggle="modal" data-backdrop="static">Add New</a>
+            </div>
+
+        </div>
+
+        <div class="row" style="padding-top:2%">
+            <div class="col-sm-12">
+                <div class="col-md-3 form-group pull-right">
+                    <div class="form-group" id="techSelect">
+                        @Html.DropDownListFor(model => model.ActiveStatusId, Model.ActiveStatus, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-3 form-group pull-right">
+                    <div class="form-group" id="techSelect">
+                        @Html.DropDownListFor(model => model.EmployeeId, ViewBag.EmployeeList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>               
+                <div class="col-md-3 form-group pull-right">
+                    @Html.TextBoxFor(model => model.DateTo, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly", @placeholder = "End Date" })
+                </div>
+                <div class="col-md-3 form-group pull-right">
+                    @Html.TextBoxFor(model => model.DateFrom, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "readonly", @placeholder = "Start Date" })
+                </div>
+
+            </div>
+
+            <div class="col-md-12 form-group">
+                <div class="form-group text-right">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+
+        <table id="grid-reminder-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="modal fade" id="modalTurnOff" tabindex="-1" role="dialog" aria-labelledby="modalTurnOff" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Complete/Running Reminder</h5>
+            </div>
+            <div class="modal-body" style="height: 115px;">
+                <input type="hidden" id="idStatus" />
+                <b>Are you sure, you want to mark complete to this reminder ?</b><br/>
+                <b>After marked as complete you are not able to change the status of this reminder, you have to create a new reminder. </b>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btn-Acticedeactive" data-type='0'>Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="btn-ActicedeactiveNo">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-reminder", AreaLabeledId = "lbl-delete-reminder", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-edit-reminder", AreaLabeledId = "modal-add-edit-reminder-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-isComplete-reminder", AreaLabeledId = "modal-isComplete-reminder-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="~/Scripts/knockout-3.3.0.js"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/scripts/customjs/reminder/index.js"></script>
+}

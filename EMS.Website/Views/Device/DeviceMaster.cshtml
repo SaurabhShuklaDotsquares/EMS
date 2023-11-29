@@ -1,0 +1,35 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Device Master";
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="NotificationMessage"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Device Master</h2>
+            </div>
+            <div class="col-sm-8 text-right">
+                <a class="btn btn-custom" href="@Url.Action("index")">Manage Devices</a>
+                <a class="btn btn-custom" href="@Url.Action("addeditdevice")" data-target="#modal-add-edit-device" data-toggle="modal" data-backdrop="static" id="AddDevice">Add Device</a>
+            </div>
+        </div>
+        <table id="grid-device-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-device", AreaLabeledId = "lbl-delete-device", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-edit-device", AreaLabeledId = "modal-add-edit-device-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script>
+    var deviceTypeSIM = @((int)Enums.DeviceType.Sim);
+    </script>
+    <script src="~/bundles/Device/deviceMaster" asp-append-version="true"></script>
+}
+

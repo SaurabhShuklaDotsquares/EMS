@@ -1,0 +1,193 @@
+﻿@model LibraryDownloadDto
+@{
+    ViewData["Title"] = "LibraryDownloadPermission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+    int j = 0;
+}
+@section styles{
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" />
+    <link rel="stylesheet" href="~/css/fSelect.css" />
+    <style>
+        .preview_image {
+            height: 100px;
+            width: 100%;
+        }
+
+        .radio-custom input[type="radio"] + label {
+            background: url("") !important;
+        }
+
+        .error {
+            color: red !important;
+        }
+
+        .my-spacing {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .col-md-2 {
+            width: 11%;
+        }
+
+        .fs-wrap {
+            width: 100%;
+        }
+    </style>
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>@((Model.Id > 0) ? "Create" : "Update") Library Download Permission</h2>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-12">
+                <partial name="_Notification" />
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+        @using (Html.BeginForm("LibraryDownloadPermission", "LibraryManagement", FormMethod.Post, new { @id = "createLibraryDownloadPermission_form", @autocomplete = "off", @enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(x => x.Id)
+            <section class="content">
+
+                <div class="col-md-4" style="padding-right:20px;">
+                    <div class="col-md-12">
+                        <h4>&nbsp;</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Roles, htmlAttributes: new { @class = "control-label" })
+
+                        </div>
+                        <div class="col-md-9 roles">
+                            @if (Model.Id > 0)
+                            {
+                                @Html.DropDownListFor(x => x.RoleId, Model.Roles, "--Select--", new { @class = "form-control UserLoginId", @id = "RoleId", @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(x => x.RoleId, Model.Roles, "--Select--", new { @class = "form-control UserLoginId", @id = "RoleId" })
+                            }
+                        </div>
+                    </div>
+                    <div class="row my-spacing">
+                        @*style="border:2px solid orange"*@
+                        <div class="col-md-12">
+
+                            @*<div class="row my-spacing">
+                                    <div class="col-md-12">
+                                        <label class="control-label" for="forAllUser">For All Users of selected role</label>
+
+                                        &nbsp;&nbsp;&nbsp;<input type="checkbox" name="forAllUserOfSelectedRole" value="true" id="forAllUser" />
+                                    </div>
+                                </div>
+
+                            *@
+                            <div class="row my-spacing">
+                                <div class="col-md-12" style="text-align:center;">
+                                    <label class="control-label">OR</label>
+                                </div>
+                            </div>
+                            <div class="row my-spacing">
+                                <div class="col-md-3">
+                                    <label class="control-label" for="UserLoginId">Users</label>
+                                </div>
+                                <div class="col-md-9 users">
+                                    @*<select asp-for="UserLoginId" name="UserLoginId" id="UserLoginId" class="form-control test layoutClass">
+                                            <option value="">--Select--</option>
+                                        </select>*@
+                                    @Html.DropDownListFor(x => x.UserLoginId, Model.Users, "--Select--", new { @class = "form-control chosen", @id = "UserLoginId" })
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-1">
+                </div>
+
+                <div class="col-md-8" style="background:aliceblue;padding: 20px 0px 20px 0px;">
+                    <div class="col-md-12">
+                        <h4>Maximum download in a day</h4>
+                    </div>
+                    <div class="row">
+                        @foreach (var item in Model.TypeList)
+                        {
+                            <div class="col-md-6" style="margin: 5px 0px 5px 0px">
+                                <div class="col-md-3">
+                                    <label class="control-label">@item.Text</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" name="@("type"+j)" id="@("type"+item.Value)" class="form-control dayType" placeholder="Enter number of downloads per day" required />
+                                </div>
+                            </div>
+                            j++;
+                        }
+                    </div>
+                    <div class="col-md-12" style="padding-top:20px;background-color:white;">
+                    </div>
+                    <div class="col-md-12" style="padding-top:20px;">
+                        <h4>Maximum download in a Month</h4>
+                    </div>
+                    <div class="row">
+                        @foreach (var item in Model.TypeList)
+                        {
+                            <div class="col-md-6" style="margin: 5px 0px 5px 0px">
+                                <div class="col-md-3">
+                                    <label class="control-label">@item.Text</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" name="@("typeMonth"+i)" id="@("typeMonth"+item.Value)" class="form-control monthType" placeholder="Enter number of downloads per day" required />
+                                </div>
+                            </div>
+                            i++;
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-11 my-spacing" style="padding-right:0px">
+                    @*<a href="/LibraryManagement/ManageLibraryDownloadPermissionList" class="btn btn-custom pull-right" name="Save">Cancel</a>*@
+
+                    <button type="submit" id="btnsave" class="btn btn-custom pull-right" name="Save">Save</button>
+                </div>
+                <div class="col-md-1 my-spacing" style="padding-right:0px">
+                    <a href="/LibraryManagement/ManageLibraryDownloadPermissionList" class="btn btn-custom pull-right" name="Save">Cancel</a>
+
+                </div>
+            </section>
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var roleid = "";
+        var userid = "";
+        $(document).ready(function () {
+            roleid ="@Model.RoleId";
+            userid = "@Model.UserLoginId";
+                @*"@ViewData["roleid"]";
+            userid = "@ViewData["userid"]";*@
+
+        });
+
+    </script>
+    <script src="~/Scripts/plugin/SearchDropdown/choosen.js"></script>
+    <script src="~/Scripts/CustomJS/LibraryManagement/libraryDownload.js"></script>
+    <script src="~/js/fSelect.js"></script>
+    <script>
+        (function ($) {
+            $(function () {
+                //window.fs_test = $('.test').fSelect();
+            });
+        })(jQuery);
+    </script>
+}

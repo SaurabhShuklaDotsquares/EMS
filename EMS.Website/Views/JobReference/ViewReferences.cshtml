@@ -1,0 +1,34 @@
+﻿@using EMS.Core;
+<style>
+    #grid-references_length {
+        padding-bottom: 10px;
+    }
+
+    .btn-group-sm > .btn, .btn-sm {
+        padding: 5px 0px;
+        font-size: 14px;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>View References </h2>
+            <!-- /.box-header -->
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <input id="hdncurrentOpening" type="hidden" value="@((ViewContext.RouteData.Values["id"]))" />
+                    <table id="grid-references" class="display postable table table-bordered table-striped table-condensed"></table>
+                </section>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-viewdetail", AreaLabeledId = "modal-viewdetail-label", Size = EMS.Core.Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-updatestatus", AreaLabeledId = "modal-updatestatus-label", Size = EMS.Core.Enums.ModalSize.Medium })
+
+@section scripts{
+    <script src="~/Scripts/CustomJS/jobReference.js"></script>
+  
+}

@@ -1,0 +1,24 @@
+﻿@model EMS.Dto.MomMeetingTaskDto
+@using (Html.BeginForm())
+{
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Add Decision" })
+
+<div class="modal-body ">
+    @Html.HiddenFor(Model => Model.Id)
+    @Html.HiddenFor(Model => Model.MomMeetingId)
+    
+    <div id="NotificationMessage"></div>
+
+    <div class="row form-group required clearfix">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.TextAreaFor(model => model.Decision, 3, 5, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @required = "required" })
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+</div>
+}

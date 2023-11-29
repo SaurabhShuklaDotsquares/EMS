@@ -1,0 +1,25 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model List<EMS.Data.Model.TdsdeductionDoc>
+@using (Html.BeginForm("InvestmentMail", "empInvestment", FormMethod.Post))
+{
+    <input type="hidden" value="@ViewBag.UID" name="hdnUID" id="hdnUID" />
+    var s = ViewBag.htmlTemp;
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Doc Details" })
+
+    <div class="modal-body">
+
+        <div class="form-group required clearfix">
+            <div class="col-md-12">
+                <div class="row">
+                    <label class="control-label">Meeting Agenda</label>
+                    @*@Html.TextArea("MailHtml",s.ToString(),7, 12, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })*@
+                    @Html.TextArea("MailHtml","", 7, 12, htmlAttributes: new { @class = "form-control", @autoComplete = "off", required = "required" })
+                    @*<textarea>@Html.Raw(s.ToString())</textarea>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+
+}

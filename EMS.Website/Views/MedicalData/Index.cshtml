@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Manage Medical Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @await Html.PartialAsync("_Notification")
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Manage Medical Data</h2>
+            </div>
+            <div class="col-md-8 search-filter">
+                <div class="pull-right box1">
+                    <a class="export-btn" data-href="MedicalData/ExportMedicalDataReportToExcel" href="MedicalData/ExportMedicalDataReportToExcel" style="">
+                        <img src="content/images/excel.png" alt=""> Export To Excel
+                    </a>
+                </div>
+            </div>
+            @*<div class="col-md-8 search-filter">
+
+                    <div class="pull-right">
+                        <a class="btn btn-custom pull-right margin-left15" href="javascript:void(0);" id="search_relative_status">Search</a>
+                    </div>
+                    <div class="custom-flex">
+
+                        <div>
+                            Group Insurance Policy:
+                        </div>
+                        <div class="col-md-4">
+                            <select id="relative_status" class="m-wrap medium form-control" name="relative_status">
+                                <option value="All">-- Select --</option>
+                                <option value="1">Agreed Person</option>
+                                <option value="0">Not Agreed Person</option>
+                            </select>
+                        </div>
+                        @if (CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.HRBP)
+                        {
+                            <div class="col-md-4">@Html.DropDownList("pmlist", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })</div>
+                        }
+                    </div>
+
+                </div>*@
+            @* <div class="col-md-12 dis-block clearfix">
+                <div class="pull-left box1">
+                    <a class="export-btn" data-href="MedicalData/ExportMedicalDataReportToExcel" href="MedicalData/ExportMedicalDataReportToExcel" style="">
+                        <img src="content/images/excel.png" alt=""> Export To Excel
+                    </a>
+                </div>
+                </div>*@
+
+            <div class="row clearfix">
+                <div class="pull-right">
+                    <div class="col-sm-6 col-md-3 col-lg-2 form-group pull-right">
+                        <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                        <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                    </div>
+
+                    <div class="col-sm-12 col-md-3 col-lg-3 form-group pull-right">
+                        <div class="input-group">
+                            @Html.TextBox("JoiningDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date of Joining", @style = "background-color: #fff;" })
+                            <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                                <i class="fa fa-close"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-3 col-lg-2 form-group pull-right">
+                        @Html.TextBox("txtSearch", null, new { @class = "form-control", @placeholder = "Emp Code/Name" })
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 col-lg-3 form-group pull-right">
+                        <select id="relative_status" class="m-wrap medium form-control" name="relative_status">
+                            <option value="All">Group Insurance Policy</option>
+                            <option value="1">Agreed Person</option>
+                            <option value="0">Not Agreed Person</option>
+                        </select>
+                    </div>
+                    @if (CurrentUser.RoleId == (int)EMS.Core.Enums.UserRoles.HRBP)
+                    {
+                        <div class="col-sm-12 col-md-3 col-lg-2 form-group pull-right">@Html.DropDownList("pmlist", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })</div>
+                    }
+
+
+
+
+                </div>
+            </div>
+
+            <table id="grid-medicaldata" class="display postable table table-stats table-condensed"></table>
+        </div>
+
+    </div>
+
+    <div class="divoverlay hide"></div>
+    @await Html.PartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-view-medicaldata", AreaLabeledId = "modal-leave-medicaldata-label", Size = EMS.Core.Enums.ModalSize.Large })
+    @section scripts
+        {
+        @*<script src="~/Scripts/CustomJS/medicaldata/Index.js" asp-append-version="true"></script>*@
+        <script src="~/bundles/MedicalData" asp-append-version="true"></script>
+    }

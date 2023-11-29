@@ -1,0 +1,102 @@
+﻿@model PagedList.Core.IPagedList<ComponentDto>
+@{
+    Layout = null;
+}
+
+<div class="container full-wdth">
+    <div class="row">
+        @if (Model.Count > 0)
+        {
+            foreach (var component in Model)
+            {
+                <div class="col-md-3">
+                    <div class="thumbnail wireframe-item">
+                        @{
+                            var ext = System.IO.Path.GetExtension(component.DesignImages.ToLower());
+
+                            <a has-image="@component.ImageName" has-html="@component.PsdImages" id="test" class="colorboxGallery" title="@component.Title " href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/ComponentImage/", component.DesignImages)">
+                                <img src="@string.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/ComponentImage/", component.DesignImages)" style="width:100%;height:220px; margin-top:3%;" />
+                            </a>
+
+                        }
+                        <div class="caption">
+                            <span class="clearfix" style="margin-top:3%;">
+                                @component.Title
+                                @if (component.UId == CurrentUser.Uid)
+                                {
+                                    <a class="fa fa-edit pull-right" data-target="#modal-AddEditComponent" style="font-size: 16px" data-toggle="modal" href="@Url.Action("AddEditComponent", "Component", new { id = @component.Id })" id="@component.Id"> </a>
+                                    <a title="delete component " class="fa fa-trash deletecomponent pull-right" style="font-size: 15px" href="@Url.Action("DeleteComponent", "Component", new { id = @component.Id })"> </a>
+                                }
+                            </span>
+                            @if (component.Description != null)
+                            {
+                                <span class="pull-left margin-right10" style="margin-top:3%;"><b>Description</b>: @component.Description</span>
+                            }
+                            <div class="clearfix">
+                                <span class="pull-left margin-right10" style="margin-top:3%;"><b>Created On</b>: @component.Created</span>
+
+                                @if (!string.IsNullOrEmpty(component.UploadedBy))
+                                {
+
+                                    <span class="pull-left" style="margin-top:3%;"><b>(@component.UploadedBy)</b></span>
+
+
+                                }
+                            </div>
+                            <div class="clearfix findimg">
+
+                                @if (component.ImageName != null)
+                                {
+                                    <b>
+                                        <a id="downloadhtml" class="btn btn-danger" style="font-size:smaller;float:left; margin-top:3%;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"Upload/ComponentImage/",component.ImageName)' download>Download HTML</a>
+                                    </b>
+                                }
+
+                                @if (component.PsdImages != null)
+                                {
+                                    <b><a id="PsdImageUrl" class="btn btn-primary pull-right" style="font-size:smaller;float:left; margin-top:3%;" href='@string.Format("{0}{1}{2}",SiteKey.DomainName,"Upload/ComponentImage/",component.PsdImages)' download>Download PSD</a></b>
+                                }
+                            </div>
+                            <b></b>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="thumbnail">
+
+                    <div class="caption">
+                        <b>No Record to Found</b>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    <br />
+    <div id="myPager" class="pull-right">
+        <pager class="pager-container"
+               asp-action="GetComponentDesignImages" asp-controller="Component"
+               list="@Model" options="PagedListRenderOptions.Bootstrap4" />
+
+        @*@Html.PagedListPager(Model, page => Url.Action("GetComponentDesignImages", new
+        {
+            humanID = ViewBag.HumanID,
+            page = page
+        }
+                            ),
+
+                              new PagedListRenderOptions
+                              {
+                                  LinkToFirstPageFormat = "<<",
+                                  LinkToPreviousPageFormat = "prev",
+                                  LinkToNextPageFormat = "next",
+                                  LinkToLastPageFormat = ">>"
+                              }
+                            )*@
+
+    </div>
+</div>

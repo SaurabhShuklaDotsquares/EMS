@@ -1,0 +1,117 @@
+.notify {
+    position: fixed;
+    padding: 20px;
+    color: #fff;
+    z-index: 99;    
+    transition: 0.3s all ease;
+    transform: translateX(100%);
+    box-shadow: 0px 0px 20px rgba(0,0,0,.5);
+    /*border-top-left-radius: 25px;*/
+}
+
+  
+
+    .notify[data-position="bottom"] {
+        right: 0;
+        left: 0;
+        bottom: 0
+    }
+
+    .notify[data-position="top"] {
+        right: 0;
+        left: 0;
+        top: 0
+    }
+
+    .notify[data-position="right"] {
+        right: 0;
+        bottom: 0;
+        top: 0;
+        max-width: 300px;
+        /*transform: translateX(0);*/
+    }
+
+    .notify[data-position="left"] {
+        left: 0;
+        top: 0;
+        bottom: 0;
+        max-width: 300px
+    }
+
+    .notify[data-notify='success'] {
+        background: #15cc1f
+    }
+
+    .notify[data-notify='info'] {
+        background: #2d9cee
+    }
+
+    .notify[data-notify='error'] {
+        background: #f32750
+    }
+
+    .notify[data-notify='default'] {
+        /* background: #ffa500*/
+        background: #e99701;
+    }
+
+    .notify .notify-close {
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: #fff;
+        padding: 10px 15px;
+        font-size: 20px;
+        text-decoration: none
+    }
+
+    .notify h4 {
+        margin: 5px 0 10px 0;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #fff
+    }
+
+.reviewsidebar {
+    width: 100%;
+    background-color: transparent;
+    color: #fff;    
+   /* box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+    margin-bottom: 5px;*/
+}
+
+    .reviewsidebar ul {
+        list-style-type: none;
+        border-left: 2px solid #094a68;
+        padding: 10px 5px;
+    }
+
+.reviewsidebarnumber {
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    margin-right: 14px;
+    border: 2px solid #fff;
+}
+
+.reviewsidebarstep {
+    display: flex;
+    position: relative;
+}
+
+
+@media (max-width:300px) {
+    .reviewsidebar {
+        width: 100%;        
+    }
+       
+}

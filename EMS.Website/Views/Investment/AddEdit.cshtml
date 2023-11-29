@@ -1,0 +1,327 @@
+﻿@model InvestmentDto
+@{
+    ViewBag.Title = "Investment Form";
+}
+@section styles{
+    <style>
+        .emp-detail .form-group {
+            margin-bottom: 10px;
+        }
+
+        .emp-detail textarea {
+            height: 82px;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .panel-default {
+            border-color: #333;
+        }
+
+            .panel-default > .panel-heading {
+                color: #fff;
+                background-color: #333;
+                border-color: #333;
+            }
+
+        .panel-title {
+            font-weight: 600;
+        }
+
+        .table-stats > thead > tr > th {
+            background: #ddd;
+            color: #333;
+        }
+    </style>
+}
+<div class="main_content clearfix">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="validation-summary"></div>
+
+        <div id="investment-add-edit-form">
+            @using (Html.BeginForm("addedit", "investment", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "investment_form", @autocomplete = "off" }))
+            {
+                <input type="hidden" name="Id" value="@Model.Id" id="Id" />
+                @Html.HiddenFor(model => model.FinancialYearId)
+                @Html.HiddenFor(model => model.FinancialYear)
+                @Html.HiddenFor(model => model.IsDraft);
+                <h3>Investment Details FY - @Model.FinancialYear</h3>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default emp-detail">
+                            <div class="panel-heading">
+                                <div class="panel-title">Employee Information</div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Name : </label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(model => model.Name,  htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Father Name : </label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(model => model.FatherName,  htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Date Of Birth : </label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(model => model.DOB,  htmlAttributes: new { @class = "form-control", @autocomplete = "off", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>PAN (Permanent Account Number) : </label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(model => model.PAN,  htmlAttributes: new { @class = "form-control text-upper" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label>Attendance Code : </label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            @Html.TextBoxFor(model => model.AttendanceCode,  htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label>ADDRESS : </label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextAreaFor(model => model.HomeAddress,  5, 10, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">Monthly Rent</div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-stats">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">S.No.</th>
+                                                <th>Month &amp; Year</th>
+                                                <th>Monthly Rent to be Paid (Rs.)</th>
+
+                                                <th class="text-center">S.No.</th>
+                                                <th>Month &amp; Year</th>
+                                                <th>Monthly Rent to be Paid (Rs.)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                for (int i = 0; i < Model.InvestmentMonths.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">@(i + 1)</td>
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.InvestmentMonths[i].InvMonth)
+                                                            @Html.HiddenFor(m => m.InvestmentMonths[i].InvYear)
+                                                            @Html.DisplayTextFor(model => model.InvestmentMonths[i].MonthName)
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.InvestmentMonths[i].MonthlyRent, htmlAttributes: new { @class = "form-control decimal-number", @autocomplete = "off" })
+                                                        </td>
+
+                                                        <td class="text-center">@((++i) + 1)</td>
+                                                        <td>
+                                                            @Html.HiddenFor(m => m.InvestmentMonths[i].InvMonth)
+                                                            @Html.HiddenFor(m => m.InvestmentMonths[i].InvYear)
+                                                            @Html.DisplayTextFor(model => model.InvestmentMonths[i].MonthName)
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m.InvestmentMonths[i].MonthlyRent, htmlAttributes: new { @class = "form-control decimal-number", @autocomplete = "off" })
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    CLAIMING EXEMPTION UNDER CHAPTER VI-A
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-stats" id="tblInvestmentAmounts">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">S.No.</th>
+                                                <th>Head of Investments</th>
+                                                <th>Short Notes</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < Model.InvestmentTypeAmountMaps.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">
+                                                        @(i + 1)
+                                                        @Html.HiddenFor(m => m.InvestmentTypeAmountMaps[i].InvestmentTypeId)
+                                                    </td>
+                                                    <td>@Model.InvestmentTypeAmountMaps[i].Name</td>
+                                                    <td>@Model.InvestmentTypeAmountMaps[i].ShortNote</td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.InvestmentTypeAmountMaps[i].Amount, htmlAttributes: new { @class = "form-control decimal-number", @autocomplete = "off" })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    INCOME FROM OTHER SOURCES
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-stats">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">S.No.</th>
+                                                <th>Others</th>
+                                                <th>Short Notes</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < Model.IncomeTypeAmountMaps.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">
+                                                        @(i + 1)
+                                                        @Html.HiddenFor(m => m.IncomeTypeAmountMaps[i].InvestmentTypeId)
+                                                    </td>
+                                                    <td>@Model.IncomeTypeAmountMaps[i].Name</td>
+                                                    <td>@Model.IncomeTypeAmountMaps[i].ShortNote</td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.IncomeTypeAmountMaps[i].Amount, htmlAttributes: new { @class = "form-control decimal-number", @autocomplete = "off" })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="investmentDocList">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Attach Documents
+                                    <button class="btn btn-primary btn-sm pull-right" data-bind="click: addInvestmentDoc, visible: !InvestmentDocuments().length" type="button">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+
+                                <div data-bind='foreach:{data: InvestmentDocuments}'>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                @Html.DropDownList("DocumentTypeId", Model.DocumentTypeList, "--Select Head--", htmlAttributes: new { data_bind = "value:DocumentTypeId, attr:{'name':'InvestmentDocuments['+$index()+'].DocumentTypeId'}", @class = "form-control", @data_rule_required = "true" })
+                                                <input type="hidden" data-bind="value: Id, attr:{'name':'InvestmentDocuments['+$index()+'].Id'}" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group"><input type="text" data-bind="value: DocumentName, attr:{'name':'InvestmentDocuments['+$index()+'].DocumentName'}" class="form-control" placeholder="Document Name" data-rule-required="true" /></div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-xs-7">
+                                            <div class="form-group text-center">
+                                                <!-- ko if: Id === 0 -->
+                                                <input type="file" data-bind="attr:{'name':'InvestmentDocuments['+$index()+'].Document'}" data-rule-required="true" />
+                                                <!-- /ko -->
+                                                <!-- ko if: Id !== 0 -->
+                                                <a data-bind="attr:{'href':DocumentUrl}" class="btn btn-link" target="_blank">View</a>
+                                                <!-- /ko -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-5">
+                                            <div class="form-group text-right">
+                                                <button class="btn btn-primary btn-sm" data-bind="click: $parent.addInvestmentDoc, visible: $parent.InvestmentDocuments().length ==($index()+1)" type="button">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button class="btn btn-danger btn-sm" data-bind="click: $parent.removeInvestmentDoc" type="button">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-custom pull-right margin-right10" id="saveDraft">Save as Draft</button>
+                        <button type="submit" class="btn btn-custom pull-right margin-right10" id="save">Save and Send Email</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var investmentDocs = @Html.Raw(Json.Serialize(Model.InvestmentDocuments));
+    </script>
+    <script src="~/scripts/select2.min.js"></script>
+    <script src="~/scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/Scripts/knockout-3.3.0.js"></script>
+    <script src="~/Scripts/knockout.mapping-latest.js"></script>
+    <script src="~/Scripts/CustomJS/Investment/AddEdit.js"></script>
+  
+}
+

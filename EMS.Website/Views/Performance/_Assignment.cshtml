@@ -1,0 +1,40 @@
+﻿@model List<CreateTaskDto>
+
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Tasks Details" }); }
+
+<div class="modal-body">
+    @if (Model != null)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <td style="width:5%">S.No.</td>
+                    <td style="width:15%">Task ID</td>
+                    <td style="width:40%">Task</td>
+                    <td style="width:20%">Task End Date</td>
+                    <td style="width:15%">Priority</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                <tr>
+                    <td>@(++index)</td>
+                    <td>@item.TaskID</td>
+                    <td>@item.TaskName</td>
+                    <td>@item.TaskEndDate</td>
+                    <td>@item.Priority</td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

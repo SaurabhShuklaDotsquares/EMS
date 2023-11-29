@@ -1,0 +1,321 @@
+﻿@model LibraryDto
+@Html.HiddenFor(model => model.Id)
+
+
+<style>
+    .popup-dtl-thumb-outer::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+    }
+
+    .style-11::-webkit-scrollbar {
+        width: 10px;
+        background-color: #F5F5F5;
+    }
+
+    /**  STYLE 11 */
+    .style-11::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background: rgba(0,0,0,0.1);
+        border: 1px solid #ccc;
+    }
+
+    .style-11::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: linear-gradient(left, #fff, #e4e4e4);
+        border: 1px solid #aaa;
+    }
+
+        .style-11::-webkit-scrollbar-thumb:hover {
+            background: #fff;
+        }
+
+        .style-11::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(left, #22ADD4, #1E98BA);
+        }
+
+    .popup-dtl-thumb-outer .popup-dtl-thumb .li {
+        width: 100%;
+        padding: 0 0 0 0;
+    }
+    .popup-dtl-thumb-outer .popup-dtl-thumb li {
+        width: 25%;
+        padding: 0 7.5px 15px;
+    }
+
+        .popup-dtl-thumb-outer .popup-dtl-thumb li .dtl-thumb-img img {
+            width: 100%;
+            display: block;
+            height: 70px;
+            object-fit: cover;
+        }
+
+        .popup-dtl-thumb-outer .popup-dtl-thumb li .dtl-thumb-img {
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+
+    .detail-col h4 {
+        /*border-bottom: 1px solid #e8e8e8;*/
+        font-size: 18px;
+        /*margin-bottom: 15px;
+        padding-bottom: 15px;*/
+        padding-right: 15px;
+    }
+
+    .detail-col div.author {
+        border-bottom: 1px solid #e8e8e8;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+
+    .dt-desc {
+        color: #707070;
+        padding: 30px 35px;
+        font-size: 16px;
+        width: 100%;
+        font-weight: 300;
+    }
+
+    .date-txt {
+        font-size: 14px;
+        padding-bottom: 15px;
+    }
+
+    .dt-desc .desc-text-box {
+        max-height: 135px;
+        overflow-y: auto;
+        margin-bottom: 15px;
+        text-align: justify;
+        padding-right: 6px;
+    }
+
+    .popup-dtl-thumb-outer {
+        padding: 15px;
+        overflow-y: auto;
+        max-height: 250px;
+    }
+
+    .file-name-bottom {
+        padding-bottom: 4px;
+    }
+</style>
+
+<div class="modal-body">
+    <div class="d-flex flex-wrap">
+        <div class="detail-col dt-desc">
+            <h4 class="modal-title" id="exampleModalLabel">@Model.Title</h4>
+            <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                <img src="~/images/close-black.png" />
+            </button>
+            @if (!string.IsNullOrEmpty(Model.Author))
+            {
+                <div class="author">
+                    <span style="font-size:11px;text-transform: capitalize;">Author: <span class="color-black">@Model.Author</span></span>
+                </div>
+            }
+            <div class="date-txt d-flex flex-wrap justify-content-between">
+                <span style="margin-right:10px">Created Date: <span class="color-black">@Model.CreatedDate</span></span>
+                <span>Last Modified: <span class="color-black">@Model.ModifyDate</span></span>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.LibraryTechnologiesComma))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">Technology:</b> <span class="color-black">@Model.LibraryTechnologiesComma</span></span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.LibraryIndustriesComma))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">Industry:</b> <span class="color-black">@Model.LibraryIndustriesComma</span></span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.Version))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">Version:</b> @Model.Version</span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.TLName))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">TL Name:</b> @Model.TLName</span>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.BAName))
+            {
+                <div class="date-txt d-flex flex-wrap justify-content-between">
+                    <span><b style="color:#e18f00">BA Name:</b> @Model.BAName</span>
+                </div>
+            }
+
+
+            <div class="desc-text-box style-11">
+                @if (Model.IntegrationHours.HasValue)
+                {
+                    <b style="font-size:12px">Integration Time (In Hrs): @Model.IntegrationHours</b><br />
+                }
+                <p>@Model.Description</p>
+            </div>
+
+            @if (Model.LibraryFileDtos != null && Model.LibraryFileDtos.Count > 0)
+            {
+                int i = 0;
+                <div class="popup-dtl-thumb-outer style-11">
+
+                    @{
+                        List<LibraryFileDto> images = null;
+                        List<LibraryFileDto> others = null;
+
+                        images = Model.LibraryFileDtos.Where(lf => Common.ImageExtensions.
+                                Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                        others = Model.LibraryFileDtos.Where(lf => !Common.ImageExtensions.
+                                        Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                        if (images != null)
+                        {
+                            <ul class="d-flex flex-wrap popup-dtl-thumb">
+                                @foreach (var fileDto in images)
+                                {
+                                    string tempImage = "images/no-image.jpg";
+                                    if (System.IO.File.Exists(System.IO.Path.Combine
+                                        (ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                    {
+                                        tempImage = fileDto.FilePath;
+                                    }
+                                    <li class="file-thumbnail @(i==0 ? "active" : "")" data-image="@tempImage">
+                                        <div class="dtl-thumb-img">
+                                            <img src="@tempImage" alt="">
+                                        </div>
+                                        <a class="lnkDownload" href="javascript:void(0);" data-id="@fileDto.Id">
+                                            Download
+                                        </a>
+                                    </li>
+                                    i++;
+                                }
+                            </ul>
+                        }
+
+
+                        if (others != null)
+                        {
+                            @foreach (var fileDto in others)
+                            {
+                                string extension = System.IO.Path.GetExtension(fileDto.FilePath.ToLower());
+                                string tempImage = "images/no-image.jpg";
+                                if (Common.ImageExtensions.Contains(extension))
+                                {
+                                    tempImage = "images/no-image.jpg";
+                                }
+                                else if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(fileDto.FilePath.ToLower())) &&
+                                    !string.IsNullOrWhiteSpace(extension))
+                                {
+                                    tempImage = string.Format("{0}{1}{2}", "images/FileTypes/", extension.Remove(0, 1), ".png");
+                                }
+                                if (System.IO.File.Exists(System.IO.Path.Combine(
+                                    ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                {
+                                    @if (Common.ImageExtensions.Contains(System.IO.Path.GetExtension(fileDto.FilePath.ToLower())))
+                                    {
+                                        tempImage = string.Format("{0}{1}{2}", SiteKey.DomainName, "", fileDto.FilePath);
+                                    }
+                                }
+                                <div class="file-name-bottom">
+                                    <a class="lnkDownload" href="javascript:void(0);" data-id="@fileDto.Id">
+                                        <img src="@tempImage" alt="" class=""> @fileDto.FileShortName
+                                    </a>
+                                </div>
+                            }
+                        }
+
+                    }
+
+                </div>
+            }
+
+            @if (Model.LibraryComponentFileDtos != null && Model.LibraryComponentFileDtos.Count > 0)
+            {
+                int i = 0;
+
+                <div class="popup-dtl-thumb-outer style-11">
+
+                    @{
+                        List<LibraryComponentFileDto> images = null;
+                        List<LibraryComponentFileDto> others = null;
+
+                        images = Model.LibraryComponentFileDtos.Where(lf => Common.ImageExtensions.
+                                Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                        others = Model.LibraryComponentFileDtos.Where(lf => !Common.ImageExtensions.
+                                        Contains(System.IO.Path.GetExtension(lf.FilePath.ToLower()))).ToList();
+                        if (images != null)
+                        {
+                            <ul class="d-flex flex-wrap popup-dtl-thumb">
+                                @foreach (var fileDto in images)
+                                {
+                                    string tempImage = "images/no-image.jpg";
+                                    if (System.IO.File.Exists(System.IO.Path.Combine
+                                        (ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                    {
+                                        tempImage = fileDto.FilePath;
+                                    }
+                                    <li class="file-thumbnail @(i==0 ? "active" : "")" data-image="@tempImage">
+                                        <div class="dtl-thumb-img">
+                                            <img src="@tempImage" alt="">
+                                        </div>
+                                        <a class="lnkDownloadComponent" href="javascript:void(0);" data-id="@fileDto.Id">
+                                            Download
+                                        </a>
+                                    </li>
+                                    i++;
+                                }
+                                @if (others != null)
+                                {
+                                    @foreach (var fileDto in others)
+                                    {
+                                        string extension = System.IO.Path.GetExtension(fileDto.FilePath.ToLower());
+                                        string tempImage = "images/no-image.jpg";
+                                        if (Common.ImageExtensions.Contains(extension))
+                                        {
+                                            tempImage = "images/no-image.jpg";
+                                        }
+                                        else if (Common.OtherExtensions.Contains(System.IO.Path.GetExtension(fileDto.FilePath.ToLower())) &&
+                                            !string.IsNullOrWhiteSpace(extension))
+                                        {
+                                            tempImage = string.Format("{0}{1}{2}", "images/FileTypes/", extension.Remove(0, 1), ".png");
+                                        }
+                                        if (System.IO.File.Exists(System.IO.Path.Combine(
+                                            ContextProvider.HostEnvironment.WebRootPath + "/", fileDto.FilePath)))
+                                        {
+                                            @if (Common.ImageExtensions.Contains(System.IO.Path.GetExtension(fileDto.FilePath.ToLower())))
+                                            {
+                                                tempImage = string.Format("{0}{1}{2}", SiteKey.DomainName, "", fileDto.FilePath);
+                                            }
+                                        }
+                                        <li class="file-name-bottom li">
+                                            <a class="lnkDownloadComponent" href="javascript:void(0);" data-id="@fileDto.Id">
+                                                <img src="@tempImage" alt="" class=""> Download Instructions @*@fileDto.FileShortName*@
+                                            </a>
+                                        </li>
+                                    }
+                                }
+
+                            </ul>
+                        }
+
+                    }
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@*<script>
+        $(document).ready(function () {
+            $(".file-thumbnail").click(function () {
+                //var image = $(this).data("image");
+                //console.log(image);
+                //$(".main-image").attr("src", image);
+                $(".file-thumbnail").removeClass("active");
+                $(this).addClass("active");
+            })
+        });
+    </script>*@

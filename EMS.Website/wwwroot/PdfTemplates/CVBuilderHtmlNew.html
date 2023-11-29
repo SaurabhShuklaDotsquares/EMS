@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html
+          PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>:: EMS :: </title>
+    <style type="text/css">
+        body {
+            margin-left: 0px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            font-family: Arial, Helvetica, sans-serif;
+            -webkit-print-color-adjust: exact;
+        }
+
+        #watermark {
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-repeat: repeat-y;
+            z-index: 0;
+            opacity: 0.2;
+        }
+        @page {
+            @prince-overlay {
+                content: flow(watermarkflow)
+            }
+        }
+       
+    </style>
+
+</head>
+
+<body >
+    <div id="watermark" style="background-image: url(@DomainName@PdfTemplates/images/darkBg.png); page-break-after: always; ">
+       </div>
+    <table width="97%" border="0" align="center" cellpadding="0" cellspacing="0" >        
+        <tr>
+            <td style="font-size:46px; color:#1e9dcb; font-weight:700; -webkit-print-color-adjust: exact; position:relative;z-index:1;">
+                @Name@
+            </td>
+        </tr>
+        <tr>
+            <td style="height:10px"></td>
+        </tr>
+        <tr>
+            <td style="color:#0b0c0e; font-size:20px; letter-spacing:5px; background:url(@DomainName@PdfTemplates/images/line.jpg); background-repeat:repeat-x;  visibility: visible; ">
+                <span style="background-color:#fff; display:inline-block; padding-right:10px">@Designation@</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td> 
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td valign="top" width="250px"><img style="max-width: 220px; position: relative; z-index: 1;" src="@UserProfile@" alt="" /></td>
+                        <td valign="top" style="width:15px">&nbsp;</td>
+                        <td valign="top" style="padding-left:15px">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        <p style="font-size:16px; line-height:24px; color:#0b0c0e; padding:0px; margin:0px">
+                                            @Title@
+                                        </p>                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:5px"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="487" valign="top" style="border-bottom:1px solid #dedfe1; padding-bottom:10px">
+                                                    <!--<table width="100%" border="0" cellspacing="0" cellpadding="0" style="position: relative; z-index: 1;">
+                                                        <tr>
+                                                            <td width="35" valign="top"><img src="@DomainName@PdfTemplates/images/icon1.jpg" style="max-width: inherit;" alt="" /></td>
+                                                            <td width="15" valign="top">&nbsp;</td>
+                                                            <td valign="top">
+                                                                <div style="color:#939393; font-size: 16px; margin-bottom: 5px">Email</div>
+                                                                <div style="color:#0b0c0e; font-size:16px; ">@Email@</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>-->
+                                                    @Email@
+                                                </td>
+                                                <td width="85" valign="top" style="width:15px">&nbsp;</td>
+                                                <td width="1016" valign="top" >
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" style="height:10px"></td>
+                                            </tr>
+                                   
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td style="background-color:#dedfe1; height:1px"></td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="320" valign="top" style="padding-right:20px">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="color: #1e9dcb; font-size: 23px; font-weight: 700; background: url(@DomainName@PdfTemplates/images/line2.png); background-repeat: repeat-x; visibility: visible; position: relative; z-index: 1; ">
+                                        <span style="background-color:#fff; display:inline-block; padding-right:10px;  ">
+                                            <img src="@DomainName@PdfTemplates/images/icon5.png" align="left"
+                                                 style="margin-right:10px; margin-top:-3px" /> Core Competencies
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td> 
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            @CoreCompetencies@
+                                            
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="background-color:#dedfe1; width:1px"></td>
+                        <td valign="top" style="padding-left:20px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(@DomainName@PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                        <span style="background-color: #fff; display: inline-block; padding-right: 10px; position: relative; z-index: 1;">
+                                            <img src="@DomainName@PdfTemplates/images/icon6.png" align="left"
+                                                 style="margin-right:10px; margin-top:-3px" /> Profile Summary
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                @ProfileSummary@
+                                                
+                                            </tr>
+                                            
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(@DomainName@PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                <span style="background-color: #fff; display: inline-block; padding-right: 10px; position: relative; z-index: 1;">
+                    <img src="@DomainName@PdfTemplates/images/icon9.png" align="left"
+                         style="margin-right:10px; margin-top:-3px" /> Previous Experience
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    @PreviousExperience@
+                </table>                    
+            </td>
+        </tr>        
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(@DomainName@PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                            <span style="background-color: #fff; display: inline-block; padding-right: 10px; position: relative; z-index: 1;">
+                                <img src="@DomainName@PdfTemplates/images/icon7.png" align="left"
+                                     style="margin-right:10px; margin-top:-3px" /> Skills
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:10px"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    @TechnicalSkills@
+                                   
+                                </tr>
+                               
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        
+        @Certifications@
+        <tr>
+            <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(@DomainName@PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                <span style="background-color: #fff; display: inline-block; padding-right: 10px; position: relative; z-index: 1;">
+                    <img src="@DomainName@PdfTemplates/images/icon12.png" align="left"
+                         style="margin-right:10px; " /> Experience
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:10px"></td>
+        </tr>
+       
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        @WorkExperience@
+                       
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        
+       @RolesAcross@
+        <tr>
+            <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(@DomainName@PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                <span style="background-color: #fff; display: inline-block; padding-right: 10px; position: relative; z-index: 1;">
+                    <img src="@DomainName@PdfTemplates/images/icon10.png" align="left"
+                         style="margin-right:10px; margin-top:-3px" /> Education
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                   @Education@
+                    
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(@DomainName@PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                <span style="background-color: #fff; display: inline-block; padding-right: 10px; position: relative; z-index: 1;">
+                    <img src="@DomainName@PdfTemplates/images/icon11.png" align="left"
+                         style="margin-right:10px; margin-top:-3px" /> Personal Details
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td style="height:25px"></td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="width:35px" valign="top"><img src="@DomainName@PdfTemplates/images/bullot.png" alt="" /></td>
+                                    <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">
+                                        <strong>
+                                            Date of Birth<br />
+                                        </strong> @DOB@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35px" valign="top">&nbsp;</td>
+                                    <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">&nbsp;</td>
+                                </tr>
+                                <!--<tr>
+                                    <td style="width:35px" valign="top"><img src="@DomainName@PdfTemplates/images/bullot.png" alt="" /></td>
+                                    <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">
+                                        <strong>
+                                            Address<br />
+                                        </strong> @Location@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:35px" valign="top">&nbsp;</td>
+                                    <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">&nbsp;</td>
+                                </tr>-->
+                                <tr>
+                                    <td style="width:35px" valign="top"><img src="@DomainName@PdfTemplates/images/bullot.png" alt="" /></td>
+                                    <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">
+                                        <strong>
+                                            Languages Known<br />
+                                        </strong> @Languages@
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>                       
+                        
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+       
+    </table>
+    
+</body>
+
+</html>

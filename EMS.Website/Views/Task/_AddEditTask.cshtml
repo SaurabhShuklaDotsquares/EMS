@@ -1,0 +1,87 @@
+﻿@model CreateTaskDto
+@using (Html.BeginForm())
+{
+    @Html.Hidden("AddedUid", CurrentUser.Uid)
+    @Html.HiddenFor(model => model.TaskID)
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Add To-Do List" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.TaskName, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.TaskName, htmlAttributes: new { @class = "form-control", @placeholder = "Enter Task Name", @maxlength = 400, @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Priority, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.DropDownListFor(model => model.Priority, Html.GetEnumSelectList(typeof(Enums.Priority)), "---Select Type---", new { @class = "form-control", data_val_required = "*required" })
+
+                    @*@Html.EnumDropDownListFor(model => model.Priority, "---Select Type---", new { @class = "form-control" })*@
+                </div>
+            </div>
+        </div>
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Assign, htmlAttributes: new { @class = "control-label" })
+                </div>
+
+                <div class="col-md-9">
+                    @Html.ListBoxFor(model => model.Assign, Model.Users, htmlAttributes: new { @class = "form-control multiple", @style = "padding:0px;" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextAreaFor(model => model.Remark, 5, 5, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.TaskEndDate, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(x => x.TaskEndDate, htmlAttributes: new { @class = "form-control", @id = "taskEndDate", @autocomplete = "off" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group required @(Model.TaskID>0 ? " ":"hidden")">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.TaskStatusId, htmlAttributes: new { @class = "control-label" })
+                </div>
+
+                <div class="col-md-9">
+                    @Html.DropDownListFor(model => model.TaskStatusId, Html.GetEnumSelectList(typeof(Enums.TaskStatusType)), new { @class = "form-control", data_val_required = "*required" })
+                    @*<select asp-for="TaskStatusId" asp-items="Html.GetEnumSelectList(typeof (Enums.TaskStatusType))" class="form-control"></select>*@
+                    @*@Html.EnumDropDownListFor(model => model.TaskStatusId, true, htmlAttributes: new { @class = "form-control", @data_msg_required = "*required" })*@
+                </div>
+            </div>
+        </div>
+    </div>
+    @*@Html.Partial("_ModalFooter", new ModalFooter { })*@
+    <div class="form-group clearfix">
+        <div class="text-right">
+            <button type="submit" class="btn btn-custom btn_submit_task margin-right10">SUBMIT</button>
+            <button id="btn_cancel_task" type="button" class="btn btn-custom margin-right10" data-dismiss="modal">CANCEL</button>
+        </div>
+    </div>
+
+
+}
+
+

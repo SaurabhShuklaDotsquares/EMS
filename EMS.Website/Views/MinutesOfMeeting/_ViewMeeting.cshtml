@@ -1,0 +1,228 @@
+﻿@model MomMeetingDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+
+<style>
+    .myclas {
+        margin-top: 8px;
+    }
+
+    .doc-list {
+        border-left: 1px solid rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+        .doc-list li {
+            width: 50%;
+            padding: 10px 15px;
+            border-right: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+            .doc-list li a {
+                word-break: break-all;
+            }
+</style>
+
+<partial name="_ModalHeader" model="@(new ModalHeader { Heading = "Minutes of Meeting (" + @Model.MeetingMasterTitle + ")" })" />
+<div class="modal-body" id="mymodel">
+
+    <div class="row form-group clearfix">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Meeting Title</label>
+                </div>
+                <div class="col-md-8">
+                    <span>@Model.MeetingTitle</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Venue</label>
+
+                </div>
+                <div class="col-md-8">
+                    <span>@Model.VenueName</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row form-group clearfix">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Date Of Meeting</label>
+                </div>
+                <div class="col-md-8">
+                    <span>@Model.DateOfMeetings</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Start Time</label>
+                </div>
+                <div class="col-md-8">
+                    <span>@Model.MeetingStartTime <b>(24:00 hours format)</b></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row form-group clearfix">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Duration</label>
+                </div>
+                <div class="col-md-8">
+                    <span>@Model.MeetingTime <b>Minutes</b></span>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label  remove-star">Participant Type</label>
+                </div>
+                <div class="col-md-8">
+                    @(((EMS.Core.Enums.MomMeetingParticipantType)Model.ParticipantType))
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group clearfix">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label">@(((EMS.Core.Enums.MomMeetingParticipantType)Model.ParticipantType))</label>
+                </div>
+                <div class="col-md-10">
+                    @Model.StrPaticipant
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row form-group clearfix">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Chaired By</label>
+                </div>
+                <div class="col-md-8">
+                    @Model.ChairedName
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="control-label">Author By</label>
+                </div>
+                <div class="col-md-8">
+                    @Model.AuthorName
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Agenda))
+    {
+        <div class="form-group clearfix">
+            <div class="col-md-12">
+                <div class="row">
+                    <label class="control-label">Meeting Agenda</label>
+                    <div>
+                        @Html.Raw(Model.Agenda)
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Notes))
+    {
+        <div class="form-group clearfix">
+            <div class="col-md-12">
+                <div class="row">
+                    <label class="control-label">Notes</label>
+                    <div>
+                        @Html.Raw(Model.Notes)
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <hr />
+    <div class="form-group clearfix">
+        <table class="table table-stats table-hover table-responsive dataTable no-footer">
+            <thead>
+                <tr role="row">
+                    <th>#</th>
+                    <th>Task</th>
+                    @*<th>Participants</th>*@
+                    <th>Status/Priority</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.MomMeetingTasks.Count > 0)
+                {
+                    int count = 1;
+                    foreach (var item in Model.MomMeetingTasks)
+                    {
+
+                        <tr>
+                            <td> @(count++)</td>
+                            <td>
+                                <strong>@item.Task</strong> <br />
+                                @item.PaticipantsList
+                            </td>
+                            @*<td>@item.PaticipantsList</td>*@
+                            <td>@((byte)item.Status == 5 ? "Future Action" : Convert.ToString(item.Status)) @(item.Priority > 0 ? "/"+ item.Priority.GetDescription() : string.Empty)</td>
+                            <td>@item.Remark </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No Task Found !</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.MomDocuments.Count > 0)
+    {
+        <div class="row clearfix">
+            <div class="col-md-12 ">
+                <ul class="doc-list">
+
+                    @foreach (var item in Model.MomDocuments)
+                    {
+
+                        <li>
+                            <i class='@(item.DocumentPath.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" : item.DocumentPath.ToLower().Contains(".doc")? "fa fa-file-word-o":item.DocumentPath.ToLower().Contains(".xls")?"fa fa-file-excel-o":item.DocumentPath.ToLower().Contains(".txt")?"fa fa-file-text-o":item.DocumentPath.ToLower().Contains(".rar")|| item.DocumentPath.ToLower().Contains(".zip")?"fa fa-file-zip-o":"fa fa-file-image-o")'></i> <a href="~/Upload/MomDocument/@item.DocumentPath.ToLower()" class="btn-link" download="download">  @item.DocumentPath </a>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    }
+
+</div>
+

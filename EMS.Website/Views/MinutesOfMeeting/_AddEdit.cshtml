@@ -1,0 +1,25 @@
+﻿@model MeetingMasterDto
+@using EMS.Web.Models.Others
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = @Model.Id == 0 ? "Add Minutes of Meeting Topic" : "Edit Minutes of Meeting Topic" })
+    
+<div class="modal-body">
+    <div id="NotificationMessage"></div>
+    @Html.HiddenFor(model => model.Id)
+    <div class="row form-group required clearfix">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <label class="control-label">Meeting Topic</label>               
+            </div>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.Title, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+                </div>
+        </div>
+    </div>
+</div>
+
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+

@@ -1,0 +1,77 @@
+﻿@model EMS.Dto.VirtualDeveloperDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    Layout = null;
+}
+
+@*<div class="cmxform addedit-virtualdevp" style="width:600px;height:100%;margin-top:10%">*@
+<div class="cmxform addedit-virtualdevp">
+    @using (Html.BeginForm("AddEditDeveloper", "VirtualDeveloper", FormMethod.Post, new { @id = "frm-virtualDeveloper" }))
+    {
+        @Html.HiddenFor(model => model.VirtualDeveloper_Id)
+
+        <div class="bg-white">
+            <div class="popup-top text-left">
+                @if (Model.VirtualDeveloper_Id == 0)
+                {
+                    <h3 style="color:#fff;padding-top:15px;" class="text-center">Add Virtual Developer</h3>
+                }
+                else
+                {
+                    <h3 style="color:#fff;padding-top:15px;" class="text-center">Edit Virtual Developer</h3>
+                }
+            </div>
+            <div class="popup-container" id="popup-container">
+                @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                {
+                    <p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                @Html.Label("Select PM")
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DropDownListFor(model => model.PMUid, Model.PMList, "--select PM--", new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                    </p>
+                }
+                <p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.VirtualDeveloper_Name)
+                        </div>
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(model => model.VirtualDeveloper_Name, null, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </p>
+                <p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Email)
+                        </div>
+                        <div class="col-md-7">
+                            @Html.TextBoxFor(model => model.Email, null, new { @email = "true", @class = "form-control" })
+                        </div>
+
+                    </div>
+                </p>
+                <p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.IsActive)
+                        </div>
+                        <div class="col-md-1">
+                            @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </p>
+
+            </div>
+            @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonID = "btn-submit", SubmitButtonText = "Submit", CancelButtonText = "Cancel" })
+        </div>
+    }
+</div>

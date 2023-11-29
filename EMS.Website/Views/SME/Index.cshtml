@@ -1,0 +1,185 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.SmeDto
+@using EMS.Core
+@{
+    ViewBag.Title = "Manage Subject Master Expert";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .no-padding {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .lbldayCountmessage {
+        /*background-color:#fcfae9;
+                                    border:1px #e9e6c7 solid;*/
+        color: red;
+        display: block;
+        font-weight: 200 !important;
+        padding: 5px 15px 5px 25px;
+        position: relative;
+    }
+
+        .lbldayCountmessage::before {
+            content: "\f0a9";
+            font-family: 'FontAwesome';
+            position: absolute;
+            color: red;
+            left: 5px;
+            top: 5px;
+        }
+
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Manage Subject Matter Expert</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform" id="leaveform">
+                        @using (Html.BeginForm("SaveSME", "SME", FormMethod.Post, new { id = "Form1" }))
+                        {
+                            @Html.HiddenFor(model=>Model.Id,new{@id="subjectmatterid"})
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>Subject:</label>
+                                    </div>
+                                    <div class="col-md-8">
+
+                                        @Html.TextBoxFor(x => x.SubjectMatterExpert, new { @class = "form-control", @id = "smeInput",@list="smeList" })
+                                        <datalist id="smeList">
+                                            @foreach (var item in Model.datalist)
+                                            {
+                                                <option value="@item"></option>
+                                            }
+                                        </datalist>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>Expert-1 :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => Model.Level1, Model.Level1Options as IEnumerable<SelectListItem>, "--Select--", new { @class = "form-control" ,@id="Level1"})
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-4">
+                                        <label>Expert-2 :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => Model.Level2, Model.Level2Options as IEnumerable<SelectListItem>,"--Select--", new { @class = "form-control",@id="Level2" })
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-4">
+                                        <label>Expert-3 :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => Model.Level3, Model.Level3Options as IEnumerable<SelectListItem>,"--Select--", new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-4">
+                                        <label>Expert-4 :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => Model.Level4, Model.Level2Options as IEnumerable<SelectListItem>,"--Select--" ,new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-4">
+                                        <label>Expert-5 :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => Model.Level5, Model.Level5Options as IEnumerable<SelectListItem>,"--Select--", new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-4">
+                                        <label>Status:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="checkbox-container">
+                                            @Html.CheckBoxFor(x => x.IsActive) Active
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-custom" id="saveBtn" name="Save">Save</button>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a href="@Url.Action("ShowSMEData","sme")" class="btn btn-custom">Cancel</a>
+                                </div>
+                                <div class="col-sm-6"></div>
+                            </div>
+
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@{
+
+    var domain = SiteKey.DomainName;
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-view-leave-balance", AreaLabeledId = "modal-view-leave-balance-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts
+    {
+    <script type="text/javascript">
+        var domain = '@(SiteKey.DomainName)';
+        var currentuserid = @CurrentUser.Uid;
+
+    </script>
+    <script src="~/scripts/customjs/sme/sme.js" asp-append-version="true"></script>
+}
+
+
+

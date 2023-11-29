@@ -1,0 +1,55 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model List<EMS.Data.Model.TdsdeductionDoc>
+
+@{
+    int i = 1;
+}
+
+<style>
+    .modal-dialog{
+        width:50% !important;
+    }
+ </style>
+
+@using (Html.BeginForm())
+{
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Doc Details" })
+
+    <div class="modal-body">
+        @if (Model.Count > 0)
+        {
+            <div class="row clearfix">
+                <div class="col-md-12 ">
+                    <ul class="doc-list">
+
+                        @foreach (var item in Model.Where(x=> x.Uid == null))
+                        {
+
+                            <li id="li_@item.DeductionDocId">
+                                <div style="@(i==1 ? "" : "padding-top:35px;")">
+                                    <div class="col-md-11">
+                                         <i class='@(item.FileName.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" :
+                                        item.FileName.ToLower().Contains(".doc")? "fa fa-file-word-o":
+                                        item.FileName.ToLower().Contains(".xls")?"fa fa-file-excel-o":
+                                        item.FileName.ToLower().Contains(".txt")?"fa fa-file-text-o":
+                                        item.FileName.ToLower().Contains(".rar")|| item.FileName.ToLower().Contains(".zip")?"fa fa-file-zip-o":
+                                        "fa fa-file-image-o")'></i>
+                                        <a href="~/Upload/TDS/@item.FileName.ToLower()" class="btn-link" download="@item.FileName">  @item.FileName (@item.EmpDeduction.AssesmentYear.YearRange)</a>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a class="btn btn-default btn-sm m2" style="float:right;" title="delete" id="delete_@item.DeductionDocId" href="~/empInvestment/DeleteDoc/@item.DeductionDocId" data-toggle="modal" data-target="#modal-delete-Doc" data-backdrop="static"><i class="fa fa-trash-o"></i></a>
+                                    </div>
+                                </div>
+
+                             </li>
+                                i++;
+            }
+                    </ul>
+                </div>
+            </div>
+        }
+
+    </div>
+}

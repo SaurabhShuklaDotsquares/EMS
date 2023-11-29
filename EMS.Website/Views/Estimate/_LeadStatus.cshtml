@@ -1,0 +1,76 @@
+﻿@model EMS.Dto.LeadStatusDto
+@using EMS.Web.Models.Others
+
+<div class="dvleadStatus">
+
+    @using (Html.BeginForm("leadstatus", "estimate", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Lead Status" });
+
+    <div class="modal-body">
+
+        <div id="MessageNotification"></div>
+        @Html.HiddenFor(model => model.LeadId)
+        @Html.HiddenFor(m => m.IsConfirmSubmit)
+        @Html.HiddenFor(m => m.IsAlmostConverted)
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Document, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6">
+                    <input type="file" name="document" id="document" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-6">
+                    @Html.DropDownListFor(model => model.Status, Model.StatusList, "--select--", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div id="divNextChanseDate" class="form-group required clearfix">
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.NextChaseDate, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.NextChaseDate, htmlAttributes: new { @class = "form-control", data_msg_required = "Next Chase Date is required", @data_rule_required = "true" })
+                </div>
+
+                @if (Model.IsAlmostConverted)
+                {
+                    <div class="col-md-2" style="text-align: right;padding-right: 0px;">
+                        @Html.LabelFor(model => model.ConversionDate, htmlAttributes: new { @style = "font-weight: 600;" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.ConversionDate, htmlAttributes: new { @class = "form-control", data_msg_required = "Conversion Date is required", @data_rule_required = "false" })
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row form-group required clearfix">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.Notes, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        @{Html.RenderPartial("_ModalFooter", new ModalFooter());}
+
+    </div>
+
+    }
+</div>
+<script src="~/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/CustomJS/Estimate/leadStatus.js"></script>
+

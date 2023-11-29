@@ -1,0 +1,30 @@
+﻿@using EMS.Core
+@{
+    ViewBag.Title = "Org Improvement";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{await Html.RenderPartialAsync("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Org Improvement</h2>
+            </div>
+            <div class="col-sm-8 text-right">
+                <a class="btn btn-custom" href="@Url.Action("add")" data-target="#modal-add-edit-improvement" data-toggle="modal" data-backdrop="static">Add New</a>
+            </div>
+        </div>
+        <table id="grid-improvement-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    await Html.RenderPartialAsync("_Modal", new Modal { ID = "modal-delete-improvement", AreaLabeledId = "lbl-delete-improvement", Size = Enums.ModalSize.Medium });
+    await Html.RenderPartialAsync("_Modal", new Modal { ID = "modal-add-edit-improvement", AreaLabeledId = "modal-add-edit-improvement-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    @*<script src="~/Scripts/CustomJS/OrgImprovement/orgImprovement.js"></script>*@
+    <script src="~/bundles/OrgImprovement/Index" asp-append-version="true"></script>
+}
+

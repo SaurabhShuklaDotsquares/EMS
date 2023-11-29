@@ -1,0 +1,88 @@
+﻿@using EMS.Web.Models.Others
+@model ProjectNCLogDto
+
+@using (Html.BeginForm("addedit", "nclog", FormMethod.Post, new { id = "add-nclogForm" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Add New NC Log" });
+
+    <div class="modal-body">
+
+        <div id="NotificationMessage"></div>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.ProjectId)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.DropDownListFor(model => model.ProjectId, Model.ProjectList, "-Select-", htmlAttributes: new { @class = "select2" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.AuditDate)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.TextBoxFor(x => x.AuditDate, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.AuditCycle)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.DropDownListFor(model => model.AuditCycle, Model.AuditCycleList, "-Select-",htmlAttributes: new { @class = "select2" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.AuditType)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.DropDownListFor(model => model.AuditType, Model.AuditTypeList, "-Select-",htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.ProjectAuditPAId)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.DropDownListFor(model => model.ProjectAuditPAId, Model.AuditPAList, "-Select-",htmlAttributes: new { @class = "select2" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.AuditDesc)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.TextAreaFor(model => model.AuditDesc, 3, 5, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.AuditeeUid)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.DropDownListFor(model => model.AuditeeUid, Model.AuditeeList, "-Select-",htmlAttributes: new { @class = "select2" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.LabelFor(model => model.FollowUpDate)
+            </div>
+            <div class="col-md-9 form-group">
+                @Html.TextBoxFor(x => x.FollowUpDate, htmlAttributes: new { @class = "form-control", data_msg_required= "Follow-up date field is required", data_rule_required="true" })
+            </div>
+        </div>
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}

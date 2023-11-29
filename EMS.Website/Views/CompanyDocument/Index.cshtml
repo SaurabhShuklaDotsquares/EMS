@@ -1,0 +1,58 @@
+﻿@model List<EMS.Dto.CompanyHeadingDto>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .download {
+        background: url("images/download.png") no-repeat;
+    }
+</style>
+
+<div class="full-wdth clearfix padding20">
+    <div class="table-custom timesheet-table table-responsive clearfix">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <h2>@item.Heading</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">
+                                Document
+                            </th>
+                            <th class="col-md-2">
+                                Department
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color:white">
+                        @foreach (var inner in item.Documents)
+                        {
+                            <tr>
+                                <td class="col-md-2 borderRight ">
+                                    @if (!string.IsNullOrEmpty(inner.DownloadLink))
+                                    {
+                                        <a target="_blank" class="fa fa-download" title="Download @inner.DocumentName" href="@inner.DownloadLink" style="font-size:large">
+                                        </a>
+                                            <a target="_blank" title="Download @inner.DocumentName" href="@inner.DownloadLink" style="color:blue">
+                                                @inner.DocumentName
+                                            </a>
+                                    }
+                                    else
+                                    {
+                                        @inner.DocumentName
+                                    }
+                                </td>
+                                <td class="col-md-2 borderRight" style="max-width:200px;  word-wrap:break-word; ">
+                                    @inner.Department
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+</div>

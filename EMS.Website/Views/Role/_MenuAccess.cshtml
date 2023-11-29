@@ -1,0 +1,58 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.RoleDto
+@using EMS.Core
+@{
+    Layout = null;
+}
+<div class="menuaccuss_editable">
+    <div class="col-sm-12">
+        <ul class="nav nav-tabs">
+            @foreach (var parentmenu in Model.ParentMenu)
+            {
+                int index = Model.ParentMenu.IndexOf(parentmenu);
+                if (index == 0)
+                {
+                    <li class="active"><a data-toggle="tab" href="#@parentmenu.MenuDisplayName.Trim()">@parentmenu.MenuDisplayName</a></li>
+                }
+                else
+                {
+                    <li><a data-toggle="tab" href="#@parentmenu.MenuDisplayName.Trim()">@parentmenu.MenuDisplayName</a></li>
+                }
+            }
+        </ul>
+        <div class="tab-content">
+            @foreach (var parentmenu in Model.ParentMenu)
+            {
+                if (Model.ParentMenu.IndexOf(parentmenu) == 0)
+                {
+                    <div id="@parentmenu.MenuDisplayName.Trim()" class="tab-pane fade in active">
+                        @foreach (var allmenu in Model.AllMenu.Where(x => x.ParentId == parentmenu.MenuId && Model.ParentMenu.IndexOf(parentmenu) == 0))
+                        {
+                            <div class="col-md-3 checkList">
+                                <div style="float:left;">
+                                    <input type="checkbox" name="childmenu" id="chkchildmenu_@allmenu.MenuId" @(Model.ChildMenuList.Any(a => a.MenuId == allmenu.MenuId) ? "checked" : "") data-id="@allmenu.MenuId" value="@allmenu.MenuId" />
+                                    <label for="chkchildmenu_@allmenu.MenuId">   &nbsp;@allmenu.MenuDisplayName</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div id="@parentmenu.MenuDisplayName.Trim()" class="tab-pane fade">
+                        @foreach (var allmenu in Model.AllMenu.Where(x => x.ParentId == parentmenu.MenuId && Model.ParentMenu.IndexOf(parentmenu) > 0))
+                        {
+                            <div class="col-md-3 checkList">
+                                <div style="float:left;">
+                                    <input type="checkbox" name="childmenu" id="chkchildmenu_@allmenu.MenuId" @(Model.ChildMenuList.Any(a => a.MenuId == allmenu.MenuId) ? "checked" : "") data-id="@allmenu.MenuId" @*id="chkTech_@tech.Id"*@ value="@allmenu.MenuId" />
+                                    <label for="chkchildmenu_@allmenu.MenuId">   &nbsp;@allmenu.MenuDisplayName</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+

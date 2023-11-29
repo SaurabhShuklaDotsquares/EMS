@@ -1,0 +1,50 @@
+﻿@model List<EstimateFormDto>
+@{
+    var range = Enumerable.Range(1, 50).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() });
+
+}
+
+@foreach (var item in Model)
+{
+    var index = Guid.NewGuid();
+    <div class="row margin-bottom15">
+        <input type="hidden" name="EstimateForm.index" autocomplete="off" value="@index" />
+        <input type="hidden" name="EstimateForm[@index].Price" value="@item.Price" class="price" />
+        <input type="hidden" name="EstimateForm[@index].MinPrice" value="@item.MinPrice" class="minprice" />
+        <input type="hidden" name="EstimateForm[@index].IsSdlc" value="@item.IsSdlc" />
+        <div class="col-md-3">
+            <input type="hidden" name="EstimateForm[@index].RoleName" value="@item.RoleName" class="rolename" />
+            <select name="EstimateForm[@index].RoleId" id="EstimateForm[@index]_RoleId" asp-for="@item.RoleId" asp-items="ViewBag.EstimateRole" class="form-control roleid" required>
+                <option value=""> Select Role</option>
+            </select>
+        </div>
+        <div class="col-md-2 technology @(item.RoleId != 1 ? "hide" : "")">
+            <input type="hidden" name="EstimateForm[@index].TechnologyName" value="@item.TechnologyName" class="technologyname" />
+            <select name="EstimateForm[@index].TechnologyId" id="EstimateForm[@index]_TechnologyId" asp-for="@item.TechnologyId" asp-items="ViewBag.TechnologyParent" class="form-control technologyid">
+                <option value=""> Select Technology</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="hidden" name="EstimateForm[@index].ExperienceName" value="@item.ExperienceName" class="experiencename" />
+            <select name="EstimateForm[@index].ExperienceId" id="EstimateForm[@index]_ExperienceId" asp-for="@item.ExperienceId" asp-items="item.EstimateRoleExpList" class="form-control experienceid" required>
+                <option value=""> Select Experience</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="EstimateForm[@index].NoOfResources" id="EstimateForm[@index]_NoOfResources" asp-items="range" asp-for="@item.NoOfResources" value="@(item.NoOfResources > 0 ? item.NoOfResources.ToString() : "")" class="form-control noOfResources" placeholder="No. Of Resources" required>
+                <option value="">No. Of Resources</option>
+            </select>
+
+        </div>
+        <div class="col-md-2">
+            <div class="input-group">
+                <input type="text" name="EstimateForm[@index].EstimateHour" id="EstimateForm[@index]_EstimateHour" asp-for="@item.EstimateHour" value="@(item.EstimateHour > 0 ? item.EstimateHour.ToString() : "")" class="form-control estimateHour" placeholder="Estimate Hours"  maxlength="6" required />
+                <span class="input-group-addon">Hours</span>
+            </div>
+        </div>
+        <div class="">
+            <span class="btn btn-danger remove" title="Add Row" style="margin-right:2px;"><i class="fa fa-times-circle"></i></span>
+            <span id="btnadd" class="btn btn-info addnew hide" title="Add Row"><i class="fa fa-plus-circle"></i></span>
+        </div>
+    </div>
+}

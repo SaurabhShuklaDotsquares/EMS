@@ -1,0 +1,252 @@
+﻿@model SelfDeclarationDto
+@*@using EMS.Core*@
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    .checkList input[type=checkbox] + label, .checkList input[type=radio] + label {
+        font-weight: normal
+    }
+
+    .checkList input[type=checkbox]:checked + label, .checkList input[type=radio]:checked + label {
+        font-weight: bold
+    }
+
+    .removeTextBorder {
+        border: 0;
+        border-bottom: 2px dashed;
+    }
+
+    .show-star:after {
+        content: "*";
+        color: red
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+
+        <div id="NotificationDiv"></div>
+        <div class="timesheet-page full-wdth clearfix">
+            <h2> Self Declaration </h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        <form asp-controller="SelfDeclaration" asp-action="Add" method="post" id="form1">
+                            <input type="hidden" asp-for="Uid" />
+                            <input type="hidden" asp-for="Id" />
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label class="Name">Name</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @*<input asp-for="Name" class="form-control" readonly/>
+                    <span asp-validation-for="Name" class="text-danger"></span>*@
+                                        <label>@Model.Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label>Employee Code</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @*<input asp-for="EmpCode" class="form-control" readonly/>*@
+                                        <label>@Model.EmpCode</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3  ">
+                                        <label>Date of Joining</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @*<input asp-for="JoiningDate" class="form-control" readonly />
+                    <span asp-validation-for="JoiningDate" class="text-danger"></span>*@
+                                        <label>@Model.JoiningDate</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label class="show-star">DOB</label>
+                                        @*<label asp-for="Dob"></label>*@
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input asp-for="Dob" class="form-control" readonly />
+                                        <span asp-validation-for="Dob" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label>E-mail <span class="clsSmallFont show-star">(Personal)</span></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="email" class="form-control" asp-for="EmailPersonal" maxlength="200" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label class="show-star">Mobile Number</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" asp-for="MobileNumber" maxlength="10" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label class="show-star">Address</label>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        @Html.TextAreaFor(x => x.Address, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Address", @rows = "2" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <label>Local Address</label>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        @Html.TextAreaFor(x => x.LocalAddress, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Address", @rows = "2" })
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 style="padding-top:20px;">Whereabouts in last 15 days</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3"><label>Were you in Jaipur since last 15 days</label></div>
+                                    <div class="col-md-9">
+                                        <input id="RecentlyInJaipur0" type="radio" value="true" name="RecentlyInJaipur" @(Model.RecentlyInJaipur == true ? "checked" : Model.Id == 0 ? "checked" : "") />&nbsp;Yes
+                                        <input id="RecentlyInJaipur1" type="radio" value="false" name="RecentlyInJaipur" @(Model.RecentlyInJaipur == false ? "checked" : "") />&nbsp;No
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <label class="RecentlyInJaipurYes show-star">What was your location?</label>
+                                        <label class="RecentlyInJaipurNo show-star">Mention the location and the purpose</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @*<div class="col-md-3">Location</div>*@
+                                        <input asp-for="Location" type="text" class="form-control" maxlength="100" />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 RecentlyInJaipurNo">
+                                    <div class="col-md-3">
+                                        <label>Mention Purpose</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @*@Html.TextAreaFor(x => x.Purpose, new { @class = "form-control purpose", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "Address", @rows = "2" })*@
+                                        <textarea asp-for="Purpose" class="form-control purpose" rows="2" placeholder="Purpose" style="min-height:80px;" maxlength="200"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2>Health Status</h2>
+                            <div class="row">
+                                <div class="col-md-3"><label>Did you come across any disease or symptoms of fever, cough, cold in last 15 days?</label></div>
+                                <div class="col-md-9">
+                                    <input id="HasDiseaseSymptoms0" type="radio" name="HasDiseaseSymptoms" value="true" @(Model.HasDiseaseSymptoms == true ? "checked" : "") />&nbsp;Yes
+                                    <input id="HasDiseaseSymptoms1" type="radio" name="HasDiseaseSymptoms" value="false" @(Model.HasDiseaseSymptoms == false ? "checked" : Model.Id == 0 ? "checked" : "") />&nbsp;No
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3"><label>Are you experiencing any of these symptoms?</label></div>
+                                <div class="col-md-9">
+                                    <input id="HasCoughSymptoms" type="checkbox" name="HasCoughSymptoms" value="true" @(Model.HasCoughSymptoms == true ? "checked" : "") />&nbsp;Cough
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasFeverSymptoms" type="checkbox" name="HasFeverSymptoms" value="true" @(Model.HasFeverSymptoms == true ? "checked" : "") />&nbsp;Fever
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasBreathingSymptoms" type="checkbox" name="HasBreathingSymptoms" value="true" @(Model.HasBreathingSymptoms == true ? "checked" : "") />&nbsp;Difficulty in Breathing
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasSmellAndTasteSymptoms" type="checkbox" name="HasSmellAndTasteSymptoms" value="true" @(Model.HasSmellAndTasteSymptoms == true ? "checked" : "") />&nbsp;Loss of sences of Smell and Taste
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3"><label>Have you ever had any of these problem?</label></div>
+                                <div class="col-md-9">
+                                    <input id="HasDiabetesProblem" type="checkbox" name="HasDiabetesProblem" value="true" @(Model.HasDiabetesProblem == true ? "checked" : "") />&nbsp;Diabetes
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasHypertensionProblem" type="checkbox" name="HasHypertensionProblem" value="true" @(Model.HasHypertensionProblem == true ? "checked" : "") />&nbsp;Hypertension
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasLungProblem" type="checkbox" name="HasLungProblem" value="true" @(Model.HasLungProblem == true ? "checked" : "") />&nbsp;Lung Disease
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasHeartProblem" type="checkbox" name="HasHeartProblem" value="true" @(Model.HasHeartProblem == true ? "checked" : "") />&nbsp;Heart Disease
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input id="HasKidneyProblem" type="checkbox" name="HasKidneyProblem" value="true" @(Model.HasKidneyProblem == true ? "checked" : "") />&nbsp;Kidney Disorder
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3"><label>Have you traveled anywhere internationally in the last 30-45 days?</label></div>
+                                <div class="col-md-9">
+                                    <input id="HasTraveledInternationallyYes" type="radio" name="HasTraveledInternationally" value="true" @(Model.HasTraveledInternationally == true ? "checked" : "") />&nbsp;Yes
+                                    <input id="HasTraveledInternationallyNo" type="radio" name="HasTraveledInternationally" value="false" @(Model.HasTraveledInternationally == false ? "checked" : Model.Id == 0 ? "checked" : "") />&nbsp;No
+                                </div>
+                            </div>
+
+                            <div class="row rowSymptoms" style="display:none">
+
+                                <div class="col-md-6">
+                                    @*<div class="col-md-3"><label>If yes, mention the date</label></div>*@
+                                    <label class="col-md-3 show-star">Symptoms Start Date</label>
+                                    <div class="col-md-6">
+                                        @*<div class="col-md-3">Symptoms Start Date*</div>*@
+                                        <input asp-for="SymptomsStartDate" type="text" class="form-control" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    @*<div class="col-md-3">Symptoms End Date*</div>*@
+                                    <label class="col-md-3 show-star">Symptoms Start Date</label>
+                                    <div class="col-md-6"><input asp-for="SymptomsEndDate" type="text" class="form-control" readonly /></div>
+                                </div>
+                            </div>
+                            <h2 class="show-star">Declaration</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>I</label><input asp-for="DeclarationName" type="text" class="removeTextBorder margin-left10" readonly />
+                                    <span>
+                                        hereby, acknowledge that I understand and accept all
+                                        rules, regulations and guidelines to be followed in ofﬁce. I also acknowledge that the above information is true and valid to the best of my knowledge.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                                    {
+                                        <a href="@Url.Action("index","selfdeclaration")" class="btn btn-custom pull-right">Back</a>
+                                    }
+
+
+                                    @if (Model.Uid == CurrentUser.Uid)
+                                    {
+                                        <button type="submit" class="btn btn-custom pull-right margin-right10 btnSubmit" name="Save">Save</button>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+<script src="~/Scripts/CustomJS/SelfDeclaration/SelfDeclaration.js" asp-append-version="true"></script>
+}

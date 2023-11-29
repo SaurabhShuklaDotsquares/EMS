@@ -1,0 +1,220 @@
+﻿@model TaskCommentDto
+<div>
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "View To - Do Comment" })
+    <div class="modal-body">
+        <div id="to-do-list-form-group">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Task Name : </label>
+                            @*@Html.Label("Task Name : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => Model.TaskName)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Task Id : </label>
+                            @*@Html.Label("Task Id : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.TaskID)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Assigned To : </label>
+                            @*@Html.Label("Assigned To : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => Model.AssignTo)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Assigned By : </label>
+                            @*@Html.Label("Assigned By : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.AssignBy)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Created On : </label>
+                            @*@Html.Label("Created On : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => Model.CreatedDate)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Last Updated : </label>
+                            @*@Html.Label("Last Updated : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.UpdateDate)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Status : </label>
+                            @*@Html.Label("Status : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7" id="statuslabel">
+                                @Html.DisplayFor(model => Model.Status)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Priority Type : </label>
+                            @*@Html.Label("Priority Type : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.Priority)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label class="col-md-5 col-sm-5">Remark : </label>
+                            @*@Html.Label("Remarks : ", htmlAttributes: new { @class = "col-md-5 col-sm-5" })*@
+                            <div class="col-md-7">
+                                @(Html.Raw(Model.Remark))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.ShowPostReplyButton)
+            {
+                <div class="form-group clearfix">
+                    <div class="text-right">
+                        <input id="btn_task_postreply" type="button" class="btn btn-warning" name="name" value="Post Reply" />
+                    </div>
+                </div>
+            }
+
+            <div id="taskCommentMessageDiv"></div>
+            
+            <div id="task_postreply" style="display:none">
+                @using (Html.BeginForm("Comment", "task", FormMethod.Post, new { id = "task-comment-form" }))
+                {
+                    @Html.HiddenFor(m => m.TaskID)
+                    <div id="validation-summary"></div>
+                    <div class="form-group required clearfix">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <label class="col-md-2 col-sm-2 control-label">Comment</label>
+                                    @*@Html.Label("Comment", htmlAttributes: new { @class = "col-md-2 col-sm-2 control-label" })*@
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(model => model.Comment, 5, 5, new { @class = "form-control ", @maxlength = 500 })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group required clearfix">
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                <div class="row">
+                                    <label class="col-md-2 col-sm-2 control-label">Status </label>
+                                    @*@Html.Label("Status", htmlAttributes: new { @class = "col-md-2 col-sm-2" })*@
+                                    <div class="col-md-10">
+                                        @*<select asp-for="TaskStatusId" asp-items="Html.GetEnumSelectList(typeof (Enums.TaskStatusType))" class="form-control"></select>*@
+                                        <select asp-for="TaskStatusId" asp-items="Model.TaskStatusList" class="form-control"></select>
+                                        @*@Html.DropDownListFor(model => model.TaskStatusId, true, Model.TaskStatusList, htmlAttributes: new { @class = "form-control" })*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                        <div class="form-group required clearfix divCommentFor">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="row">
+                                        <label class="col-md-2 col-sm-2 control-label">Completed for </label>
+
+                                        <div class="col-md-10">
+                                            @if (Model.IsUserInTaskAssignToList)
+                                            {
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="CommentFor" checked class="CommentFor" value="Self">Only for me
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="CommentFor" class="CommentFor" value="All">All
+                                                </label>
+                                            }
+                                            else
+                                            {
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="CommentFor" class="CommentFor" value="All" checked>All
+                                                </label>
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="form-group clearfix">
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-warning btn_reply">Reply</button>
+                            <button id="btn_cancel_postcomment" type="button" class="btn btn-warning">Cancel</button>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <div id="to-do-commentTable">
+                <table class="table table-striped table-bordered" id="task_comment_table">
+                    <thead>
+                        <tr>
+                            <th width="75%">
+                                Comments
+                            </th>
+                            <th>
+                                Posted By
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Comments.Count > 0)
+                        {
+                            foreach (var item in Model.Comments)
+                            {
+                                <tr>
+                                    <td>@Html.Raw(item.Comment)</td>
+                                    <td>
+                                        <strong>
+                                            @item.CommentBy
+                                        </strong>
+                                        <br />
+                                        <span style="font-size: 11px; padding-top: 4px; display: block;">
+                                            <strong>Posted On : </strong>@item.AddedDate
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/CustomJS/Task/task-commentpopup.js" asp-append-version="true"></script>

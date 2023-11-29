@@ -1,0 +1,417 @@
+﻿@model EMS.Dto.LeadDto
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+
+        <div id="validation-summary" class="error"></div>
+
+        <div class="addEditlead-page full-wdth clearfix">
+            <h2>Add/Edit Project Lead</h2>
+            <div class="create-form-outer-box dis-block clearfix err_msg_inControl padding10">
+                @using (Html.BeginForm("AddEditLead", "estimate", FormMethod.Post, new { @id = "frm-addEditLead", @enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(model => model.LeadId)
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(x => x.AbroadPMId)<span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.AbroadPMId, Model.LeadFromList, "--select--", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.LeadCRMId)<span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.LeadCRMId, htmlAttributes: new { @class = "form-control", @placeholder = "use default CRMId:999" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.IsNewClient)
+                                </div>
+                                <div clss="col-md-8">
+
+                                    New: <input type="radio" value="true" name="IsNewClient" @(Model.IsNewClient ? "checked=true" : "") /> &nbsp; &nbsp;
+                                    Existing: <input type="radio" value="false" name="IsNewClient" @(!Model.IsNewClient ? "checked=true" : "") />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.Title)<span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-8">
+                                    @* @Html.TextBoxFor(model => model.Title, useNativeUnobtrusiveAttributes: true, htmlAttributes: new { @class = "form-control" })*@
+                                    @Html.TextBoxFor(model => model.Title, htmlAttributes: new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.AssignedDate)<span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-6">
+                                    @*@Html.TextBoxFor(model => model.AssignedDate, useNativeUnobtrusiveAttributes: true, htmlAttributes: new { @class = "form-control", @readonly="readonly" })*@
+                                    @Html.TextBoxFor(model => model.AssignedDate, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label style="color:red;"><strong>COVID 19 Impact</strong></label>
+                                </div>
+                                <div class="col-md-8 form-check" style="padding-left:0px;">
+                                    <input asp-for="IsCovid19" type="checkbox" class="form-check-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.LeadType)<span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(model => model.LeadType, Model.TypeList, "--select--", new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.EstimateTimeInDays, new { @style = "display:inline !important" })
+                                    @*<span class="red-color font16 font-weight700">*</span>*@
+                                </div>
+                                <div class="col-md-6">
+                                    @* @Html.TextBoxFor(model => model.EstimateTimeInDays, useNativeUnobtrusiveAttributes: true, htmlAttributes: new { @class = "form-control", @maxlength = "4" })*@
+                                    @Html.TextBoxFor(model => model.EstimateTimeInDays, htmlAttributes: new { @class = "form-control", @maxlength = "4" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4" id="ConversionDateDiv" @(!Model.IsAlmostConverted ? "style=display:none" : "")> 
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.ConversionDate, htmlAttributes: new { @style = "font-weight: 600;" })
+                                    <span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.ConversionDate, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.EstimateOwnerId)
+                                    <span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(model => model.EstimateOwnerId, Model.EstimateOwnerList, "--Select--", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.CommunicatorOwnerId, new { @style = "display:inline !important" })
+                                    <span class="red-color font16 font-weight700">*</span>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(model => model.CommunicatorOwnerId, Model.CommunicatorOwnerList, "--Select--", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12 pull-right">
+                            <h4>
+                                <label class="pull-left" style="color:#ffa500;">Technical Help:</label>
+                                @*@Html.Label("Technical Help: ", htmlAttributes: new { @style = "color:#ffa500;", @class = "pull-left" })*@
+                                <span class="red-color font16 font-weight900">*</span>
+                            </h4>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        @foreach (var Techni in Model.TakenTechnician)
+                        {
+                            <div class="col-md-2 font-weight600">
+                                <input type="checkbox" name="Technician" checked="@Techni.Selected" value="@Techni.Value" /> @Techni.Text
+                            </div>
+                        }
+                        @foreach (var Techni in Model.TechnicianList)
+                        {
+                            <div class="col-md-2">
+                                <input type="checkbox" name="Technician" value="@Techni.Value" /> @Techni.Text
+                            </div>
+                        }
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4> <label style="color:#ffa500;"> Technology: </label>@*@Html.Label("Technology: ", new { @style = "color:#ffa500;" })*@<span class="red-color font16 font-weight700">*</span></h4>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+
+                        @foreach (var techno in Model.TakenTechnologies)
+                        {
+                            <div class="col-md-2 font-weight600">
+                                <input type="checkbox" checked="@techno.Selected" name="Technology" value="@techno.Value" /> @techno.Text
+                            </div>
+                        }
+                        @foreach (var techno in Model.TechnologyList)
+                        {
+                            <div class="col-md-2">
+                                <input type="checkbox" checked="@techno.Selected" name="Technology" value="@techno.Value" /> @techno.Text
+                            </div>
+                        }
+                    </div>
+                    <hr />
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.TechnologyOther)
+
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.TechnologyOther, null, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.Industry)
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="Domains" name="Domains" class="form-control select2Industries" multiple>
+                                        <option value="">Select Industries</option>
+                                        @foreach (var item in ViewBag.Industries)
+                                        {
+                                            <!option value="@item.Text" selected="@(Model.Industry != null && (Model.Industry.Contains(item.Text)))">
+                                                @item.Text
+                                            </!option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div>
+                                        @Html.LabelFor(model => model.ProjectTag)<span class="red-color font16 font-weight700">*</span>
+                                    </div>
+                                    <span style="font-size:9px;" class="font-weight600">(Put keyword for searching the estimate documents.)</span>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(model => model.ProjectTag, null, new { @class = "form-control" })
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.Label("Requirement Doc(s):")
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.FileRequirmentDoc, new { type = "file" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+
+                            @if (!string.IsNullOrEmpty(Model.InitialReqDoc))
+                            {
+                                <a target="_blank" style="font-weight:bold;text-decoration:underline" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "content/leads/", Model.InitialReqDoc)">@Model.InitialReqDoc</a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.Label("Proposal Document:")
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.FileProposalDoc, new { type = "file" })
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-8">
+
+                            @if (!string.IsNullOrEmpty(Model.ProposalDoc))
+                            {
+                                <a target="_blank" style="font-weight:bold;text-decoration:underline" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", Model.ProposalDoc)">@Model.ProposalDoc</a>
+                                <a id="lnkDelProposalDoc" style="font-size:medium !important" class="margin-left5 red-color fa fa-trash delete-doc" href="javascript:void(0)"></a>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.Label("Wireframe/ Mockups(image):")
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.FileWireframeMockupsImg, new { type = "file" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-8 divUploadedFile">
+
+                            @if (!string.IsNullOrEmpty(Model.WireframeMockupsImages))
+                            {
+                                <a target="_blank" style="font-weight:bold;text-decoration:underline" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", Model.WireframeMockupsImages)">@Model.WireframeMockupsImages</a>
+                                <a id="lnkDelWireframeMockupDoc" style="font-size:medium !important" class="margin-left5 red-color fa fa-trash delete-doc" href="javascript:void(0)"></a>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.Label("Other Document:")
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.FileOtherDoc, new { type = "file" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 divUploadedFile">
+
+                            @if (!string.IsNullOrEmpty(Model.OtherDoc))
+                            {
+                                <a target="_blank" style="font-weight:bold;text-decoration:underline" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", Model.OtherDoc)">@Model.OtherDoc</a>
+                                <a id="lnkDelOtherDoc" style="font-size:medium !important" class="margin-left5 red-color fa fa-trash delete-doc" href="javascript:void(0)"></a>
+                            }
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-4">
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    @Html.Label("Zip (Wireframe/ Mockups):")
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.FileWireframeMockupsZip, null, new { type = "file" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 divUploadedFile">
+                            @if (!string.IsNullOrEmpty(Model.WireframeMockupsZip))
+                            {
+                                <a target="_blank" style="font-weight:bold;text-decoration:underline" href="@string.Format("{0}{1}{2}", SiteKey.DomainName, "Upload/EstimateDocument/", Model.WireframeMockupsZip)">@Model.WireframeMockupsZip</a>
+                                <a id="lnkDelMockupDoc" style="font-size:medium !important" class="margin-left5 red-color fa fa-trash delete-doc" href="javascript:void(0)"></a>
+                            }
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    @Html.LabelFor(model => model.Notes)
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.Notes, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-1 ">
+                                    @Html.LabelFor(model => model.Remark)
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", @style = "height:70px" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom15">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-1">
+
+                                </div>
+                                <div class="col-md-6 pull-left">
+                                    <button id="btn-submit" type="submit" value="Submit" class="btn btn-custom pull-left">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/ckeditor/ckeditor.js"></script>
+    @*<script src="~/bundles/Estimate/addEditLead"></script>*@
+    @*@Scripts.Render("~/ckeditor/ckeditor.js", "~/bundles/Estimate/addEditLead")*@
+
+    <script src="~/Scripts/CustomJS/addEditLead.js" asp-append-version="true"></script>
+    <link href="~/css/fSelect.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/js/fSelect.js"></script>
+    <script>
+        $('.select2Industries').fSelect({ placeholder: "Select Industry" });
+    </script>
+}

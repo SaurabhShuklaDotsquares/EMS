@@ -1,0 +1,293 @@
+﻿@model List<TeamOccupancyDto>
+@using EMS.Core;
+@if (Model != null && Model.Any())
+{
+    if (Model.Count > 1)
+    {
+        var departments = typeof(Enums.ProjectDepartment).EnumToDictionaryWithDescription().OrderBy(x => x.Key);
+
+        <h4>Overall Stats</h4>
+        <div class="row">
+            @{
+                int srNo = 1;
+                int totalDevelopers = 0;
+                int totalRunningDevelopers = 0;
+                int totalFreeDevelopers = 0;
+                <div class="col-md-4">
+                    <br />
+                    <h5>Total Developer Stats</h5>
+
+                    <table class="table table-bordered table-stats">
+                        <thead>
+                            <tr>
+                                <th>S. No.</th>
+                                <th>Department</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var deptId in departments)
+                            {
+                                var employeeStats = Model.SelectMany(x => x.TotalEmployeeStats.Where(s => s.DepartmentId == deptId.Value));
+                                if (employeeStats.Any())
+                                {
+                                    totalDevelopers += employeeStats.Sum(o => o.OccupancyCount);
+                                    <tr>
+                                        <td>@(srNo++)</td>
+                                        <td>@employeeStats.First().DepartmentName</td>
+                                        <td class="text-center">@employeeStats.Sum(o => o.OccupancyCount)</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="text-center">Total</td>
+                                <td class="text-center">@totalDevelopers</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                srNo = 1;
+                <div class="col-md-4">
+                    <br />
+                    <h5>Running Developer Stats</h5>
+
+                    <table class="table table-bordered table-stats">
+                        <thead>
+                            <tr>
+                                <th>S. No.</th>
+                                <th>Department</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var deptId in departments)
+                            {
+                                var runningStats = Model.SelectMany(x => x.RunningStats.Where(s => s.DepartmentId == deptId.Value));
+                                if (runningStats.Any())
+                                {
+                                    totalRunningDevelopers += runningStats.Sum(o => o.OccupancyCount);
+                                    <tr>
+                                        <td>@(srNo++)</td>
+                                        <td>@runningStats.First().DepartmentName</td>
+                                        <td class="text-center">@runningStats.Sum(o => o.OccupancyCount)</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="text-center">Total</td>
+                                <td class="text-center">@totalRunningDevelopers</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                srNo = 1;
+                <div class="col-md-4">
+                    <br />
+                    <h5>Free Developer Stats</h5>
+                    <table class="table table-bordered table-stats">
+                        <thead>
+                            <tr>
+                                <th>S. No.</th>
+                                <th>Department</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var deptId in departments)
+                            {
+                                var freeStats = Model.SelectMany(x => x.FreeStats.Where(s => s.DepartmentId == deptId.Value));
+                                if (freeStats.Any())
+                                {
+                                    totalFreeDevelopers += freeStats.Sum(o => o.OccupancyCount);
+                                    <tr>
+                                        <td>@(srNo++)</td>
+                                        <td>@freeStats.First().DepartmentName</td>
+                                        <td class="text-center">@freeStats.Sum(o => o.OccupancyCount)</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class="text-center">Total</td>
+                                <td class="text-center">@totalFreeDevelopers</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+        </div>
+                }
+
+                int count = 1;
+                foreach (TeamOccupancyDto teamdetail in Model)
+                {
+                    <div id="tm_@teamdetail.TeamManagerId" class="team-detail">
+                        <h4>@string.Format("{0}) Team Manager : {1}", count++, teamdetail.TeamManagerName)</h4>
+
+                        <table frame="box" class="team-summary">
+                            <colgroup>
+                                <col class="EmployeeInfo" span="10" />
+                                <col class="RunningInfo" span="8" />
+                                <col class="SupportInfo" span="5" />
+                                <col class="red-bg" span="1" />
+                                <col class="blue-bg" span="1" />
+                                <col class="orange-bg" span="1" />
+                                <col />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <td colspan="10">Employees</td>
+                                    <td colspan="8"><b>Running</b></td>
+                                    <td colspan="5"><b>Support Team</b></td>
+                                    <td rowspan="2">Free</td>
+                                    <td rowspan="2">Add. Support</td>
+                                    <td rowspan="2">Overrun</td>
+                                    <td rowspan="2">Leave</td>
+                                    <td rowspan="2">Not Logged In</td>
+                                </tr>
+                                <tr>
+                                    <td class="EmployeeMain">Total</td>
+                                    <td>.Net</td>
+                                    <td>PHP</td>
+                                    <td>Mob.</td>
+                                    <td>BA</td>
+                                    <td>QA</td>
+                                    <td>SEO</td>
+                                    <td>DG</td>
+                                    <td>Trainee</td>
+                                    <td>Other</td>
+
+                                    <td class="RunningMain">CRM Occupancy</td>
+                                    <td>Running</td>
+                                    <td>SEO</td>
+                                    <td>Leave</td>
+                                    <td>Not LoggedIn</td>
+                                    <td>Bonus</td>
+                                    <td>Bucket</td>
+                                    <td>No Actual Assigned</td>
+
+                                    <td class="SupportMain">Total</td>
+                                    <td>Designer</td>
+                                    <td>BA</td>
+                                    <td>TL</td>
+                                    <td>QA</td>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td class="EmployeeMain"><b>@teamdetail.TotalEmployee</b></td>
+                                <td>@(teamdetail.TotalDotNetEmployee != 0 ? teamdetail.TotalDotNetEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalPHPEmployee != 0 ? teamdetail.TotalPHPEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalMobileEmployee != 0 ? teamdetail.TotalMobileEmployee.ToString() : "")</td>
+                                <td>@(teamdetail.TotalBAEmployee != 0 ? teamdetail.TotalBAEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalQAEmployee != 0 ? teamdetail.TotalQAEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalSEOEmployee != 0 ? teamdetail.TotalSEOEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalDesignerEmployee != 0 ? teamdetail.TotalDesignerEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalTraineeEmployee != 0 ? teamdetail.TotalTraineeEmployee.ToString() : "-")</td>
+                                <td>@(teamdetail.TotalOtherEmployee != 0 ? teamdetail.TotalOtherEmployee.ToString() : "-")</td>
+
+                                <td class="RunningMain"><b>@(teamdetail.ActualRunning != 0 ? String.Format("{0} ({1}%)", teamdetail.ActualRunning, teamdetail.ActualRunningPercentage) : "-")</b></td>
+                                <td>@(teamdetail.Running != 0 ? teamdetail.Running.ToString() : "-")</td>
+                                <td>@(teamdetail.SEORunning != 0 ? teamdetail.SEORunning.ToString() : "-")</td>
+                                <td>@(teamdetail.OnLeaveButRunning != 0 ? teamdetail.OnLeaveButRunning.ToString() : "-")</td>
+                                <td>@(teamdetail.NotLoginButRunning != 0 ? teamdetail.NotLoginButRunning.ToString() : "-")</td>
+                                <td>@(teamdetail.BonusRunning != 0 ? teamdetail.BonusRunning.ToString() : "-") </td>
+                                <td>@(teamdetail.BucketRunning != 0 ? teamdetail.BucketRunning.ToString() : "-")</td>
+                                <td>@(teamdetail.UnassignedRunning != 0 ? teamdetail.UnassignedRunning.ToString() : "-")</td>
+
+                                <td class="SupportMain"><b>@(teamdetail.TotalSupport != 0 ? String.Format("{0} ({1}%)", teamdetail.TotalSupport, teamdetail.SupportTeamPercentage) : "-")</b></td>
+                                <td>@(teamdetail.DesignerInSupport != 0 ? teamdetail.DesignerInSupport.ToString() : "-")</td>
+                                <td>@(teamdetail.BAInSupport != 0 ? teamdetail.BAInSupport.ToString() : "-")</td>
+                                <td>@(teamdetail.TLInSupport != 0 ? teamdetail.TLInSupport.ToString() : "-")</td>
+                                <td>@(teamdetail.QAInSupport != 0 ? teamdetail.QAInSupport.ToString() : "-")</td>
+                                <td>@(teamdetail.Free != 0 ? String.Format("{0} ({1}%)", teamdetail.Free, teamdetail.FreePercentage) : "-")</td>
+                                <td>@(teamdetail.AdditionalSupport != 0 ? String.Format("{0} ({1}%)", teamdetail.AdditionalSupport, teamdetail.AdditionalSupportPercentage) : "-")</td>
+                                <td>@(teamdetail.OverRun != 0 ? String.Format("{0} ({1}%)", teamdetail.OverRun, teamdetail.OverrunPercentage) : "-")</td>
+                                <td>@(teamdetail.Leave != 0 ? teamdetail.Leave.ToString() : "-")</td>
+                                <td>@(teamdetail.NotLogin != 0 ? teamdetail.NotLogin.ToString() : "-")</td>
+                            </tr>
+                        </table>
+
+                        <div class="row">
+                            @{
+                                int srNo = 1;
+                                if (teamdetail.RunningStats.Any())
+                                {
+                                    <div class="col-md-6 col-lg-4">
+                                        <br />
+                                        <h5>Running Developer Stats</h5>
+
+                                        <table class="table table-bordered table-stats">
+                                            <thead>
+                                                <tr>
+                                                    <th>S. No.</th>
+                                                    <th>Department</th>
+                                                    <th class="text-center">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var stats in teamdetail.RunningStats.OrderBy(x => x.DepartmentName))
+                                                {
+                                                    <tr>
+                                                        <td>@(srNo++)</td>
+                                                        <td>@stats.DepartmentName</td>
+                                                        <td class="text-center">@stats.OccupancyCount</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2" class="text-center">Total</td>
+                                                    <td class="text-center">@teamdetail.RunningStats.Sum(o=> o.OccupancyCount)</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                }
+
+                                srNo = 1;
+                                if (teamdetail.FreeStats.Any())
+                                {
+                                    <div class="col-md-6 col-lg-4">
+                                        <br />
+                                        <h5>Free Developer Stats</h5>
+                                        <table class="table table-bordered table-stats">
+                                            <thead>
+                                                <tr>
+                                                    <th>S. No.</th>
+                                                    <th>Department</th>
+                                                    <th class="text-center">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var stats in teamdetail.FreeStats.OrderBy(x => x.DepartmentName))
+                                                {
+                                                    <tr>
+                                                        <td>@(srNo++)</td>
+                                                        <td>@stats.DepartmentName</td>
+                                                        <td class="text-center">@stats.OccupancyCount</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2" class="text-center">Total</td>
+                                                    <td class="text-center">@teamdetail.FreeStats.Sum(o => o.OccupancyCount)</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <hr />
+                    </div>
+                                    }
+                                }

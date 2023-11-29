@@ -1,0 +1,78 @@
+﻿@model EMS.Dto.LoginDto
+@{
+    Layout = null;
+}
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration configuration;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!--Google Font Face Css-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
+    <!--Site Css-->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/style.css" rel="stylesheet" type="text/css" asp-append-version="true">
+    <link href="~/Content/css/responsive.css" rel="stylesheet" type="text/css" asp-append-version="true">
+    <script type="text/javascript">        
+        if (window.location.href.indexOf('?') > -1) {
+            history.pushState('', document.title, window.location.pathname);
+        }
+    </script>
+</head>
+
+<body id="login-bg">
+    <form id="form1" action="@Url.Action("Index", "Login")" method="post">
+        @Html.HiddenFor(model => model.ReturnUrl)
+        <div class="login-outer-box dis-block clearfix">
+            <div class="login-logo dis-block text-center"><img src="~/content/images/logo.png" alt=""></div>
+            <div class="login-inner-box dis-block clearfix">
+                <div class="login-hd dis-block clearfix"> Dotsquares Employee Login</div>
+                <div class="login_inr dis-block clearfix">
+                    <div class="top_error">
+                        <span id="lblerrormsg" style="color:Red;">@ViewBag.Invalid</span>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label asp-for="Email"></label>
+                        <input type="text" asp-for="Email" class="form-control bg1" placeholder="Email">
+                    </div>
+                    <div class="form-group clearfix">
+                        <label asp-for="Password"></label>
+                        <input type="password" asp-for="Password" class="form-control bg2" placeholder="Password">
+                    </div>
+                    <div class="btm_btn_box dis-block clearfix">
+                        <div class="rem_box margin-top10 check-custom">
+                            @*@Html.CheckBoxFor(model => model.RememberMe, new { @id="rem1", @name="rem" })*@
+                            <input type="checkbox" asp-for="RememberMe" />
+                            <label asp-for="RememberMe"></label>
+                            @*<input type="checkbox" id="rem1" name="rem">
+                            <label for="rem1">Remember Me</label>*@
+                        </div>
+                        <div class="rt_btn_box">
+                            <button type="submit" class="btn btn-custom btn-lg">Submit</button>
+                        </div>
+                    </div>
+                    <div class="frg text-right margin-top10 dis-block clearfix">
+                        <a href="@Url.Action("ForgotPassword", "Login")" class="forgot-pwd">Forgot Password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="~/bundles/jquery"></script>
+    <script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/jqueryval"></script>
+    <script src="~/bundles/layoutjs"></script>
+    <script src="@(SiteKey.DomainName)Scripts/CustomJS/login.js" asp-append-version="true"></script>
+</body>
+
+</html>

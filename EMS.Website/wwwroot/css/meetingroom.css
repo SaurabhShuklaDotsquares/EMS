@@ -1,0 +1,1173 @@
+﻿thead > tr > th {
+    background-color: #383f45;
+    color: #fff;
+    padding: 5px 1%;
+    height: 30px !important;
+    font-weight: 600;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+th.fc-sun {
+    background-color: #ea5036;
+}
+
+.fc-ltr .fc-basic-view .fc-day-top .fc-day-number {
+    float: left;
+}
+
+tbody > tr > td {
+    background-color: #ffebe2;
+}
+
+.fc td, .fc th {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
+    padding: 0;
+    vertical-align: top;
+}
+
+.fc-time-grid .fc-slats td {
+    height: 2.5em;
+}
+
+.fc-title {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.fc-axis {
+    width: 80px !important;
+    text-align: center !important;
+}
+
+    .fc-axis.fc-widget-header:before {
+        content: "Time";
+        width: 100px;
+    }
+
+.fc-day-number {
+    font-weight: 600;
+}
+
+.clstitle {
+    background-color: yellow;
+    text-align: center;
+}
+
+.fc-event, .fc-event:hover, .ui-widget .fc-event {
+    color: #333;
+    /* text-decoration: none; */
+}
+
+.fc-unthemed td.fc-today {
+    background: #fad8d2;
+}
+
+.clsmeetingcal .fc-event-container a {
+    margin-bottom: 4px !important;
+}
+/**media**/
+/**popup-css**/
+@media only screen and (max-width:1800px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width:1600px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width:1400px) {
+    .bookmeeting-popup .modal-header h4 {
+        font-size: 20px;
+    }
+
+    .bookmeeting-popup .close {
+        font-size: 36px;
+    }
+}
+
+@media only screen and (max-width:1199px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width:991px) {
+    .bookmeeting-popup .modal-header h4 {
+        font-size: 18px;
+    }
+
+    .bookmeeting-popup .form-group {
+        margin-bottom: 10px;
+    }
+
+    .bookmeeting-popup .close {
+        font-size: 32px;
+    }
+
+    .bookmeeting-popup .btn {
+        padding: 6px 18px;
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width:767px) {
+    .bookmeeting-popup textarea.form-control {
+        height: 80px;
+    }
+
+    .bookmeeting-popup .timeslot-text {
+        margin-left: 7px !important;
+    }
+
+    .timeslotrow-width {
+        margin: 0 -7px;
+    }
+
+    .timeslot-width {
+        width: 49.5%;
+        display: inline-block;
+        padding: 0 7px;
+    }
+
+    .bookmeeting-popup label.clslabel {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width:579px) {
+    .bookmeeting-popup label.clslabel {
+        padding-left: 32px;
+    }
+}
+
+@media only screen and (max-width:479px) {
+    .bookmeeting-popup label.clslabel {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+
+    .timeslot-width {
+        width: 100%;
+        display: block;
+    }
+}
+/**popup-css**/
+
+/**calender-css**/
+.clsmeetingcal .fc-state-default {
+    background-color: #e99701;
+    background-image: -moz-linear-gradient(top,#e99701,#e99701);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#e99701),to(#e99701));
+    background-image: -webkit-linear-gradient(top,#e99701,#e99701);
+    background-image: -o-linear-gradient(top,#e99701,#e99701);
+    background-image: linear-gradient(to bottom,#e99701,#e99701);
+    border-color: #e99701 #e99701 #e99701 #fff;
+    border-right: 1px solid #fff;
+    color: #fff;
+    text-shadow: none;
+    box-shadow: none;
+    z-index: 3;
+    border-radius: 0;
+    opacity: 1;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+    .clsmeetingcal .fc-state-default.fc-state-active {
+        background-color: #ffa500;
+        background-image: -moz-linear-gradient(top,#ffa500,#ffa500);
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#ffa500),to(#ffa500));
+        background-image: -webkit-linear-gradient(top,#ffa500,#ffa500);
+        background-image: -o-linear-gradient(top,#ffa500,#ffa500);
+        background-image: linear-gradient(to bottom,#ffa500,#ffa500);
+    }
+
+.clsmeetingcal .fc-day-header {
+    padding: 6px 0;
+    vertical-align: middle;
+}
+
+.clsmeetingcal .fc button .fc-icon {
+    color: #fff;
+}
+
+.clsmeetingcal .fc-event-container {
+    padding: 0 5px;
+}
+
+    .clsmeetingcal .fc-event-container a {
+        background-color: #fff;
+        border: none !important;
+        border-left: 3px solid #fff !important;
+        border-radius: 0;
+        padding: 5px 5px;
+        margin: 0 4px 6px;
+        box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+    }
+
+.clsmeetingcal .fc-day-grid-event .fc-content {
+    white-space: normal !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-blue {
+    border-color: #4c54f3 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-darkpink {
+    border-color: #c0015f !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-green {
+    border-color: #148d6f !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-yellow {
+    border-color: #f8ea03 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-pink {
+    border-color: #f40fe7 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-orange {
+    border-color: #f58220 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-red {
+    border-color: #f52020 !important;
+}
+/*23/01/2019*/
+.clsmeetingcal .fc-event-container a.color-brown {
+    border-color: #A52A2A !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-purple {
+    border-color: #800080 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-indigo {
+    border-color: #4B0082 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-gold {
+    border-color: #FFD700 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-darkslateblue {
+    border-color: #483D8B !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-chocolate {
+    border-color: #D2691E !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-darkslategrey {
+    border-color: #2F4F4F !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-grey {
+    border-color: #808080 !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-violet {
+    border-color: #EE82EE !important;
+}
+
+.clsmeetingcal .fc-event-container a.color-cadetblue {
+    border-color: #5F9EA0 !important;
+}
+
+
+/*end  23/01/2019*/
+
+.clsmeetingcal .fc-event-container a .fc-content {
+    background: url(../Content/images/calender.png) no-repeat left 1px;
+    padding-left: 22px;
+}
+
+    .clsmeetingcal .fc-event-container a .fc-content .fc-title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-transform: capitalize;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+.clsmeetingcal .fc-rigid {
+    min-height: 180px !important;
+}
+
+.clsmeetingcal .fc-more {
+    font-size: 12px;
+    text-transform: capitalize;
+    font-weight: 600;
+    margin: 0 7px;
+}
+
+.clsmeetingcal .fc-day-top {
+    padding: 2px 7px 0;
+}
+
+.color-code-list {
+    margin: 10px 0 0;
+}
+
+    .color-code-list li {
+        display: inline-block;
+        margin: 0 12px 5px 0;
+        color: #353535;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+        position: relative;
+        padding-left: 25px;
+    }
+
+        .color-code-list li:before {
+            background-color: #000;
+            position: absolute;
+            content: '';
+            left: 0;
+            top: 4px;
+            height: 10px;
+            width: 18px;
+        }
+
+        .color-code-list li.color-blue:before {
+            background-color: #4c54f3;
+        }
+
+        .color-code-list li.color-darkpink:before {
+            background-color: #c0015f;
+        }
+
+        .color-code-list li.color-green:before {
+            background-color: #148d6f;
+        }
+
+        .color-code-list li.color-yellow:before {
+            background-color: #f8ea03;
+        }
+
+        .color-code-list li.color-pink:before {
+            background-color: #f40fe7;
+        }
+
+        .color-code-list li.color-orange:before {
+            background-color: #f58220;
+        }
+
+        .color-code-list li.color-red:before {
+            background-color: #f52020;
+        }
+        /*23/01/2019*/
+        .color-code-list li.color-brown:before {
+            background-color: #A52A2A;
+        }
+
+        .color-code-list li.color-purple:before {
+            background-color: #800080;
+        }
+
+        .color-code-list li.color-indigo:before {
+            background-color: #4B0082;
+        }
+
+        .color-code-list li.color-gold:before {
+            background-color: #FFD700;
+        }
+
+        .color-code-list li.color-darkslateblue:before {
+            background-color: #483D8B;
+        }
+
+        .color-code-list li.color-chocolate:before {
+            background-color: #D2691E;
+        }
+
+        .color-code-list li.color-darkslategrey:before {
+            background-color: #2F4F4F;
+        }
+
+        .color-code-list li.color-grey:before {
+            background-color: #808080;
+        }
+
+        .color-code-list li.color-violet:before {
+            background-color: #EE82EE;
+        }
+
+        .color-code-list li.color-cadetblue:before {
+            background-color: #5F9EA0;
+        }
+/*end 23/01/2019*/
+.clsmeetingcal .fc-basicWeek-view .fc-row.fc-rigid .fc-content-skeleton {
+    padding: 7px 0 0;
+}
+
+.clsmeetingcal .fc-basicWeek-view .fc-event-container a {
+    margin: 0 4px 8px;
+}
+
+.clsmeetingcal .fc-agenda-view .fc-event-container a {
+    margin-bottom: 0;
+    padding: 2px 5px;
+    border-bottom: 1px solid #ddd !important;
+    box-shadow: none;
+}
+
+.clsmeetingcal .fc-agenda-view .fc-title {
+    font-size: 11px !important;
+}
+
+.officeroom {
+    width: 22%;
+}
+
+.clsmeetingcal .box-body {
+    margin: 0 0 18px;
+}
+
+.bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+    width: 30%;
+}
+
+.meeting-schedule-popup #pDetails12 {
+    padding: 0;
+}
+
+.schedule-title {
+    color: #e18f00;
+    font-size: 16px;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.schedule-time {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: #555555;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+    .schedule-time:last-child {
+        margin-bottom: 0;
+    }
+
+    .schedule-time .fa {
+        font-size: 20px;
+        color: #757575;
+        vertical-align: middle;
+        margin: 0 4px 0 0;
+        min-width: 19px;
+    }
+
+    .schedule-time b {
+        font-size: 16px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        color: #333333;
+    }
+/*.schedule-time.meetingtime {
+        color: #e18f00!important;
+    }*/
+span.meeting-clock-hr {
+    color: #e18f00 !important;
+}
+
+.bookmeeting-popup.meeting-schedule-popup .btn {
+    border-color: #e18f00;
+}
+
+.bookmeeting-popup.meeting-schedule-popup .cancelmeeting-btn {
+    float: left !important;
+    background-color: red;
+    border-color: red !important;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 7px 15px;
+}
+
+.cancelmeeting-btn .glyphicon {
+    vertical-align: middle;
+    margin: -2px 0 0;
+}
+
+/**media**/
+@media only screen and (max-width:1600px) {
+    .clsmeetingcal .fc-event-container a .fc-content .fc-title {
+        font-size: 11px;
+    }
+
+    .officeroom {
+        width: 30%;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+        width: 35%;
+    }
+}
+
+@media only screen and (max-width:1400px) {
+    .bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+        width: 45%;
+    }
+
+    .schedule-title {
+        font-size: 15px;
+    }
+
+    .schedule-time {
+        font-size: 14px;
+    }
+
+        .schedule-time b {
+            font-size: 15px;
+        }
+}
+
+@media only screen and (max-width:1199px) {
+    .clsmeetingcal .box-body {
+        margin: 0 0 12px;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+        width: 52%;
+    }
+}
+
+@media only screen and (max-width:991px) {
+    .color-code-list li {
+        margin: 0 10px 5px 0;
+    }
+
+    .clsmeetingcal .fc-day-grid-event .fc-content {
+        white-space: nowrap !important;
+    }
+
+    .clsmeetingcal .fc-agenda-view .fc-time-grid-event {
+        width: auto;
+        right: auto !important;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+        width: 75%;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .cancelmeeting-btn {
+        font-size: 15px;
+        padding: 6px 15px;
+    }
+}
+
+@media only screen and (max-width:767px) {
+    .color-code-list li:nth-child(2n+2) {
+        margin-right: 0;
+    }
+
+    .color-code-list li {
+        margin: 0 7px 5px 0;
+    }
+
+    .clsmeetingcal h2 {
+        font-size: 18px;
+    }
+
+    .clsmeetingcal .fc-header-toolbar h2 {
+        font-size: 17px;
+        padding: 3px 0 0;
+    }
+
+    .officeroom {
+        width: 45%;
+    }
+
+    .clsmeetingcal thead > tr > th {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width:575px) {
+    .color-code-list li:nth-child(2n+2) {
+        margin-right: 0;
+    }
+
+    .color-code-list li::before {
+        width: 15px;
+    }
+
+    .color-code-list li {
+        margin: 0 7px 5px 0;
+        font-size: 11px;
+        padding-left: 20px;
+    }
+
+    .clsmeetingcal h2 {
+        font-size: 17px;
+    }
+
+    .clsmeetingcal .fc-state-default {
+        font-size: 12px;
+    }
+
+    .clsmeetingcal .fc-today-button {
+        margin-left: 5px;
+    }
+
+    .clsmeetingcal .fc-header-toolbar h2 {
+        font-size: 15px;
+    }
+
+    .officeroom {
+        width: 54%;
+        padding-left: 7px;
+    }
+
+    .clsmeetingcal thead > tr > th {
+        font-size: 12px;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+        width: 85%;
+    }
+
+    .schedule-time {
+        font-size: 13px;
+    }
+
+        .schedule-time .fa {
+            font-size: 17px;
+            min-width: 18px;
+            margin: 0;
+        }
+
+        .schedule-time b {
+            font-size: 14px;
+        }
+}
+
+@media only screen and (max-width:479px) {
+    .color-code-list li {
+        margin-right: 0;
+        display: block;
+    }
+
+    .clsmeetingcal h2 {
+        font-size: 15px;
+        padding: 7px 0 0;
+    }
+
+    .clsmeetingcal .form-control, .clsmeetingcal select, .clsmeetingcal select.form-control {
+        font-size: 12px;
+        padding-left: 6px;
+    }
+
+    .clsmeetingcal .fc-state-default {
+        font-size: 11px;
+    }
+
+    .clsmeetingcal .fc-header-toolbar h2 {
+        font-size: 14px;
+        padding: 12px 0 0;
+    }
+
+    .clsmeetingcal .fc-event-container {
+        padding: 0 2px;
+    }
+
+        .clsmeetingcal .fc-event-container a .fc-content {
+            padding-left: 14px;
+            background-size: 11px;
+        }
+
+    .clsmeetingcal .fc-more-cell {
+        padding-left: 4px;
+    }
+
+    .clsmeetingcal .fc-more {
+        font-size: 11px;
+        margin: 0 2px;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .modal-dialog {
+        width: 90%;
+    }
+
+    .schedule-time {
+        font-size: 12px;
+    }
+
+        .schedule-time .fa {
+            font-size: 15px;
+        }
+
+        .schedule-time b {
+            font-size: 13px;
+        }
+
+    .bookmeeting-popup.meeting-schedule-popup .cancelmeeting-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .bookmeeting-popup.meeting-schedule-popup .btn {
+        font-size: 14px;
+    }
+}
+/**calender-css**/
+
+
+
+
+/*new csss*/
+label.clslabel:hover {
+    background: #eee;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+label.clslabel {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0 0 10px;
+    display: block;
+    cursor: pointer;
+    color: #555;
+    display: block;
+    padding: 10px;
+    margin: 3px;
+}
+/**popup-css**/
+.bookmeeting-popup .modal-dialog {
+    width: 50%;
+}
+
+.bookmeeting-popup .modal-header {
+    background-color: #000;
+}
+
+    .bookmeeting-popup .modal-header h4 {
+        color: #fff;
+        font-size: 23px;
+    }
+
+.bookmeeting-popup .close {
+    color: #fff;
+    opacity: 1;
+    font-size: 40px;
+    font-weight: normal;
+    text-shadow: none;
+}
+
+.bookmeeting-popup label {
+    font-weight: 600;
+}
+
+.bookmeeting-popup .form-control {
+    border: 1px solid #ddd;
+}
+
+.bookmeeting-popup textarea.form-control {
+    height: 100px;
+    resize: none;
+}
+
+.bookmeeting-popup label.clslabel {
+    background-color: #ddd;
+    background-image: url(../Content/images/uncheck-box.png);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+    color: #757575;
+    font-weight: 600;
+    padding-left: 35px;
+    background-size: 18px;
+}
+
+.bookmeeting-popup input[type="checkbox"] {
+    display: none;
+}
+
+    .bookmeeting-popup input[type="checkbox"]:checked + label {
+        background-color: #e18f00 !important;
+        border: 1px solid #e18f00 !important;
+        color: #fff !important;
+        background-image: url(../Content/images/checked-mark.png);
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+
+.bookmeeting-popup .btn {
+    background-color: #e18f00;
+    color: #fff;
+    padding: 7px 20px;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.bookmeeting-popup .close-btn {
+    background-color: #000;
+}
+
+.multiselect.dropdown-toggle.btn.btn-default {
+    color: #333;
+    font-weight: normal;
+    background: #fff url(../images/arrowdown.png) no-repeat scroll right center !important;
+    height: 36px;
+    padding-left: 8px;
+    padding-right: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    text-align: left;
+}
+
+.btn.btn-default.multiselect-clear-filter {
+    background-color: #fff;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.caret {
+    display: none;
+}
+
+.btn.multiselect-selected-text {
+    text-align: left;
+}
+
+@media only screen and (max-width:1800px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width:1600px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width:1400px) {
+    .bookmeeting-popup .modal-header h4 {
+        font-size: 20px;
+    }
+
+    .bookmeeting-popup .close {
+        font-size: 36px;
+    }
+}
+
+@media only screen and (max-width:1199px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width:991px) {
+    .bookmeeting-popup .modal-header h4 {
+        font-size: 18px;
+    }
+
+    .bookmeeting-popup .form-group {
+        margin-bottom: 10px;
+    }
+
+    .bookmeeting-popup .close {
+        font-size: 32px;
+    }
+
+    .bookmeeting-popup .btn {
+        padding: 6px 18px;
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width:767px) {
+    .bookmeeting-popup textarea.form-control {
+        height: 80px;
+    }
+
+    .bookmeeting-popup .timeslot-text {
+        margin-left: 7px !important;
+    }
+
+    .timeslotrow-width {
+        margin: 0 -7px;
+    }
+
+    .timeslot-width {
+        width: 49.5%;
+        display: inline-block;
+        padding: 0 7px;
+    }
+
+    .bookmeeting-popup label.clslabel {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width:579px) {
+    .bookmeeting-popup label.clslabel {
+        padding-left: 32px;
+    }
+}
+
+@media only screen and (max-width:479px) {
+    .bookmeeting-popup label.clslabel {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+
+    .timeslot-width {
+        width: 100%;
+        display: block;
+    }
+}
+
+
+
+
+
+
+
+label.clslabel:hover {
+    background: #eee;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+label.clslabel {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0 0 10px;
+    display: block;
+    cursor: pointer;
+    color: #555;
+    display: block;
+    padding: 10px;
+    margin: 3px;
+}
+/**popup-css**/
+.bookmeeting-popup .modal-dialog {
+    width: 50%;
+}
+
+.bookmeeting-popup .modal-header {
+    background-color: #000;
+}
+
+    .bookmeeting-popup .modal-header h4 {
+        color: #fff;
+        font-size: 23px;
+    }
+
+.bookmeeting-popup .close {
+    color: #fff;
+    opacity: 1;
+    font-size: 40px;
+    font-weight: normal;
+    text-shadow: none;
+}
+
+.bookmeeting-popup label {
+    font-weight: 600;
+}
+
+.bookmeeting-popup .form-control {
+    border: 1px solid #ddd;
+}
+
+.bookmeeting-popup textarea.form-control {
+    height: 100px;
+    resize: none;
+}
+
+.bookmeeting-popup label.clslabel {
+    background-color: #ddd;
+    background-image: url(../Content/images/uncheck-box.png);
+    background-repeat: no-repeat;
+    background-position: 4% center;
+    color: #757575;
+    font-weight: 600;
+    padding-left: 35px;
+    background-size: 18px;
+}
+
+.bookmeeting-popup input[type="checkbox"] {
+    display: none;
+}
+
+    .bookmeeting-popup input[type="checkbox"]:checked + label {
+        background-color: #e18f00 !important;
+        border: 1px solid #e18f00 !important;
+        color: #fff !important;
+        background-image: url(../Content/images/checked-mark.png);
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+
+.bookmeeting-popup .btn {
+    background-color: #e18f00;
+    color: #fff;
+    padding: 7px 20px;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.bookmeeting-popup .close-btn {
+    background-color: #000;
+}
+
+.multiselect.dropdown-toggle.btn.btn-default {
+    color: #333;
+    font-weight: normal;
+    background: #fff url(../images/arrowdown.png) no-repeat scroll right center !important;
+    height: 36px;
+    padding-left: 8px;
+    padding-right: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    text-align: left;
+}
+
+.btn.btn-default.multiselect-clear-filter {
+    background-color: #fff;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.caret {
+    display: none;
+}
+
+.btn.multiselect-selected-text {
+    text-align: left;
+}
+
+.note-instruction {
+    font-size: 10px;
+    text-align: right;
+    color: red;
+}
+
+    .note-instruction P {
+        line-height: 2px;
+    }
+
+/**popup-css**/
+@media only screen and (max-width:1800px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width:1600px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width:1400px) {
+    .bookmeeting-popup .modal-header h4 {
+        font-size: 20px;
+    }
+
+    .bookmeeting-popup .close {
+        font-size: 36px;
+    }
+}
+
+@media only screen and (max-width:1199px) {
+    .bookmeeting-popup .modal-dialog {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width:991px) {
+    .bookmeeting-popup .modal-header h4 {
+        font-size: 18px;
+    }
+
+    .bookmeeting-popup .form-group {
+        margin-bottom: 10px;
+    }
+
+    .bookmeeting-popup .close {
+        font-size: 32px;
+    }
+
+    .bookmeeting-popup .btn {
+        padding: 6px 18px;
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width:767px) {
+    .bookmeeting-popup textarea.form-control {
+        height: 80px;
+    }
+
+    .bookmeeting-popup .timeslot-text {
+        margin-left: 7px !important;
+    }
+
+    .timeslotrow-width {
+        margin: 0 -7px;
+    }
+
+    .timeslot-width {
+        width: 49.5%;
+        display: inline-block;
+        padding: 0 7px;
+    }
+
+    .bookmeeting-popup label.clslabel {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width:579px) {
+    .bookmeeting-popup label.clslabel {
+        padding-left: 32px;
+    }
+}
+
+@media only screen and (max-width:479px) {
+    .bookmeeting-popup label.clslabel {
+        padding-left: 35px;
+        font-size: 14px;
+    }
+
+    .timeslot-width {
+        width: 100%;
+        display: block;
+    }
+}

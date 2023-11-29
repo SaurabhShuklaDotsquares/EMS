@@ -1,0 +1,51 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Self Declaration";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Self Declaration</h2>
+            </div>
+        </div>
+        <div class="create-form-outer-box clearfix dis-block">
+            <div class="pull-left margin-right5 margin-bottom10">
+                @Html.TextBox("txtSearch", null, new { @class = "form-control", style = "width: 216px;", @placeholder = "Search By Name" })
+            </div>
+            <div class="pull-left margin-right5">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Recently In Jaipur
+                &nbsp;&nbsp;&nbsp;
+                <select id="drpInJpr" style="width:100px;">
+                    <option selected="selected" value="0">All</option>
+                    <option value="1">Yes</option>
+                    <option value="2">No</option>
+                </select>
+            </div>
+            <div class="pull-left margin-right5">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Has Disease Symptoms
+                &nbsp;&nbsp;&nbsp;
+                <select id="drpHasDiseaseSymptoms" style="width:100px;">
+                    <option selected="selected" value="0">All</option>
+                    <option value="1">Yes</option>
+                    <option value="2">No</option>
+                </select>
+            </div>
+            <div class="pull-left margin-right5 left10">
+                &nbsp;&nbsp;&nbsp;
+                <input type="button" class="btn btn-custom" id="btnSearch" value="Search" style="height:41px;" />
+            </div>
+        </div>
+        <table id="grid-self-declaration-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+<script src="~/Scripts/CustomJS/SelfDeclaration/index.js" asp-append-version="true"></script>
+}
+

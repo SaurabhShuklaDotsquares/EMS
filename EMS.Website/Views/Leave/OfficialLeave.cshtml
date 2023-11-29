@@ -1,0 +1,89 @@
+﻿@model IEnumerable<OfficialLeaveDto>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @if (Model != null && Model.Any(x => x.CountryId == (byte)EMS.Core.Enums.Country.India))
+        {
+            <div class="timesheet-page full-wdth clearfix">
+                <h2>India office Holiday  </h2>
+                <div class="table-custom  timesheet-table table-responsive clearfix" id="div_Table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="roundedL" width="10%" style="text-align:center">S.No</th>
+                                <th width="40%">Holiday</th>
+                                <th width="25%">Holiday Date</th>
+                                <th width="25%">Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model != null && Model.Any(x => x.CountryId == (byte)EMS.Core.Enums.Country.India))
+                            {
+                                int count = 0;
+                                foreach (var item in Model.Where(x => x.CountryId == (byte)EMS.Core.Enums.Country.India))
+                                {
+                                    count = count + 1;
+                                    <tr>
+                                        <td style="width: 8%;text-align:center;vertical-align:top;">@count</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.LeaveDate.ToString("ddd, MMM dd, yyyy")</td>
+                                        <td>@item.LeaveType</td>
+                                    </tr>
+
+                                }
+                            }
+                            else
+                            {
+                                <tr class="tr-norecord">
+                                    <td colspan="5" style="font-size:larger; text-align:center;">No Record Found !!</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        @if (Model != null && Model.Any(x => x.CountryId == (byte)EMS.Core.Enums.Country.UK))
+        {
+            <div class="timesheet-page full-wdth clearfix">
+                <h2>UK office Holiday  </h2>
+                <div class="table-custom  timesheet-table table-responsive clearfix" id="div_Table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="roundedL" width="10%" style="text-align:center">S.No</th>
+                                <th width="40%">Holiday</th>
+                                <th width="25%">Holiday Date</th>
+                                <th width="25%">Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model != null && Model.Any(x => x.CountryId == (byte)EMS.Core.Enums.Country.UK))
+                            {
+                                int count = 0;
+                                foreach (var item in Model.Where(x => x.CountryId == (byte)EMS.Core.Enums.Country.UK))
+                                {
+                                    count = count + 1;
+                                    <tr>
+                                        <td style="width: 8%;text-align:center;vertical-align:top;">@count</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.LeaveDate.ToString("ddd, MMM dd, yyyy")</td>
+                                        <td>@item.LeaveType</td>
+                                    </tr>
+
+                                }
+                            }
+                            else
+                            {
+                                <tr class="tr-norecord">
+                                    <td colspan="5" style="font-size:larger; text-align:center;">No Record Found !!</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>

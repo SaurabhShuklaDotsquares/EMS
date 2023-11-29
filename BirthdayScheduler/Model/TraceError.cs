@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Configuration;
+
+namespace BirthdayScheduler.Model
+{
+    public class TraceError
+    {
+        public static void ReportError(System.Exception exception, string ReportToEmail = "info@dotsquares.com", string ApplicationTitle = "")
+        {
+            if ((exception != null))
+            {
+                try
+                {
+                    FlexiMail objSendMail = new FlexiMail();
+
+                    string ErrorDesc = "";
+
+                    var _with1 = exception;
+
+                    ErrorDesc += "<H3>Error Occured</h3><hr>";
+                    ErrorDesc += "<b>Date Time:</b><br>" + DateTime.Now.ToString() + "<br><br>";
+                    ErrorDesc += "<b>Error Code: </b><br>" + exception.GetHashCode().ToString() + "<br><br>";
+                    ErrorDesc += "<b>Base Exception: </b><br>" + exception.GetBaseException().ToString() + "<br><br>";
+                    ErrorDesc += "<b>Type: </b><br>" + exception.GetType().ToString() + "<br><br>";
+                    ErrorDesc += "<b>Inner Exception: </b><br>" + exception.InnerException + "<br><br>";
+                    ErrorDesc += "<b>Message: </b><br>" + exception.Message + "<br><br>";
+                    ErrorDesc += "<b>Source: </b><br>" + exception.Source + "<br><br>";
+                    ErrorDesc += "<b>Stack Trace: </b><br>" + exception.StackTrace.ToString() + "<br><br>";
+                    ErrorDesc += "<b>Generic Info: </b><br>" + exception.ToString() + "<br><br><hr>";
+
+
+                    string strExtentedInfo = null;
+
+                    //collect server variables
+                    object x = null;
+                    strExtentedInfo = "<b>Server variables ...</b><br>";
+                    
+                    strExtentedInfo += "<hr>";
+
+                    //dump extended error info to error description
+                    ErrorDesc += strExtentedInfo;
+
+
+                    //report the error here
+                    try
+                    {
+                        ErrorDesc = ErrorDesc + "<hr>" + exception.ToString();
+                    }
+                    catch
+                    {
+                    }
+
+
+                    objSendMail.From = "no-reply@dotsquares.com";
+                    objSendMail.To = ReportToEmail;
+                    objSendMail.CC = "";
+                    objSendMail.BCC = "";// SiteKey.BCC;
+                    objSendMail.Subject = "Exception in application - " + ApplicationTitle;
+                    objSendMail.MailBodyManualSupply = true;
+                    objSendMail.MailBody = ErrorDesc;
+                    objSendMail.Send();
+
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
+    }
+}

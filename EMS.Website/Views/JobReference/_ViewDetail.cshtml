@@ -1,0 +1,152 @@
+﻿@using EMS.Dto;
+@using EMS.Data;
+@using EMS.Web.Models.Others;
+@using EMS.Core;
+@model JobReference
+@{
+    Layout = null;
+}
+<style>
+    .clsSmallFont {
+        font-size: xx-small;
+    }
+
+    #frm-viewdetail-add-edit label {
+        float: left;
+    }
+
+    #frm-viewdetail-add-edit p {
+        float: left;
+    }
+     #frm-viewdetail-add-edit a {
+        float: left;
+    }
+</style>
+
+<div id="frm-viewdetail" class="cmxform" style="width:600px;height:100%;margin-top:10%">
+    <div class="row bg-white">
+        <div class="popup-container" id="popup-container">
+
+            <h5 class="text-left">
+                Job Profile Details
+            </h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Post</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.CurrentOpening.Post</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Technology</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.CurrentOpening.Technology</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Department</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.CurrentOpening.Department.Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Min. Exp.</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.CurrentOpening.Min_Experience    </label>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Job Description</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.CurrentOpening.Small_Description</label>
+                </div>
+            </div>
+
+
+
+
+            <h5 class="text-left">
+                Person's Details
+            </h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Name</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.Name    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Email</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.Email    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Mobile No.</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.MobileNo    </label>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Attacchment))
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        <label> Download Resume</label>
+                    </div>
+                    <div class="col-md-6">
+                        <a target="_blank" class="fa fa-download" title="Download Resume" href="~/Upload/Resume/@Model.Attacchment" style="font-size:large">
+                        </a>
+                        <a target="_blank" title="Download Resume" href="~/Upload/Resume/@Model.Attacchment" style="color:blue">
+                            Download
+                        </a>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Referred By</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@(Model.UserLogin != null ? Model.UserLogin.Name : string.Empty   )    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Status</label>
+                </div>
+                <div class="col-md-6">
+                    <label> @(Model.Status.ToEnum<Enums.InterViewStaus>().ToString())</label>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Description</label>
+                </div>
+                <div class="col-md-6">
+                    <label>@Model.Small_Desc</label>
+                </div>
+            </div>
+
+
+        </div>
+        @Html.Partial("_ModalFooter", new ModalFooter() { OnlyCancelButton = true })
+    </div>
+</div>
+</div>

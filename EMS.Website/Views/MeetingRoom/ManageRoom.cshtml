@@ -1,0 +1,81 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.AddMeetingRoomDto
+@using EMS.Core
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Add Meeting Room</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform" id="leaveform">
+                        @using (Html.BeginForm("ManageRoom", "MeetingRoom", FormMethod.Post, new { id = "Form1" }))
+                        {
+                            @Html.HiddenFor(x => x.ConferenceRoomId)
+                            <div class="row dvuser">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>Company Office:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(x => x.CompanyOfficeId,  new SelectList(ViewBag.OfficeList, "Value", "Text"), "--Select--", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="row dvuser">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>Meeting Room Name:</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(x => x.Name,  null, new { @class = "form-control", @maxlength = "100" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <label>Color</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(x => x.ThemeColor,  new SelectList(ViewBag.ColorList, "Value", "Text"), "--Select--", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="@Url.Action("roomlist","meetingroom")" class="btn btn-custom">Back</a>
+                                    <button type="submit" class="btn btn-custom  margin-right10" name="Save">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/CustomJS/MeetingRoom/ManageRoom.js"></script>
+   
+    <script>
+        if (@Model.ConferenceRoomId > 0)
+        {
+            selectedcolor = '@Model.ThemeColor';
+        }
+    </script>
+}
+
+
+

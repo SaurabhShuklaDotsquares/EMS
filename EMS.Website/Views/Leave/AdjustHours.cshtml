@@ -1,0 +1,82 @@
+﻿@using EMS.Core
+@model AdjustHoursDto
+@{
+    ViewBag.Title = "AdjustHours";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <style>
+        .table .form-control.inpt-wd4 {
+            margin-left: 127px;
+            width: 100px;
+            margin-top: -35px;
+        }
+
+        .altform.adjust-table .row {
+            margin: 0 0 10px 0;
+        }
+
+        .adjust-table .table .form-control.inpt-wd4 {
+            margin: 0 15px 0 15px;
+            display: inline-block;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            margin: 12px 10px 16px;
+            margin-top: 1px\9;
+            line-height: normal;
+        }
+    </style>
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <div id="tackCommentMessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+            <h2>Adjust Hours</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform adjust-table">
+                        @using (Html.BeginForm("AdjustHours", "Leave", FormMethod.Post, new { id = "adjustform" }))
+                        {
+                            <div class="table-custom timesheet-table table-responsive clearfix">
+                                <div class="row">
+                                    <div class="col-md-4 ">
+                                        <div class="col-md-6">
+                                            <label>Day of Date :</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.Modified, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = "readonly", required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table" id="LeaveAdjustTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:2%;">#</th>
+                                            <th style="width:20%;">Employee Name</th>
+                                            <th style="width:78%;">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO)
+                            {
+                                <div class="row">
+                                    <button type="submit" class="btn btn-custom pull-right txtbtnSave" name="Save">Save</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/Scripts/masked-input/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/datepicker/moment.js"></script>
+    <script src="~/Scripts/CustomJS/Leave/AdjustHours.js" asp-append-version="true"></script> 
+}

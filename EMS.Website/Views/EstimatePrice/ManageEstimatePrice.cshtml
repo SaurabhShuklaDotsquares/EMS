@@ -1,0 +1,67 @@
+﻿@model EstimatePriceDto
+@using EMS.Core
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Add Estimate Price</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix validateform altform" id="leaveform">
+                        @using (Html.BeginForm("ManageEstimatePrice", "EstimatePrice", FormMethod.Post, new { id = "Form1" }))
+                        {
+                            @*@Html.HiddenFor(x => x.ConferenceRoomId)*@
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>Role:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(x => x.EstimateRoleId, Model.EstimateRoleList, "--Select--", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                @if (Model.EstimateRoleId == 1)
+                                {
+                                    <div class="col-md-6 TechDiv">
+                                        <div class="col-md-4">
+                                            <label>Technology:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.DropDownListFor(x => x.EstimateTechnologyId, Model.TecnologyParentList, "--Select--", new { @class = "form-control", required="" })
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div id="EstimateExpPricePartial">
+                                <partial name="_EstimateExpPrice" model="Model" />
+                            </div>
+
+                            <div class="row" style="text-align: center;">
+                                <div class="col-md-2">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="/estimateprice" class="btn btn-custom">Back</a>
+                                    <button type="submit" class="btn btn-custom  margin-right10" name="Save">Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/CustomJS/ManageEstimatePrice.js"></script>
+}
+
+
+

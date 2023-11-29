@@ -1,0 +1,57 @@
+﻿@model DailyThoughtDto
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+       @using (Html.BeginForm("index", "dailythought", FormMethod.Post, new {  @id = "daiyThought_form", @autocomplete = "off" }))
+       {
+            @Html.HiddenFor(model => model.Id)
+            <div id="validation-summary"></div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2>Daily Thought</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Thought1, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextAreaFor(x => x.Thought1, 5, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Thought2, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.TextAreaFor(x => x.Thought2, 5, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-4 text-right">
+                        <input type="submit" class="btn btn-custom btn-submit-form" value="submit">                        
+                    </div>
+                </div>
+        }
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/bundles/DailyThought/index"></script>   
+}
+
+
+

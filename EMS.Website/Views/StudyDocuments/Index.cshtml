@@ -1,0 +1,83 @@
+﻿@model bool
+@{
+    ViewBag.Title = "Study Center";
+    var HasPermission = Model;
+}
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+
+        <div class="row form-group" style="margin:0px">
+            <div class="col-sm-12">
+
+                <partial name="_Notification" />
+                <div id="validation-summary"></div>
+
+            </div>
+        </div>
+
+        <div class="manage-Project-page full-wdth">
+            <div class="row">
+                <div class="col-sm-12"><h2>Study Center List</h2></div>
+
+                <div class="col-md-12 col-sm-12">
+
+                    <div class="row">
+                        <div class="col-md-5 col-sm-12">
+                        </div>
+                        <div class="col-md-1 text-right col-sm-12">
+                            <label>Technology: </label>
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <div class="custom-multiple-dropdown-wrapper">
+                                <select multiple="multiple" style="width: 100%;" id="TechnologyId" name="TechnologyId" asp-items="@ViewBag.TechnologyList">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-right col-sm-12">
+                            <a href="@Url.Action("AddEdit","studydocuments")" class="btn btn-custom margin-bottom10" style="margin-right:5px">Add New</a>
+                            <a id="btnSDDeleteAll" href="javascript:void(0);" class="btn btn-danger margin-bottom10" style="margin-right:5px">Delete</a>
+
+                            @if (HasPermission)
+                            {
+                                <input type="hidden" id="hasPermission" value="@HasPermission.ToString().ToLower()" />
+                                <a id="btnSDApproveAll" href="javascript:void(0);" class="btn btn-success margin-bottom10" style="margin-right:5px">Approve</a>
+                                <a id="btnSDDisapproveAll" href="javascript:void(0);" class="btn btn-danger margin-bottom10" style="margin-right:5px">Un-approve</a>
+                                <a id="btnSDAddDelPermissionAll" href="javascript:void(0);" class="btn btn-success margin-bottom10" style="margin-right:5px">Permission</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <div class="table-responsive">
+                        <table id="gridSDlist" class="table default-table black-theme-table"></table>
+                    </div>
+                </section>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/multipleselect/multiple-select.css" rel="stylesheet" />
+    <link href="~/css/custom-css/studydocuments/studydocuments.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="~/multipleselect/jquery.multiple.select.js"></script>
+    <script src="~/scripts/customjs/studydocuments/StudyDocumentCommon.js" asp-append-version="true"></script>
+    <script src="~/scripts/customjs/studydocuments/list.js" asp-append-version="true"></script>
+}
+
+<partial name="_Modal" model='new Modal { ID = "modal-SD-adddelpermission", AreaLabeledId = "modal-SD-adddelpermission-label", Size = Enums.ModalSize.Large }' />
+<partial name="_Modal" model='new Modal { ID = "modal-SD-quickview", AreaLabeledId = "modal-SD-quickview-label", Size = Enums.ModalSize.Large }' />
+<partial name="_Modal" model='new Modal { ID = "modal-SD-unapprovedreason", AreaLabeledId = "modal-SD-unapprovedreason-label", Size = Enums.ModalSize.Medium }' />
+<partial name="_ModelMessagePartial" model='new Modal { ID = "modal-SD-unapprovedreasonmessage", AreaLabeledId = "modal-SD-unapprovedreasonmessage-label", ModelHeading="Un-approved reason", Size = Enums.ModalSize.Medium }' />

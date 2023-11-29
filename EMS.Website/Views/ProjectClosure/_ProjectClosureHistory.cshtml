@@ -1,0 +1,80 @@
+﻿@using EMS.Web.Models.Others
+@model ProjectClosureProjectDetailDto
+<style>
+
+    #tblClosure_Details tr {
+        color: #333;
+    }
+
+    #tblClosure_Details td {
+        padding: 10px 7px;
+    }
+</style>
+<div>
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Project Closure History" })
+    <div class="modal-body">
+
+        <table id="tblClosure_Details" class="table table-no-border">
+            <tr>
+                <td width="20%"><strong>Client Name : </strong></td>
+                <td width="80%">@Model.ClientName</td>
+            </tr>
+
+            <tr>
+                <td width="20%"><strong>Project Name : </strong></td>
+                <td width="80%">@Model.ProjectName</td>
+            </tr>
+
+
+
+        </table>
+
+        @if (Model.ClosureHistory.Count > 0)
+        {
+            <h4 class="modal-title">Closure History</h4>
+
+            <table class="table table-stats">
+                <thead>
+                    <tr>
+                        <th width="7%">Sr. No.</th>
+                        <th width="15%">Closing Date</th>
+                        <th width="15%">CRM Start/ End Date</th>
+                        <th width="10%">Invoice</th>
+                        <th width="8%">Estimate</th>
+                        <th width="10%">Status</th>
+                        <th width="35%">Closing Reason</th>
+                        <th width="15%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        foreach (var item in Model.ClosureHistory)
+                        {
+                            <tr>
+                                <td width="7%">@(i++)</td>
+                                <td width="15%">
+                                    @item.DateOfClosing
+                                    @if (item.IsNewLeadGenerated == true && item.NewLeadId > 0)
+                                    {<br /><a class='ablue' target='_blank' href="@(SiteKey.DomainName)estimate/AddEditLead/@item.NewLeadId">Generated Lead Id:  @item.NewLeadId</a>
+                                }
+                                </td>
+                                <td width="15%">@item.StartEndDate</td>
+                                <td width="10%">@item.Invoice</td>
+                                <td width="7%">@item.Estimate</td>
+                                <td width="10%">@item.CRMStatus</td>
+                                <td width="35%">@Html.Raw(item.Reason)</td>
+                                <td width="15%" style="text-align: center;">
+                                    @*@if (item.IsAllowToViewProjectClosureDetail)
+                                    {*@
+                                        <a class='glyphicon glyphicon-eye-open' data-toggle="modal" data-target="#modal-detail-projectClosure" target="_parent" href="@(SiteKey.DomainName)projectclosure/detail/@item.Id"><span></span></a>
+                                    @*}*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

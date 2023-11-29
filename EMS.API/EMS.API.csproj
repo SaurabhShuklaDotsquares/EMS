@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EMS.Core\EMS.Core.csproj" />
+    <ProjectReference Include="..\EMS.Data\EMS.Data.csproj" />
+    <ProjectReference Include="..\EMS.Dto\EMS.Dto.csproj" />
+    <ProjectReference Include="..\EMS.Repo\EMS.Repo.csproj" />
+    <ProjectReference Include="..\EMS.Service\EMS.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Logfile\" />
+    <Folder Include="wwwroot\UserProfileLogFile\" />
+    <Folder Include="wwwroot\UserProfileLogFile\" />
+    <Folder Include="wwwroot\ProjectLogFile\" />
+  </ItemGroup>
+
+</Project>

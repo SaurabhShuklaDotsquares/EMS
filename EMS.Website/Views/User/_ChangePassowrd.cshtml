@@ -1,0 +1,51 @@
+﻿@model EMS.Dto.ChangeUserPasswordDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@{
+    Layout = null;
+}
+
+@*<div class="cmxform addedit-virtualdevp" style="width:600px;height:100%;margin-top:10%">*@
+<div class="cmxform addedit-virtualdevp">
+    @using (Html.BeginForm("ChangeUserPassword", "User", FormMethod.Post, new { @id = "frm-changepassword" }))
+    {
+        <div class="bg-white">
+            @*@Html.AntiForgeryToken()*@
+            <input type="hidden" asp-for="UserId" />
+            <div class="popup-top text-left">
+
+                <h3 style="color:#fff;padding-top:15px;" class="text-center">Change User Password</h3>
+
+            </div>
+            <div class="popup-container" id="popup-container">
+                <p>
+                    <div class="row">
+                        <div class="col-md-4 row-width">
+                            <label asp-for="NewPassword"></label>
+                        </div>
+                        <div class="col-md-7 row-width">
+                            <input asp-for="NewPassword" type="password" class="form-control" required />
+                            @*<span asp-validation-for="NewPassword" class="text-danger"></span>*@
+                            @*<label class="NewPasswordError text-danger" style="display:none;">*required</label>*@
+                        </div>
+
+                    </div>
+                </p>
+                <p>
+                    <div class="row grey-row">
+                        <div class="col-md-4 row-width">
+                            <label asp-for="ConfirmPassword"></label>
+
+                        </div>
+                        <div class="col-md-7 row-width">
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" required/>
+                            @*<span asp-validation-for="ConfirmPassword" class="text-danger"></span>*@
+                        <label class="ConfirmPasswordError text-danger" style="display:none;">Password Doesn't Match</label>
+                        </div>
+                    </div>
+                </p>
+            </div>
+            @Html.Partial("_ModalFooter", new ModalFooter { SubmitButtonID = "btn-submit", SubmitButtonText = "Submit", CancelButtonText = "Cancel" })
+        </div>
+    }
+</div>

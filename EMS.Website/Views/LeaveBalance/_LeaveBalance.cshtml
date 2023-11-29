@@ -1,0 +1,182 @@
+﻿@{
+    var attendId = SiteKey.AttendenceId.Split(',');
+
+}
+@if (ViewBag.AttendenceId > 0 @*&& attendId.Length > 0 && attendId.Any(a => a.Equals(@CurrentUser.AttendenceId.ToString()))*@)
+{
+    <style>
+        .LeaveHead {
+            background-color: antiquewhite;
+            color: black;
+            font: bold;
+            font-weight: 700;
+            text-align: center;
+            /*padding-top:20px;*/
+        }
+
+        .Leave-1 {
+            background-color: antiquewhite;
+            color: black;
+            font: bold;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .Leave-2 {
+            background-color: cornflowerblue;
+            color: black;
+            font: bold;
+            text-align: center;
+        }
+
+        .Leave-3 {
+            background-color: orange;
+            color: black;
+            font: bold;
+            text-align: center;
+        }
+
+        .Leave-4 {
+            background-color: salmon;
+            color: black;
+            font: bold;
+            text-align: center;
+        }
+
+        .Leave-5 {
+            background-color: palevioletred;
+            color: black;
+            font: bold;
+            text-align: center;
+        }
+
+        .Leave-6 {
+            background-color: #32CD32;
+            color: black;
+            font: bold;
+            text-align: center;
+        }
+
+        .lbldayCountmessage {
+            color: red;
+            display: block;
+            font-weight: bold !important;
+            font-size:12px;
+            padding: 5px 15px 5px 0px;
+            position: relative;
+        }
+
+            .lbldayCountmessage::before {
+                content: "\f0a9";
+                font-family: 'FontAwesome';
+                position: absolute;
+                color: red;
+                left: 5px;
+                top: 5px;
+            }
+    </style>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="LeaveHead" colspan="9">Your Leave Balance Summary</th>
+                    </tr>
+                    <tr>
+                        <th class="LeaveHead">Leave Type</th>
+                        <th class="LeaveHead">@Enums.LeaveCategory.CasualLeave.GetEnumDescription()</th>
+                        <th class="LeaveHead">@Enums.LeaveCategory.EarnedLeave.GetEnumDescription()</th>
+                        @*<th class="LeaveHead">@Enums.LeaveCategory.UnpaidLeave.GetEnumDescription()</th>*@
+                        <th class="LeaveHead">@Enums.LeaveCategory.SickLeave.GetEnumDescription()</th>
+                        <th class="LeaveHead">@Enums.LeaveCategory.WeddingLeave.GetEnumDescription()</th>
+                        <th class="LeaveHead">@Enums.LeaveCategory.CompensatoryOff.GetEnumDescription()</th>
+                        <th class="LeaveHead">@Enums.LeaveCategory.BereavementLeave.GetEnumDescription()</th>
+                        @if (CurrentUser.Gender.Equals("M"))
+                        {
+                            <th class="LeaveHead">@Enums.LeaveCategory.PaternityLeave.GetEnumDescription()</th>
+                        }
+                        @if (CurrentUser.Gender.Equals("F"))
+                        {
+                            <th class="LeaveHead">@Enums.LeaveCategory.MaternityLeave.GetEnumDescription()</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="Leave-1">Assigned Leave Balance
+                            @Html.Raw(Model.isPreviousMonthLeave ? "<br/><label class='lbldayCountmessage note-box'> Updated till "+ Model.MonthName + "</label>" : "")
+                            </td>
+                        <td class="Leave-2">@Model.LeaveTypeBalance.CasualLeave_OB</td>
+                        <td class="Leave-3">@Model.LeaveTypeBalance.EarnedLeave_OB</td>
+                        @*<td class="Leave-4">@Model.LeaveTypeBalance.LossPayLeave_OB</td>*@
+                        <td class="Leave-5">@Model.LeaveTypeBalance.SickLeave_OB</td>
+                        <td class="Leave-2">@Model.LeaveTypeBalance.WeddingLeave_OB</td>
+                        <td class="Leave-3">@Model.LeaveTypeBalance.CompensatoryOff_OB</td>
+                        <td class="Leave-4">@Model.LeaveTypeBalance.BereavementLeave_OB</td>
+                        @if (CurrentUser.Gender.Equals("M"))
+                        {
+                            <td class="Leave-5">@Model.LeaveTypeBalance.PaternityLeave_OB</td>
+                        }
+                        @if (CurrentUser.Gender.Equals("F"))
+                        {
+                            <td class="Leave-5">@Model.LeaveTypeBalance.MaternityLeave_OB</td>
+                        }
+                    </tr>
+                   @* <tr>
+                        <td class="Leave-1">Current Month Approved Leave</td>
+                        <td class="Leave-2">@Model.ApprovedLeaveBalance.CasualLeave</td>
+                        <td class="Leave-3">@Model.ApprovedLeaveBalance.EarnedLeave</td>
+                        <td class="Leave-4">@Model.ApprovedLeaveBalance.LossPayLeave</td>
+                        <td class="Leave-5">@Model.ApprovedLeaveBalance.SickLeave</td>
+                        <td class="Leave-2">@Model.ApprovedLeaveBalance.WeddingLeave</td>
+                        <td class="Leave-3">@Model.ApprovedLeaveBalance.CompensatoryOff</td>
+                        <td class="Leave-4">@Model.ApprovedLeaveBalance.BereavementLeave</td>
+                        @if (CurrentUser.Gender.Equals("M"))
+                        {
+                            <td class="Leave-5">@Model.ApprovedLeaveBalance.PaternityLeave</td>
+                        }
+                        @if (CurrentUser.Gender.Equals("F"))
+                        {
+                            <td class="Leave-5">@Model.ApprovedLeaveBalance.MaternityLeave</td>
+                        }
+                    </tr>*@
+                    <tr>
+                       @* <td class="Leave-1">Current Leave Balance</td>
+                        <td class="Leave-2">@Model.LeaveTypeBalance.CasualLeave_CB</td>
+                        <td class="Leave-3">@Model.LeaveTypeBalance.EarnedLeave_CB</td>
+                        <td class="Leave-5">@Model.LeaveTypeBalance.SickLeave_CB</td>
+                        <td class="Leave-2">@Model.LeaveTypeBalance.WeddingLeave_CB</td>
+                        <td class="Leave-3">@Model.LeaveTypeBalance.CompensatoryOff_CB</td>
+                        <td class="Leave-4">@Model.LeaveTypeBalance.BereavementLeave_CB</td>
+                        @if (CurrentUser.Gender.Equals("M"))
+                        {
+                            <td class="Leave-5">@Model.LeaveTypeBalance.PaternityLeave_CB</td>
+                        }
+                        @if (CurrentUser.Gender.Equals("F"))
+                        {
+                            <td class="Leave-5">@Model.LeaveTypeBalance.MaternityLeave_CB</td>
+                        }*@
+
+                        <td class="Leave-1">Current Leave Balance</td>
+                        <td class="Leave-2">@Model.CurrentLeaveBalance.CasualLeave</td>
+                        <td class="Leave-3">@Model.CurrentLeaveBalance.EarnedLeave</td>
+                        @*<td class="Leave-4">@Model.CurrentLeaveBalance.LossPayLeave</td>*@
+                        <td class="Leave-5">@Model.CurrentLeaveBalance.SickLeave</td>
+                        <td class="Leave-2">@Model.CurrentLeaveBalance.WeddingLeave</td>
+                        <td class="Leave-3">@Model.CurrentLeaveBalance.CompensatoryOff</td>
+                        <td class="Leave-4">@Model.CurrentLeaveBalance.BereavementLeave</td>
+                        @if (CurrentUser.Gender.Equals("M"))
+                        {
+                            <td class="Leave-5">@Model.CurrentLeaveBalance.PaternityLeave</td>
+                        }
+                        @if (CurrentUser.Gender.Equals("F"))
+                        {
+                            <td class="Leave-5">@Model.CurrentLeaveBalance.MaternityLeave</td>
+                        }
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

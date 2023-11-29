@@ -1,0 +1,125 @@
+﻿@model ProjectsUpdateDto
+@using EMS.Web.Models.Others
+@using (Html.BeginForm("Index", "ProjectInfo", FormMethod.Post, new { @id = "frm-update-projects-info" }))
+{
+    <div class="main_content">
+        <div class="full-wdth padding20">
+            @await Html.PartialAsync("_Notification")
+            <div id="validation-summary"></div>
+            <div class="form-group clearfix">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Different CRM Project List</h2>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <button type="submit" id="lnkSubmit" class="btn btn-custom">Update Projects From CRM</button>
+                        <a href="@Url.Action("Index", "Project")" id="lnkback" class="btn btn-custom">Back</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row pull-right" id="recordDiv" style="padding-right:17px;padding-bottom:2px">
+                @($"{Model.ProjectsListInfo.Count} Record(s) Found")
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.HiddenFor(x => x.PmUid)
+                    @Html.HiddenFor(x => x.PmUidEncrypted)
+                    <table id="tblAddUpdateProject" class="table table-stats">
+                        <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    Title
+                                </th>
+                                <th>
+                                    Model Name
+                                </th>
+                                <th>
+                                    Actual Developers
+                                </th>
+                                <th>
+                                    EMS Running Developers
+                                </th>
+                                <th>
+                                    CRM Id
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                                <th>
+                                    <input type="checkbox" id="chkAction" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (Model.ProjectsListInfo != null || Model.ProjectsListInfo.Any())
+                                {
+                                    int counter = 1;
+                                    for (var i = 0; i < Model.ProjectsListInfo.Count; i++)
+                                    {
+                                        <tr class="@(Model.ProjectsListInfo[i].IsRunDev ? "bgcolor" : "")" style="height:30px">
+                                            <td>@(counter++)</td>
+                                            <td>@Model.ProjectsListInfo[i].Project_Name</td>
+                                            <td>@Model.ProjectsListInfo[i].ModelName</td>
+                                            <td>@Model.ProjectsListInfo[i].Developer</td>
+                                            <td>@Model.ProjectsListInfo[i].WorkingDevelopers</td>
+                                            <td>@(Model.ProjectsListInfo[i].IsRemovedOtherPm == true ? Model.ProjectsListInfo[i].EmsCRMPId : Model.ProjectsListInfo[i].Project_Id)</td>
+                                            <td>
+                                                @(EMS.Core.Common.GetProjectDisplayStatus(Model.ProjectsListInfo[i].Project_Status))
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Project_Name)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].ModelName)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Developer)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].WorkingDevelopers)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Project_Id)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Bill_Team)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Estimate_Time)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Start_Date)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Primary_Technology)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Actual_DevId)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Virtual_DevId)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Client_Name)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Pdev_Detail)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Pm_Email)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].CommandName)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].Project_Status)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].other_contact)
+                                                @Html.HiddenFor(m => Model.ProjectsListInfo[i].IsRemovedOtherPm)
+                                            </td>
+                                            @if (Model.ProjectsListInfo[i].IsRemovedOtherPm)
+                                            {
+                                            <td> Delete</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@(Convert.ToString(Model.ProjectsListInfo[i].IsNew) == "True" ? "Add" : "Update")</td>
+                                            }
+                                            <td>
+                                                @Html.CheckBoxFor(x => x.ProjectsListInfo[i].RecordCheckbox, new { @class = "itemCheckbox" })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        No Records Found
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script src="~/bundles/ProjectInfo/index"></script>
+}

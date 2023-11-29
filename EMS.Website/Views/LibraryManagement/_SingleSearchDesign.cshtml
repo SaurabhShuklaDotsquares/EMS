@@ -1,0 +1,436 @@
+﻿@model LibraryManagementDto
+@{
+    bool isAnchorTabToShow = false;
+}
+<div id="myModal" class="modal" role="dialog">
+    <div class="modal-dialog" style="width:auto;max-width: 90%;min-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 40px;">
+                <button type="button" class="close" data-dismiss="modal"><img src="/images/close-black.png"></button>
+            </div>
+            <div class="modal-body" style="overflow:auto;text-align: center;">
+                <img src="" id="bannerPreviewImage" alt="No Image" />
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@if (Model.libraries != null && Model.libraries.Count > 0)
+{
+    @foreach (var library in Model.libraries)
+    {
+        string bannerImage = "images/no-image.jpg";
+        isAnchorTabToShow = library.LibraryTypeId == (byte)Enums.LibraryType.Website ||
+            library.LibraryTypeId == (byte)Enums.LibraryType.MobileApp;
+        if (library.BannerImage != null && System.IO.File.Exists(System.IO.Path.Combine(ContextProvider.HostEnvironment.WebRootPath + "/", library.BannerImage)))
+        {
+            bannerImage = library.BannerImage;
+        }
+        if (library.LibraryTypeId == (byte)Enums.LibraryType.Select)
+        {
+            foreach (var file in library.LibraryFileDtos.Where(x => x.LibraryLayoutTypeId.HasValue))
+            {
+                if (file.LibraryLayoutTypeId != null)
+                {
+                    if (Model.LibraryFileIds != null && Model.LibraryFileIds.Count > 0 && Model.LibraryFileIds.Contains(Convert.ToInt32(file.LibraryLayoutTypeId)))
+                    {
+                        //start hide image section for component and document
+                        @*<div class="SearchFile lib-col search-library-col banner-col hideimage-banner">*@
+                        <div class="SearchFile lib-col search-library-col banner-col @(library.LibraryTypeId==(byte)Enums.LibraryType.Component
+                    || library.LibraryTypeId==(byte)Enums.LibraryType.Document?"hideimage-banner":"")">
+                            @*end hide image section for component and document*@
+                            <div class="bannerImg @(library.IsFeatured ?? false?"ribbon-panel":"")">
+                                <div class="text-center img-dblock">
+                                    @if (bannerImage == "images/no-image.jpg")
+                                    {
+                                        <img src="@file.FilePath" alt="No Image" class="bannerImage @(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />
+                                    }
+                                    else
+                                    {
+                                        <a id="btnBannerPreview" class="btnBannerPreview" href="javascript:void(0);" data-toggle="modal">
+                                            <img src="@file.FilePath" alt="No Image" class="bannerImage @(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />
+                                        </a>
+                                    }
+                                    @*<img src="@file.FilePath" alt="No Image" class="@(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />*@
+                                </div>
+                                @if (library.IsFeatured ?? false)
+                                {
+                                    <div class='ribbon'><span>Featured</span></div>
+                                }
+                            </div>
+                            <div class="cont-lib">
+                                @*<h4>@library.Title - @file.LibraryLayoutType.Name</h4>*@
+                                @if (isAnchorTabToShow)
+                                {
+                                    <h4><a target="_blank" href="@library.LiveURL">@library.Title - @file.LibraryLayoutType.Name</a></h4>
+                                }
+                                else
+                                {
+                                    <h4>@library.Title - @file.LibraryLayoutType.Name</h4>
+                                }
+                                <p class="library-description">
+                                    @{
+                                        string item = string.Empty;
+                                        if (library.Description != null)
+                                        {
+                                            item = (library.Description.Length <= 72 ? library.Description : library.Description.Substring(0, 72) + "...");
+                                        }
+                                    }
+                                    @item
+                                </p>
+                            </div>
+                            <div class=" bannerbottom-row">
+                                <div class="created-date">
+                                    <b>Created Date:</b>
+                                    <div class="show-date"><img src="~/Content/images/cald-icon.png" alt="" /> @library.CreatedDate.Substring(0, 8), <img src="~/Content/images/clock-icon.png" alt="" /> @library.CreatedDate.Substring(9)</div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(library.Version))
+                                {
+                                    <div class="ver-block"><b>Version:</b>  @library.Version</div>
+                                }
+
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(library.LibraryTechnologiesComma))
+                            {
+                                <div class=" bannerbottom-row">
+                                    <div class="ver-block"><b>Technology:</b>  @library.LibraryTechnologiesComma</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(library.LibraryIndustriesComma))
+                            {
+                                <div class="bannerbottom-row">
+                                    <div class="ver-block"><b>Industry:</b>  @library.LibraryIndustriesComma</div>
+                                </div>
+                            }
+                            @if (library.LibraryTypeId == (byte)Enums.LibraryType.Component && library.IntegrationHours.HasValue)
+                            {
+                                <div class=" bannerbottom-row">
+                                    <div class="ver-block"><b>Integration Time (In Hrs):</b>  @library.IntegrationHours</div>
+                                </div>
+                            }
+
+
+                            @if (library.LibraryFileTypes != null && library.LibraryFileTypes.Count > 0)
+                            {
+                                <div class=" bannerbottom-row">
+                                    <p>
+                                        @foreach (string filetype in library.LibraryFileTypes)
+                                        {
+                                            <a href="javascript:void(0)" class="lib-link"><img src="~/images/FileTypes/@filetype" alt=""></a>
+                                        }
+                                    </p>
+                                </div>
+                            }
+
+
+
+
+                            @if (library.LibraryTypeId == (byte)Enums.LibraryType.Website || library.LibraryTypeId == (byte)Enums.LibraryType.MobileApp)
+                            {
+                                <div class="cont-lib-btm d-flex flex-wrap">
+                                    <a href="javascript:void(0)" class="copy-link CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                                    <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details" data-backdrop="static" data-toggle="modal" href='@Url.Action("Details", "LibraryManagement", new { KeyId = @library.KeyId })'>Details</a>
+                                </div>
+                            }
+                            else if (library.LibraryTypeId == (byte)Enums.LibraryType.Design)
+                            {
+                                <div class="cont-lib-btm d-flex flex-wrap">
+                                    <a href="javascript:void(0)" class="btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                                    <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details" data-backdrop="static" data-toggle="modal" href='@Url.Action("Details", "LibraryManagement", new { KeyId = @library.KeyId, LibraryFileId = file.Id })'>Details</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="cont-lib-btm d-flex flex-wrap">
+                                    <a href="javascript:void(0)" class="btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                                    <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details-ComponentDocu" data-backdrop="static" data-toggle="modal" href='@Url.Action("ComponentDocumentDetails", "LibraryManagement", new { KeyId = @library.KeyId })'>Details</a>
+                                    
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else if (Model.LibraryFileIds == null || Model.LibraryFileIds.Count == 0)
+                    {
+                        //start hide image section for component and document
+                        @*<div class="SearchFile lib-col search-library-col banner-col hideimage-banner">*@
+                        <div class="SearchFile lib-col search-library-col banner-col @(library.LibraryTypeId==(byte)Enums.LibraryType.Component
+                    || library.LibraryTypeId==(byte)Enums.LibraryType.Document?"hideimage-banner":"")">
+                            @*end hide image section for component and document*@
+                            <div class="bannerImg @(library.IsFeatured ?? false?"ribbon-panel":"")">
+                                <div class="text-center img-dblock">
+                                    @if (bannerImage == "images/no-image.jpg")
+                                    {
+                                        <img src="@file.FilePath" alt="No Image" class="bannerImage @(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />
+                                    }
+                                    else
+                                    {
+                                        <a id="btnBannerPreview" class="btnBannerPreview" href="javascript:void(0);" data-toggle="modal" data-target="#myModal">
+
+                                            <img src="@file.FilePath" alt="No Image" class="bannerImage @(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />
+                                        </a>
+                                    }
+                                    @*<img src="@file.FilePath" alt="No Image" class="@(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />*@
+                                </div>
+                                @if (library.IsFeatured ?? false)
+                                {
+                                    <div class='ribbon'><span>Featured</span></div>
+                                }
+                            </div>
+                            <div class="cont-lib">
+                                @*<h4>@library.Title - @file.LibraryLayoutType.Name</h4>*@
+                                @if (isAnchorTabToShow)
+                                {
+                                    <h4><a target="_blank" href="@library.LiveURL">@library.Title - @file.LibraryLayoutType.Name</a></h4>
+                                }
+                                else
+                                {
+                                    <h4>@library.Title - @file.LibraryLayoutType.Name</h4>
+                                }
+                                <p class="library-description">
+                                    @{
+                                        string item = string.Empty;
+                                        if (library.Description != null)
+                                        {
+                                            item = (library.Description.Length <= 72 ? library.Description : library.Description.Substring(0, 72) + "...");
+                                        }
+                                    }
+                                    @item
+                                </p>
+                            </div>
+                            <div class=" bannerbottom-row">
+                                <div class="created-date">
+                                    <b>Created Date:</b>
+                                    <div class="show-date"><img src="~/Content/images/cald-icon.png" alt="" /> @library.CreatedDate.Substring(0, 8), <img src="~/Content/images/clock-icon.png" alt="" /> @library.CreatedDate.Substring(9)</div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(library.Version))
+                                {
+                                    <div class="ver-block"><b>Version:</b>  @library.Version</div>
+                                }
+
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(library.LibraryTechnologiesComma))
+                            {
+                                <div class=" bannerbottom-row">
+                                    <div class="ver-block"><b>Technology:</b>  @library.LibraryTechnologiesComma</div>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(library.LibraryIndustriesComma))
+                            {
+                                <div class="bannerbottom-row">
+                                    <div class="ver-block"><b>Industry:</b>  @library.LibraryIndustriesComma</div>
+                                </div>
+                            }
+                            @if (library.LibraryTypeId == (byte)Enums.LibraryType.Component && library.IntegrationHours.HasValue)
+                            {
+                                <div class=" bannerbottom-row">
+                                    <div class="ver-block"><b>Integration Time (In Hrs):</b>  @library.IntegrationHours</div>
+                                </div>
+                            }
+
+
+                            @if (library.LibraryFileTypes != null && library.LibraryFileTypes.Count > 0)
+                            {
+                                <div class=" bannerbottom-row">
+                                    <p>
+                                        @foreach (string filetype in library.LibraryFileTypes)
+                                        {
+                                            <a href="javascript:void(0)" class="lib-link"><img src="~/images/FileTypes/@filetype" alt=""></a>
+                                        }
+                                    </p>
+                                </div>
+                            }
+
+
+                            @if (library.LibraryTypeId == (byte)Enums.LibraryType.Website ||
+                                                          library.LibraryTypeId == (byte)Enums.LibraryType.MobileApp)
+                            {
+                                <div class="cont-lib-btm d-flex flex-wrap">
+                                    <a href="javascript:void(0)" class="btn btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                                    <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details" data-backdrop="static" data-toggle="modal" href='@Url.Action("Details", "LibraryManagement", new { KeyId = @library.KeyId })'>Details</a>
+                                </div>
+                            }
+                            else if (library.LibraryTypeId == (byte)Enums.LibraryType.Design)
+                            {
+                                <div class="cont-lib-btm d-flex flex-wrap">
+                                    <a href="javascript:void(0)" class="btn btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                                    <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details" data-backdrop="static" data-toggle="modal" href='@Url.Action("Details", "LibraryManagement", new { KeyId = @library.KeyId, LibraryFileId = file.Id })'>Details</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="cont-lib-btm d-flex flex-wrap">
+                                    <a href="javascript:void(0)" class="btn btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                                    <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details-ComponentDocu" data-backdrop="static" data-toggle="modal" href='@Url.Action("ComponentDocumentDetails", "LibraryManagement", new { KeyId = @library.KeyId })'>Details</a>
+                                    
+                                </div>
+                            }
+
+                        </div>
+                    }
+                }
+            }
+        }
+        else
+        {
+            //start hide image section for component and document
+            @*<div class="SearchFile lib-col search-library-col banner-col hideimage-banner">*@
+            <div class="SearchFile lib-col search-library-col banner-col @(library.LibraryTypeId==(byte)Enums.LibraryType.Component
+                    || library.LibraryTypeId==(byte)Enums.LibraryType.Document?"hideimage-banner":"")">
+                @*end hide image section for component and document*@
+                @if (library.LibraryTypeId == (byte)Enums.LibraryType.Website ||
+          library.LibraryTypeId == (byte)Enums.LibraryType.Design ||
+          library.LibraryTypeId == (byte)Enums.LibraryType.MobileApp)
+                {
+                    <div class="bannerImg @(library.IsFeatured ?? false?"ribbon-panel":"")">
+
+
+                        <div class="text-center img-dblock">
+                            @if (bannerImage == "images/no-image.jpg")
+                            {
+                                <img src="@bannerImage" alt="No Image" class="bannerImage @(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />
+                            }
+                            else
+                            {
+                                <a id="btnBannerPreview" class="btnBannerPreview" href="javascript:void(0);" data-toggle="modal" data-target="#myModal">
+
+                                    <img src="@bannerImage" alt="No Image" class="bannerImage @(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />
+                                </a>
+                            }
+                            @*<img src="@bannerImage" alt="No Image" class="@(bannerImage == "images/no-image.jpg" ? "no-image" : "banner-image")" />*@
+                        </div>
+                        @if (library.IsFeatured ?? false)
+                        {
+                            <div class='ribbon'><span>Featured</span></div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="bannerImg @(library.IsFeatured ?? false?"ribbon-panel":"")">
+                        @*<div class="text-center img-dblock">
+                            </div>*@
+                        @if (library.IsFeatured ?? false)
+                        {
+                            <div class='ribbon'><span>Featured</span></div>
+                        }
+                    </div>
+                }
+                <div class="cont-lib">
+                    @*<h4>@library.Title</h4>*@
+                    @if (isAnchorTabToShow)
+                    {
+                        <h4><a target="_blank" href="@library.LiveURL">@library.Title</a></h4>
+                    }
+                    else
+                    {
+                        <h4>@library.Title</h4>
+                    }
+                    <p class="library-description">
+                        @{
+                            string item = string.Empty;
+                            if (library.Description != null)
+                            {
+                                item = (library.Description.Length <= 72 ? library.Description : library.Description.Substring(0, 72) + "...");
+                            }
+                        }
+                        @item
+                    </p>
+                </div>
+                <div class="bannerbottom-row">
+                    <div class="created-date">
+                        <b>Created Date:</b>
+                        <div class="show-date"><img src="~/Content/images/cald-icon.png" alt="" /> @library.CreatedDate.Substring(0, 8), <img src="~/Content/images/clock-icon.png" alt="" /> @library.CreatedDate.Substring(9)</div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(library.Version))
+                    {
+                        <div class="ver-block"><b>Version:</b>  @library.Version</div>
+                    }
+
+                </div>
+
+                @if (!string.IsNullOrEmpty(library.LibraryTechnologiesComma))
+                {
+                    <div class="bannerbottom-row">
+                        <div class="ver-block"><b>Technology:</b>  @library.LibraryTechnologiesComma</div>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(library.LibraryIndustriesComma))
+                {
+                    <div class="bannerbottom-row">
+                        <div class="ver-block"><b>Industry:</b>  @library.LibraryIndustriesComma</div>
+                    </div>
+                }
+                @if (library.LibraryTypeId == (byte)Enums.LibraryType.Component && library.IntegrationHours.HasValue)
+                {
+                    <div class=" bannerbottom-row">
+                        <div class="ver-block"><b>Integration Time (In Hrs):</b>  @library.IntegrationHours</div>
+                    </div>
+                }
+
+                @*@if (library.LibraryFileTypes != null && library.LibraryFileTypes.Count > 0)
+                    {
+                        <div class=" bannerbottom-row">
+                            <p>
+                                @foreach (string filetype in library.LibraryFileTypes)
+                                {
+                                    <a href="javascript:void(0)" class="lib-link"><img src="~/images/FileTypes/@filetype" alt=""></a>
+                                }
+                            </p>
+                        </div>
+                    }*@
+
+                @if (library.LibraryTypeId == (byte)Enums.LibraryType.Website || library.LibraryTypeId == (byte)Enums.LibraryType.Design || library.LibraryTypeId == (byte)Enums.LibraryType.MobileApp)
+                {<div class="cont-lib-btm d-flex flex-wrap">
+                        <a href="javascript:void(0)" class="btn btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                        <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details" data-backdrop="static" data-toggle="modal" href='@Url.Action("Details", "LibraryManagement", new { KeyId = @library.KeyId })'>Details</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="cont-lib-btm d-flex flex-wrap">
+                        <a href="javascript:void(0)" class="btn btn-custom btn-sm btn-black CopyLinkIndividual" data-key-id="@library.KeyId">Copy Link</a>
+                        <a class="btn btn-custom btn-sm" data-key-id="@library.KeyId" data-target="#modal-Library-Details-ComponentDocu" data-backdrop="static" data-toggle="modal" href='@Url.Action("ComponentDocumentDetails", "LibraryManagement", new { KeyId = @library.KeyId })'>Details</a>
+                        
+                    </div>
+                }
+            </div>
+        }
+    }
+}
+
+
+<script>
+    $(document).ready(function () {
+        $('.switchBox').off('change').on('change', function () {
+            //var switchElement = this;
+            let changeStatus = confirm("Would you like to update feature status?")
+            if (changeStatus) {
+                $.get(domain + 'LibraryManagement/UpdateFeatureStatus', {
+                    id: this.value
+                });
+            }
+            else {
+                let currenttStatus = $(this).prop("checked");
+                $(this).prop("checked", !currenttStatus);
+            }
+
+        });
+
+        $('.btnBannerPreview').on('click', function () {
+            $('#myModal').fadeIn(1000);
+            var imgPath = $(this).find('.bannerImage').attr("src");
+            $('#bannerPreviewImage').attr("src", imgPath);
+        });
+        $('.close').on('click', function () {
+            $('#myModal').fadeOut(1000);
+        });
+    });
+</script>

@@ -1,0 +1,135 @@
+﻿@using System.Web.Mvc
+@using EMS.Web.Models.Others
+@model ProjectAdditionalSupportDto
+
+@using (Html.BeginForm("RequestAdditionalSupport", "Project", FormMethod.Post, new { @id = "additionalSupportForm" }))
+{
+    //await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = string.Format("{0} Additional Support", Model.Id == 0 ? "Request" : "Process") });
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = string.Format("{0} Additional Support", Model.Id == 0 ? "Request" : "Process") })
+    <div class="modal-body">
+        <div id="NotificationMessage"></div>
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+        @Html.HiddenFor(model => model.TLid)
+        @if (Model.Id == 0)
+        {
+            @Html.HiddenFor(model => model.Status)
+        }
+
+        <div class="row form-group">
+
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ProjectId)
+            </div>
+            <div class="col-md-4">
+                @if (Model.Id == 0)
+                {
+                    @Html.DropDownListFor(model => model.ProjectId, Model.ProjectList, "Select Project", htmlAttributes: new { @class = "form-control" })
+                }
+                else
+                {
+                    @Model.ProjectName
+                    @Html.HiddenFor(model => model.ProjectId)
+                }
+            </div>
+            <div class="col-md-2">
+                <label>Project Manager</label>
+            </div>
+
+            <div class="col-md-4">
+                @*@Html.DropDownListFor(model => model.UserIdByPM, Model.UserListByPM, "---- Select Project Manager ----", htmlAttributes: new { @class = "form-control"})*@
+                <select asp-for="UserIdByPM" asp-items="Model.UserListByPM" class="form-control">
+                    <option value="0">-- Select Project Manager --</option>
+                </select>
+            </div>
+          
+
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Reason for Add. Support</label>
+            </div>
+            <div class="col-md-10">
+                @if (Model.Id == 0 || !Model.IsPMUser)
+                {
+                    @Html.TextAreaFor(model => model.AddDescription, htmlAttributes: new { @class = "form-control", @data_msg_required = "Reason for Add. Support is required", @data_rule_required = "true" })
+
+                }
+                else if (Model.IsPMUser && Model.Status == (byte)Enums.AddSupportRequestStatus.Partial)
+                {
+                    @Html.TextAreaFor(model => model.AddDescription, htmlAttributes: new { @class = "form-control", @data_msg_required = "Reason for Add. Support is required", @data_rule_required = "true" })
+                }
+                else
+                {
+                    @Model.AddDescription
+                    @Html.HiddenFor(model => model.AddDescription)
+                }
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <label>Start Date for Add. Support</label>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.StartDate, htmlAttributes: new { @class = "form-control datepicker", @readonly = "readonly" })
+            </div>
+            <div class="col-md-2">
+                <label>End Date for Add. Support</label>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.EndDate, htmlAttributes: new { @class = "form-control datepicker", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.AssignedUserIds)
+            </div>
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.AssignedUserIds, Model.UserList, htmlAttributes: new { @style = "border: 1px solid #ddd;" })
+            </div>
+        </div>
+
+        @if (Model.Id > 0 && Model.IsPMUser)
+        {
+        <div class="row form-group">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Status)
+            </div>
+            @if (Model.Status == (byte)Enums.AddSupportRequestStatus.Approved)
+            {
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.Status,  Model.StatusList,
+                            htmlAttributes: new { @class = "form-control", @data_msg_required = "Approval status required", @data_rule_required = "true", @disabled = "disabled" })
+                </div>
+            }
+            else
+            {
+                @if (Model.Status == (byte)Enums.AddSupportRequestStatus.Pending || Model.Status == (byte)Enums.AddSupportRequestStatus.Partial)
+                {
+                    var status = (byte)Enums.AddSupportRequestStatus.Approved;
+                    Model.Status = status;
+                }
+                
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.Status,  Model.StatusList,
+                            htmlAttributes: new { @class = "form-control", @data_msg_required = "Approval status required", @data_rule_required = "true" })
+                </div>
+            }
+        </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ApprovalComment)
+                </div>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.ApprovalComment,
+                            htmlAttributes: new { @class = "form-control", @data_msg_required = "Approver comments required", @data_rule_required = "true" })
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.Status)
+        }
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}

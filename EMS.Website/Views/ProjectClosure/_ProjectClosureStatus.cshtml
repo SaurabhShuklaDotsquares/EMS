@@ -1,0 +1,53 @@
+﻿@using EMS.Web.Models.Others
+@model ProjectClosureStatusDto
+@using (Html.BeginForm("updateprojectstatus", "projectclosure", FormMethod.Post, new { @id = "closure-status-form" }))
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = "Project Closure Status" });
+    <div class="modal-body">
+        @Html.HiddenFor(m => m.ProjectClosureId)
+        @Html.HiddenFor(m => m.FromReviewPage)
+        <div id="validation-summary"></div>
+        <div class="form-group clearfix">
+            <div class="row">
+                @Html.LabelFor(model => model.ProjectName, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.ProjectName)
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <div class="row">
+                @Html.LabelFor(model => model.CurrentStatus, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.CurrentStatus)
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <div class="row">
+                @Html.LabelFor(model => model.ChangeStatusId, new { @class = "col-md-3 control-label" })
+                <div class="col-md-5">
+                    @Html.DropDownListFor(model => model.ChangeStatusId, Model.ChangeStatus, new { @class = "form-control " })
+                </div>
+            </div>
+        </div>
+        <div class="form-group clearfix" id="DeadResponseDateRow">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label" for="IsPermanentDead">Dead Response Till</label>
+                </div>
+                <div class="col-md-5" id="DeadResponseDateCol">
+                    @Html.TextBoxFor(model => model.DeadResponseDate, "{0:dd/MM/yyyy}", htmlAttributes: new { @class = "form-control", @id = "DeadResponseDate", @autocomplete = "off", placeholder = "Dead Response Date", style = "display: ;" })
+
+                    @Html.CheckBoxFor(model => model.IsPermanentDead)&nbsp;<span for="IsPermanentDead">Permanent Dead</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group required clearfix">
+            @Html.LabelFor(model => model.Reason, new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.Reason, 5, 10, new { @class = "form-control ", @maxlength = 500 })
+        </div>
+    </div>
+    Html.RenderPartial("_ModalFooter", new ModalFooter());
+}
+<script src="~/Scripts/CustomJS/ProjectClosure/projectClosure-status.js"></script>  

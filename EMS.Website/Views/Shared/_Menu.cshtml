@@ -1,0 +1,56 @@
+﻿@model List<FrontMenuItemDto>
+@using EMS.Core
+@using EMS.Dto
+<ul class="clearfix">
+    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+    @foreach (var item in Model.Where(x => x.ParentId == 0))
+    {
+        if (Model.Any(x => x.ParentId == item.MenuId))
+        {
+            <li id="menuItemParent">
+                <a href='javascript:void(0)'>
+                    @item.MenuDisplayName
+                    @if (Model.Any(x => x.ParentId == item.MenuId && x.NotificationCount > 0))
+                    {
+                        <div class="bounce-spinner">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                        </div>
+                    }
+                </a>
+                <ul style="width:max-content">
+                    
+                        @foreach (var childItem in Model.Where(x => x.ParentId == item.MenuId)) // to exclude PF account menu for other PMs except Accounts Department PM
+                        {
+                            <li>
+                                <a href='@childItem.PageName'>
+                                    @childItem.MenuDisplayName
+
+                                    @if (childItem.NotificationCount > 0)
+                                    {
+                                        <label style="margin-bottom:0px;font-size:9px;" class="badge badge-danger">@childItem.NotificationCount</label>
+                                    }
+                                </a>
+                            </li>
+                        }
+                </ul>
+            </li>
+        }
+    }
+    @if (SiteKey.AshishTeamPMUId == CurrentUser.Uid)
+    {
+        <li><a href="@Url.Action("Index", "documentlibrary")">Document Library</a></li>
+    }
+    @if (CurrentUser.RoleId != (int)Enums.UserRoles.PM &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.PMO &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.HRBP &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.Director &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.UKBDM &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.UKPM &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.AUPM &&
+             CurrentUser.RoleId != (int)Enums.UserRoles.PMOAU)
+        {
+            <li class="pull-right margin-right10"><a class="cta-button ainline" id="btnprojectStatus" data-toggle="modal" data-target="#modal-projectStatus"
+                href="@Url.Action("ProjectList","User")">Project Status</a></li>
+        }
+</ul>

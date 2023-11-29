@@ -1,0 +1,124 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@using EMS.Data.Model;
+@using static EMS.Core.Encryption;
+
+@{
+    var AssesmentYearData = (List<TdsassesmentYear>)ViewBag.AssesmentYearId;
+    var isAcUser = ViewBag.isAcUser;
+    var keybytes = GetRiJndael_KeyBytes(SiteKey.Encryption_Key);
+    var userid = Convert.ToBase64String(EncryptStringToBytes(CurrentUser.Uid.ToString(), keybytes, keybytes));
+    ViewBag.Title = "Investment Index";
+}
+
+@section styles{
+    <link href="~/css/bootstrap-switch.css" rel="stylesheet" />
+    <link href="~/css/alertify.min.css" rel="stylesheet" />
+}
+
+<style>
+    label {
+        font-weight: bold;
+    }
+
+    .margin-top-23{
+        margin-top:23px;
+    }
+</style>
+
+<script>
+        var currentYearRangeId = '@ViewBag.currentYearRangeId'
+</script>
+<div class="main_content">
+    @Html.Hidden("hdnAcUser", (object)ViewBag.isAcUser)
+    <div class="full-wdth padding20">
+        @{Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row margin-bottom20">
+            <div class="col-lg-12">
+                <h2>Share Investment List</h2>
+            </div>
+        </div>
+        @if (ViewBag.isAcUser)
+        {
+            <div class="col-lg-12">
+                <div class="col-md-2 col-sm-6 form-group">
+                    <label>AssesmentYear</label>
+                    @Html.DropDownList("AssesmentYearId", AssesmentYearData.Select(x => new SelectListItem { Text = x.YearRange, Value = x.AssesmentYearId.ToString(), Selected = x.IsActive }).ToList() as List<SelectListItem>, "Select  AssesmentYear", new { @class = "form-control" })
+                </div>
+                <div class="col-md-3 col-sm-6 form-group">
+                    <label>Name / Email / Pan Number</label>
+                    @Html.TextBox("UserInfo", "", new { @class = "form-control", @placeholder = "Name / Email / Pan Number....." })
+                </div>
+                <div class="col-md-2 col-sm-6 form-group">
+                    <label>Attendence Code</label>
+                    @Html.TextBox("Attendencecode", "", new { @class = "form-control", @placeholder = "Attendence Code....." })
+                </div>
+                <div class="col-md-2 col-sm-6 form-group">
+                    <label>Lock/Unlock</label>
+                    @Html.DropDownList("LockUnlockType", (List<SelectListItem>)ViewBag.LockUnlockTypeList, "Select Lock/Unlock", new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 col-sm-6 form-group">
+                    <label>Modified Employer</label>
+                    @Html.DropDownList("ModifiedEmployeeId", (List<SelectListItem>)ViewBag.LastModifiedEmployeeList, "Select Employer", new { @class = "form-control" })
+                </div>
+
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-3 col-sm-6 form-group">
+                    <label>Modified Start Date</label>
+                    <label>(By Employee / Employer)</label>
+                    <input type="text" id="StartDate" name="StartDate" class="form-control" placeholder="Start Date" />
+                </div>
+                <div class="col-md-3 col-sm-6 form-group">
+                    <label>Modified End Date</label>
+                    <label>(By Employee / Employer)</label>
+                    <input type="text" id="EndDate" name="EndDate" class="form-control" placeholder="End Date" />
+                </div>
+                <div class="col-md-2 col-sm-6 form-group margin-top-23">
+                    <label>HRA/LOAN</label>
+                    @Html.DropDownList("TdsTypeId", (List<SelectListItem>)ViewBag.TdsTypeList, "Select HRA/LOAN", new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-6 form-group margin-top-23">
+                    <button type="button" id="btnSearch" class="btn btn-custom" style="padding:7px 8px; margin-top:24px;">Search</button>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-6 form-group float-right margin-top-23">
+                    <a href="javascript:void(0)" id="btnexporttoexcel"  class="btn btn-custom" style="padding: 7px 8px; margin-top: 24px;">
+                        <img src="content/images/excel.png" alt="" style="width:15%;">
+                        Export to Excel
+                    </a>
+                </div>
+            </div>
+
+        }
+
+        <div class="col-md-12">
+            <div class="col-md-4 float-right">
+                @if (ViewBag.isCreatedTDS)
+                {
+                    <a id="btnAdd" href="~/empInvestment/InvestmentDetails?UID=@userid" class="btn btn-custom float-right margin-bottom20" style="padding:7px 8px">Add your investment details </a>
+
+                }
+            </div>
+        </div>
+
+        <table id="grid-tds-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-appraise", AreaLabeledId = "lbl-delete-appraise", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-edit-appraise", AreaLabeledId = "modal-add-edit-appraise-label", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+    <script>
+        var isAcUserAuth = '@(ViewBag.isAcUser)';
+     </script>
+    <script src="~/scripts/jquery-ui-timepicker.js"></script>
+    <script src="~/Scripts/bootstrap-switch.js"></script>
+    <script src="~/js/alertify.min.js"></script>
+    <script src="~/Scripts/CustomJS/TDS/Index.js"></script>
+     
+}
+

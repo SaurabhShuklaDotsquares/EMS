@@ -1,0 +1,137 @@
+﻿@model InvoiceDto
+@using EMS.Web.Models.Others
+
+@using (Html.BeginForm())
+{
+    Html.RenderPartial("_ModalHeader", new ModalHeader { Heading = @Model.Id == 0 ? "Add Invoice" : "Edit Invoice" });
+
+    <div class="modal-body">
+        <div id="MessageDiv"></div>
+        @Html.HiddenFor(model => model.Id)
+        <div class="row form-group clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Project Name:</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.ProjectId, Model.ProjectList, "--Select Project--", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Invoice Status :</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.InvoiceStatusId, Model.InvoiceStatus, "--Select Status--", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Client Country :</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.CountryId, Model.ClientCountry, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Invoice Number :</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.InvoiceNumber, null, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Invoice Start Date:</label>                        
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.StartDate, null, new { @class = "form-control", @placeholder = "dd/mm/yyyy", @autoComplete = "off", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Invoice End Date:</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.EndDate, null, new { @class = "form-control", @autoComplete = "off", @placeholder = "dd/mm/yyyy", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">BA Name :</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "--Select BA--", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">TL Name :</label>                       
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "--Select TL--", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group clearfix">
+            <div class="col-md-2">
+                <label class="control-label">Comment :</label>               
+            </div>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comment, 4, 10, new { @class = "form-control" })
+            </div>
+        </div>
+
+        @if (Model.Id == 0)
+        {
+            <div class="row form-group clearfix">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="control-label">Invoice Amount :</label>                           
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.DropDownListFor(model => model.CurrencyID, Model.CurrencyList, null, new { @class = "form-control", data_msg_required = "required", data_rule_required = "true" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(model => model.InvoiceAmount, null, new { @class = "form-control decimal-number", data_msg_required = "required", data_rule_required = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    Html.RenderPartial("_ModalFooter", new ModalFooter { });
+}

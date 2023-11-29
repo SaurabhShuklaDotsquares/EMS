@@ -1,0 +1,65 @@
+﻿<style>
+    .headerclass {
+        background-color: black;
+        color: white;
+        text-align: center;
+    }
+    .headerwidth
+    {
+        width:250px;
+    }
+</style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @*@await Html.PartialAsync("_Notification")*@
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>Attendance Report</h2>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        <input type="button" id="searchLogin" class="btn btn-custom btn-block" value="Search" />
+                    </div>
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        @Html.DropDownList("MonthYear", ViewBag.MonthYear as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+                    </div>
+                    <div class="col-md-2 col-sm-3 pull-right">
+                        @Html.DropDownList("userId", ViewBag.UserList as IEnumerable<SelectListItem>, "All Employee", new { @class = "form-control", @required = "required" })
+                    </div>
+                    <div class="wdth2 margin-right10 pull-right">
+                        @*<label class="pull-right margin-right10 margin-top10"><b>Status:</b></label>*@
+                        @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                        {
+                            @Html.DropDownList("ddl_pm", ViewBag.PMList as IEnumerable<SelectListItem>, new { @class = "form-control pull-right margin-right10", @style = "width: 200px;", @onchange = "FillEmployee()" })
+                            @*<label class="pull-right margin-right10 margin-top10"><b>Project Manager:</b></label>*@
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 pull-right">
+                <a id="btnDownload" class="btn btn-custom" style="background-color: #3f8c09;" onclick="ExportAttendanceReport()" target="_blank">
+                    <i class="fa fa-file-excel-o"></i> Export to Excel
+                </a>
+            </div>
+            <div class="col-md-2 pull-right">
+                <div class="input-group">
+                    @Html.TextBox("AttendanceDate", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Attendance Date", @style = "background-color: #fff;" })
+                    <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                        <i class="fa fa-close"></i>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+        <div id="divLoginReport" class="table-responsive" style="overflow-x:auto;margin-bottom:13px;"></div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts
+    {
+    <script src="~/Scripts/CustomJS/report/employeeloginreport.js"></script>
+}

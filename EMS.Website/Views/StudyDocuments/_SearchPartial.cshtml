@@ -1,0 +1,78 @@
+﻿@model StudyDocumentsSearchTextResultDto
+@{
+    Layout = null;
+    int recordsView = 0;
+}
+
+<style>
+    .detail-link {
+        cursor: pointer;
+    }
+</style>
+
+
+
+@if (Model.studyDocumentsSearchResultDtos.Any())
+{
+    if (ViewBag.IsLoadMore == false)
+    {
+        <input type="hidden" id="totalSearchedRecords" value="@Model.TotalRecords" />
+
+        <div class="sub-heading-lib d-flex flex-wrap align-items-center padding-top20 padding-bottom15">
+            <h3>@Model.TotalRecords Total results from all Study Center</h3>
+            @*<span class="tooltip">
+    <button class="btn btn-primary library-top-copylink" id="CopyLink">
+    <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+    <i class="glyphicon glyphicon-link"></i> Copy Link
+    </button>
+    </span>*@
+        </div>
+    }
+
+    <div class="listing-sec">
+
+        @foreach (var sd in Model.studyDocumentsSearchResultDtos)
+        {
+            recordsView++;
+
+            //start hide image section for component and document
+
+            <div class="SearchFile lib-col search-sd-col">
+
+                <div class="cont-lib">
+
+                    <h4>@sd.Title</h4>
+
+                    <p class="library-description">
+
+                        @Html.Raw(sd.Description)
+                    </p>
+                </div>
+
+                <div class="bannerbottom-row">
+                    <div class="ver-block"><b>Technology:</b>  @sd.Technology</div>
+                </div>
+                
+                <div class="bannerbottom-row">
+                    <div class="created-date">
+                        <b>Created Date:</b>
+                        <div class="show-date"><img src="~/Content/images/cald-icon.png" alt="" /> @sd.AddedDate.Substring(0, 8), <img src="~/Content/images/clock-icon.png" alt="" /> @sd.AddedDate.Substring(9)</div>
+                    </div>
+                </div>
+
+                <div class="cont-lib-btm d-flex flex-wrap">
+
+                    <a href="javascript:void(0)" class="CopyLinkIndividual btn btn-custom btn-sm btn-black" data-key-id="@sd.KeyId">Copy Link</a>
+                    <button type="button" class="btn btn-custom btn-sm" data-target="#modal-SD-Details" data-backdrop="static" data-toggle="sdmodal" data-remote='@Url.Action("searchdetails", "studydocuments", new { id = sd.KeyId })'>Details</button>
+                </div>
+
+            </div>
+        }
+    </div>
+}
+else
+{
+    <span style="margin: 1%;">No Study Center found</span>
+}
+
+<partial name="_Modal" model='new Modal { ID = "modal-SD-Details", AreaLabeledId = "modal-SD-Details-label", Size = Enums.ModalSize.Large }' />

@@ -1,0 +1,99 @@
+﻿@using EMS.Core;
+@using EMS.Data
+@model List<CurrentOpening>
+<style>
+    #grid-opening_length {
+        padding-bottom: 10px;
+    }
+
+    .btn-group-sm > .btn, .btn-sm {
+        padding: 5px 0px;
+        font-size: 14px;
+    }
+
+    .job-block {
+        border: 1px solid;
+        margin-right: 10px;
+    }
+
+    .btn-refer {
+        margin: 5px;
+    }
+
+    .current-jobs .job-block {
+        margin: 5px;
+    }
+
+    .validation-summary-errors {
+        color: red;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Current Openings  </h2>
+            @if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+            {
+                <div class="dis-block clearfix">
+                    <div class="pull-right box2">
+                        <a class="btn btn-custom pull-left" href="@Url.Action("addedit","currentopening")">Add New</a>
+                    </div>
+                </div>
+            }
+            <!-- /.box-header -->
+            <div class="box-body ">
+                <section id="no-more-tables">
+
+                    <div class="row current-jobs">
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <div class="col-lg-4 job-block">
+                                    <label class="jobpost col-md-3 col-sm-3">Post</label><label class="jobpost col-md-9 col-sm-9">@Html.Raw(item.Post)</label>
+                                    <label class="jobTechnology col-md-3 col-sm-3">Technology</label><label class="jobTechnology col-md-9 col-sm-9">@Html.Raw(item.Technology)</label>
+                                    @if (item.Department != null)
+                                    {
+                                        <label class="jobDepartment col-md-3 col-sm-2">Department</label><label class="jobDepartment col-md-9 col-sm-9">@Html.Raw(item.Department.Name)</label>
+                                    }
+                                    <label class="jobDepartment col-md-3 col-sm-2">Description</label><p class="jobDepartment col-md-9 col-sm-9">@Html.Raw(item.Small_Description)</p>
+                                    <div class="col-md-12 col-sm-12">
+                                        <a data-toggle='modal' data-target='#modal-referFriend-add-edit' href="@Url.Action("referfriend", "JobReference", new { id = item.Id })" class="btn btn-custom pull-right btn-refer">Refer a Friend</a>
+                                        @{
+
+                                            var isRefernceCount = (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP) ? (item.JobReferences.Count) : (item.JobReferences.Count(c => c.ReferBy_UserLoginId == CurrentUser.Uid));
+                                        }
+                                        @if (isRefernceCount > 0)
+                                        {
+                                            <a href="@Url.Action("viewreferences", "jobreference", new { id = item.Id })" class="btn btn-custom pull-right btn-refer">View References (@isRefernceCount)</a>
+                                        }
+                                    </div>
+                                </div>
+                                                }
+                                            }
+                    </div>
+                </section>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-referFriend-add-edit", AreaLabeledId = "modal-referFriend-add-edit-label", Size = EMS.Core.Enums.ModalSize.Small })
+@section scripts{
+<script src="~/Scripts/CustomJS/currentOpening.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).delegate("#btnSubmit-Job-refer", "click", function () {
+                var form = $('#frm-referFriend');
+                form.validate();
+                if (form.valid()) {
+                    var form1 = new Global.FormHelperWithFiles($("#frm-referFriend"), { updateTargetId: "refer-friend-validation-summary" });
+                    return true;
+                }
+                else { return false; }
+                return false;
+            });
+        });
+    </script>
+}

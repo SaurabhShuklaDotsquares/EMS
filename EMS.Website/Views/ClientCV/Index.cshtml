@@ -1,0 +1,277 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model CVBuilderIndexDto
+@{
+    ViewBag.Title = "CV(s) for Client";
+}
+<link href="~/css/fSelect.css" rel="stylesheet" />
+<link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+<style>
+    .listing-sec,
+    .filter-lib {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+
+    .li {
+        width: 100px;
+        padding: 0 0 0 0;
+    }
+
+    .flex {
+        flex: 1 0 0;
+    }
+
+    .d-flex {
+        display: -webkit-box !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+    }
+
+    .flex-wrap {
+        -ms-flex-wrap: wrap !important;
+        flex-wrap: wrap !important;
+    }
+
+    .justify-content-between {
+        -webkit-box-pack: justify !important;
+        -ms-flex-pack: justify !important;
+        justify-content: space-between !important;
+    }
+
+    .align-items-center {
+        -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+        align-items: center !important;
+    }
+
+    .adv-srch .drop-sec {
+        display: none;
+        width: 100%;
+        right: 0;
+        z-index: 6;
+    }
+
+        .adv-srch .drop-sec .drop-in::before {
+            right: 20px;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .adv-srch .drop-sec label {
+        margin-bottom: 5px;
+    }
+
+    .fs-wrap,
+    .fs-dropdown {
+        width: 100% !important;
+    }
+
+    .fs-label-wrap .fs-label {
+        padding: 11px 22px 11px 11px !important;
+    }
+
+    .fs-arrow {
+        right: 12px !important;
+        opacity: 0.5;
+    }
+
+    .search-row {
+        position: relative;
+        /*z-index: 5;*/
+    }
+
+
+
+    .industry-togle .industry-listing, #divAdvancedFilters .scroll2 {
+        width: 100% !important;
+    }
+
+    .filter-display {
+        margin-top: 10px;
+    }
+
+    .industry-block {
+        z-index: 99;
+    }
+    .rdTemplate{
+        background: #eee;
+        padding: 5px 10px;
+        border-radius: 4px;
+        min-width: 117px;
+        margin-right: 15px;
+    }
+</style>
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+    <style>
+        .table-stats.project-closure td {
+            border-bottom: 0;
+        }
+    </style>
+
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{
+            Html.RenderPartial("_Notification");
+        }
+        <div id="MessageDiv"></div>
+        <div class="row" style="padding-bottom:10px;">
+            <div class="col-sm-4">
+                <h2>CV(s) for Client</h2>
+            </div>
+            <div class="col-sm-8 text-right">
+                @if (Model.IsCVExists)
+                {
+                    <a class="btn btn-custom" href="@Url.Action("add")">Add Your CV</a>
+                }
+            </div>
+        </div>
+        <div class="row">
+            @if ((int)Enums.UserRoles.PM == CurrentUser.RoleId || RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || (int)Enums.UserRoles.Director == CurrentUser.RoleId)
+            {
+               
+                <div class="col-sm-12">
+                    
+                   
+                    @if (ViewBag.ExperienceTypeList != null)
+                    {
+                        if (ViewBag.ExperienceTypeList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group pull-right">
+                                @Html.DropDownList("Experience", (List<SelectListItem>)ViewBag.ExperienceTypeList, null, new { @class = "form-control select2Experience" , @multiple = "multiple"})
+                            </div>
+                        }
+                    }
+                    @if (ViewBag.SpecTypeList != null)
+                    {
+                        if (ViewBag.SpecTypeList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group pull-right">
+                                <div class="form-group">
+                                    @Html.DropDownList("SpecType", (List<SelectListItem>)ViewBag.SpecTypeList, "Select Technology Experience Stage", new { @class = "form-control searchfilter" })
+                                </div>
+                            </div>
+                        }
+                    }
+                    @if (ViewBag.DomainTypeList != null)
+                    {
+                        if (ViewBag.DomainTypeList.Count > 0)
+                        {
+                            <div class="col-md-2 form-group pull-right">
+                                @Html.DropDownList("industries", (List<SelectListItem>)ViewBag.DomainTypeList, null, new { @class = "form-control select2Industries ", @multiple = "multiple" })
+                            </div>
+
+                        }
+                    }
+                    @if (ViewBag.TechnologyList != null)
+                    {
+                        if (ViewBag.TechnologyList.Count > 0)
+                        {
+                            <div class="col-md-3 form-group pull-right">
+                                <div class="form-group" id="techSelect">
+                                    @Html.DropDownList("technologies", (List<SelectListItem>)ViewBag.TechnologyList, null, new { @class = "form-control select2Technologies", @multiple = "multiple" })
+                                </div>
+                                <div class="or-and">
+                                    <strong> With:</strong>
+                                <input type="radio" id="rdAnd" name="fav_technology" value="And">
+                                <label for="rdAnd" >And</label>
+                                <input type="radio" id="rdOr" name="fav_technology" value="Or">
+                                <label for="rdOr" >Or</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                    @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId) || (int)Enums.UserRoles.Director==CurrentUser.RoleId)
+                    {
+                        <div class="col-md-3 form-group pull-right">
+                            @Html.DropDownList("pm", (List<SelectListItem>)ViewBag.PM, "All PM", new { @class = "m-wrap medium form-control searchfilterpm" })
+                        </div>
+                    }   
+                </div>
+             
+                <div class="col-md-12">
+                    <div class="filter-sec">
+                        <div class="filter-grp">
+                            @Html.CheckBox("EmpStatusTypeCheck")
+                            <label id="lblEmpStatusType" for="EmpStatusTypeCheck" class="control-label">Free Only</label>
+                        </div>
+                        <div class="filter-grp">
+                            @Html.CheckBox("TrainingCheck")
+                            <label for="TrainingCheck" class="control-label">Training Done</label>
+                        </div>
+                        <div class="filter-grp">
+                            @Html.CheckBox("PMReviewCheck")
+                            <label for="PMReviewCheck" class="control-label">PM Review</label>
+                        </div>
+
+
+                        </div>
+
+               
+                </div>
+                 <div class="col-md-12 form-group">
+                   <div class="form-group text-right">
+                       <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                       <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                       <input type="button" class="btn btn-custom" id="btnDownload" value="Download ALL" />
+                   </div>
+                 </div>
+            }
+           
+             <div class="col-lg-12 col-md-12 form-group">                   
+                <div class="pull-right tech-legend">
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="rdTemplate">
+                                    <input type="radio" id="rdTemplate1" name="fav_Template" value="1" onclick="handleTemplateClick(1)">
+                                    <label for="rdTemplate1">Template 1</label>
+                                    <input type="radio" id="rdTemplate2" name="fav_Template" value="2" onclick="handleTemplateClick(2)">
+                                    <label for="rdTemplate2">Template 2</label>
+                                </div>
+                            </td>
+                            <td style="padding-right:10px;"><strong>Technologies Legend: </strong></td>
+                            <td>
+                                <ul class="badges-block">
+                                    <li class="badge-success" style="height:12px;"></li>Expert|
+                                    <li class="badge-primary" style="height:12px;"></li>Intermediate |
+                                    <li class="badge-warning" style="height:12px;"></li>Beginner
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                  
+                </div>
+            </div>
+        </div>
+
+
+        <table id="grid-document-table" class="display postable table table-stats project-closure table-condensed"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@await Html.PartialAsync("_Modal", new EMS.Web.Models.Others.Modal { ID = "modal-view-cvdata", AreaLabeledId = "modal-leave-cvdata-label", Size = EMS.Core.Enums.ModalSize.Large })
+@section scripts{
+    <script type="text/javascript">
+        var isAllowed = @((CurrentUser.RoleId == (int)(int)Enums.UserRoles.Director || CurrentUser.IsSuperAdmin || CurrentUser.RoleId == (int)(int)Enums.UserRoles.PM || RoleValidator.AllHR_DesignationIds.Contains(CurrentUser.DesignationId)) ? 1 : 0);
+    </script>
+
+    <script src="~/js/fSelect.js"></script>
+    <script src="~/Scripts/CustomJS/CVBuilderClient/Index.js" asp-append-version="true"></script>
+    <script>
+        function handleTemplateClick(value) {            
+            // Store
+            localStorage.setItem("templateType", value);
+            location.reload();
+        }
+    </script>
+}
+

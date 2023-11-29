@@ -1,0 +1,49 @@
+﻿@model ActivityFreeReportDto
+
+@{ Html.RenderPartial("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Activity Details" }); }
+
+<div class="modal-body">
+
+    <div class="row form-group">
+        <div class="col-md-6">
+            <label>Name :</label> @Model.Name
+        </div>
+        <div class="col-md-6">
+            <label>Designation :</label> @Model.Designation
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <div class="col-md-6">
+            <label>Department :</label> @Model.Department
+        </div>
+        <div class="col-md-6">
+            <label>Free Days :</label> @Model.TotalFreeDays
+        </div>
+    </div>
+
+    <table class="table table-stats">
+        <thead>
+            <tr>
+                <td style="width:5%">S.No.</td>
+                <td style="width:15%">Date</td>
+                <td style="width:40%">Activity</td>
+                <td style="width:40%">Timesheet</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int index = 0;
+                foreach (var item in Model.FreeDetails)
+                {
+                    <tr>
+                        <td>@(++index)</td>
+                        <td>@item.Date</td>
+                        <td>@Html.Raw(item.Description)</td>
+                        <td>@Html.Raw(item.TimeSheet)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,82 @@
+﻿@model ProjectClosureDto
+@{
+    var abroadPMList = Model.AbroadPMList.GroupBy(x => x.GroupName).ToList();
+    var count = 0;
+}
+<style>
+
+    .chk {
+        margin-bottom: 15px;
+        float: left;
+    }
+    #AbroadPMList_0__Selected {
+        float: left;
+        width: auto;
+    }
+
+    .text-inner {
+        float: right;
+        width: 94%;
+    }
+    .width13-90 {
+        width: 14.80%;
+    }
+    #abordPMCheckedDiv > label {
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    #abortedPMListDIV .noti-box {
+        border: 1px solid #e1e1e1;
+        background: #ffe5b5;
+        padding: 10px
+    }
+
+    .selected-checkbox .name-box label {
+        font-weight: bold;
+    }
+
+    .name-box label {
+        margin-bottom: 0px;
+    }
+
+    </style>
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-2 width13-90">
+            <label></label>
+        </div>
+        <div class="col-md-10 noti-box">
+            <div style=" padding: 0px;" id="abordPMCheckedDiv"><label><strong>Notification will share with:</strong></label><br />
+                @for (int i = 0; i < abroadPMList.Count; i++)
+                {
+
+                    var sdf = abroadPMList[i].ToList();
+                   
+                      
+                            @for (int j = 0; j < sdf.Count; j++)
+                            {
+
+                                @Html.HiddenFor(m => Model.AbroadPMList[count].Name)
+                                @Html.HiddenFor(m => Model.AbroadPMList[count].Email)
+                                @Html.HiddenFor(m => Model.AbroadPMList[count].AutoId)
+                                <div class="col-md-3 chk">
+                                    @Html.CheckBoxFor(m => Model.AbroadPMList[count].Selected)
+                                    <div class="text-inner">
+                                        <div class="name-box">
+                                            <label>@sdf[j].Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                count++;
+                            }                      
+                   
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

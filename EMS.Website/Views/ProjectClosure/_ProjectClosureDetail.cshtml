@@ -1,0 +1,133 @@
+﻿@using EMS.Web.Models.Others
+@model ViewProjectClosureDto
+<style>
+    #tblClosure_Details.table-striped > tbody > tr:nth-of-type(2n+1) {
+        background-color: #e9e9e9;
+    }
+
+    #tblClosure_Details tr {
+        color: #333;
+    }
+
+    #tblClosure_Details td {
+        padding: 10px 7px;
+    }
+
+    .comments {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        font-size: 13px;
+    }
+
+        .comments i {
+            color: #757575;
+            font-size: 12px;
+            text-decoration: dotted;
+            margin-top: 8px;
+            display: block;
+        }
+
+    div#modal-detail-projectClosure {
+        z-index: 9999;
+    }
+</style>
+<div>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "PROJECT CLOSURE DETAILS  <span class='pull-right margin-right15'>We will chase again on : " + Model.NextEngementDate + "</span>" })
+    <div class="modal-body">
+
+        <table id="tblClosure_Details" class="table table-striped table-no-border">
+            <tr>
+                <td width="17%"><strong>Date of Closing : </strong></td>
+                <td colspan="3" width="83%">@Model.DateOfClosing</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Client Name : </strong></td>
+                <td width="33%">@Model.ClientName</td>
+                <td width="17%"><strong>Project Name : </strong></td>
+                <td width="33%">@Model.ProjectName</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Project Status : </strong></td>
+                <td width="33%">@Model.CRMStatus</td>
+                <td width="17%"><strong>Client Quality : </strong></td>
+                <td width="33%">@Model.ClientQuality</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Project Live Url : </strong></td>
+                <td colspan="3" width="83%">@Model.LiveUrl</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Technogies : </strong></td>
+                <td colspan="3" width="83%">@Model.Technologies</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Lead Developer : </strong></td>
+                <td width="33%">@Model.DeveloperName</td>
+                <td width="17%"><strong>Other Developers : </strong></td>
+                <td width="33%">@Model.VirtualDeveloperName</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>BA Name : </strong></td>
+                <td width="33%">@Model.BA_Name</td>
+                <td width="17%"><strong>TL Name : </strong></td>
+                <td width="33%">@Model.TL_Name</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Closing Reason : </strong></td>
+                <td colspan="3" width="83%">@Html.Raw(Model.Reason)</td>
+            </tr>
+
+            <tr>
+                <td width="17%"><strong>Suggestions : </strong></td>
+                <td colspan="3" width="83%">@Html.Raw(Model.Suggestion)</td>
+            </tr>
+        </table>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ReviewComments))
+        {
+            <h4 class="modal-title">Closure Review</h4>
+            <table class="table table-striped table-no-border">
+                <tr>
+                    <td width="17%"><strong>Promising :</strong></td>
+                    <td width="83%" colspan="3">@Model.PromisingPercentage</td>
+                </tr>
+                @if (!string.IsNullOrWhiteSpace(Model.ProjectMayStartDate))
+                {
+                    <tr>
+                        <td width="17%"><strong>May start again on :</strong></td>
+                        <td width="33%">@Model.ProjectMayStartDate</td>
+                        <td width="17%"><strong>Number of Developers :</strong></td>
+                        <td width="33%">@Model.DeveloperCount</td>
+                    </tr>
+                }
+                <tr>
+                    <td width="17%"><strong>Comments :</strong></td>
+                    <td width="83%" colspan="3">@Model.ReviewComments</td>
+                </tr>
+            </table>
+        }
+
+        @if (Model.ChaseHistory.Count > 0)
+        {
+            <h4 class="modal-title">CHASED HISTORY</h4>
+
+            foreach (var item in Model.ChaseHistory)
+            {
+                <div class="comments">
+                    <i>@item.ChaseDate &nbsp;&nbsp;  <b>@(item.AddedBy != null && item.AddedBy != "" ? "[Added By " + item.AddedBy + "]" : "")</b></i>
+                    @item.MessageText
+                </div>
+            }
+        }
+    </div>
+
+</div>
+<script src="~/Scripts/CustomJS/ProjectClosure/projectclosure-detailpopup.js"></script>

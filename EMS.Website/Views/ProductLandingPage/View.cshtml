@@ -1,0 +1,154 @@
+﻿@model ProductLandingDto
+@{
+    ViewBag.Title = "Product Landing Page Details";
+    var domain = SiteKey.DomainName;
+}
+
+@section styles{
+    <style>
+    label {
+        font-weight: 600;
+    }
+    .cke_editable_inline{
+            margin-bottom: 40px;
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,.15);
+        }
+    .section-title{
+            text-transform: uppercase;
+            color: #e18f00;
+        }
+    #screenshot-list {
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        #screenshot-list li {
+            list-style: none;
+            float: left;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 400px;
+            height: 162px;
+            border: 1px dashed #a7a7a7;
+            padding: 5px;
+            position: relative;
+            vertical-align: top;
+        }
+
+            #screenshot-list li a {
+                display: inline-block;
+                float: left;
+                width: 150px;
+                height: 150px;
+                margin-right: 5px;
+                text-align: center;
+            }
+
+            #screenshot-list li img {
+                max-width: 150px;
+                max-height: 150px;
+                border: none;
+            }
+
+            #screenshot-list li .description {
+                max-height: 152px;
+                max-width: 230px;
+                overflow-y: auto;
+                float: left;
+            }
+</style>
+}
+
+<div class="full-wdth padding20">
+    <h2 class="margin-bottom20">Product Landing Page Details</h2>
+
+    @{ Html.RenderPartial("_Notification"); }
+
+    <div class="row">
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="section-title">Product Name : <span style="color:#000">@Model.ProductName</span></h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-title">Banner Text</h4>
+                    <div class="cke_editable_inline">@Html.Raw(Model.HighlightText)</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-title">About Product</h4>
+                    <div class="cke_editable_inline">@Html.Raw(Model.AboutProduct)</div>
+                </div>
+            </div>
+
+            <h4 class="section-title">Features</h4>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div class="cke_editable_inline">@Html.Raw(Model.Feature1)</div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="cke_editable_inline">@Html.Raw(Model.Feature2)</div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="cke_editable_inline">@Html.Raw(Model.Feature3)</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-title">Services Include</h4>
+                    @Html.Raw(Model.ServiceDetail)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-title">Technology Used</h4>
+                    <div class="cke_editable_inline">@Html.Raw(Model.TechnologyDetail)</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-title">Client Testimonials</h4>
+                    <div class="cke_editable_inline">@Html.Raw(Model.Testimonials)</div>
+                </div>
+            </div>
+
+            @if (Model.Screenshots.Count > 0)
+            {
+                <h2>Product Screenshots</h2>
+                <br />
+
+                <ul id="screenshot-list">
+                    @{
+                        foreach (var item in Model.Screenshots)
+                        {
+                            <li>
+                                <a href="@(domain + item.ScreenshotUrl)" target="_blank" title="view image">
+                                    <img src="@(domain + item.ScreenshotUrl)" />
+                                </a>
+                                <div class="description"> @Html.Raw(item.Description)</div>
+                            </li>
+                        }
+                    }
+                </ul>
+                        }
+            <div class="clearfix"></div>
+
+            <div class="text-left">
+                <a class="btn btn-custom" href="@Url.Action("index")"><i class="fa fa-arrow-left"></i> Back</a>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@using EMS.Core;
+@{
+    DateTime dt = DateTime.Now;
+    dt = dt.AddMonths(-1);
+}
+
+@*<div class="main_content clearfix">*@
+<div class="full-wdth clearfix padding20">
+    <div class="timesheet-page full-wdth clearfix">
+        <h2>Daily/Weekly Report </h2>
+        <div class="dis-block clearfix">
+            <div class="pull-left box1">
+                <a class="export-btn" data-href="@Url.Action("ExportTimesheetWeeklyReportToExcel","TimesheetReport")" href="@Url.Action("ExportTimesheetWeeklyReportToExcel","TimesheetReport")" style="display:none"><img src="content/images/excel.png" alt=""> Export To Excel</a>
+            </div>
+            <div class="pull-right box2">
+                @using (Html.BeginForm())
+                {
+                    <div class="wdth1 margin-right10 pull-left">
+                        @Html.DropDownList("ddl_timesheetType", new List<SelectListItem>
+                                                                {
+                                                                    new SelectListItem{ Text="Daily", Value = "D" },
+                                                                    new SelectListItem{ Text="Weekly", Value = "W" }
+                                                                 }, new { @class = "form-control" })
+                    </div>
+                    <div class="wdth1 margin-right10 pull-left">
+                        @Html.DropDownList("TimeSheetMonth", ViewBag.MonthList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                    <div class="wdth1 margin-right10 pull-left">
+                        @Html.DropDownList("TimeSheetYear", Enumerable.Range(DateTime.Now.Year - 1, 2).Select(x => new SelectListItem { Text = x.ToString(), Value = x.ToString(), Selected = x == dt.Year }), new { @class = "form-control" })
+                    </div>
+                    if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+                    {
+                        <div class="wdth2 margin-right10 pull-left">
+                            @Html.DropDownList("ddl_Pm", ViewBag.pmList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    }
+
+                    <div class="wdth2 margin-right10 pull-left">
+                        @Html.DropDownList("ddl_User", ViewBag.DeveloperList as IEnumerable<SelectListItem>, new { @class = "form-control", @required = "required" })
+                    </div>
+                    <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+                }
+            </div>
+        </div>
+        @*<div class="table-custom margin-top15 timesheet-table table-responsive clearfix" id="div_Table">
+            </div>*@
+        <!-- /.box-header -->
+        <div class="box-body ">
+            <section id="no-more-tables">
+                <table id="grid-timesheetWeeklyReport" class="display postable table table-bordered table-striped table-condensed"></table>
+            </section>
+        </div>
+        <!-- /.box-body -->
+
+    </div>
+</div>
+@*</div>*@
+@section scripts{
+    <script src="~/Scripts/CustomJS/timesheetWeeklyReport.js"></script>
+}

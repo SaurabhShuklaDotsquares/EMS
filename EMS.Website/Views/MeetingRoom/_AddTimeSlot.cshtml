@@ -1,0 +1,155 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model EMS.Dto.BooKMeetingRoomDto
+<input type="hidden" id="hdEventID" value="0" />
+<input type="hidden" id="hdChkCount" value="0" />
+<div class="row">
+    <div class="col-sm-6 col-md-6">
+        <div class="form-group clearfix">
+            <label>Meeting Room</label>
+            <select id="txtCRoom" class="form-control">
+                <option value="0">--Select--</option>
+                @foreach (var row in Model.OfficeList)
+                {
+                    <optgroup label="@row.Text">
+                        @foreach (var item in Model.ConferenceRoomList)
+                        {
+                            if (item.Group.Name.ToLower() == row.Text.ToLower())
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </optgroup>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6">
+        <div class="form-group clearfix">
+            <label>Meeting Date</label>
+            <input type="text" id="txtSelectedDate" rows="3" class="form-control" readonly="readonly" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-6">
+        <div class="form-group clearfix">
+            <label class="clscheckbox">Meeting Title</label>
+            <input type="text" id="txtTitle" maxlength="100" class="form-control" />
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6">
+        <div class="form-group clearfix">
+            <label>Attendees Name</label>
+            <input type="text" id="txtAttendee" maxlength="500" class="form-control" />
+        </div>
+    </div>
+</div>
+<div class="row">
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group clearfix">
+            <label>Agenda</label>
+            <textarea maxlength="1500" id="txtDescription" rows="3" class="form-control"></textarea>
+
+        </div>
+    </div>
+</div>
+<div class="row timeslotrow-width">
+    <div style="margin-left:16px;" class="timeslot-text">
+        <label>Time Slots</label>
+    </div>
+    @if (Model.TimeSlot != null)
+            {
+                for (var i = 0; i < Model.TimeSlot.Count(); i++)
+                {
+            <div class="col-sm-4 col-md-3 timeslot-width">
+                <div class="form-group clearfix">
+                    <input type="checkbox" name="TimeSlot" id="timeSlot_@Model.TimeSlot[i].Slot_Id" class="clsCheck" value="@Model.TimeSlot[i].Text">
+                    <label name="lbltimeslot" class="clslabel clsCheck lbltimeslot_@Model.TimeSlot[i].Slot_Id" for="timeSlot_@Model.TimeSlot[i].Slot_Id" value="@Model.TimeSlot[i].Text">@Model.TimeSlot[i].Text</label>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<script>
+
+        $("#txtSelectedDate").datepicker({
+            defaultDate: "+1w",
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            minDate: 0,
+        });
+ 
+   
+        $(".clsCheck").change(function () {
+            var total = $('input:checkbox:checked').length;
+            $('#hdChkCount').val(total);
+            if (total > 1) {
+                var previd = parseInt(this.id.split("_")[1]) - 1;
+                var nextid = parseInt(this.id.split("_")[1]) + 1;
+                if (document.getElementById('timeSlot_' + previd).checked || document.getElementById('timeSlot_' + nextid).checked) {
+
+                }
+                else {
+                    $(this).attr('checked', false);
+                }
+            }
+        });
+
+        $("#txtCRoom").change(function () {
+            var e = document.getElementById("txtCRoom");
+            var valRoom = e.options[e.selectedIndex].value;
+            var meetingdate = $("#txtSelectedDate").val();
+            console.log("txtCRoom-meetingdate", meetingdate)
+            var bookingId = $("#hdEventID").val();
+            if (valRoom != "" && valRoom != null && valRoom > 0 && meetingdate != "" && meetingdate != null) {
+                checkForFreeTimeSlot(valRoom, meetingdate, bookingId);
+            }
+        });
+
+        $("#txtSelectedDate").change(function () {
+            var e = document.getElementById("txtCRoom");
+            var valRoom = e.options[e.selectedIndex].value;
+            var meetingdate = $("#txtSelectedDate").val();
+            console.log("txtSelectedDate-meetingdate", meetingdate)
+            var bookingId = $("#hdEventID").val();
+            if (valRoom != "" && valRoom != null && valRoom > 0 && meetingdate != "" && meetingdate != null) {
+                checkForFreeTimeSlot(valRoom, meetingdate, bookingId);
+            }
+        });
+
+    function checkForFreeTimeSlot(roomid, date, bookingId) {
+        console.log("date from checkForFreeTimeSlot:" + date);
+            if (parseInt(roomid) > 0 && date && parseInt(bookingId) >= 0) {
+                $.ajax({
+                    url: domain + 'MeetingRoom/GetDisabledTimeSlot',
+                    data: { roomId: roomid, date: date, bookingId: bookingId },
+                    dataType: "json",
+                    type: "GET",
+                    error: function () {
+                        alert(" An error occurred.");
+                    },
+                    success: function (data) {
+                        var arr = data.split('#');
+                        console.log(arr);
+                        $("input[name='TimeSlot']").prop("disabled", false);
+                        $("label[name='lbltimeslot'").css("background", "");
+
+                        if (data != "") {
+                            jQuery.each(arr, function (i, val) {
+                                $("#timeSlot_" + val).attr("disabled", true);
+                                $("#timeSlot_" + val).attr('checked', false);
+                                $("#timeSlot_" + val).trigger('change');
+                                $(".lbltimeslot_" + val).css('background-color', 'rgba(241, 131, 131, 0.35)');
+                            });
+                        }
+
+                    }
+                });
+            }
+        }
+</script>

@@ -1,0 +1,75 @@
+﻿@using EMS.Core
+@using EMS.Web.Models.Others
+@model ProjectNCLogIndexDto
+@{
+    ViewBag.Title = "NC Log List";
+}
+<link rel="stylesheet" href="~/css/select2.css" />
+@section styles{
+    <style>
+        .select2-container .select2-choice{
+            height:36px!important;
+            line-height:36px!important;
+            border: 1px solid #ddd!important;
+            border-radius:0!important;
+        }
+        
+        .select2-container .select2-arrow{
+            background: none!important;
+            border-left:none!important;
+        }
+        .select2-container .select2-choice .select2-arrow b{
+            background: #fff url(images/arrowdown.png) no-repeat scroll center center !important;
+        }
+        form label{font-weight:600}
+        .btn-sm{
+            padding: 3px 5px
+        }
+    </style>
+    }
+
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        
+        <div class="row margin-bottom20">
+            <div class="col-sm-4">
+                <h2>NC Log List</h2>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-md-2 col-sm-6 pull-right">
+                        <a class="btn btn-custom btn-block" href="@Url.Action("addedit")" data-target="#modal-add-nclog" data-toggle="modal" data-backdrop="static">Add New</a>
+                    </div>
+                    <div class="col-md-2 col-sm-6 pull-right">
+                        <button type="button" id="btnSearch" class="btn btn-custom btn-block">Search</button>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 pull-right">
+                        @Html.DropDownList("ProjectId", Model.ProjectList, "All Projects", htmlAttributes: new { @class = "form-control" })
+                    </div>
+
+                    @if (CurrentUser.IsSPEG)
+                    {
+                        <div class="col-md-3 col-sm-6 pull-right">
+                            @Html.DropDownList("PMId", Model.PMUserList, "All PM", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+
+        <table id="grid-ncLogList" class="display postable table table-stats table-condensed"></table>
+
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-add-nclog", AreaLabeledId = "modal-add-nclog-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-comment-nclog", AreaLabeledId = "modal-comment-nclog-label", Size = Enums.ModalSize.Large });
+    }
+
+@section scripts{
+    <script src="~/bundles/NCLog/index"></script>   
+}

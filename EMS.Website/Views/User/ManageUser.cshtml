@@ -1,0 +1,88 @@
+﻿@using EMS.Core
+@section styles{
+    <link type="text/css" href="~/Content/css/toggle-switch.css" />
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="dis-block clearfix">
+                    <h2 class="pull-left">
+                        Manage Users
+                    </h2>
+
+                    @Html.Hidden("hdnIsPMPMO", CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO);
+
+                    @if (CurrentUser.IsSuperAdmin)
+                    {
+
+                        <div class="pull-right"><a class="btn  btn-custom pull-right orange pull-right" href="@Url.Action("edituser","user")" id="btn_search">Add User</a></div>
+
+                    }
+                </div>
+                <div class="box marR7 flotR margin-top20" id="div_verified">
+
+                    <button type="button" class="btn btn-custom pull-right orange" id="btn_search">Search</button>
+                    <div class="wdth2 margin-right10 pull-right">
+                        <input id="txtusername" placeholder="Enter Name.." class="pull-right margin-right10 form-control" style="height:36px;" />
+                    </div>
+                    <div class="wdth1 margin-right10 pull-right">
+                        <select name="" class="pull-right margin-right10 form-control" id="ddl_status">
+                            <option value="0">All</option>
+                            <option value="1" selected>Active</option>
+                            <option value="2">Deactive</option>
+                        </select>
+                    </div>
+                    <div class="wdth2 margin-right10 pull-right">
+                        <label class="pull-right margin-right10 margin-top10"><b>Status:</b></label>
+                        @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                        {
+                            @Html.DropDownList("ddl_pm", ViewBag.PMList as IEnumerable<SelectListItem>, new { @class = "form-control pull-right margin-right10", @style = "width: 150px;" })
+                            <label class="pull-right margin-right10 margin-top10"><b>Project Manager:</b></label>
+                        }
+                    </div>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body ">
+                    <section id="no-more-tables">
+                        <table id="grid-manageuser" class="display postable table table-bordered table-striped table-condensed"></table>
+                    </section>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-updatePassword", AreaLabeledId = "modal-action-lblchangepassword", Size = Enums.ModalSize.Medium })
+@Html.Partial("_Modal", new Modal { ID = "modal-ShowPassword", AreaLabeledId = "modal-action-lblshowpassword", Size = Enums.ModalSize.Medium })
+@section scripts
+    {
+    @**@
+    @*<script src="~/bundles/jquery"></script>
+        <script src="~/bundles/jqueryval"></script>
+    *@
+    @*<script src="~/bundles/jqueryval"></script>*@
+    <script src="~/bundles/jquery"></script>
+    <script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/jqueryval"></script>
+    @*<script src="~/bundles/layoutjs"></script>*@
+    <script src="~/Scripts/additional-methods.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/global.js"></script>
+    <script src="~/bundles/otherjs"></script>
+
+    <script src="@(SiteKey.DomainName)Scripts/CustomJS/manageuser.js" asp-append-version="true"></script>
+    @*  *@
+    @*<script type="text/javascript" src="~/bundles/User/manageUser"></script>*@
+    @*  *@
+    @*<script type="text/javascript" src="~/bundles/User/manageUser"></script>*@
+    @*<script src="~/bundles/jquery"></script>
+
+        <script src="~/bundles/jqueryval"></script>
+
+    *@
+
+    @**@
+}

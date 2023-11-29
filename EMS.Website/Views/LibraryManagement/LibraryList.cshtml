@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Library List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //List<SelectListItem> DesignLayoutTypes = ViewBag.DesignLayoutTypes ?? new List<SelectListItem>();
+    //List<SelectListItem> LibraryComponentTypes = ViewBag.LibraryComponentTypes ?? new List<SelectListItem>();
+}
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+
+        <div class="row form-group" style="margin:0px">
+            <div class="col-sm-12">
+                <partial name="_Notification" />
+                <div id="validation-summary"></div>
+            </div>
+        </div>
+
+        <div class="manage-Project-page full-wdth">
+            <div class="row">
+                <div class="col-sm-3"><h2>Library List</h2></div>
+
+                <div class="col-sm-9">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-4">@Html.DropDownList("DesignLayoutType", (List<SelectListItem>)ViewBag.DesignLayoutTypes, "Select Layout", new { @class = "m-wrap medium form-control" })</div>
+                            <div class="col-md-5">@Html.DropDownList("LibraryComponentType", (List<SelectListItem>)ViewBag.LibraryComponentTypes, "Select Component", new { @class = "m-wrap medium form-control" })</div>
+                            <div class="col-md-2"><a class="btn btn-custom margin-bottom10 " id="btnLibraryFilter">Search</a></div>
+                            <div class="col-md-1"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="pull-right col-md-5">
+                        <a id="btnDeleteAll" href="javascript:;" class="btn btn-danger margin-bottom10 pull-right" style="margin-right:5px">Delete Selected Libraries</a>
+                        <a href="@Url.Action("AddEdit","LibraryManagement")" class="btn btn-custom margin-bottom10 pull-right" style="margin-right:5px">Add New</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-librarylist" class="table default-table black-theme-table"></table>
+                </section>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-ImportLibrary", AreaLabeledId = "lbl-ImportLibrary", Size = Enums.ModalSize.Medium })
+@*@Html.Partial("_Modal", new Modal { ID = "modal-delete-library", AreaLabeledId = "modal-delete-library-label", Size = Enums.ModalSize.Medium });*@
+@section scripts{
+    <script type="text/javascript">
+        var isPM = @((CurrentUser.Uid == SiteKey.AshishTeamPMUId && CurrentUser.RoleId == (int)(int)Enums.UserRoles.PM) ?1:0);
+    </script>
+    <script src="~/Scripts/CustomJS/LibraryManagement/libraryList.js" asp-append-version="true"></script>
+}

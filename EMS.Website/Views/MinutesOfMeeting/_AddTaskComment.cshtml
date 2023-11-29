@@ -1,0 +1,152 @@
+﻿@model MomMeetingTaskCommentsAddDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+<style>
+    .table-striped > tbody > tr:nth-of-type(2n+1) {
+        background-color: #e9e9e9;
+    }
+
+    table-striped tr {
+        color: #333;
+    }
+
+    table-striped td {
+        padding: 10px 7px;
+    }
+
+    .comments {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        font-size: 13px;
+    }
+
+        .comments i {
+            color: #757575;
+            font-size: 12px;
+            text-decoration: dotted;
+            margin-top: 8px;
+            display: block;
+        }
+    .ck-text.error + label + .cke {
+        border: 1px solid #f00;
+    }
+   
+</style>
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Add Comments <span class='pull-right margin-right15'>Target date to finish the Action : " + Model.TargetDate + "</span>" })
+
+    <div class="modal-body ">
+        <div id="NotificationMessage"></div>
+        @Html.HiddenFor(Model => Model.CommentedByUid)
+        @Html.HiddenFor(Model => Model.MomMeetingId)
+        @Html.HiddenFor(Model => Model.MomMeetingTaskId)
+        @Html.HiddenFor(Model => Model.PaticipantsList)
+
+        <table class="table table-striped table-no-border">
+            <tbody>
+                <tr>
+                    <td width="17%"><strong>Action : </strong></td>
+                    <td width="33%">@Model.Task</td>
+                    <td width="17%"><strong>Assigned Meeting : </strong></td>
+                    <td width="33%">  @Model.MeetingTitle</td>
+                </tr>
+                <tr>
+                    <td width="17%">
+                        <div class="form-group required clearfix">
+                            <label style="font-weight: 700 !important;" class="control-label">Assign To : </label>
+                        </div>
+                    </td>
+                    <td colspan="3" width="83%">  @Html.ListBoxFor(model => model.Paticipants, Model.PaticipantList, htmlAttributes: new { @class = "form-control multiple ParticipantClass", @style = "padding:0px;", @autoComplete = "off", @placeholder = "-- Select Participant --", @data_rule_required = "true", @data_msg_required = "*required" })  </td>
+                </tr>
+                <tr>
+                    <td width="17%"><strong>Current Status : </strong></td>
+                    <td colspan="3" width="83%"> @Model.Status</td>
+
+                </tr>
+                <tr>
+                    <td width="17%"><strong>Remark : </strong></td>
+                    <td colspan="3" width="83%">@Html.Raw(Model.Remark)</td>
+                </tr>
+                <tr>
+                    <td width="17%"><strong>Last Comment : </strong></td>
+                    <td colspan="3" width="83%">@Html.Raw(Model.LastComment)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="panel">
+            <div class="form-group required clearfix">
+                <label class="control-label">Comment</label>
+                @Html.TextAreaFor(model => model.Comment, 2,5, htmlAttributes: new { @class = "form-control ck-text", @autoComplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })
+            
+            </div>
+
+            <div class="row form-group required clearfix">
+                <div class="col-md-4">
+                    <div class="form-group clearfix">
+                        <div>
+                            <label class="control-label remove-star">Status</label>
+                        </div>
+                        <br />
+                        @Html.DropDownListFor(model => model.Status, Html.GetEnumSelectList(typeof(Enums.MomMeetingStatus)), htmlAttributes: new { @class = "form-control", @autoComplete = "off", @required = "required", data_val_required = "*required" })
+
+                    </div>
+                </div>
+                @if (Model.Status != Enums.MomMeetingStatus.Completed)
+                {
+                    <div class="col-md-4" id="divTargetDate">
+                        <div class="form-group required clearfix">
+                            <div>
+                                <label class="control-label">Target date to finish the Action</label>
+                            </div>
+                            <br />
+                            @Html.TextBoxFor(model => model.TargetDates, htmlAttributes: new { @class = "form-control Calender", @placeholder = "dd/mm/yyyy", @autoComplete = "off", @required = "required", data_val_required = "*required" })
+
+                        </div>
+                    </div>
+                }
+
+                <div class="col-md-4">
+                   
+                        <div>
+                            <label class="control-label">Priority</label>
+                        </div>
+                        <br />
+                        @Html.DropDownListFor(model => model.Priority, Html.GetEnumSelectList(typeof(Enums.Priority)), "---Select Type---", new { @class = "form-control", @required = "required", data_val_required = "*required" })
+
+                    </div>
+                
+            </div>
+
+          
+            <div class="form-group clearfix">
+                <label class="control-label">Decision</label>
+                @Html.TextAreaFor(model => model.Decision, 2, 5, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+            </div>
+        </div>
+        @await Html.PartialAsync("_ModalFooter", new ModalFooter { })
+    </div>
+    }
+</div>
+
+@{ 
+    <script type="text/javascript">
+        $('#Status').on('change', function () {
+            if ($(this).val() == '4')
+            {
+                $("#divTargetDate").hide();
+                $('#TargetDates').removeAttr("required");
+            }
+            else
+            {
+                $("#divTargetDate").show();
+                $('#TargetDates').attr('required', 'required')
+            }          
+        });
+    </script>
+}
+
+

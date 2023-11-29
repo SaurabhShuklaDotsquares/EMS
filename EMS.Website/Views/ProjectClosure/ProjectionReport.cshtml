@@ -1,0 +1,120 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model ProjectClosureIndexDto
+@{
+    ViewBag.Title = "Projection Report";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet"/>
+}
+    <style>
+        table.text-align-center tr th, table.text-align-center tr td
+        {
+        text-align: center !important;
+        padding-left:1px;
+        padding-right:1px;
+        }
+        table.text-align-center tr th {
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+        }
+        table.text-align-center tr td {
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+        }
+        .bold-text
+        {
+            font-weight:bold;
+        }
+        .font-size-custom {
+            font-size: 11px;
+        }
+
+        .padding-top-bottom
+        {
+            padding-bottom:0px !important;
+            padding-top:0px !important;
+        }
+        
+    </style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+        @Html.Partial("_Notification")
+
+        @Html.Hidden("ProjectionData", "1")
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 class="pull-left">Projection Report</h2>
+                </div>
+                <div class="col-md-6 text-right info-block1">
+                    <span class="color-info"><i class="darkredbg"></i>Start Date passed</span>
+                    <span class="color-info"><i class="lightredbg"></i>May start within week</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+                    @Html.TextBox("txtSearch", null, new { @class = "form-control", @placeholder = "CRM ID/Client/Project name" })
+                </div>
+
+                <div class="col-sm-12 col-md-3 col-lg-2 form-group">
+                    <div class="input-group">
+                        @Html.TextBox("ReportDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date Range", @style = "background-color: #fff;" })
+                        <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </div>
+                </div>
+                @if (Model.IsDirector)
+                {
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownListFor(model => model.PMUid, Model.PMList, "Select PM", new { @class = "form-control" })
+                </div>
+                }
+                else
+                {
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownListFor(model => model.Uid_BA, Model.BAList, "Select BA", new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownListFor(model => model.Uid_TL, Model.TLList, "Select TL", new { @class = "form-control" })
+                </div>
+                }
+
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownListFor(model => model.ReviewPercentageId, Model.ReviewPercentageList, "Select Promising Type", new { @class = "form-control" })
+                </div>
+
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group text-left">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+
+        <div id="div_baconversion" class="form-group clearfix">
+
+        </div>
+        <div class="row">
+            <div id="divRunningDeveoper" class="table-responsive col-md-3" style="overflow-x:auto;margin-top:-18px;margin-bottom:13px;"></div>
+        </div>
+
+
+        <div id="divProjectionReport" class="table-responsive" style="overflow-x:auto;margin-bottom:13px;"></div>
+        <div id="divPastProjectionReport" class="table-responsive" style="overflow-x:auto;margin-bottom:13px;"></div>
+        <table id="grid-projectcloser" class="table table-stats"></table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-review-projectClosure", AreaLabeledId = "modal-review-projectClosure-label", Size = Enums.ModalSize.Large });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-status-projectClosure", AreaLabeledId = "modal-status-projectClosure-label", Size = Enums.ModalSize.Medium });
+}
+@section scripts{
+    <script src="~/bundles/ProjectClosure/review"></script>  
+    @*<script src="~/Scripts/CustomJS/ProjectClosure/projectClosure-review.js"></script>*@
+}

@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Vaccination Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .table > thead:first-child > tr:first-child > th { /* border-top: 0; */
+        background: #333333 none repeat scroll 0 0 !important;
+        color: #fff !important;
+        text-transform: uppercase !important;
+    }
+
+    p {
+        display: block;
+        line-height: 16px !important;
+        margin: 0;
+        padding: 0px !important;
+    }
+
+    .dropdown_employee {
+        width: 200px;
+        position: relative;
+        float: right;
+        margin-left: 10px;
+    }
+
+    .filterLateHour {
+        float: right !important;
+        position: relative !important;
+        margin-left: 13px !important;
+    }
+</style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div class="manage-Project-page full-wdth">
+            <h2 style="float:left;">Vaccination Reports</h2>
+            <a class="btn btn-warning filterLateHour" href="@(SiteKey.DomainName+"report/downloadvaccinationreportexcel")">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i> Export Excel
+            </a>
+            <section id="no-more-tables">
+                <table id="grid-vaccination-report" class="display postable table table-bordered table-condensed"></table>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+@section scripts{
+    <script src="~/Scripts/CustomJS/User/vaccination-index.js"></script>
+}

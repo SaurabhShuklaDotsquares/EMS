@@ -1,0 +1,319 @@
+﻿@model EMS.Dto.EmployeeFeedback.EmpFeedbackDto
+@{
+    ViewData["Title"] = "EmpFeedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string Yes = "Yes";
+    string No = "No";
+}
+<style>
+    .color-orange {
+        color: #e99701;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20" id="frm-create-edit-employeefeedback">
+        @Html.Partial("_Notification")
+        <div class="timesheet-page full-wdth clearfix">
+            <h2> Exit Interview & Feedback </h2>
+            <div class="validation-summary"></div>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form dis-block clearfix">
+                        @using (Html.BeginForm("savempfeedback", "feedback", FormMethod.Post))
+                        {
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    @Html.DropDownListFor(model => model.PmUid, Model.PMUsers, "--Select PM--", new { @class = "form-control searchfilterpm", @required = "required" })
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="Uid" name="Uid" class="form-control userinfo" required>
+                                        <option value="">--All Employee--</option>
+                                    </select>
+                                    @*@Html.DropDownListFor(model => model.Uid, Model.PMUsers, "--All Employee--", new { @class = "form-control userinfo", @required = "required" })*@
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row checkfeedbackerror hide">
+                                <div class="col-md-6">
+                                    <div class="alert alert-danger" role="alert">
+                                        Feedback already recorded for selected employee, please check in <a asp-action="index" asp-controller="feedback" style="text-decoration:underline;">feedback list</a>.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-padding">
+                                    <div><b><span class="color-orange">Employee Information</span></b></div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Name : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label id="empname"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Email : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label id="empemail"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Employee Code : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label id="empcode"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Manager Name : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label id="emppmname"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Designation : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label id="empdesignation"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label>Department : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label id="empdepartment"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row feedbacksubmitted">
+                                <div class="col-padding">
+                                    <div><b><span class="color-orange">Employee Details</span></b></div>
+                                </div>
+                            </div>
+                            <hr class="feedbacksubmitted" />
+                            <div class="row feedbacksubmitted">
+
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <label>Review Link : </label>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(model => model.ReviewLink, new { @class = "form-control" })
+                                        <span class="help-block" style="font-size:11px;">ex: Glassdoor, LinkedIn etc.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row feedbacksubmitted">
+                                <div class="col-md-6 form-group">
+                                    <div class="col-md-6">
+                                        <label>Linkedin / Facebook Profile changed : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model.Id > 0)
+                                        {
+                                            @if (Model.LFProfile == true)
+                                            {
+                                                <span class="text-success"><b> @Yes </b></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger"><b> @No </b></span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" name="LFProfile" class="@(Model.Id>0?"disabled-radio":"")" @(Model.LFProfile == true ? "checked" : "") value="true" required />
+                                            @Yes
+                                            <input type="radio" name="LFProfile" class="@(Model.Id>0?"disabled-radio":"")" @(!Model.LFProfile == true ? "checked" : "") value="false" />
+                                            @No
+                                            @*<input type="radio" name="LFProfile" class="@(Model.Id>0?"disabled-radio":"")" @(Model.LFProfile && Model.Id > 0 ? "checked" : "") value="true" required />
+                            @Yes
+                            <input type="radio" name="LFProfile" class="@(Model.Id>0?"disabled-radio":"")" @(!Model.LFProfile && Model.Id > 0 ? "checked" : "") value="false" />
+                            @No*@
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-group feedbacksubmitted">
+                                    <div class="col-md-6">
+                                        <label>Email/ Skypee Password Retested : </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model.Id > 0)
+                                        {
+                                            @if (Model.EmailSkypePassReset == true)
+                                            {
+                                                <span class="text-success"><b> @Yes </b></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger"><b> @No </b></span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" name="EmailSkypePassReset" class="@(Model.Id>0?"disabled-radio":"")" @(Model.EmailSkypePassReset == true ? "checked" : "") value="true" required />
+                                            @Yes
+                                            <input type="radio" name="EmailSkypePassReset" class="@(Model.Id>0?"disabled-radio":"")" @(!Model.EmailSkypePassReset == true ? "checked" : "") value="false" />
+                                            @No
+
+                                            @*<input type="radio" name="EmailSkypePassReset" class="@(Model.Id > 0 ? "disabled-radio" : "")" @(Model.EmailSkypePassReset && Model.Id > 0 ? "checked" : "") value="true" required /> @Yes
+                            <input type="radio" name="EmailSkypePassReset" class="@(Model.Id > 0 ? "disabled-radio" : "")" @(!Model.EmailSkypePassReset && Model.Id > 0 ? "checked" : "") value="false" /> @No*@
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row feedbacksubmitted">
+                                <div class="col-padding">
+                                    <div>
+                                        <b><span class="color-orange">What are the reasons for leaving?</span></b>
+                                        &nbsp; <span style="color:red;">(You can select maximum 3 reasons)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="feedbacksubmitted" />
+                            <div class="row feedbacksubmitted" id="checkboxfeedbackreason">
+                                @if (Model.Feedbackreason != null)
+                                {
+                                    <div style="margin-left:36px;height: 110px;">
+                                        @foreach (var item in Model.Feedbackreason)
+                                        {
+                                            <div class="checkbox col-md-3 setfontweight">
+                                                <input class="reasoncheckbox @(Model.Id>0?"disabled-radio":"")" type="checkbox" name="selectedfeedbackreason[]" value="@item.Value" data-attr="@item.Text" checked="@item.Selected" /> @item.Text
+
+                                            </div>
+                                            @*@if (item.Text.ToLower() == "other")
+                                            {
+                                                if (Model.Id > 0)
+                                                {
+                                                    if (!string.IsNullOrEmpty(Model.comment))
+                                                    {
+                                                        <div class="col-md-3 div-comment" id="commentbox" style="display:none">
+                                                            <span><b>[</b>@Model.comment<b>]</b></span>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-md-3" id="commentbox" style="display:none">
+                                                        @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @style = "width:auto;resize: none;margin-top:18px;min-height:50px;", @placeholder = "comment here.....", id = "comment" })
+                                                    </div>
+
+                                                }
+                                            }*@
+                                        }
+                                    </div>
+                                }
+
+                            </div>
+
+                            <div class="row feedbacksubmitted" id="commentbox" style="display:none">
+                                <div class="col-md-6" style="margin-left: 16px;" >
+                                    @Html.TextAreaFor(model => model.comment, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "comment here.....", @rows = "10", id = "comment" })
+                                </div>
+                            </div>
+
+                            <div class="row feedbacksubmitted" id="reasoncheckbox">
+                                <div class="col-padding">
+                                    <div><span class="color-orange"><b>Please rank the following</b></span></div>
+                                </div>
+                            </div>
+                            <hr class="feedbacksubmitted" />
+                            <div class="col-md-12 feedbacksubmitted">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            @foreach (var item in Model.LeavingReason)
+                                            {
+                                                <th>@item.Text</th>
+                                            }
+                                        </tr>
+                                    <thead>
+                                    <tbody>
+
+                                        @{
+                                            int i = 0;
+
+                                            foreach (var item in Model.FeedbackrankDto)
+                                            {
+                                                <tr>
+                                                    <td class="setfontweight">
+                                                        @item.Name
+                                                        <input type="hidden" name="FeedbackrankDto[@i].EmployeeFeedbackRankId" value="@item.EmployeeFeedbackRankId" />
+                                                    </td>
+                                                    @foreach (var chk in Model.LeavingReason)
+                                                    {
+                                                        <td>
+                                                            <input class="radio  @(Model.Id>0?"disabled-radio":" ")"
+                                                                   type="radio" value="@chk.Value" name="FeedbackrankDto[@i].EmployeeFeedbackStatus" required />
+                                                        </td>
+                                                    }
+                                                </tr>
+                                                i++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row feedbacksubmitted">
+                                <div class="col-padding">
+                                    <div><b><span class="color-orange">Suggestions</span></b></div>
+                                </div>
+                            </div>
+                            <hr class="feedbacksubmitted" />
+                            <div class="row feedbacksubmitted">
+                                <div class="col-md-6" style="margin-left: 16px;">
+                                    @Html.TextAreaFor(x => x.Suggestions, new { @class = "form-control", @style = "width:100%;resize: none;min-height:80px;", @placeholder = "suggestion here.....", @rows = "10" })
+                                </div>
+                            </div>
+                            <div class="row feedbacksubmitted" style="display:block;">
+                                <div class="col-md-12">
+                                    @Html.HiddenFor(model => model.LeavingDate)
+                                    <button type="submit" class="btn btn-custom pull-right margin-right10 btnSubmit" name="Save">Submit</button>
+                                </div>
+                            </div>
+                        }
+                        @*@if (CurrentUser.RoleId == (int)Enums.UserRoles.HRBP)
+        {
+            <div class="row" style="display:block;">
+                <div class="col-md-12">
+                    <a href="@(SiteKey.DomainName + "feedback/index")" class="btn btn-custom pull-right margin-right10" name="Save">Back</a>
+                </div>
+            </div>
+        }*@
+
+                        @*<div class="row" style="@(Model.Id>0?"display:block":"display:none")">
+            <div class="col-md-12">
+                <a href="@(SiteKey.DomainName + "feedback/index")" class="btn btn-custom pull-right margin-right10" name="Save">Back</a>
+            </div>
+        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/scripts/jquery-ui-timepicker.js" asp-append-version="true"></script>
+    <script src="~/Scripts/datepicker/moment.js" asp-append-version="true"></script>
+    @*<script src="~/bundles/EmployeeFeedback/add" asp-append-version="true"></script>*@
+    <script src="~/Scripts/CustomJS/EmployeeFeedback/emp-feedback.js" asp-append-version="true"></script>
+
+}
+

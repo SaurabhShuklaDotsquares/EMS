@@ -1,0 +1,266 @@
+﻿@using EMS.Core;
+@model EMS.Web.Models.Calendar.CalendarMonthWithWeek
+@{
+    var statusClass = "noStatus";
+    var officialLeaves = ViewBag.OfficialLeave as List<OfficialLeaveDto> ?? new List<OfficialLeaveDto>();
+    var isUKTeam = (ViewBag.IsUKTeam as bool?) ?? false;
+    var totalLeave = ViewBag.totalLeave;
+    var holidayLeaveUserName = ViewBag.holidayLeaveUserName;
+    var startDate = ViewBag.startDate;
+    var endDate = ViewBag.endDate;
+    var isIndianUser = ViewBag.isIndianUser;
+    var holidayLeaveCount = ViewBag.holidayLeaveCount;
+    var sickLeaveCount = ViewBag.sickLeaveCount;
+    //if (totalLeave != null && totalLeave != "")
+    //{
+    //    if (holidayLeaveCount == 0)
+    //    {
+    //        holidayLeaveCount = "-";
+    //    }
+    //    if (sickLeaveCount == 0)
+    //    {
+    //        sickLeaveCount = "-";
+    //    }
+    //}
+
+}
+
+<div class="calendar-box clearfix">
+    @if (totalLeave != null && totalLeave != "")
+    {
+        <div class="cald-box1 clearfix">
+            <div class="col-sm-6 pull-right" style="padding-left:0px;">
+                @if (isIndianUser == "0")
+                {
+                    <table class="table table-stats">
+                        <tbody>
+                            <tr><td colspan="3">Name: <b>@holidayLeaveUserName</b></td></tr>
+                            <tr><td>From: <b>@startDate</b></td><td colspan="2">To: <b>@endDate</b></td></tr>
+                            <tr><td>Sick Leave: <b>@sickLeaveCount</b></td><td>Holiday Leave: <b>@holidayLeaveCount</b></td><td>Pending Leave: <b>@totalLeave</b></td></tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <table class="table table-stats">
+                        <tbody>
+                            <tr><td colspan="3">Name: <b>@holidayLeaveUserName</b></td></tr>
+                            <tr><td>From: <b>@startDate</b></td><td colspan="2">To: <b>@endDate</b></td></tr>
+                            <tr>@*<td>Sick Leave: <b>@sickLeaveCount</b></td>*@<td>Holiday Leave: <b>@holidayLeaveCount</b></td><td colspan="2">Pending Leave: <b>@totalLeave</b></td></tr>
+                            @*<tr><td colspan="3">Pending Leave: <b>@totalLeave</b></td></tr>*@
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    }
+    <div class="cald-box1 clearfix">
+        <div class="month-box">
+            <a onclick="GetEmpLeaves(this);" class="prev-month changeMonth" href="javascript:;" steps-type="previous"><i class="fa fa-angle-left"></i></a>
+            <div class="month-slide"><span class="currenth-month">@Model.MonthName</span></div>
+            <a onclick="GetEmpLeaves(this);" class="next-month changeMonth" href="javascript:;" steps-type="next"><i class="fa fa-angle-right"></i></a>
+        </div>
+
+        <div class="cald-box1 clearfix">
+            <div class="col-md-6 padding-top5 text-right  pull-right">
+                <span class="text-right">
+                    <span class="">
+                        <span class="info-block2">
+                            <i class="statusPending"></i><span>Pending</span>
+                        </span>
+                        <span class="info-block2">
+                            <i class="statusApproved"></i><span>Approved</span>
+                        </span>
+                        <span class="info-block2">
+                            <i class="statusCancelled"></i><span>Cancelled</span>
+                        </span>
+                        <span class="info-block2">
+                            <i class="statusUnApproved"></i><span>UnApproved</span>
+                        </span>
+                        @*@if (totalLeave != null && totalLeave != "")
+                        {
+                            <span class="label label-info info-block2" style="font-size:14px;font-weight:bold;">Total Applied Leave: @totalLeave</span>
+                        }*@
+
+                    </span>
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="cald-box2 overflow-x clearfix">
+        <table class="table-calendar table">
+            <thead>
+                <tr>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                    <th>Sun</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var weeks in Model.calendarWeeks)
+                {
+                <tr>
+                    @foreach (var days in weeks.calendarDays)
+                    {
+                        var isaHoliday = officialLeaves.Where(l => l.LeaveDate.Date == days.Date.Date).FirstOrDefault();
+                        //bool isaHoliday = officialLeaves.Count() > 0 && officialLeaves.Count(l => l.LeaveDate.Date == days.Date.Date) > 0;
+                        string classname = "";
+                        @if (isaHoliday != null)
+                        {
+                            @if (isaHoliday.LeaveType == "Holiday")
+                            {
+                                classname = "calendarrow-holiday";
+                            }
+                            else if (isaHoliday.LeaveType == "Event")
+                            {
+                                classname = "calendarrow-event";
+                            }
+                        }
+                        @*<td class="@(isaHoliday ? "calendarrow-holiday" : "")">*@
+                    <td class="@classname">
+                        <span class="date-no">@days.Day</span>
+
+                        @{
+                            if (isUKTeam && (isaHoliday != null))
+                            {
+                                // Don't show any thing
+                                <span class="pull-right">
+                                    @if (days.CalenderDayList != null)
+                                    {
+                                        string title = "";
+                                        title = days.CalenderDayList.Count + " " + (days.CalenderDayList.Count > 1 ? "Employees" : "Employee") + " on leave today";
+                                        <span class="empOnLeave" title="@title">@days.CalenderDayList.Count</span>
+                                    }
+                                </span>
+                                <div class="main__scroller">
+                                    <div class="baron baron__root baron__clipper _simple _scrollbar" style="overflow: hidden;">
+                                        <div class="baron__scroller" style="overflow-x:hidden !important; overflow-y:hidden !important">
+                                            @if (days.EmployeeWithLeaveId != null)
+                                            {
+                                                <ul>
+                                                    @foreach (var tuple in days.CalenderDayList)
+                                                    {
+                                                        <li>
+                                                            @{ statusClass = (tuple.Item4 == 6) ? "Pending" : (tuple.Item4 == 7) ? "Approved" : (tuple.Item4 == 8) ? "Cancelled" : (tuple.Item4 == 9) ? "UnApproved" : "noStatus"; }
+                                                            <i class="fa fa-circle @statusClass"></i>
+                                                            <a class='prc-btn2' data-toggle='modal' data-target='#modal-leave-detail' href="@Url.Action("LeaveInfo", "Leave", new { id = tuple.Item2 })">
+                                                                @tuple.Item1
+                                                                @if (Convert.ToInt32(tuple.Item3) > 0)
+                                                                {
+                                                                    if (tuple.Item3 == (int)Enums.LeaveType.Urgent)
+                                                                    {
+                                                                        <span>&nbsp;(@Enum.GetName(typeof(EMS.Core.Enums.LeaveType), tuple.Item3))</span>
+                                                                    }
+                                                                }
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            if (isUKTeam && (isaHoliday != null || days.Date.DayOfWeek == DayOfWeek.Saturday || days.Date.DayOfWeek == DayOfWeek.Sunday))
+                            {
+                                // Don't show any thing
+                            }
+                            else
+                            {
+                                <span class="pull-right">
+                                    @if (days.CalenderDayList != null)
+                                    {
+                                        string title = "";
+                                        title = days.CalenderDayList.Count + " " + (days.CalenderDayList.Count > 1 ? "Employees" : "Employee") + " on leave today";
+                                        <span class="empOnLeave" title="@title">@days.CalenderDayList.Count</span>
+                                    }
+                                </span>
+                                <div class="main__scroller">
+                                    <div class="baron baron__root baron__clipper _simple _scrollbar" style="overflow: hidden;">
+                                        <div class="baron__scroller" style="overflow-x:hidden !important; overflow-y:hidden !important">
+                                            @if (days.EmployeeWithLeaveId != null)
+                                            {
+                                                <ul>
+                                                    @foreach (var tuple in days.CalenderDayList)
+                                                    {
+                                                        <li>
+                                                            @{ statusClass = (tuple.Item4 == 6) ? "Pending" : (tuple.Item4 == 7) ? "Approved" : (tuple.Item4 == 8) ? "Cancelled" : (tuple.Item4 == 9) ? "UnApproved" : "noStatus"; }
+                                                            <i class="fa fa-circle @statusClass"></i>
+                                                            <a class='prc-btn2' data-toggle='modal' data-target='#modal-leave-detail' href="@Url.Action("LeaveInfo", "Leave", new { id = tuple.Item2 })">
+                                                                @tuple.Item1
+                                                                @if (Convert.ToInt32(tuple.Item3) > 0)
+                                                                {
+                                                                    if (tuple.Item3 == (int)Enums.LeaveType.Urgent)
+                                                                    {
+                                                                        <span>&nbsp;(@Enum.GetName(typeof(EMS.Core.Enums.LeaveType), tuple.Item3))</span>
+                                                                    }
+                                                                }
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                            @if (isUKTeam && days.CalenderDayAdjustHourList != null && days.CalenderDayAdjustHourList.Any())
+                                            {
+                                                <ul>
+                                                    @foreach (var tuple in days.CalenderDayAdjustHourList)
+                                                    {
+                                                        <li>
+                                                            <i class="fa fa-circle"></i>
+                                                            <a style="cursor:pointer" class="prc-btn2 " title="@string.Format("{0}", tuple.Item5 != null ? tuple.Item5 : "")">
+                                                                @tuple.Item1
+                                                                <span class="text-maroon">
+                                                                    (@(tuple.Item3 != "" ? "Late " + tuple.Item3 : "")
+                                                                    @(tuple.Item3 != "" && tuple.Item4 != "" ? " / " : "")
+                                                                    @(tuple.Item4 != "" ? "Early Leave " + tuple.Item4.ToString() : "")
+                                                                    @(tuple.Item5 != null ? "UnAuthorized" : "" ))
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        </div>
+                                        <div class="baron__track hidden">
+                                            <div class="baron__control baron__up">▲</div>
+                                            <div class="baron__free">
+                                                <div class="baron__bar"></div>
+                                            </div>
+                                            <div class="baron__control baron__down">▼</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+                            if (isaHoliday != null)
+                            {
+                                <div class="calendar-holiday">
+                                    @if (isUKTeam)
+                                    {
+                                        foreach (var ofcLeaves in officialLeaves.Where(l => l.LeaveDate.Date == days.Date.Date).ToList())
+                                        {
+                                            <b>@ofcLeaves.Title</b><br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @(officialLeaves.FirstOrDefault(l => l.LeaveDate.Date == days.Date.Date).Title)
+                                    }
+                                </div>
+                            }
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

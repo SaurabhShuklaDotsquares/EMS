@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Set Encrypt Password";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .color_green {
+        color: forestgreen;
+    }
+
+    .color_red {
+    color:red;
+    }
+    
+    .color_orange {
+        color:darkorange;
+    }
+
+    .font_size_15 {
+    font-size:15px;
+    }
+</style>
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div id="NotificationDiv"></div>
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>Set Encrypt Password</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="button" id="startencryption" name="name" style="    background: #e18f00 none repeat scroll 0 0;
+                                    border-radius: 0 !important;
+                                    font-size: 16px !important;
+                                    font-weight: 600;
+                                    line-height: normal;
+                                    padding: 7px 20px;
+                                    color: white;" value="Set Encrypt Password" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span id="EncryptInProgress" class="hide color_orange font_size_15"> User Password Encryption Procedure Is In Progress. </span>
+                                <span id="EncryptSuccess" class="hide color_green font_size_15"> User Password Encryption Procedure Completed. </span>
+                                <span id="EncryptError" class="hide color_red font_size_15">No Details Found or Something Went Wrong. </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script type="text/javascript" src="~/bundles/User/SetEncryptPass" asp-append-version="true"></script>
+}
+

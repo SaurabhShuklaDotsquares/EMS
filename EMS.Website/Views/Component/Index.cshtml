@@ -1,0 +1,68 @@
+﻿@model ComponentDto
+@using EMS.Core
+@using EMS.Web.Models.Others
+@section styles{
+    <link href="~/css/colorbox.css" />
+
+}
+<div class="main_content">
+    <input type="hidden" id="hdnInputType" />
+    @Html.Hidden("hdnIsSuperAdmin", Model.IsSuperAdmin)
+    <input type="hidden" value=@Model.CreatedByUid id="uid" />
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div class="estimateDocument-page fullwidth">
+            <h2>Component List</h2>
+            <div class="clearfix full-wdth margin-bottom15">
+                <div class="full-wdth clearfix">
+                    <div class="pull-left">
+                        <a href="@Url.Action("AddEditComponent","Component")" data-target="#modal-AddEditComponent" data-toggle="modal" class="btn btn-custom margin-bottom10 pull-left">Add New</a>
+                    </div>
+                    <div style="width:60%;float:right;">
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-custom pull-left" id="btnSearch">Search</button>
+                        </div>
+                        <div class="pull-right box2 margin-right10">
+                            <input class="form-control" style="width: 250px;" type="text" placeholder="Search Filter" id="txtSearch" />
+                        </div>
+                        <div class="pull-right margin-right10">
+                            @Html.DropDownList("type", new List<SelectListItem>()
+                                                                {
+                                                                   new SelectListItem() { Text= "Html", Value = "1"},
+                                                                    new SelectListItem() { Text= "Design", Value = "2" },
+                                                                    new SelectListItem() { Text= "Js", Value = "3"}
+                                                                }, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-right margin-right10">
+                            @Html.DropDownListFor(model => model.ComponentCategoryId, Model.CategoryList, "All Category", new { @class = "form-control" })
+                        </div>
+
+                        @*<div class="pull-right margin-right10">
+                                @Html.DropDownList("drpSpam", new List<SelectListItem>()
+                                                                    {
+                                                                        new SelectListItem() { Text= "Included from library", Value = "0" },
+                                                                        new SelectListItem() { Text= "Excluded from library", Value = "1"},
+
+                                                                    }, new { @class = "form-control" })
+                            </div>*@
+
+                    </div>
+                </div>
+                <section id="div-grid-component">
+                    <table class="table postable table-responsive table-condensed " id="grid-component"></table>
+                </section>
+                <section id="component-Image-gallery" style="display:none;"></section>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-AddEditComponent", AreaLabeledId = "lbl-modal-AddEditComponent", Size = Enums.ModalSize.Large })
+
+@section scripts{
+    <script src="~/Scripts/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/CustomJS/component.js"></script>
+    <script src="~/Scripts/jquery.colorbox-min.js"></script>
+
+}

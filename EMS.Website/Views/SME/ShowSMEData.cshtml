@@ -1,0 +1,80 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.SmeDto
+@using EMS.Core
+@{
+    ViewBag.Title = "Manage Subject Master Expert";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/fSelect.css" rel="stylesheet" />
+<link href="~/Content/css/toggle-switch.css" rel="stylesheet" />
+<style>
+    .fs-label {
+        padding: 10px !important;
+    }
+
+    @@media (max-width: 768px) {
+        /* Adjust styles for screens with a maximum width of 768px (sm devices) */
+        .selectsubjectmatter {
+            width: 100%;
+        }
+        /* Add more responsive styles as needed */
+    }
+
+    .fs-dropdown {
+        width: 233px;
+    }
+</style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @Html.Partial("_Notification")
+        <div class="row" style="padding-top:2%">
+
+
+            <div class="col-md-12">
+                <div class="form-group  col-sm-4 col-md-4">
+                    <h2>Manage Subject Matter Experts</h2>
+                </div>
+                <div class=" form-groupcol-sm-8 col-md-8">
+
+                    <div class="col-sm-2 col-md-2 form-group">
+                        @Html.DropDownList("subjectmatter", (List<SelectListItem>)ViewBag.SubjectMatterList, null, new { @class = "form-control selectsubjectmatter pull-left", @multiple = "multiple" })
+
+                    </div>
+                    <div class="col-sm-2 col-md-2 form-group" style="margin-left: 60px;">                      
+                        <button id="searchButton" class="btn btn-custom">Search</button>
+                    </div>
+                    <div class="form-group text-right col-sm-6 col-md-6">
+                        <a href="javascript:void(0)" id="btnExport" class="btn btn-custom" style="background-color: #3f8c09;">
+                            <i class="fa fa-file-excel-o"></i> Export To Excel
+                        </a>
+                        <button id="resetButton" class="btn btn-custom">Reset</button>
+
+
+                        <a href="@Url.Action("index","sme")" class="btn btn-custom">Add New</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <table id="grid-sme-table" class="display postable table table-stats table-condensed"></table>
+    </div>
+
+
+</div>
+
+
+
+<div class="divoverlay hide"></div>
+
+
+
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-sme", AreaLabeledId = "lbl-delete-sme", Size = Enums.ModalSize.Medium });
+}
+
+@section scripts{
+
+    <script src="~/js/fSelect.js"></script>
+    <script src="~/scripts/customjs/sme/managesme.js"></script>
+}

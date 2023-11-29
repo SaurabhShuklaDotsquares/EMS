@@ -1,0 +1,336 @@
+﻿@model ProductLandingDto
+@{
+    ViewBag.Title = "Product Landing Page";
+    var domain = SiteKey.DomainName;
+}
+
+@section styles{
+    <link href="~/Scripts/plugin/fine-uploader/fine-uploader-new.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+
+        .cke_top {
+            background: #ffeaa1 !important;
+        }
+
+        .cke_textarea_inline, .cke_editable_inline {
+            margin-bottom: 40px;
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,.15);
+        }
+
+        .cke_editable a {
+            color: #0061dd;
+            text-decoration: underline;
+        }
+
+        .section-title {
+            text-transform: uppercase;
+            color: #e18f00;
+        }
+
+        .ems-form .row {
+            margin-bottom: 0;
+        }
+
+        .btn-link {
+            text-decoration: underline;
+        }
+
+        .qq-uploader, .qq-upload-list {
+            max-height: none;
+            overflow-y: visible;
+            box-shadow: none;
+        }
+
+        .qq-upload-cancel {
+            background-color: red;
+            color: #fff;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+            .qq-upload-cancel:hover {
+                background-color: #c61313;
+            }
+
+        #fine-uploader-manual-trigger .buttons {
+            margin-top: 0;
+        }
+
+        #fine-uploader-manual-trigger .caption {
+            height: 60px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        #fine-uploader-manual-trigger .img-container {
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            float: left;
+            margin-right: 5px;
+        }
+
+            #fine-uploader-manual-trigger .img-container img {
+                margin-right: 0;
+            }
+
+        @@media only screen and (min-width: 768px) {
+            #fine-uploader-manual-trigger .qq-upload-list li {
+                width: 100%;
+                float: none;
+                margin-right: 0;
+            }
+
+            #fine-uploader-manual-trigger .qq-upload-list .desc-btns-container {
+                float: left;
+                width: 83.5%;
+            }
+
+            #fine-uploader-manual-trigger .img-container {
+                float: left;
+                max-width: 15%;
+            }
+        }
+
+        @@media only screen and (max-width: 767px) {
+            #fine-uploader-manual-trigger .qq-upload-list li {
+                width: 100%;
+                float: none;
+                margin-right: 0;
+                text-align: center;
+            }
+
+            #fine-uploader-manual-trigger .img-container {
+                float: none;
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            #fine-uploader-manual-trigger .qq-upload-list .desc-btns-container {
+                float: none;
+                width: 100%;
+            }
+        }
+
+        @@media only screen and (min-width: 992px) {
+            #fine-uploader-manual-trigger .qq-upload-list li {
+                padding: 9px 0;
+                width: 48.5%;
+                float: left;
+                margin-right: 10px;
+                margin-bottom: 5px;
+            }
+
+            #fine-uploader-manual-trigger .qq-upload-list .desc-btns-container {
+                float: left;
+                width: 83.5%;
+            }
+        }
+
+        #screenshot-list {
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            #screenshot-list li {
+                list-style: none;
+                float: left;
+                margin-right: 15px;
+                margin-bottom: 15px;
+                width: 200px;
+                text-align: center;
+                border: 1px dashed #a7a7a7;
+                padding: 10px;
+                position: relative;
+            }
+
+                #screenshot-list li a {
+                    display: inline-block;
+                }
+
+                #screenshot-list li img {
+                    display: inline-block;
+                    max-width: 180px;
+                    max-height: 180px;
+                    border: none;
+                    margin-bottom: 5px;
+                }
+
+                #screenshot-list li textarea {
+                    height: 60px;
+                    resize: none;
+                    border: 1px solid #ccc !important;
+                }
+
+                #screenshot-list li .remove {
+                    position: absolute;
+                    right: -5px;
+                    top: -5px;
+                    font-size: 10px;
+                    color: #fff;
+                    border-radius: 11px;
+                    background-color: #db0000;
+                    padding: 6px;
+                    line-height: 100%;
+                    height: 22px;
+                    width: 22px;
+                    cursor: pointer;
+                }
+    </style>
+}
+
+<div class="full-wdth padding20">
+    <h2>Product Landing Page</h2>
+
+    @{ Html.RenderPartial("_Notification"); }
+    <div id="validation-summary"></div>
+
+    <div class="ems-form create-form-outer-box">
+        @using (Html.BeginForm("addedit", "productlandingpage", FormMethod.Post, new { id = "ProductLandingForm" }))
+        {
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            @Html.HiddenFor(x => x.IsDraft)
+
+            <div class="row">
+                <div class="col-md-12 col-lg-10 col-lg-offset-1">
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h4 class="section-title">Product Name</h4>
+                            @Html.TextBoxFor(x => x.ProductName, htmlAttributes: new { @class = "form-control", @data_rule_required = "true" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="section-title">Banner Text</h4>
+                            @Html.TextAreaFor(x => x.HighlightText, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="section-title">About Product</h4>
+                            @Html.TextAreaFor(x => x.AboutProduct, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <h4 class="section-title">Features</h4>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            @Html.TextAreaFor(x => x.Feature1, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            @Html.TextAreaFor(x => x.Feature2, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            @Html.TextAreaFor(x => x.Feature3, htmlAttributes: new { @class = "form-control" })
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="section-title">Services Include</h4>
+                            @Html.TextAreaFor(x => x.ServiceDetail, htmlAttributes: new { @class = "form-control" })
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="section-title">Technology Used</h4>
+                            @Html.TextAreaFor(x => x.TechnologyDetail, htmlAttributes: new { @class = "form-control", @style = "height:150px" })
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="section-title">Client Testimonials</h4>
+                            @Html.TextAreaFor(x => x.Testimonials, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <h4 class="section-title">Upload Product Screenshots</h4>
+
+                    <div id="fine-uploader-manual-trigger"></div>
+                    <br />
+
+                    <ul id="screenshot-list">
+                        @{
+                            for (int i = 0; i < Model.Screenshots.Count; i++)
+                            {
+                                <li>
+                                    <span class="remove"><i class="fa fa-close"></i></span>
+                                    @Html.HiddenFor(model => model.Screenshots[i].Id, htmlAttributes: new { @class = "reindex" })
+                                    @Html.HiddenFor(model => model.Screenshots[i].ScreenshotUrl, htmlAttributes: new { @class = "reindex" })
+                                    <a href="@(domain + Model.Screenshots[i].ScreenshotUrl)" target="_blank" title="view image">
+                                        <img src="@(domain + Model.Screenshots[i].ScreenshotUrl)" />
+                                    </a>
+                                    @Html.TextAreaFor(model => model.Screenshots[i].Description, htmlAttributes: new { @class = "form-control reindex" })
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <div class="clearfix"></div>
+                    <div class="text-right">
+                        <a href="@Url.Action("index")" class="btn btn-custom" style="background-color:#b1b1b1">Cancel</a>
+                        <button type="submit" class="btn btn-custom" id="Draft">Save as Draft</button>
+                        <button type="submit" class="btn btn-custom" id="Save">Publish</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="qq-template-manual-trigger" class="hidden">
+        <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
+            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+                <span class="qq-upload-drop-area-text-selector"></span>
+            </div>
+            <div class="buttons">
+                <div class="qq-upload-button-selector qq-upload-button">
+                    <div>Select files</div>
+                </div>
+            </div>
+            <span class="qq-drop-processing-selector qq-drop-processing">
+                <span>Processing dropped files...</span>
+                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+            </span>
+            <ul class="qq-upload-list-selector qq-upload-list clearfix" aria-live="polite" aria-relevant="additions removals">
+                <li>
+                    <div class="qq-progress-bar-container-selector">
+                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                    </div>
+                    <div class="img-container">
+                        <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                        <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                    </div>
+                    <div class="desc-btns-container">
+                        <textarea class="caption form-control" placeholder="Description"></textarea>
+                        <span class="qq-upload-size-selector qq-upload-size"></span>
+                        <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">Cancel</button>
+                        <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
+                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">Delete</button>
+                        <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+@section scripts{
+    <script src="https://cdn.ckeditor.com/4.11.4/full/ckeditor.js"></script>
+    <script src="~/bundles/ProductLandingPage/addEdit"></script>
+}

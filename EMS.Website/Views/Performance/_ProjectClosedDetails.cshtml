@@ -1,0 +1,39 @@
+﻿@model List<ProjectClosureDto>
+@{await Html.RenderPartialAsync("_ModalHeader", new EMS.Web.Models.Others.ModalHeader { Heading = "Project Closed Details" }); }
+
+<div class="modal-body">
+    @if (Model != null)
+    {
+        <table class="table table-stats">
+            <thead>
+                <tr>
+                    <td style="width:5%">S.No.</td>
+                    <td style="width:20%">Project Name</td>
+                    <td style="width:20%">Client</td>
+                    <td style="width:30%">Closing Date</td>
+                    <td style="width:25%">BA/TL Name</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(++index)</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.ClientName</td>
+                            <td>@item.DateOfClosing</td>
+                            <td>@item.BATLName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <span> No data found</span>
+    }
+
+</div>

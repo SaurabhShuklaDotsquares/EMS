@@ -1,0 +1,95 @@
+﻿@model EstimateCalculationDto
+@{
+    var isCollapse = Model.CalculationResult.Where(x => x.IsCollapsePrice == true).FirstOrDefault() != null;
+}
+
+@if (Model.CalculationResult.Count > 0)
+{
+    <table class="table table-bordered table-stats">
+        @foreach (var item in Model.CalculationResult.Where(x => x.IsCollapsePrice == null || x.IsCollapsePrice == false))
+        {
+        <tr class="@(item.Heading == "Per Hour Project Cost" ? "fontbold":"")@(item.Heading == "SDLC Time" ? " btnSDLC pointer":"")">
+            <td style="width: 250px;font-weight: bold;">
+                <span id="spnSDLCTime" class="@(item.Heading == "SDLC Time" ? "badge badge-secondary ":"")">@(item.Heading == "SDLC Time" && isCollapse == true ? " + " + item.Heading : item.Heading) </span> @(item.Heading == "SDLC Time" ? item.Percent.ToString("0.00") + " %" : "")
+            </td>
+            <td class="text-center">@(item.Pound == "0" ? "-" : item.Pound)</td>
+            <td class="text-center">@(item.USD == "0" ? "-" : item.USD)</td>
+            <td class="text-center">@(item.AUD == "0" ? "-" : item.AUD)</td>
+            <td class="text-center">@(item.AED == "0" ? "-" : item.AED)</td>
+        </tr>
+            @if (item.Heading == "SDLC Time")
+            {
+
+                @foreach (var item1 in Model.CalculationResult.Where(x => x.IsCollapsePrice == true))
+                {
+    <tr class="SDLCTime hidden">
+        <td style="width:250px;font-weight:bold;">@item1.Heading </td>
+        <td class="text-center">@(item1.Pound == "0" ? "-" : item1.Pound)</td>
+        <td class="text-center">@(item1.USD == "0" ? "-" : item1.USD)</td>
+        <td class="text-center">@(item1.AUD == "0" ? "-" : item1.AUD)</td>
+        <td class="text-center">@(item1.AED == "0" ? "-" : item1.AED)</td>
+    </tr>
+                }
+            }
+        }
+        <tr class="fontbold">
+            <td>Team composition for estimate</td>
+            <td colspan="4">
+                @(string.Join(", ", Model.EstimateForm.GroupBy(x => new { x.RoleId, x.TechnologyId }).Select(x => $"{x.Sum(s => s.NoOfResources)} {x.FirstOrDefault().TechnologyName} {x.FirstOrDefault().RoleName}{(x.Sum(s => s.NoOfResources) > 1 ? "(s)" : "")}")))
+            </td>
+        </tr>
+        <tr class="fontbold">
+            <td>Total Duration of Project</td>
+            <td colspan="4">
+                @Model.TotalDurationOfProject
+            </td>
+        </tr>
+
+        @if (Model.UKCount > 0 || Model.USCount > 0 || Model.AUSCount > 0 || Model.UAECount > 0)
+            {
+    <tr>
+        <td class="fontbold">Server Hosting Cost</td>
+        <td>
+            @if (Model.UKCount > 0)
+            {
+                <span class="ahref btn-servercountry" data-countryId="2" title="View UK Server Hosting packages">View UK Packages</span>
+            }
+            else
+            {
+                <span>-</span>
+            }
+        </td>
+        <td>
+            @if (Model.USCount > 0)
+            {
+                <span class="ahref btn-servercountry" data-countryId="3" title="View US Server Hosting packages">View US Packages</span>
+            }
+            else
+            {
+                <span>-</span>
+            }
+        </td>
+        <td>
+            @if (Model.AUSCount > 0)
+            {
+                <span class="ahref btn-servercountry" data-countryId="4" title="View AUS Server Hosting packages">View AUS Packages</span>
+            }
+            else
+            {
+                <span>-</span>
+            }
+        </td>
+        <td>
+            @if (Model.UAECount > 0)
+            {
+                <span class="ahref btn-servercountry" data-countryId="4" title="View AUS Server Hosting packages">View UAE Packages</span>
+            }
+            else
+            {
+                <span>-</span>
+            }
+        </td>
+    </tr>
+            }
+    </table>
+}

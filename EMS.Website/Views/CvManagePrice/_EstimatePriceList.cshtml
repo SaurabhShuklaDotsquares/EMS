@@ -1,0 +1,51 @@
+﻿@model EMS.Dto.CVEstimatePrice.CVEstimatePriceDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@section styles{
+    <link href="~/Content/css/toggle-switch.css" />
+
+}
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+
+
+        <div class="PriceList-page full-wdth clearfix">
+            <fieldset>
+                <legend><h2>Manage Price List</h2></legend>
+            </fieldset>
+
+            @*<div class="dis-block clearfix">
+            <div class="pull-right box2">
+            <div class="wdth2 margin-right10 pull-left">
+            @using (Html.BeginForm())
+            {
+            <div class="wdth1 margin-right10 pull-left">
+            @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Enter Technology Name", style = "width: 250px;" })
+            </div>
+
+            <button type="button" class="btn btn-custom pull-left" id="btn_search">Search</button>
+            }
+            </div>
+
+            </div>
+            </div>*@
+            <table style="float: right;border: 3px grey solid;">
+                   
+                <tr>
+                    <th>Conversion Rate</th>
+                    <th>£ 1= @Model.USD USD</th>
+                    <th>£ 1= @Model.AUD AUD</th>
+                    <th>£ 1= @Model.AED AED</th>
+                </tr>
+            </table>
+
+            <div class="box-body ">
+                <section id="no-more-tables">
+                    <table id="grid-priceList" class="display postable table table-bordered table-condensed"></table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Modal", new Modal { ID = "modal-price-list", AreaLabeledId = "modal-price-list-label", Size = Enums.ModalSize.Large })

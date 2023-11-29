@@ -1,0 +1,948 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+html, body {
+	height: 100%;
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/Q47Ro23nlKqZrOLipd3-SyEAvth_LlrfE80CYdSH47w.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/qkE6YsKPRiYUugBb1_QwHCEAvth_LlrfE80CYdSH47w.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/N2U74xxQEyaTBF6QLZRr1CEAvth_LlrfE80CYdSH47w.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/1_daFS3X6gkNOcmGmHl7UiEAvth_LlrfE80CYdSH47w.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/G-mm5mDezDSs-RvEL7XAECEAvth_LlrfE80CYdSH47w.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/fVu1p3782bqS2z-CaJvp9iEAvth_LlrfE80CYdSH47w.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Noto Serif'), local(NotoSerif), url(https://fonts.gstatic.com/s/notoserif/v4/eCpfeMZI7q4jLksXVRWPQ_k_vArhqVIZ0nv9q090hN8.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPede9INZm0R8ZMJUtfOsxrw.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPbpHcMS0zZe4mIYvDKG2oeM.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPRquHyap-BLkxbFhcQRhghg.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPTyJJ3dJfU6-XWVNf-DPRbs.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPTh33M2A-6X0bdu871ruAGs.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPRHJTnCUrjaAm2S9z52xC3Y.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Noto Serif';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Noto Serif Bold'), local(NotoSerif-Bold), url(https://fonts.gstatic.com/s/notoserif/v4/lJAvZoKA5NttpPc9yc6lPYWiMMZ7xLd792ULpGE4W_Y.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTa-j2U0lmluP9RWlSytm3ho.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTZX5f-9o1vgP2EXwfjgl7AY.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTRWV49_lSm1NYrwo-zkhivY.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTaaRobkAwv3vxw3jMhVENGA.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTf8zf_FOSsgRmwsS7Aa9k2w.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTT0LW-43aMEzIO6XUTLjad8.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Open Sans Light'), local(OpenSans-Light), url(https://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTegdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/K88pR3goAWT7BTt32Z01mxJtnKITppOI_IvcXXDNrsc.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/RjgO7rYTmqiVp7vzi-Q5URJtnKITppOI_IvcXXDNrsc.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/LWCjsQkB6EMdfHrEVqA1KRJtnKITppOI_IvcXXDNrsc.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/xozscpT2726on7jbcb_pAhJtnKITppOI_IvcXXDNrsc.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/59ZRklaO5bWGqF5A9baEERJtnKITppOI_IvcXXDNrsc.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/u-WUoqrET9fUeobQW7jkRRJtnKITppOI_IvcXXDNrsc.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Open Sans'), local(OpenSans), url(https://fonts.gstatic.com/s/opensans/v13/cJZKeOuBrn4kERxqtaUH3VtXRa8TVwTICgirnJhmVJw.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSq-j2U0lmluP9RWlSytm3ho.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSpX5f-9o1vgP2EXwfjgl7AY.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNShWV49_lSm1NYrwo-zkhivY.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSqaRobkAwv3vxw3jMhVENGA.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSv8zf_FOSsgRmwsS7Aa9k2w.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSj0LW-43aMEzIO6XUTLjad8.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Open Sans Semibold'), local(OpenSans-Semibold), url(https://fonts.gstatic.com/s/opensans/v13/MTP_ySUJH_bn48VBG8sNSugdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzK-j2U0lmluP9RWlSytm3ho.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzJX5f-9o1vgP2EXwfjgl7AY.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzBWV49_lSm1NYrwo-zkhivY.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzKaRobkAwv3vxw3jMhVENGA.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzP8zf_FOSsgRmwsS7Aa9k2w.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzD0LW-43aMEzIO6XUTLjad8.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Open Sans Bold'), local(OpenSans-Bold), url(https://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzOgdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hq-j2U0lmluP9RWlSytm3ho.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hpX5f-9o1vgP2EXwfjgl7AY.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hhWV49_lSm1NYrwo-zkhivY.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hqaRobkAwv3vxw3jMhVENGA.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hv8zf_FOSsgRmwsS7Aa9k2w.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hj0LW-43aMEzIO6XUTLjad8.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Open Sans Extrabold'), local(OpenSans-Extrabold), url(https://fonts.gstatic.com/s/opensans/v13/EInbV5DfGHOiMmvb1Xr-hugdm0LZdjqr5-oayXSOefg.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBjTOQ_MqJVwkKsUn0wKzc2I.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBjUj_cnvWIuuBMVgbX098Mw.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBkbcKLIaa1LC45dFaAfauRA.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBmo_sUJ8uO4YLWRInS22T3Y.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBr6up8jxqWt8HVA3mDhkV_0.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBiYE0-AqJ3nfInTTiDXDjU4.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Open Sans Italic'), local(OpenSans-Italic), url(https://fonts.gstatic.com/s/opensans/v13/xjAJXh38I15wypJXxuGMBo4P5ICox8Kq3LLUNMylGO4.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxmgpAmOCqD37_tyH_8Ri5MM.woff2) format("woff2");
+unicode-range:U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxsPNMTLbnS9uQzHQlYieHUU.woff2) format("woff2");
+unicode-range:U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxgyhumQnPMBCoGYhRaNxyyY.woff2) format("woff2");
+unicode-range:U+1F00-1FFF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxhUVAXEdVvYDDqrz3aeR0Yc.woff2) format("woff2");
+unicode-range:U+0370-03FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxlf4y_3s5bcYyyLIFUSWYUU.woff2) format("woff2");
+unicode-range:U+0102-0103, U+1EA0-1EF9, U+20AB
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxnywqdtBbUHn3VPgzuFrCy8.woff2) format("woff2");
+unicode-range:U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF
+}
+@font-face {
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Open Sans Semibold Italic'), local(OpenSans-SemiboldItalic), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxl2umOyRU7PgRiv8DXcgJjk.woff2) format("woff2");
+unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215
+}
+body {
+	background: #fff;
+	font-family: 'Open Sans', sans-serif;
+}
+html, body {
+	height: auto;
+}
+a, button, input, select, textarea {
+	text-decoration: none;
+	transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-webkit-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	font-family: 'Open Sans', sans-serif !important;
+}
+a:hover {
+	text-decoration: none;
+	outline: 0
+}
+a:focus {
+	outline: none;
+	outline-offset: none;
+	text-decoration: none
+}
+button:focus {
+	outline: medium none
+}
+a, img {
+	border: none;
+	outline: none
+}
+img {
+	max-width: 100%;
+	height: auto;
+	display: inline-block
+}
+label {
+	font-weight: 400;
+	margin: 0
+}
+h1, h2, h3, h4, h5, h6 {
+	display: block;
+	font-family: "Open Sans", sans-serif;
+	font-weight: 600;
+	margin: 0;
+	padding: 0 0 15px;
+}
+ul, ol {
+	list-style: none;
+	margin: 0
+}
+ul li, ol li {
+	list-style: none
+}
+p {
+	display: block;
+}
+.dis-inline {
+	display: inline-block;
+	vertical-align: middle;
+	position: relative
+}
+.dis-block {
+	display: block;
+	position: relative
+}
+.full-wdth {
+	display: block;
+	width: 100%;
+	position: relative;
+	margin-bottom: 30px;
+}
+.mrg0 {
+	margin: 0!important
+}
+.pad0 {
+	padding: 0!important
+}
+.bdr-none {
+	border: none!important
+}
+.new_container * {
+	box-sizing: border-box;
+}
+.new_container *:after, .new_container *:before {
+	box-sizing: border-box;
+}
+.clearfix:after, .clearfix:before, .row:after, .row:before {
+	content: " ";
+	display: table;
+}
+.clearfix:after, .row:after {
+	clear: both;
+}
+.pull-left {
+	float: left;
+	display: inline-block;
+	position: relative;
+}
+.pull-right {
+	float: right;
+	display: inline-block;
+	position: relative;
+}
+.text-left {
+	text-align: left;
+}
+.text-center {
+	text-align: center;
+}
+.text-right {
+	text-align: right;
+}
+/* GENERAL --------------------------------------------------------*/
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+.fr {
+	float: right;
+}
+a {
+	outline: none;
+	text-decoration: none;
+}
+a:hover {
+}
+.clear {
+	clear: both;
+	font-size: 0px;
+	height: 0;
+	line-height: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+img {
+	border: 0;
+}
+p {
+	margin: 0px;
+	padding: 0px;
+}
+form {
+	margin: 0;
+	padding: 0;
+}
+.line {
+	border-top: 1px solid #dcdada;
+	font-size: 0px;
+	height: 1px;
+	line-height: 0px;
+	margin: 20px 0;
+	padding: 0;
+}
+.font11 {
+	font-size: 11px;
+}
+.flotL {
+	float: left;
+}
+.flotR {
+	float: right;
+}
+/*  LOGIN -------------------------------------------------------------------------------- */
+
+#login-bg { /*background: url(../images/login/login_bg.jpg) no-repeat top center;*/
+}
+.employee-login {
+	background: #333333 none repeat scroll 0 0;
+	border-radius: 5px 5px 0 0;
+	box-sizing: border-box;
+	color: #ffffff;
+	display: block;
+	font-size: 24px;
+	font-weight: 600;
+	margin: 0;
+	padding: 10px 0;
+	position: relative;
+	text-align: center;
+	width: 100%;
+}
+#login-holder {
+	margin: 0px auto 0 auto;
+	width: 508px;
+}
+#loginbox, #forgotbox {
+	background: #f1f1f1 none repeat scroll 0 0;
+	border: medium none;
+	border-radius: 5px;
+	box-sizing: border-box;
+	font-size: 14px;
+	height: auto;
+	line-height: normal;
+	margin: 30px 0 0;
+	padding: 0;
+	position: relative;
+	width: 500px;
+}
+.login_inr {
+	box-sizing: border-box;
+	color: #333333;
+	display: block;
+	font-size: 13px;
+	line-height: normal;
+	margin: 0 auto;
+	padding: 30px;
+	position: relative;
+	width: 100%;
+}
+#login-inner label {
+	position: relative;
+}
+.checkbox-size {
+	width: 13px;
+	height: 13px;
+	margin: 5px 0;
+}
+#login-inner th {
+	font-weight: 400;
+	padding: 0 0 10px;
+	text-align: left;
+	width: 100px;
+}
+#login-inner td {
+	padding: 0 0 10px;
+	position: relative;
+}
+.login-inp {
+	border: 1px solid #dddddd;
+	border-radius: 0;
+	box-sizing: border-box;
+	color: #333333;
+	font-size: 14px;
+	height: auto;
+	margin: 0 !important;
+	padding: 10px 12px;
+	position: relative;
+	width: 100%;
+	display: block;
+}
+#logo-login {
+	display: block;
+	margin: 55px auto 0;
+	text-align: center;
+}
+a.forgot-pwd {
+	color: #999999;
+	display: block;
+	font-size: 12px;
+	margin: 0;
+	text-decoration: underline;
+}
+a:hover.forgot-pwd {
+	color: #f89f2c;
+}
+#forgot-inner {
+	display: block;
+	width: 100%;
+}
+#forgot-inner th {
+	font-weight: 400;
+	padding: 0 0 10px;
+	text-align: left;
+	width: 100px;
+}
+#forgot-inner td {
+	padding: 0 0 10px;
+	position: relative;
+}
+a.back-login {
+	background: url(../images/login/icon_back_login.gif) no-repeat 0 4px;
+	bottom: 30px;
+	color: #161616;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 12px;
+	padding: 0 0 0 10px;
+	position: absolute;
+	right: 40px;
+}
+a:hover.back-login {
+	color: #fff;
+}
+.submit-login {
+	background: url(../images/login/submit.png) no-repeat;
+	border: none;
+	cursor: pointer;
+	display: block;
+	height: 31px;
+	text-indent: -3000px;
+	width: 90px;
+}
+.submit-login:hover {
+	background: url(../images/login/submit-hover.png) no-repeat;
+}
+.selectbox3_input {
+	background: url(../images/login/login-dropdon.png) right 15px no-repeat #fff;
+	border: 1px solid #656565;
+	border-radius: 5px 5px 5px 5px;
+	color: #24497f;
+	cursor: pointer;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	height: 32px;
+	line-height: 32px;
+	padding-left: 3px;
+	position: relative;
+	text-align: left;
+	width: 216px;
+}
+.new_searchF_inp {
+	float: left;
+	width: 70%;
+}
+.selectbox3_select {
+	height: 36px;
+	left: 0;
+	line-height: 1;
+	opacity: 0;
+	padding: 8px;
+	position: absolute;
+	top: 0;
+	width: 221px;
+}
+input[type="text"]:focus, textarea:focus, select:focus, input[type="password"]:focus {
+	box-shadow: 0 0 8px #305386 !important;
+}
+:focus {
+	outline: 0 none;
+}
+/* #select dropdown
+========================================*/
+select {
+	padding: 8px 3px;
+	margin: 0;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+	-moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+	background: #fff;
+	color: #24497F;
+	border: 1px solid #305386;
+	display: inline-block;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	cursor: pointer;
+	width: 221px;
+}
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+select {
+	padding-right: 18px
+}
+}
+label {
+	position: relative
+}
+label:after {
+	content: '<>';
+	color: #24497F;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+	right: 8px;
+	top: 2px;
+	padding: 0 0 2px;
+	border-bottom: 1px solid #ddd;
+	position: absolute;
+	pointer-events: none;
+}
+label:before {
+	content: '';
+	right: 6px;
+	top: 0px;
+	width: 20px;
+	height: 20px;
+	background: #f8f8f8;
+	position: absolute;
+	pointer-events: none;
+	display: block;
+}
+#login-inner table {
+	width: 100%;
+}
+#login-inner td span.error {
+	left: -30px;
+	position: absolute;
+	top: 10px;
+}
+#lbl_remember {
+	color: #999999 !important;
+}
+#login-inner input[type="checkbox"] {
+	display: inline-block;
+	margin: 0 3px 0 0;
+	vertical-align: middle;
+}
+#login-inner input[type="text"]:focus, #login-inner textarea:focus, #login-inner select:focus, #login-inner input[type="password"]:focus {
+	box-shadow: none !important;
+}
+#forgot-inner input[type="text"]:focus, #forgot-inner textarea:focus, #forgot-inner select:focus, #login-inner input[type="password"]:focus {
+	box-shadow: none !important;
+}
+.form-group {
+	display: block;
+	margin: 0 0 25px;
+	position: relative;
+	width: 100%;
+}
+.form-group label:before, .form-group label:after {
+	display: none;
+}
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 0 5px;
+}
+.inpt {
+	background: #ffffff none repeat scroll 0 0;
+	border: 1px solid #dddddd;
+	border-radius: 5px;
+	box-shadow: none;
+	box-sizing: border-box;
+	display: block;
+	font-family: "Open Sans", sans-serif !important;
+	font-size: 14px;
+	height: 44px;
+	line-height: 1.42857;
+	outline: medium none;
+	padding: 6px 12px 6px 60px;
+	width: 100%;
+}
+.form-group .bg1 {
+	background: #fff url(../images/user-name-icon.png) no-repeat 14px center;
+}
+.form-group .bg2 {
+	background: #fff url(../images/password-icon.png) no-repeat 14px center;
+}
+.form-group .error {
+	bottom: 14px;
+	font-size: 12px;
+	position: absolute;
+	right: 15px;
+}
+.top_error {
+	left: 30px;
+	position: absolute;
+	top: 8px;
+}
+.rem_box {
+	float: left;
+	margin: 10px 0 0;
+}
+.rt_btn_box {
+	float: right;
+}
+.sbmt_btn {
+	background-color: #e99701;
+	border: medium none;
+	border-radius: 5px;
+	color: #ffffff;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.42857;
+	margin: 0;
+	outline: medium none;
+	padding: 8px 26px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.sbmt_btn:hover {
+	background-color: #333333;
+	color: #ffffff;
+}
+.frg {
+	text-align: right;
+	display: block;
+}
+.error {
+	color: Red;
+}
+
+.frg {
+  margin: 10px 0 0;
+}
+/*---20-07-2017---*/
+#login-inner .form-group label.error, #forgot-inner .form-group label.error{margin-bottom:0; position:absolute;}
+#login-inner .form-group input.error, #forgot-inner .form-group input.error{position:relative; left:0; top:0;}
+#login-inner .btm_btn_box label#litRememberMe::before, #login-inner .btm_btn_box label#litRememberMe::after {content: ""; display:none;}
+#login-inner .btm_btn_box label#litRememberMe{color:#999;}
+.frg a, .rem_box a{color:#999999; font-size:12px; text-decoration:underline;}
+.frg a:hover, .rem_box a:hover{color:#f89f2c;}

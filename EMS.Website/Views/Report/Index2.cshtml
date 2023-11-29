@@ -1,0 +1,105 @@
+﻿@model EmployeeWorkingHoursDto;
+@using EMS.Core
+@using EMS.Web.Models.Others
+@{
+    ViewBag.Title = "Employee working Hour data";
+}
+<style>
+    .padding-right {
+        padding-right: 5px !important;
+    }
+</style>
+<div class="main_content">
+    <div class="full-wdth padding20">
+        @{ Html.RenderPartial("_Notification"); }
+        <div id="MessageDiv"></div>
+        <div class="row form-group">
+            <div class="col-sm-3">
+                <h2>Employee Working Hours Variance</h2>
+            </div>
+            <div class="col-sm-9 text-right">
+                <div class="pull-right">
+                    <button id="btnGo" class="btn btn-custom">Search</button>
+                </div>
+                @*<div class="col-md-2 pull-right">
+                        <input asp-for="DateTo" class="form-control" type="text" placeholder="Date To" readonly />
+                    </div>*@
+                <div class="col-md-2 pull-right">
+                    <input asp-for="DateFrom" class="form-control" type="text" placeholder="Date" readonly />
+                </div>
+                <div class="div-Department col-md-3 pull-right">
+                    <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control">
+                        <option value="">- Select Department -</option>
+                    </select>
+                </div>
+                <div class="div-Employee col-md-3 pull-right">
+                    <select asp-for="Uid" asp-items="Model.Employees" class="form-control">
+                        <option value="">- Select Employee -</option>
+                    </select>
+                </div>
+                <div class="col-md-3 pull-right">
+                    <select asp-for="WorkingHourTypeId" asp-items="Model.WorkingHourTypes" class="form-control">
+                        <option value="">- Select Report By -</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <div class="actual-hours hide pull-right padding-bottom10" style="font-size:19px;color:red;">
+            <span style="font-weight:bold;">Total Actual Hours :</span> <span style="font-weight:bold;" class="total-actual-hours"></span>
+        </div>
+        <div class="planned-hours hide pull-right text-right padding-bottom10 padding-right20" style="font-size:19px;color:red;">
+            <span style="font-weight:bold;">Total Planned Hours :</span> <span style="font-weight:bold;" class="total-planned-hours"></span>
+        </div>
+        <div class="note-box dis-block padding-top15 clearfix">
+            <p style="font-size:19px;"><b>Note:</b></p>
+            <p>
+                <ul style="color:red;padding-left:20px;">
+                    <li style="list-style-type:disc">8 hours planning should be updated on PMS before 11 O'clock in morning.</li>
+                    <li style="list-style-type:disc">Task should be maximum decompose, it should not be more than 2 hours (Split as much as you can).</li>
+                    <li style="list-style-type:disc">Actual hours should be actual spent hours (Not Articulate).</li>
+                    <li style="list-style-type:disc">If you are moving resource from Project A to Project B then reduce that resource hours from Project A and add in Project B.</li>
+                    <li style="list-style-type:disc">If you are planning same task for 2 days then need to split it in Part 1 and Part 2 for both days like Part 1 task will be for day 1 and Part 2 task will be for day 2.</li>
+                </ul>
+            </p>
+        </div>
+
+        <div class="pull-right padding-bottom5">
+            <a class="export-btn" data-href="@Url.Action("ExportEmpWorkingReportExcel","Report")" href="@Url.Action("ExportEmpWorkingReportExcel","Report")" style="display:none" target="_blank">
+                <img src="content/images/excel.png" alt="" /> Export To Excel
+            </a>
+        </div>
+
+        <table id="grid-EmployeeWorkingHour-table" class="display postable table table-stats table-condensed">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>
+                        <table class="display postable table table-stats table-condensed" style="margin:0px;border:none;">
+                            <thead>
+                                <tr>
+                                    <th style="width:30%;">Project Name</th>
+                                    <th style="width:40%;text-align: left;">Task Name</th>
+                                    <th style="width:15%;text-align: right;">Planned Hours</th>
+                                    <th style="padding-right:0px;border-right:none;text-align:right;">Actual Hours</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </th>
+                    @*<th style="text-align:right;">Total Planned Hours</th>
+                <th style="text-align:right;">Total Actual Hours</th>*@
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div class="divoverlay hide"></div>
+
+
+@section scripts{
+    @*<script src="~/Scripts/CustomJS/Report/EmployeeWorkingHours2.js" asp-append-version="true"></script>*@
+    <script src="~/bundles/Report/EmployeeWorkingHour2" asp-append-version="true"></script>
+}
+

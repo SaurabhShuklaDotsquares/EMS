@@ -1,0 +1,275 @@
+﻿@model List<ActivityGrid>
+@using EMS.Core
+@{
+    var teamSummary = (List<TeamOccupancyDto>)ViewBag.TeamSummary;
+    bool isPMUser = CurrentUser.RoleId == (int)Enums.UserRoles.PM;
+    bool isDirector = CurrentUser.RoleId == (int)Enums.UserRoles.Director;
+
+}
+@if (teamSummary != null && teamSummary.Any()) {
+    <h3>Employee Stats</h3>
+    <div class="table-responsive">
+        <table class="team-summary" id="team_summary">
+            <colgroup>
+                <col />
+                <col />
+                <col class="EmployeeInfo" span="11" />
+                <col class="RunningInfo" span="8" />
+                <col class="SupportInfo" span="5" />
+                <col class="red-bg" span="1" />
+                <col class="blue-bg" span="1" />
+                <col class="orange-bg" span="1" />
+                <col />
+                <col />
+                @if (isDirector) {
+                    <col />
+                }
+            </colgroup>
+            <thead>
+                <tr>
+                    <td rowspan="2">S No.</td>
+                    <td rowspan="2">Team Manager</td>
+                    <td colspan="11">Employees</td>
+                    <td colspan="8"><b>Running</b></td>
+                    <td colspan="5"><b>Support Team</b></td>
+                    <td rowspan="2">Free</td>
+                    <td rowspan="2">Add. Support</td>
+                    <td rowspan="2">Overrun</td>
+                    <td rowspan="2">Leave</td>
+                    <td rowspan="2">Not Logged In</td>
+                    @if (isDirector) {
+                        <td rowspan="2"></td>
+                    }
+                </tr>
+                <tr>
+                    <td class="EmployeeMain">Total</td>
+                    <td>.Net</td>
+                    <td>PHP</td>
+                    <td>Mob.</td>
+                    <td>Hub.</td>
+                    <td>BA</td>
+                    <td>QA</td>
+                    <td>SEO</td>
+                    <td>DG</td>
+                    <td>Trainee</td>
+                    <td>Other</td>
+                    <td class="RunningMain">CRM Occupancy</td>
+                    <td>Running</td>
+                    <td>SEO</td>
+                    <td>Leave</td>
+                    <td>Not Logged In</td>
+                    <td>Bonus</td>
+                    <td>Bucket</td>
+                    <td>No Actual Assigned</td>
+                    <td class="SupportMain">Total</td>
+                    <td>DG</td>
+                    <td>BA</td>
+                    <td>TL</td>
+                    <td>QA</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var count = 1;
+                    foreach (TeamOccupancyDto teamdetail in teamSummary) {
+                                <tr data-pmuid="@teamdetail.TeamManagerId">
+                                    <td>@(count++)</td>
+                                    <td>@teamdetail.TeamManagerName</td>
+
+                                    <td class="EmployeeMain"><b>@teamdetail.TotalEmployee</b></td>
+                                    <td class="@(teamdetail.TotalDotNetEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.DotNetDevelopment" data-val="@((int)Enums.ProjectDepartment.DotNetDevelopment)">@(teamdetail.TotalDotNetEmployee != 0 ? teamdetail.TotalDotNetEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalPHPEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.PHPDevelopment" data-val="@((int)Enums.ProjectDepartment.PHPDevelopment)">@(teamdetail.TotalPHPEmployee != 0 ? teamdetail.TotalPHPEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalMobileEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.MobileApplication" data-val="@((int)Enums.ProjectDepartment.MobileApplication)">@(teamdetail.TotalMobileEmployee != 0 ? teamdetail.TotalMobileEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalHubspotEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.HubSpot" data-val="@((int)Enums.ProjectDepartment.HubSpot)">@(teamdetail.TotalHubspotEmployee != 0 ? teamdetail.TotalHubspotEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalBAEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.BusinessAnalyst" data-val="@((int)Enums.ProjectDepartment.BusinessAnalyst)">@(teamdetail.TotalBAEmployee != 0 ? teamdetail.TotalBAEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalQAEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.QualityAnalyst" data-val="@((int)Enums.ProjectDepartment.QualityAnalyst)">@(teamdetail.TotalQAEmployee != 0 ? teamdetail.TotalQAEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalSEOEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.SEO" data-val="@((int)Enums.ProjectDepartment.SEO)">@(teamdetail.TotalSEOEmployee != 0 ? teamdetail.TotalSEOEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalDesignerEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.WebDesigning" data-val="@((int)Enums.ProjectDepartment.WebDesigning)">@(teamdetail.TotalDesignerEmployee != 0 ? teamdetail.TotalDesignerEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalTraineeEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.SoftwareTrainee" data-val="@((int)Enums.ProjectDepartment.SoftwareTrainee)">@(teamdetail.TotalTraineeEmployee != 0 ? teamdetail.TotalTraineeEmployee.ToString() : "-")</td>
+                                    <td class="@(teamdetail.TotalOtherEmployee > 0 ? "filter filterdept":"")" data-department="@Enums.ProjectDepartment.Other" data-val="@((int)Enums.ProjectDepartment.Other)">@(teamdetail.TotalOtherEmployee != 0 ? teamdetail.TotalOtherEmployee.ToString() : "-")</td>
+
+
+                                    <td class="RunningMain"><b>@(teamdetail.ActualRunning != 0 ? String.Format("{0} ({1}%)", teamdetail.ActualRunning, teamdetail.ActualRunningPercentage) : "-")</b></td>
+                                    <td @(teamdetail.Running > 0 ? "class=filter data-status=Running" : "")>@(teamdetail.Running != 0 ? teamdetail.Running.ToString() : "-")</td>
+                                    <td @(teamdetail.SEORunning > 0 ? "class=filter2 data-other=seo data-seorunning=" + teamdetail.SEOUserIds : "")>@(teamdetail.SEORunning > 0 ? teamdetail.SEORunning.ToString() : "-")</td>
+                                    <td @(teamdetail.OnLeaveButRunning > 0 ? "class=filter data-status=OnLeaveButRunning" : "")>@(teamdetail.OnLeaveButRunning != 0 ? teamdetail.OnLeaveButRunning.ToString() : "-")</td>
+                                    <td @(teamdetail.NotLoginButRunning > 0 ? "class=filter data-status=NotLoginButRunning" : "")>@(teamdetail.NotLoginButRunning != 0 ? teamdetail.NotLoginButRunning.ToString() : "-")</td>
+                                    <td @(teamdetail.BonusRunning > 0 ? "class=filter2 data-other=bonus data-bonusrunning=" + teamdetail.BonusRunningDevelopers : "")>@(teamdetail.BonusRunning > 0 ? teamdetail.BonusRunning.ToString() : "-") </td>
+                                    <td @(teamdetail.BucketRunning > 0 ? "class=filter2 data-other=bucket data-bucketrunning=" + teamdetail.BucketProjectIds : "")>@(teamdetail.BucketRunning != 0 ? teamdetail.BucketRunning.ToString() : "-")</td>
+                                    <td @(teamdetail.UnassignedRunning > 0 ? "class=filter2 data-other=unassigned data-unassignedrunning=" + teamdetail.UnassignedProjectIds : "")>@(teamdetail.UnassignedRunning != 0 ? teamdetail.UnassignedRunning.ToString() : "-")</td>
+
+                                    <td class="SupportMain @(teamdetail.TotalSupport > 0 ? "filter":"")" @(teamdetail.TotalSupport > 0 ? "data-status=SupportTeam" : "")><b>@(teamdetail.TotalSupport != 0 ? String.Format("{0} ({1}%)", teamdetail.TotalSupport, teamdetail.SupportTeamPercentage) : "-")</b></td>
+                                    @*<td @(teamdetail.DesignerInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + (int)Enums.UserRoles.DG : "")>@(teamdetail.DesignerInSupport != 0 ? teamdetail.DesignerInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.BAInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + (int)Enums.UserRoles.BA : "")>@(teamdetail.BAInSupport != 0 ? teamdetail.BAInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.TLInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + (int)Enums.UserRoles.TL : "")>@(teamdetail.TLInSupport != 0 ? teamdetail.TLInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.QAInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + (int)Enums.UserRoles.QA : "")>@(teamdetail.QAInSupport != 0 ? teamdetail.QAInSupport.ToString() : "-")</td>*@
+                                    <td @(teamdetail.DesignerInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + 8 : "")>@(teamdetail.DesignerInSupport != 0 ? teamdetail.DesignerInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.BAInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + 9 : "")>@(teamdetail.BAInSupport != 0 ? teamdetail.BAInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.TLInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + 3 : "")>@(teamdetail.TLInSupport != 0 ? teamdetail.TLInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.QAInSupport > 0 ? "class=filter data-status=SupportTeam data-role=" + 6 : "")>@(teamdetail.QAInSupport != 0 ? teamdetail.QAInSupport.ToString() : "-")</td>
+                                    <td @(teamdetail.Free > 0 ? "class=filter data-status=Free" : "")>@(teamdetail.Free != 0 ? String.Format("{0} ({1}%)", teamdetail.Free, teamdetail.FreePercentage) : "-")</td>
+                                    <td @(teamdetail.AdditionalSupport > 0 ? "class=filter data-status=AdditionalSupport" : "")>@(teamdetail.AdditionalSupport != 0 ? String.Format("{0} ({1}%)", teamdetail.AdditionalSupport, teamdetail.AdditionalSupportPercentage) : "-")</td>
+                                    <td @(teamdetail.OverRun > 0 ? "class=filter data-status=OverRun" : "")>@(teamdetail.OverRun != 0 ? String.Format("{0} ({1}%)", teamdetail.OverRun, teamdetail.OverrunPercentage) : "-")</td>
+                                    <td @(teamdetail.Leave > 0 ? "class=filter data-status=Leave" : "")>@(teamdetail.Leave != 0 ? teamdetail.Leave.ToString() : "-")</td>
+                                    <td @(teamdetail.NotLogin > 0 ? "class=filter data-status=NotLogin" : "")>@(teamdetail.NotLogin != 0 ? teamdetail.NotLogin.ToString() : "-")</td>
+                                    @if (isDirector)
+                                    {
+                                        <td><a data-url="activity/getdetail/@teamdetail.TeamManagerId" class="ablue" style="cursor:pointer">Detail</a></td>
+                                    }
+                                </tr>
+                    }
+                }
+            </tbody>
+            @if (isDirector) {
+                <tfoot>
+                    <tr>
+                        <td colspan="2">Total</td>
+                        <td class="EmployeeMain">@teamSummary.Sum(x => x.TotalEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalDotNetEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalPHPEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalMobileEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalHubspotEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalBAEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalQAEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalSEOEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalDesignerEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalTraineeEmployee)</td>
+                        <td>@teamSummary.Sum(x => x.TotalOtherEmployee)</td>
+                        <td class="RunningMain">@teamSummary.Sum(x => x.ActualRunning)</td>
+                        <td>@teamSummary.Sum(x => x.Running)</td>
+                        <td>@teamSummary.Sum(x => x.SEORunning)</td>
+                        <td>@teamSummary.Sum(x => x.OnLeaveButRunning)</td>
+                        <td>@teamSummary.Sum(x => x.NotLoginButRunning)</td>
+                        <td>@teamSummary.Sum(x => x.BonusRunning)</td>
+                        <td>@teamSummary.Sum(x => x.BucketRunning)</td>
+                        <td>@teamSummary.Sum(x => x.UnassignedRunning)</td>
+                        <td class="SupportMain">@teamSummary.Sum(x => x.TotalSupport)</td>
+                        <td>@teamSummary.Sum(x => x.DesignerInSupport)</td>
+                        <td>@teamSummary.Sum(x => x.BAInSupport)</td>
+                        <td>@teamSummary.Sum(x => x.TLInSupport)</td>
+                        <td>@teamSummary.Sum(x => x.QAInSupport)</td>
+                        <td>@teamSummary.Sum(x => x.Free)</td>
+                        <td>@teamSummary.Sum(x => x.AdditionalSupport)</td>
+                        <td>@teamSummary.Sum(x => x.OverRun)</td>
+                        <td>@teamSummary.Sum(x => x.Leave)</td>
+                        <td>@teamSummary.Sum(x => x.NotLogin)</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            }
+        </table>
+        <input type ="hidden" id="clicked_dept" value="0"/>
+    </div>
+}
+<br />
+<div class="table-responsive">
+    <div class="pull-left">
+        <h3>Team Details</h3>
+    </div>
+    @*<div class="pull-left">        
+        <input type="checkbox" class="checkboxNoticePeriod" name="NoticePeriod" id="cboxNoticePeriod" value="NoticePeriod">
+        <label for="cboxNoticePeriod">Exclude Notice Period</label>
+    </div>*@
+    <div class="pull-right">
+        <ul class="badges-block">
+            <li class="badge-success">Expert</li>
+            <li class="badge-primary">Intermediate</li>
+            <li class="badge-warning">Beginner</li>
+            <li class="badge-dark">Interested</li>
+        </ul>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table default-table black-theme-table" id="team_activity">
+        <thead>
+            <tr>
+                <th style="width: 3%">S. No.</th>
+                <th style="width: 15%">Name</th>
+                <th style="width: 10%">Designation</th>
+                <th style="width: 15%">Project Name</th>
+                <th style="width: 15%">Technologies</th>
+                <th style="width: 15%">Domain Expert</th>
+                <th style="width: 10%">Team Manager</th>
+                <th style="width: 10%">Project Status</th>
+                <th style="width: 10%">Developer Status </th>
+                <th align="right" style="width: 10%">Login Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any()) {
+                int i = 1;
+                foreach (var item in Model) {
+                    <tr style="vertical-align: top;" class='@(item.AvailabilityStatus == "Free" ? "freeuser Free" : item.AvailabilityStatus == "Away" ? "away" : (item.AvailabilityStatus == "Not Logged-In" || item.AvailabilityStatus == "Not Logged-In [Leave UnApproved]" || item.AvailabilityStatus == "Not Logged-In [Leave Pending]") ? "nologin NotLogin" : item.AvailabilityStatus == "Running" ? "working Running" : item.AvailabilityStatus == "Additional Support" ? "addassigned AdditionalSupport" : "" ) @(item.NotLogInButRunning > 0 ? "NotLoginButRunning" : "") @(item.OnLeaveButRunning > 0 ? "OnLeaveButRunning" : "") @(item.AvailabilityStatus == "Working-Overrun" ? "OverRun" : "") @(item.AvailabilityStatus == "Support Team" ? "SupportTeam" : "") @(item.AvailabilityStatus == "Leave" || item.AvailabilityStatus == "Leave-[Half]" ? "Leave" : "")'
+                        data-pmuid="@item.PmUID" data-department="@item.UserDepartment" data-role="@item.RoleId">
+                        <td class="counter">@i</td>
+                        <td>
+                            @if (isPMUser)
+                            {
+                                <a href="@Url.Action("edituser", "user", new { id = item.UserID })" title="Edit" class="ablue" target="_blank"><b>@item.Name</b></a>
+                            }
+                            else
+                            {
+                                <span><b>@item.Name</b></span>
+                            }
+                            <span class="time-inst"><b>( @item.UserDepartmentName )</b></span>
+                            @Html.Raw(item.IsResigned && (isDirector || isPMUser) ? "<span class='notice'>(Notice Period)</span>" : "")
+                            @if (item.AdditionalSupportStatus.HasValue)
+                            {
+                                <div class="add-support-label @(item.AdditionalSupportStatus == Enums.AddSupportRequestStatus.Approved ? "success" : (item.AdditionalSupportStatus == Enums.AddSupportRequestStatus.UnApproved ? "danger" : "warning"))">
+                                    @Html.Raw(string.Format("{0} : {1} ", item.AdditionalSupportStatus.Value.GetDescription(), item.AdditionalSupportPeriod))
+                                    @if (item.AdditionalSupportStatus != Enums.AddSupportRequestStatus.Partial)
+                                    {
+                                        <i class="fa fa-info-circle" data-toggle="tooltip" title="@Html.Raw(item.AdditionalSupportReason)"></i>
+                                    }
+                                </div>
+                            }
+                        </td>
+                        <td><span><b>@item.UserDesignation</b></span></td>
+                        <td><span><b>@Html.Raw(item.ProjectName ?? "-")</b> @Html.Raw(!string.IsNullOrWhiteSpace(item.ProjectModel) ? "<br>" + item.ProjectModel : "")</span></td>
+                        <td>
+                            <span>
+                                @Html.Raw(item.TechSpecilization.ToCombinedString(delimiter: " | "))
+                            </span>
+
+                        </td>
+                        <td align="center">
+                            <span>
+                                @item.DomainExpertName.ToCombinedString(delimiter: " | ")
+                                @*<a style="cursor:pointer;color:crimson;" data-tech="@item.Technologies.ToCombinedString()" data-spec="@item.Specialisties.ToCombinedString()" data-othertech="@item.OtherTechnology" data-dom="@item.DomainExpertName.ToCombinedString()" class='tooltip-view'><i class="fa fa-eye"></i> Click Here</a>*@
+                            </span>
+                        </td>
+                        <td><span>@item.TeamManager</span></td>
+                        <td align="left">
+                            @item.CRM_ProjectStatus
+                        </td>
+                        <td>
+                            <span class='@(item.AvailabilityStatus != "Running" ? (item.AvailabilityStatus == "Free" ? "ared" : "ablue") : "agreen")'>
+                                @(item.AvailabilityStatus)
+                            </span>
+                            @*<span class=''>
+                                @(item.AvailabilityStatus)
+                            </span>*@
+                        </td>
+                        <td align="left" style="padding-right: 10px;">
+                            <span>@Html.Raw(item.LoginTime)</span>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else {
+                <tr>
+                    <td colspan="8" class="text-center">
+                        Data not found
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+@{
+    await Html.RenderPartialAsync("_Modal", new Modal { ID = "modal-tech-activity-detail", AreaLabeledId = "modal-tech-activity-detail-label", Size = Enums.ModalSize.Medium });
+}

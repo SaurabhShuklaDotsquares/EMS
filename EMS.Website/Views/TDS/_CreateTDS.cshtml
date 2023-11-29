@@ -1,0 +1,599 @@
+﻿@model CreateTDSDto
+@using EMS.Data.Model;
+@{
+    ViewBag.Title = "TDS";
+    /// .Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString() }).ToList();
+    var DeductionTypeData = (List<TdsdeductionType>)ViewBag.DeductionTypeList;
+    //  var tdsEmpList = (List<TdsempDeduction>)ViewBag.tdsEmpList;
+    var tdsEmpList1 = (List<TDSDeductionModel>)ViewBag.tdsEmpDocList;
+    var FileName = ViewBag.FileName;
+    var ddldisabled = CurrentUser.Uid != Convert.ToInt32(ViewBag.UID) ? true : false;
+    var PanNumber = tdsEmpList1.Where(x => x.TdsempDeduction.PanNumberByEmployee != null).FirstOrDefault() != null ? tdsEmpList1.Where(x => x.TdsempDeduction.PanNumberByEmployee != null).FirstOrDefault().TdsempDeduction.PanNumberByEmployee : null;
+    var AssesmentYear = "";
+    if (tdsEmpList1.Count() > 0)
+    {
+        AssesmentYear = tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange;
+    }
+    else
+    {
+        AssesmentYear = ViewBag.AssesmentYear;
+    }
+
+
+    var IsLockUnlock = tdsEmpList1.Count != 0 ? tdsEmpList1.OrderByDescending(x => x.TdsempDeduction.ModifyDateAc).FirstOrDefault().TdsempDeduction.IsLockUnlock : false;
+    string backColorEMR = "", backColorAC = "", EMPreadOnly = "", AcreadOnly = "", EMRequired = "", AcRequired = "", FileRequired = "";
+
+    switch (ViewBag.isAcUser)
+    {
+        case true:
+            if (Convert.ToInt32(ViewBag.UID) != CurrentUser.Uid)
+            {
+                EMPreadOnly = "readonly";
+                AcRequired = "required";
+                backColorEMR = "background-color:#f0f0f0!important;";
+            }
+            else
+            {
+                if (IsLockUnlock)
+                {
+                    EMPreadOnly = "readonly";
+                    backColorEMR = "background-color:#f0f0f0!important;";
+                }
+                AcreadOnly = "readonly";
+                EMRequired = "required";
+                backColorAC = "background-color:#f0f0f0!important;";
+            }
+
+            break;
+        default:
+            if (IsLockUnlock)
+            {
+                EMPreadOnly = "readonly";
+                backColorEMR = "background-color:#f0f0f0!important;";
+            }
+            AcreadOnly = "readonly";
+            EMRequired = "required";
+            backColorAC = "background-color:#f0f0f0!important;";
+            break;
+    }
+
+    //EMPreadOnly = ViewBag.isAcUser == true ? "readonly" : "";
+    //AcreadOnly = ViewBag.isAcUser == false ? "readonly" : "";
+
+
+    //EMRequired = ViewBag.isAcUser == true ? "" : "required";
+    //AcRequired = ViewBag.isAcUser == false ? "" : "required";
+
+
+}
+@*<script src="~/js/STBasejs.js"></script>*@
+@section styles{
+    <link href="~/css/bootstrap-switch.css" rel="stylesheet" />
+    <link href="~/css/alertify.min.css" rel="stylesheet" />
+}
+
+<script>
+    var isAcountUser = '@ViewBag.isAcUser'
+
+
+    var EMPreadOnly = '@EMPreadOnly'
+    var AcRequired = '@AcRequired'
+    var backColorEMR = '@backColorEMR'
+    var EMRequired = '@EMRequired'
+    var backColorAC = '@backColorAC'
+    var AcreadOnly = '@AcreadOnly'
+    var FileRequired = '@FileRequired'
+</script>
+
+<style>
+
+    table, th, td {
+        /*border: 1px solid black;*/
+    }
+
+    .notification {
+        background-color: #f9f9f9;
+        color: white;
+        text-decoration: none;
+        padding: 5px 5px;
+        position: relative;
+        display: inline-block;
+        border-radius: 2px;
+        bottom: 1px;
+    }
+
+        .notification .badge {
+            position: absolute;
+            top: -8px;
+            right: -4px;
+            padding: 2px 5px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+            font-size: 11px;
+        }
+
+    #tblfile th td {
+        border: none;
+    }
+    #frmTDS label.error {
+        display: contents;
+    }
+   
+</style>
+
+
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <div class="timesheet-page full-wdth clearfix">
+            <div id="KRAMessageDiv" class="alert alert-success alert-dismissable" style="display:none"></div>
+            <div id="MessageDiv"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Investment Details (@AssesmentYear)</h2>
+                </div>
+            </div>
+
+            @if (tdsEmpList1.Count() > 0 && tdsEmpList1.FirstOrDefault().TdsempDeduction != null && tdsEmpList1.FirstOrDefault().TdsempDeduction.U != null && ViewBag.isAcUser)
+            {
+                <div class="row">
+                    <div class="card-body table-responsive">
+                        <table id="grid-title" class="table table-bordered table-striped table-condensed">
+                            <tr>
+                                <td>
+                                    <label><b>Name :</b> @tdsEmpList1.FirstOrDefault().TdsempDeduction.U.Name</label>
+                                </td>
+                                <td>
+                                    <label><b>Email :</b> @tdsEmpList1.FirstOrDefault().TdsempDeduction.U.EmailOffice</label>
+                                </td>
+                                <td>
+                                    <label><b>Attendence Id :</b> @tdsEmpList1.FirstOrDefault().TdsempDeduction.U.AttendenceId</label>
+                                </td>
+                                <td>
+                                    @if (PanNumber != null)
+                                    {
+                                        <label><b>PAN Number :</b> @PanNumber</label>
+                                    }
+                                    else
+                                    {
+
+                                        <label><b>PAN Number :</b> Not Available</label>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }
+            
+
+
+            <div class="validation-summary"></div>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <div class="grey-bg ems-form checkList-outer dis-block clearfix validateform altform">
+                        @using (Html.BeginForm(FormMethod.Post, new { @id = "frmTDS", enctype = "multipart/form-data" }))
+                        {
+                            var loop = 1; var i = 1;
+                            <input type="hidden" id="hdnUID" name="hdnUID" value="@Model.Uid" />
+                            <input type="hidden" id="hdnAssesmentYearId" value="@Model.AssesmentYearId" />
+                            <input type="hidden" id="hdnEmpDeductionId" nbame="hdnEmpDeductionId" value="@(tdsEmpList1.Count != 0 ? tdsEmpList1.FirstOrDefault().TdsempDeduction.EmpDeductionId : 0)" />
+
+                            <div class="row">
+                                <div class="card-body table-responsive">
+                                    <table id="grid-title" class="table table-bordered table-striped table-condensed">
+                                        @foreach (var item in Model.TDSType)
+                                        {
+                                            var DeductinTypeId = string.Format("DeductinTypeId_{0}_{1}", item.TypeId, i);
+                                            var ClaimedByEmployee = string.Format("ClaimedByEmployee_{0}_{1}", item.TypeId, i);
+                                            var GivenByEmployer = string.Format("GivenByEmployer_{0}_{1}", item.TypeId, i);
+                                            var EmployeeRemark = string.Format("EmployeeRemark_{0}_{1}", item.TypeId, i);
+                                            var EmployerRemark = string.Format("EmployerRemark_{0}_{1}", item.TypeId, i);
+                                            var file = string.Format("file_{0}_{1}", item.TypeId, i);
+                                            var tr = string.Format("tr_{0}_{1}", item.TypeId, i);
+                                            var EmployeePanNumber = string.Format("EmployeePanNumber_{0}_{1}", item.TypeId, i);
+                                            var EmployeePanNumberValidate = string.Format("EmployeePanNumberValidate_{0}_{1}", item.TypeId, i);
+                                            var EmployeePanNumberValidateBrowse = string.Format("EmployeePanNumberValidateBrowse_{0}_{1}", item.TypeId, i);
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2" style="text-align:center">@item.TypeName</th>
+                                                    <th colspan="2" style="text-align:center">Deduction Amount</th>
+                                                    <th colspan="2" style="text-align:center">Remark</th>
+                                                    @if (item.TypeId == 3 || item.TypeId == 4)
+                                                    {
+                                                        <th>PanNumber</th>
+                                                    }
+                                                    else
+                                                    {
+                                                        <th></th>
+                                                    }
+                                                    @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                    {
+                                                        <th style="text-align:center">Proof Entry</th>
+                                                    }
+
+                                                    @if (loop == 1 && Model.Uid !=null)
+                                                    {
+                                                        <th style="text-align:center"><a style="color: #0909e2" class="ablue" href="~/empInvestment/Download?Uid=@Model.Uid&AssesmentYearId=@Model.AssesmentYearId">Download ALL (ZIP ) </a> </th>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <th style="text-align:center"></th>
+
+                                                    }
+
+                                                </tr>
+                                                <tr>
+                                                    <th width="4%">S N.</th>
+                                                    <th>Deduction Type</th>
+                                                    <th> Claimed by Employee </th>
+                                                    <th>Given by Employer</th>
+                                                    <th>
+                                                        Employee's
+                                                    </th>
+                                                    <th>Employer's</th>
+                                                    <th></th>
+                                                    @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                    {
+                                                        <th></th>
+                                                    }
+                                                    <th></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="Tbody_@loop" style="border-bottom:5px solid #e99701;">
+
+                                                @if (tdsEmpList1.Where(x => Convert.ToInt32(x.TdsempDeduction.TypeId) == item.TypeId).ToList().Count > 0)
+                                                {
+                                                    var tdsLoop = 1;
+                                                    var exceptionList = new List<int>();
+
+                                                    foreach (var tdsitem in tdsEmpList1.Where(x => Convert.ToInt32(x.TdsempDeduction.TypeId) == item.TypeId))
+                                                    {
+                                                        FileRequired = tdsitem.TdsDoc.Where(x=> x.Uid == null).Count() == 0 ? "required" : "";
+
+                                                        tr = string.Format("tr_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        DeductinTypeId = string.Format("DeductinTypeId_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        ClaimedByEmployee = string.Format("ClaimedByEmployee_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        GivenByEmployer = string.Format("GivenByEmployer_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        EmployeeRemark = string.Format("EmployeeRemark_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        EmployerRemark = string.Format("EmployerRemark_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        file = string.Format("file_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        //exceptionList.Add(tdsitem.DeductionTypeId);
+                                                        exceptionList = tdsEmpList1.Where(x => x.TdsempDeduction.TypeId == item.TypeId && x.TdsempDeduction.DeductionTypeId != tdsitem.TdsempDeduction.DeductionTypeId).Select(x => x.TdsempDeduction.DeductionTypeId).ToList();
+                                                        EmployeePanNumber = string.Format("EmployeePanNumber_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        EmployeePanNumberValidate = string.Format("EmployeePanNumberValidate_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+                                                        EmployeePanNumberValidateBrowse = string.Format("EmployeePanNumberValidateBrowse_{0}_{1}", tdsitem.TdsempDeduction.TypeId, tdsLoop);
+
+                                                        <tr id="@tr" style="height:80px;">
+                                                            <td>@tdsLoop</td>
+                                                            <td>
+                                                                @if(IsLockUnlock)
+                                                                {
+                                                                    @Html.DropDownList(DeductinTypeId, DeductionTypeData.Where(x => x.TypeId == item.TypeId && !exceptionList.Contains(x.DeductionTypeId)).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString(), Selected = x.DeductionTypeId == tdsitem.TdsempDeduction.DeductionTypeId }).ToList() as List<SelectListItem>, "Please Select", new { @class = "form-control ddlDeductinType", @disabled="disabled", onchange = "Validate(this)" })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.DropDownList(DeductinTypeId, DeductionTypeData.Where(x => x.TypeId == item.TypeId && !exceptionList.Contains(x.DeductionTypeId)).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString(), Selected = x.DeductionTypeId == tdsitem.TdsempDeduction.DeductionTypeId }).ToList() as List<SelectListItem>, "Please Select", new { @class = "form-control ddlDeductinType", onchange = "Validate(this)" })
+                                                                }
+                                                                
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" style="@backColorEMR" @EMPreadOnly @EMRequired name="@ClaimedByEmployee" value="@String.Format("{0:0.00}", tdsitem.TdsempDeduction.ClaimedByEmployee)" oninput="validateNumber(this);" class="form-control" id="@ClaimedByEmployee" />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" style="@backColorAC" @AcreadOnly @AcRequired name="@GivenByEmployer" value="@String.Format("{0:0.00}", tdsitem.TdsempDeduction.GivenByEmployer)" oninput="validateNumber(this);" class="form-control" id="@GivenByEmployer" />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" style="@backColorEMR" @EMPreadOnly @EMRequired name="@EmployeeRemark" value="@tdsitem.TdsempDeduction.EmployeeRemark" class="form-control" id="@EmployeeRemark" />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" style="@backColorAC" @AcreadOnly @AcRequired name="@EmployerRemark" value="@tdsitem.TdsempDeduction.EmployerRemark" class="form-control" id="@EmployerRemark" />
+
+                                                            </td>
+                                                            <td>
+                                                                @if (item.TypeId == 3 || item.TypeId == 4)
+                                                                {
+                                                                    <input type="text" style="@backColorEMR text-transform:uppercase;" @EMPreadOnly @EMRequired class="form-control CheckPannumber" value="@tdsitem.TdsempDeduction.PanNumberByEmployee" id="@EmployeePanNumber" name="@EmployeePanNumber" />
+                                                                    <span style="color: red; font-weight: bold; font-size: smaller; " id="@EmployeePanNumberValidate"></span>
+                                                                }
+
+                                                            </td>
+
+                                                            @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                            {
+                                                                <td>
+                                                                    @if(IsLockUnlock)
+                                                                    {
+                                                                        <input multiple type="file" accept="image/png,image/jpg,image/jpeg,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/pdf,text/csv,text/plain" disabled="disabled" @FileRequired name="@file" class="form-control" id="@file" />
+                                                                        <span style="color: red; font-weight: bold; font-size: smaller;" id="@EmployeePanNumberValidateBrowse"></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input multiple type="file" accept="image/png,image/jpg,image/jpeg,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/pdf,text/csv,text/plain" @FileRequired name="@file" class="form-control" id="@file" />
+                                                                        <span style="color: red; font-weight: bold; font-size: smaller;" id="@EmployeePanNumberValidateBrowse"></span>
+                                                                    }
+                      
+                                                                </td>
+                                                            }
+                                                            @if (tdsLoop == 1)
+                                                            {
+                                                                <td>
+                                                                    <a class="AddMore_@loop" id="addmore" onclick="AddRow('@item.TypeId','@loop')" href="javascript:void(0);"><i class="fa fa-plus-circle" style="font-size: 20px; color: green; @((Convert.ToInt32(ViewBag.UID) != CurrentUser.Uid) == true ? "display:none;" : DeductionTypeData.Where(x => x.TypeId == item.TypeId).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString() }).ToList().Count == 1? "display:none;": IsLockUnlock == true ? "display:none;" : "")"></i></a>
+                                                                    <a title="Download" href="~/empInvestment/DocDetails?id=@tdsitem.TdsempDeduction.EmpDeductionId" data-target="#modal-edit-TDS" data-toggle="modal" data-backdrop="static" style="color: #0a33e3" class="ablue notification">
+                                                                        <i class="fa fa-download"><span class="badge" style="@(tdsitem.TdsDoc.Where(x => x.Uid == null).Count() == 0 ? "display:none;" : "")">@tdsitem.TdsDoc.Where(x => x.Uid == null).Count()</span></i>
+                                                                    </a>
+
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+
+
+                                                                <td style="width: 5pc;">
+                                                                    <a href="javascript:void (0);" class="RemoveRow btnRemoveRow" data-id="@tdsitem.TdsempDeduction.EmpDeductionId" onclik="RemoveRow(this)"><i onclik="RemoveRow(this)" style="@(CurrentUser.Uid != Convert.ToInt32(ViewBag.UID) ? "display:none;" : IsLockUnlock ? "display : none;" : "font-size: 18px;")" class="text-danger fa fa-trash"></i></a>
+                                                                    <a title="Download" href="~/empInvestment/DocDetails?id=@tdsitem.TdsempDeduction.EmpDeductionId" data-target="#modal-edit-TDS" data-toggle="modal" data-backdrop="static" style="color: #0a33e3" class="ablue notification">
+                                                                        <i class="fa fa-download"><span class="badge" style="@(tdsitem.TdsDoc.Where(x => x.Uid == null).Count() == 0 ? "display:none;" : "")">@tdsitem.TdsDoc.Where(x => x.Uid == null).Count()</span></i>
+                                                                    </a>
+                                                                </td>
+                                                            }
+
+                                                        </tr>
+
+                                                        tdsLoop++;
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr id="@tr" style="height:80px;">
+                                                        <td>1</td>
+                                                        <td>
+                                                            @if (ddldisabled)
+                                                            {
+                                                                @Html.DropDownList(DeductinTypeId, DeductionTypeData.Where(x => x.TypeId == item.TypeId).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString() }).ToList() as List<SelectListItem>, "Please Select", new { @class = "form-control ddlDeductinType", @disabled = "disabled", onchange = "Validate(this)" })
+                                                            }
+                                                            else
+                                                            {
+                                                                if (IsLockUnlock)
+                                                                {
+                                                                    @Html.DropDownList(DeductinTypeId, DeductionTypeData.Where(x => x.TypeId == item.TypeId).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString() }).ToList() as List<SelectListItem>, "Please Select", new { @class = "form-control ddlDeductinType", @disabled = "disabled", onchange = "Validate(this)" })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.DropDownList(DeductinTypeId, DeductionTypeData.Where(x => x.TypeId == item.TypeId).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString() }).ToList() as List<SelectListItem>, "Please Select", new { @class = "form-control ddlDeductinType", onchange = "Validate(this)" })
+                                                                }
+                                                               
+                                                            }
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" style="@backColorEMR" @EMPreadOnly name="@ClaimedByEmployee" oninput="validateNumber(this);" class="form-control" id="@ClaimedByEmployee" />
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" style="@backColorAC" @AcreadOnly name="@GivenByEmployer" oninput="validateNumber(this);" class="form-control" id="@GivenByEmployer" />
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" style="@backColorEMR" @EMPreadOnly name="@EmployeeRemark" class="form-control" id="@EmployeeRemark" />
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" style="@backColorAC" @AcreadOnly name="@EmployerRemark" class="form-control" id="@EmployerRemark" />
+
+                                                        </td>
+                                                        <td>
+                                                            @if (item.TypeId == 3 || item.TypeId == 4)
+                                                            {
+                                                                <input type="text" style="@backColorEMR text-transform:uppercase;" @EMPreadOnly value="" class="form-control CheckPannumber" id="@EmployeePanNumber" name="@EmployeePanNumber" />
+                                                                <span style="color: red; font-weight: bold; font-size: smaller; " id="@EmployeePanNumberValidate"></span>
+                                                            }
+
+                                                        </td>
+                                                        @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                        {
+                                                            <td>
+                                                                @if(IsLockUnlock)
+                                                                {
+                                                                    <input multiple type="file" accept="image/png,image/jpg,image/jpeg,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/pdf,text/csv,text/plain" name="@file" disabled="disabled" class="form-control" id="@file" />
+                                                                    <span style="color: red; font-weight:bold; font-size:smaller;" id="@EmployeePanNumberValidateBrowse"></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input multiple type="file" accept="image/png,image/jpg,image/jpeg,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/pdf,text/csv,text/plain" name="@file" class="form-control" id="@file" />
+                                                                    <span style="color: red; font-weight:bold; font-size:smaller;" id="@EmployeePanNumberValidateBrowse"></span>
+                                                                }
+
+
+                                                            </td>
+                                                        }
+                                                        <td style="width: 5pc;">
+                                                            <a class="AddMore_@loop" id="addmore" onclick="AddRow('@item.TypeId','@loop')" href="javascript:void(0);"><i class="fa fa-plus-circle" style="font-size: 20px; color: green; @((ViewBag.isAcUser == true && (ViewBag.UID != null && ViewBag.AssesmentYearId != null)) ? "display:none" : DeductionTypeData.Where(x => x.TypeId == item.TypeId).Select(x => new SelectListItem { Text = x.DeductionTypeName, Value = x.DeductionTypeId.ToString() }).ToList().Count == 1 ? "display:none;": IsLockUnlock == true ? "display:none;" : "")"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                            loop = loop + 1;
+                                        }
+
+
+                                        <tfoot></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            @if (!ViewBag.isAcUser && IsLockUnlock)
+                            {
+                                <div class="row " style="border-bottom:5px solid #e99701; margin-top:-30px;">
+                                    <div class="card-body table-responsive">
+                                        <table border="0" class="table table-bordered table-striped table-condensed" height="100px" id="tblfile">
+                                            <thead>
+                                                <tr>
+                                                    <th>Declaration Sheet File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        @if (FileName != null)
+                                                        {
+                                                            @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                            {
+                                                                <div style="float:left;">
+                                                                    <label style="padding-right:10px;">Click Here To Download</label>
+                                                                    <i class='@(FileName.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" :
+                                                                        FileName.ToLower().Contains(".doc")? "fa fa-file-word-o":
+                                                                        FileName.ToLower().Contains(".xls")?"fa fa-file-excel-o":
+                                                                        FileName.ToLower().Contains(".txt")?"fa fa-file-text-o":
+                                                                        FileName.ToLower().Contains(".rar")|| FileName.ToLower().Contains(".zip")?"fa fa-file-zip-o":
+                                                                        "fa fa-file-image-o")'></i>
+                                                                    <a href="~/Upload/TDS/@FileName.ToLower()" class="btn-link" download="@FileName">
+                                                                        Download (@(
+                                                                  tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange != null ? tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange : ""
+                                                                  ))
+                                                                    </a>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row " style="@(!ViewBag.isAcUser && IsLockUnlock ? "display:none;" : "border-bottom:5px solid #e99701; margin-top:-30px;")">
+                                    <div class="card-body table-responsive">
+                                        <table border="0" class="table table-bordered table-striped table-condensed" height="100px" id="tblfile">
+                                            <thead>
+                                                <tr>
+                                                    <th>Declaration Sheet File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="@(CurrentUser.Uid == Convert.ToInt32(ViewBag.UID) ? "height:80px;" : "")">
+                                                    <td>
+                                                        @if (!IsLockUnlock)
+                                                        {
+                                                            @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                            {
+
+
+                                                                <div style="float:left;">
+                                                                    <input type="file" accept="text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="width:80%;" id="filetxt" name="filetxt" class="form-control" @(ViewBag.DeclarationSheet != null ? "" : "required") />
+                                                                    <span style="color: red; font-weight:bold; font-size:smaller;" id="filetxtvalidate"></span>
+                                                                </div>
+
+                                                            }
+                                                        }
+
+                                                        @if (FileName != null)
+                                                        {
+                                                            if (ViewBag.isAcUser && (ViewBag.UID != null && ViewBag.AssesmentYearId != null))
+                                                            {
+
+                                                                <div style="float:left;">
+                                                                    <label style="@(CurrentUser.Uid == Convert.ToInt32(ViewBag.UID) ? "display:none" : "padding-right:10px;") ">Click Here To Download</label>
+                                                                    <i class='@(FileName.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" :
+                                                                        FileName.ToLower().Contains(".doc")? "fa fa-file-word-o":
+                                                                        FileName.ToLower().Contains(".xls")?"fa fa-file-excel-o":
+                                                                        FileName.ToLower().Contains(".txt")?"fa fa-file-text-o":
+                                                                        FileName.ToLower().Contains(".rar")|| FileName.ToLower().Contains(".zip")?"fa fa-file-zip-o":
+                                                                        "fa fa-file-image-o")'></i>
+                                                                    <a href="~/Upload/TDS/@FileName.ToLower()" class="btn-link" download="@FileName">Download (@(
+                                                        tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange != null ? tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange : ""
+                                                        ))</a>
+                                                                </div>
+
+                                                            }
+                                                            @if (CurrentUser.Uid == Convert.ToInt32(ViewBag.UID))
+                                                            {
+                                                                <div style="float:left;">
+                                                                    <label style="padding-right:10px;">Click Here To Download</label>
+                                                                    <i class='@(FileName.ToLower().Contains(".ppt")? "fa fa-file-powerpoint-o" :
+                                                                        FileName.ToLower().Contains(".doc")? "fa fa-file-word-o":
+                                                                        FileName.ToLower().Contains(".xls")?"fa fa-file-excel-o":
+                                                                        FileName.ToLower().Contains(".txt")?"fa fa-file-text-o":
+                                                                        FileName.ToLower().Contains(".rar")|| FileName.ToLower().Contains(".zip")?"fa fa-file-zip-o":
+                                                                        "fa fa-file-image-o")'></i>
+                                                                    <a href="~/Upload/TDS/@FileName.ToLower()" class="btn-link" download="@FileName">Download (@(
+                                                        tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange != null ? tdsEmpList1.FirstOrDefault().TdsempDeduction.AssesmentYear.YearRange : ""
+                                                        ))</a>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </td>
+                                                </tr>
+
+
+
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="">
+                                <div class="col-md-12">
+                                    <a href="~/empInvestment/Index" class="btn btn-custom pull-right">Cancel</a>
+                                    @if (ViewBag.isAcUser)
+                                    {
+                                        <button type="button" class="btn btn-custom pull-right margin-right10" name="Save" id="btn-submit-tdsfrm">Save</button>
+                                    }
+                                    else
+                                    {
+                                        if (!IsLockUnlock)
+                                        {
+                                            <button type="button" class="btn btn-custom pull-right margin-right10" name="Save" id="btn-submit-tdsfrm">Save</button>
+
+                                        }
+                                    }
+
+                                    @if (ViewBag.isAcUser)
+                                    {
+                                        if (ViewBag.UID != null && ViewBag.AssesmentYearId != null)
+                                        {
+                                            <a class="btn btn-custom pull-right" title="Sent Mail" href="~/empInvestment/InvestmentMail?id=@Model.Uid" data-target="#modal-investment-mail" data-toggle="modal" data-backdrop="static" style="color: #0a33e3; margin-right:10px;">
+                                                InvestmentMail Mail
+                                            </a>
+                                            <div style="float:right; margin-right:130px;">
+                                                <span id="btnLockUnlocktxt" style="color:red; position:absolute;top:34px; font-weight:bold; font-size:smaller;">Click here to @(IsLockUnlock == true ? "Unlock" : "Lock")</span>
+                                                <input type="checkbox" class="switchBox custom" id="btnLockUnlock" name="btnLockUnlock" data-on-color="primary" data-onlabel="Enabled" data-on-text="Lock" data-off-text="Unlock" data-off-color="info" checked="@(tdsEmpList1.Count != 0 ? tdsEmpList1.FirstOrDefault().TdsempDeduction.IsLockUnlock == false? false : true : false)">
+                                            </div>
+
+
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="divoverlay hide"></div>
+@{
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-edit-TDS", AreaLabeledId = "modal-add-edit-appraise-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-delete-Doc", AreaLabeledId = "modal-delete-doc-label", Size = Enums.ModalSize.Medium });
+    Html.RenderPartial("_Modal", new Modal { ID = "modal-investment-mail", AreaLabeledId = "modal-investment-mail-label", Size = Enums.ModalSize.Medium });
+}
+@section scripts{
+    <script src="~/Scripts/bootstrap-switch.js"></script>
+    <script src="~/js/alertify.min.js"></script>
+    <script src="~/Scripts/CustomJS/TDS/STBasejs.js" asp-append-version="true"></script>
+}

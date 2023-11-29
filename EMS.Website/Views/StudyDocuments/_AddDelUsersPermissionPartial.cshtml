@@ -1,0 +1,93 @@
+﻿@model StudyDocumentAddDelUsersPermission
+@{
+    Layout = null;
+}
+
+<div class="modal-body library-detail-popup">
+    <div class="detail-cont flex-wrap">
+
+        <div class="row form-group" style="margin:0px">
+            <div class="col-sm-11">
+
+                <div id="validation-summary-adddelpermission"></div>
+
+            </div>
+        </div>
+
+        <div class="dt-desc">
+            <h4 class="modal-title" id="exampleModalLabel">
+                Allow/Restrict Permission
+            </h4>
+            <hr />
+
+            <button type="button" class="close close-dt-btn" data-dismiss="modal" aria-label="Close">
+                <img src="~/images/close-black.png" />
+            </button>
+
+            <div class="ems-form create-form-outer-box">
+                <form id="frmadddelpermission" asp-action="AddDelUsersPermission" asp-controller="StudyDocuments" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+
+                    <input type="hidden" id="StudyDocumentIds" name="StudyDocumentIds" value="" />
+
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-10">
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Users</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="custom-multiple-dropdown-wrapper">
+                                    <select class="multiselectcheckbox" multiple="multiple" style="width: 100%;" asp-for="UserId" asp-items="@ViewBag.UsersList">
+                                    </select>
+                                    <span asp-validation-for="UserId" class="text-red"></span>
+                                </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Permission</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input asp-for="AddDelPermission" checked/>
+                                    &nbsp;&nbsp;<label>(Please Check/Uncheck to Allow/Restrict permission)</label>
+                                </div>
+                            </div>
+
+                            <div class="row clsdateoption">
+                                <div class="col-md-3">
+                                    <label>Valid From Date </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" asp-for="StartDate" readonly class="form-control" />
+                                    <span asp-validation-for="StartDate"></span>
+                                </div>
+                                <div class="col-md-2" style="left:20px;">
+                                    <label>To Date </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" asp-for="EndDate" readonly class="form-control" />
+                                    <span asp-validation-for="EndDate"></span>
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="row">
+                                <div class="col-md-5">
+                                </div>
+                                <div class="col-sm-5">
+                                    <button type="submit" class="btn btn-custom">Submit</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

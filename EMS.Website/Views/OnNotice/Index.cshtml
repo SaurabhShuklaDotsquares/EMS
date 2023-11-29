@@ -1,0 +1,86 @@
+﻿@model OnNoticeIndexDto
+@{
+    ViewBag.Title = "On Notice";
+}
+@section styles{
+    <link href="~/Scripts/plugin/DateRangePicker/daterangepicker.css" rel="stylesheet" />
+}
+    <div class="container-fluid">
+        <div class="row padding-top10">
+            <div class="col-md-12">
+                @await Html.PartialAsync("_Notification")
+            </div>
+
+            <div class="col-md-12"><div id="MessageDiv"></div></div>
+            <div class="col-md-6">
+                <h2>On Notice users</h2>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="row padding-top5">
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownList("PMList", Model.PMList, "--Select PM--", htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownList("DepartmentList", Model.DepartmentList, "--Select Departments--", htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.DropDownList("IsVoluntaryExit", Html.GetEnumSelectList(typeof(Enums.VolentryExit)), "- Select All -",
+                   htmlAttributes: new { @class = "form-control"})
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    @Html.TextBox("txt_search", null, new { @class = "form-control", @placeholder = "Employee Code / Name" })
+                </div>
+                @*<div class="col-sm-6 col-md-3 col-lg-2 form-group">
+                    <div class="input-group">
+                        @Html.TextBox("JoiningDateRange", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @placeholder = "Date of Joining", @style = "background-color: #fff;" })
+                        <span id="clrFilterDate" class="input-group-addon" style="cursor:pointer;border-radius: 0;">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </div>
+
+                </div>*@
+                <div class="col-sm-6 col-md-12 col-lg-2 form-group" style="text-align:right !important;">
+                    <input type="button" class="btn btn-custom" id="btnSearch" value="Search" />
+                    <input type="button" class="btn btn-custom" id="btnReset" value="Reset" />
+                </div>
+            </div>
+        </div>
+        <div class="cald-box1 clearfix">
+            <div class="col-md-6 padding-top5 text-right  pull-right">
+                <span class="text-right">
+                    <span class="">
+                        <span class="info-block2">
+                            <i class="glyphicon glyphicon-envelope anchor-send-mail"></i><span>Mail Not Sent Yet</span>
+                        </span>
+                        <span class="info-block2">
+                            <i class="glyphicon glyphicon-envelope anchor-send-mail" style="color:red"></i><span>Resend Mail</span>
+                        </span>
+                        <span class="info-block2">
+                            <i class="glyphicon glyphicon-envelope anchor-send-mail text-success" style="color:green"></i><span>Feedback Received</span>
+                        </span>
+                        
+                        @*@if (totalLeave != null && totalLeave != "")
+                        {
+                            <span class="label label-info info-block2" style="font-size:14px;font-weight:bold;">Total Applied Leave: @totalLeave</span>
+                        }*@
+
+                    </span>
+                </span>
+
+            </div>
+        </div>
+        <div class="divoverlay hide"></div>
+        <section id="no-more-tables">
+            <table id="grid-OnNotice" class="display postable table table-bordered table-condensed"></table>
+        </section>
+
+    </div>
+    
+
+@section scripts{
+    <script src="/Scripts/plugin/FullCalender/Js/moment.min.js"></script>
+    <script src="/Scripts/plugin/DateRangePicker/daterangepicker.js"></script>
+
+    <script src="~/Scripts/CustomJS/OnNotice/OnNotice-index.js"></script>
+}

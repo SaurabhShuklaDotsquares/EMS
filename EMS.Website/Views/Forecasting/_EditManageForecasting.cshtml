@@ -1,0 +1,152 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.ManageForecastingDto
+@using EMS.Core
+
+@using (Html.BeginForm("EditManageForecasting", "Forecasting", FormMethod.Post, new { id = "Form1" }))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group clearfix">
+                <label>Forecasting Type</label><br>
+                <div class="col-md-6">
+                    @Html.RadioButtonFor(x => x.ForecastingType, "1", new { @id = "ForecastingType1", @checked = "checked" }) <label for="ForecastingType1" class="label-radio">Exisitng Lead</label>
+                </div>
+                <div class="col-md-6">
+                    @Html.RadioButtonFor(x => x.ForecastingType, "2", new { @id = "ForecastingType2", @class = "" }) <label for="ForecastingType2" class="label-radio">Exisitng Project / Client</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group clearfix" id="divlead">
+                <label>Lead</label><br>
+                @Html.DropDownListFor(x => x.Lead, new SelectList(ViewBag.LeadList, "Value", "Text"), "--Select Lead--", new { @class = "form-control chosen" })
+                <label id="leaderror">*required</label>
+            </div>
+            <div class="form-group clearfix" id="divclient">
+                <label>Project / Client</label><br>
+                @Html.DropDownListFor(x => x.ProjectId, new SelectList(ViewBag.Projectlist, "Value", "Text"), "--Select Project / Client--", new { @class = "form-control chosen" })
+                <label id="projectiderror">*required</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group clearfix">
+                <label>Owner</label><br>
+                @Html.DropDownListFor(x => x.OwnerUId, new SelectList(ViewBag.UserList, "Value", "Text"), "--Select Owner--", new { @class = "form-control" })
+                <label id="leaderror">*required</label>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group clearfix">
+                <label>Reviewed by</label><br>
+                @Html.DropDownListFor(x => x.ReviewedUId, new SelectList(ViewBag.UserList, "Value", "Text"), "--Select Reviewed--", new { @class = "form-control" })
+                <label id="leaderror">*required</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-3 col-md-3">
+            <div class="form-group clearfix">
+                <label>No Of Developer</label>
+                @Html.TextBoxFor(x => x.DeveloperCount, null, new { @class = "form-control", @pattern = "^[0-9]*$" })
+            </div>
+        </div>
+        <div class="col-sm-3 col-md-3">
+            <div class="form-group clearfix">
+                <label>Country</label>
+                @Html.DropDownListFor(x => x.Country, new SelectList(ViewBag.CountryList, "Value", "Text"), "--Select--", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group clearfix">
+                <label>Tentive Date</label>
+                @Html.TextBoxFor(x => x.TentiveDate, null, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+    </div>
+    <div class="row timeslotrow-width">
+        <div style="margin-left:16px;" class="timeslot-text">
+            <label>Department</label>
+        </div>
+        @for (var i = 0; i < Model.DepartmentList.Count; i++)
+        {
+            <div class="col-sm-3 col-md-3">
+                <div class="">
+                    @Html.HiddenFor(x => x.DepartmentList[i].Value)
+                    @Html.HiddenFor(x => x.DepartmentList[i].Text)
+                    @Html.CheckBoxFor(x => x.DepartmentList[i].Selected, new { @id = "DepartmentList_" + i, @class = "dept-group" }) <label for="DepartmentList_@i" class="label-radio" style="font-size: 11px!important;">@Model.DepartmentList[i].Text</label>
+                </div>
+            </div>
+        }
+        @Html.TextBoxFor(x => x.SelectedDepartment, null, new { @class = "form-control", @style = "display:none" })
+    </div>
+    <div class="row margin-top15">
+        <div class="col-md-12">
+            <div class="form-group clearfix">
+                <label>Project Description</label>
+                @Html.TextAreaFor(x => x.ProjectDescription, 0, 0, new { @class = "form-control", @rows = "5" })
+            </div>
+        </div>
+    </div>
+    <div class="row margin-top15">
+        <div class="col-md-12">
+            <div class="form-group clearfix">
+                <label>Note: If you have any concern and want to put on hold then please specify the reason as well.</label><br>
+                <div class="col-md-6">
+                    @Html.CheckBoxFor(x => x.IsHold, new { @id = "IsHold", @checked = "checked" }) <label for="IsHold" class="label-radio">Put on Hold</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row margin-top15">
+        <div class="col-md-12" id="HoldReasonShow" style="@(Model.IsHold ? "display:block" : "display:none")">           
+                <div class="form-group clearfix">
+                    <label>Reason for Hold</label>
+                    @Html.TextAreaFor(x => x.HoldReason, 0, 0, new { @class = "form-control", @rows = "5" })
+                </div>           
+        </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary1 save-btn" name="Save">SUBMIT</button>
+            <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
+        </div>
+        }
+        <script src="~/Scripts/plugin/SearchDropdown/choosen.js"></script>
+        <script src="~/Scripts/CustomJS/Forecasting/EditManageForecasting.js"></script>
+        <script type="text/javascript">
+    $(".chosen").chosen();
+    var modelId = '@Model.Id';
+    var modelForecastintype = '@Model.ForecastingType';
+    $("#SelectedDepartment").val('test');
+    if (modelId > 0 && modelForecastintype == 1) // for lead
+    {
+        $("#divclient").css("display", "none");
+        $("#divlead").css("display", "block");
+    }
+    if (modelId > 0 && modelForecastintype == 2) // for project
+    {
+        $("#divlead").css("display", "none");
+        $("#divclient").css("display", "block");
+    }
+
+    $(document).on("click", "#IsHold", function () {
+        if ($(this).is(":checked")) {
+            $("#HoldReasonShow").show();
+            $("#HoldReason").prop("required",true);
+        } else {
+            $("#HoldReasonShow").hide();
+            $("#HoldReason").prop("required", false);
+        }
+    });
+        </script>
+
+
+

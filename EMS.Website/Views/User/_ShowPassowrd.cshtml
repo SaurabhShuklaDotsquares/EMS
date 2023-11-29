@@ -1,0 +1,44 @@
+﻿@model EMS.Dto.ShowPasswordDto
+
+@{
+    Layout = null;
+}
+@section styles{
+    <link type="text/css" href="~/Content/css/toggle-switch.css" />
+}
+<div class="cmxform addedit-virtualdevp">
+    @using (Html.BeginForm("ShowUserPassword", "User", FormMethod.Post, new { @id = "frm-showpassword" }))
+    {
+        <div class="bg-white">
+            <input type="hidden" asp-for="UserId" />
+            <div class="popup-top text-left">
+                <h3 style="color:#fff;padding-top:15px;" class="text-center">User Password</h3>
+            </div>
+            <div class="popup-container" id="popup-container">
+                <p>
+                    <div class="row">
+                        <div class="col-md-4 row-width">
+                            <label>Original Password</label>
+                        </div>
+                        <div class="col-md-7 row-width">
+                            @Html.TextBoxFor(x => x.OriginalPassword, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </p>
+            </div>
+            @*@Html.Partial("_ModalFooter", new ModalFooter {CancelButtonText = "Cancel" })*@
+            @Html.Partial("_ModalHeader", new ModalHeader { DisplayCloseButton = true })
+        </div>
+    }
+</div>
+
+<script src="~/bundles/jquery"></script>
+<script src="~/bundles/bootstrap"></script>
+<script src="~/bundles/jqueryval"></script>
+@*<script src="~/bundles/layoutjs"></script>*@
+<script src="~/Scripts/additional-methods.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/global.js"></script>
+<script src="~/bundles/otherjs"></script>
+
+<script src="@(SiteKey.DomainName)Scripts/CustomJS/manageuser.js" asp-append-version="true"></script>

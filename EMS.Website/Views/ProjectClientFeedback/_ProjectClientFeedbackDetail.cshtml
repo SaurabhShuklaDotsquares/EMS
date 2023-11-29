@@ -1,0 +1,90 @@
+﻿@model ProjectClientFeedbackDetailDto
+<style>
+    .padding-row {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+</style>
+@await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Project Client Feedback Details" })
+<div class="modal-body">
+    <div class="tableProjectClientFeedback">
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Project Name :</strong> </div>
+            <div class="col-md-4">@Model.ProjectName </div>
+            <div class="col-md-2"><strong>Client Name : </strong> </div>
+            <div class="col-md-4"> @Model.ClientName</div>
+
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Website Name :</strong> </div>
+            <div class="col-md-4">@Model.WebsiteName </div>
+            <div class="col-md-2"><strong>Website Url : </strong> </div>
+            <div class="col-md-4"> @Model.WebUrl</div>
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Company Name :</strong> </div>
+            <div class="col-md-4">@Model.CompanyName </div>
+            <div class="col-md-2"><strong>Status : </strong> </div>
+            <div class="col-md-4"> @Model.Status</div>
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Business Description :</strong> </div>
+            <div class="col-md-10">@Model.BusinessDescription </div>
+
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Project Scope : </strong> </div>
+            <div class="col-md-10"> @Model.ProjectScope</div>
+        </div>
+
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Comment : </strong> </div>
+            <div class="col-md-10"> @Model.Comment</div>
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Meet Requirements : </strong> </div>
+            <div class="col-md-10"> @Model.MeetRequirements</div>
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Value About Dotsquares : </strong> </div>
+            <div class="col-md-10"> @Model.ValueAboutDotsquares</div>
+        </div>
+        <div class="row padding-row">
+            <div class="col-md-2"><strong>Comment Date :</strong> </div>
+            <div class="col-md-10">@Model.Commentdate </div>
+        </div>
+        @if (Model.ClientFeedbackDocuments !=null && Model.ClientFeedbackDocuments.Count > 0)
+        {
+            <div class="row clearfix padding-row">
+                <div class="col-md-12 ">
+                    <div class="padding-bottom5" style="font-weight:bold">Files : </div>
+                    <ul class="doc-list">
+
+                        @foreach (var item in Model.ClientFeedbackDocuments)
+                        {
+                            var file = item.DocumentPath.ToLower();
+                            <li>
+                                <i class='@(file.Contains(".ppt")? "fa fa-file-powerpoint-o" :
+                                (file.Contains(".doc") || file.Contains(".docx"))? "fa fa-file-word-o":
+                                file.Contains(".xls") ||file.Contains(".xlsx") ?"fa fa-file-excel-o":
+                                file.Contains(".txt")?"fa fa-file-text-o":
+                                file.Contains(".rar")|| file.Contains(".zip")?"fa fa-file-zip-o":
+                                file.Contains(".mp4") || file.Contains(".wmv") || file.Contains(".wav")?"fa fa-file-video-o":
+                                "fa fa-file-image-o")'></i>
+                                <a href="~/Upload/ClientFeedbackDocument/@file" class="btn-link" download="download">  @item.DocumentPath </a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>
+<style type="text/css">
+    .tableProjectClientFeedback .row:nth-child(odd) {
+        background-color: #e9e9e9;
+    }
+</style>

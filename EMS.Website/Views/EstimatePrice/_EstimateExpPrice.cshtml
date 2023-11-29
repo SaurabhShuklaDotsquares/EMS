@@ -1,0 +1,32 @@
+﻿@model EMS.Dto.EstimatePriceDto
+@{
+    List<EstimateExpPriceDto> EstimateExpPriceDtoList = Model.EstimateRoleId > 0 ? Model.EstimateExpPriceDtoList : null;
+    int index = 0;
+}
+@if (Model.EstimateExpPriceDtoList != null)
+{
+    foreach (var item in Model.EstimateExpPriceDtoList)
+    {
+        <input type="hidden" id="@($"EstimateExpPriceDtoList[{index}].EstimateRoleExpID")" name="@($"EstimateExpPriceDtoList[{index}].EstimateRoleExpID")" value="@item.EstimateRoleExpID" class="form-control" />
+        <div class="row ">
+            <div class="col-md-6">
+                <div class="col-md-4">
+                    <label>Experience:</label>
+                </div>
+                <div class="col-md-3">
+                    <label id="@($"EstimateExpPriceDtoList[{index}].EstimateRoleExp")"
+                           name="@($"EstimateExpPriceDtoList[{index}].EstimateRoleExp")"
+                           autocomplete="off">@item.EstimateRoleExp (In years)</label>
+                </div>
+                <div class="col-md-5" style="display: inline-flex;">
+                    <span style="margin-top: 6px; padding-right: 5px; font-size: 18px;">£</span>
+                    <input type="text" id="@($"EstimateExpPriceDtoList[{index}].Price")"
+                                name="@($"EstimateExpPriceDtoList[{index}].Price")" class="form-control"
+                                autocomplete="off" placeholder="Price ex: £20" value="@(item.Price > 0 ? item.Price.ToString(): string.Empty)" required />
+                </div>
+            </div>
+         </div>
+
+            index++;
+    }
+ }

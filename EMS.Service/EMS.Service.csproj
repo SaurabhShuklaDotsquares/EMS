@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EMS.Data\EMS.Data.csproj" />
+    <ProjectReference Include="..\EMS.Dto\EMS.Dto.csproj" />
+    <ProjectReference Include="..\EMS.Repo\EMS.Repo.csproj" />
+  </ItemGroup>
+
+</Project>

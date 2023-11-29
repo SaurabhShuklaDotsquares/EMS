@@ -1,0 +1,378 @@
+﻿@using EMS.Web.Models.Others
+@model EMS.Dto.CVViewDto
+
+@if (Model != null)
+{
+    <div class="ManageDepartment-page full-wdth clearfix">
+        <div id="frm-leave-detail">
+            <div class="modal-body form-horizontal fontsize12 clearfix padding20">
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal-header" style="clear:both;">
+                            <button data-dismiss="modal" id="Close" class="btn btn-custom pull-right" type="button">Close</button>
+                        </div>
+                        <table width="97%" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-left: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; font-family: Arial, Helvetica, sans-serif; -webkit-print-color-adjust: exact;">
+                            <tr>
+                                <td style="font-size:38px; color:#1e9dcb; font-weight:700; -webkit-print-color-adjust: exact;">
+                                    @Model.UserName
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:10px"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#0b0c0e; font-size:20px; letter-spacing:5px; background:url(PdfTemplates/images/line.jpg); background-repeat:repeat-x;  visibility: visible; ">
+                                    <span style="background-color:#fff; display:inline-block; padding-right:10px">@Model.Designation</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td valign="top" width="250px"><img style="max-width:220px;" src="@Model.ProfilePicture" alt="" /></td>
+                                            <td valign="top" style="width:15px">&nbsp;</td>
+                                            <td valign="top" style="padding-left:15px">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td>
+                                                            <p style="font-size:16px; line-height:24px; color:#0b0c0e; padding:0px; margin:0px">
+                                                                @Html.Raw(@Model.Title)
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height:5px"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(Model.Email))
+                                                            {
+                                                                System.Net.Mail.MailAddress address = new System.Net.Mail.MailAddress(Model.Email);
+                                                                string hostname = address.Host;
+                                                                if (hostname.ToLower() == "dotsquares.com")
+                                                                {
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td width="487" valign="top" style="border-bottom:1px solid #dedfe1; padding-bottom:10px">
+                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                    <tr>
+                                                                                        <td width="35" valign="top"><img src="PdfTemplates/images/icon1.jpg" style="max-width: inherit;" alt="" /></td>
+                                                                                        <td width="15" valign="top">&nbsp;</td>
+                                                                                        <td valign="top">
+                                                                                            <div style="color:#b4b4b4; font-size:16px; margin-bottom:5px">Email</div>
+                                                                                            <div style="color:#0b0c0e; font-size:16px; ">@Model.Email</div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                            <td width="85" valign="top" style="width:15px">&nbsp;</td>
+                                                                            <td width="1016" valign="top" >
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" style="height:10px"></td>
+                                                                        </tr>
+
+                                                                    </table>
+                                                                }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:#dedfe1; height:1px"></td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="320" valign="top" style="padding-right:20px">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td style="color:#1e9dcb; font-size:23px; font-weight:700; background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                                            <span style="background-color:#fff; display:inline-block; padding-right:10px;  ">
+                                                                <img src="PdfTemplates/images/icon5.png" align="left"
+                                                                 style="margin-right:10px; margin-top:-3px" /> Core Competencies
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.CoreCompetencies))
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="background-color:#dedfe1; width:1px"></td>
+                                            <td valign="top" style="padding-left:20px;">
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                                            <span style="background-color:#fff; display:inline-block; padding-right:10px;">
+                                                                <img src="PdfTemplates/images/icon6.png" align="left"
+                                                                 style="margin-right:10px; margin-top:-3px" /> Profile Summary
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    @Html.Raw(@Model.ProfileSummary)
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                    <span style="background-color:#fff; display:inline-block; padding-right:10px; ">
+                                        <img src="PdfTemplates/images/icon9.png" align="left"
+                                         style="margin-right:10px; margin-top:-3px" /> Previous Experience
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.PreviousExperience))
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                                <span style="background-color:#fff; display:inline-block; padding-right:10px;  ">
+                                                    <img src="PdfTemplates/images/icon7.png" align="left"
+                                                     style="margin-right:10px; margin-top:-3px" /> Skills
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:10px"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        @Html.Raw(@Model.TechnicalSkills)
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            @if (!string.IsNullOrEmpty(Model.Certifications))
+                            {
+                                <tr>
+                                    <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                        <span style="background-color:#fff; display:inline-block; padding-right:10px; ">
+                                            <img src="PdfTemplates/images/certificate.png" align="left"
+                                         style="margin-right:10px; position:relative; top:3px" /> Certifications
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:25px"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.Certifications))
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:25px"></td>
+                                </tr>
+                            }
+                            <tr>
+                                <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                    <span style="background-color:#fff; display:inline-block; padding-right:10px; ">
+                                        <img src="PdfTemplates/images/icon12.png" align="left"
+                                         style="margin-right:10px; " /> Experience
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:10px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            @Html.Raw(@Model.WorkExperience)
+
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            @if (!string.IsNullOrEmpty(Model.RolesAcross))
+                            {
+                                <tr>
+                                    <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                        <span style="background-color:#fff; display:inline-block; padding-right:10px; ">
+                                            <img src="PdfTemplates/images/icon8.png" align="left"
+                                         style="margin-right:10px; margin-top:-3px" /> Roles Across The Career
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:10px"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                @Html.Raw(@Model.RolesAcross)
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:25px"></td>
+                                </tr>
+                            }
+                            <tr>
+                                <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                    <span style="background-color:#fff; display:inline-block; padding-right:10px; ">
+                                        <img src="PdfTemplates/images/icon10.png" align="left"
+                                         style="margin-right:10px; margin-top:-3px" /> Education
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.Education))
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td style="color:#1e9dcb; font-size:23px; font-weight:700;  background:url(PdfTemplates/images/line2.png); background-repeat:repeat-x;  visibility: visible; ">
+                                    <span style="background-color:#fff; display:inline-block; padding-right:10px; ">
+                                        <img src="PdfTemplates/images/icon11.png" align="left"
+                                         style="margin-right:10px; margin-top:-3px" /> Personal Details
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:25px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td>
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td style="width:35px" valign="top"><img src="PdfTemplates/images/bullot.png" alt="" /></td>
+                                                        <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">
+                                                            <strong>
+                                                                Date of Birth<br />
+                                                            </strong> @Model.DateOfBirth
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width:35px" valign="top">&nbsp;</td>
+                                                        <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">&nbsp;</td>
+                                                    </tr>
+                                                    @*<tr>
+                                                        <td style="width:35px" valign="top"><img src="PdfTemplates/images/bullot.png" alt="" /></td>
+                                                        <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">
+                                                            <strong>
+                                                                Address<br />
+                                                            </strong> @Model.Address
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width:35px" valign="top">&nbsp;</td>
+                                                        <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">&nbsp;</td>
+                                                    </tr>*@
+                                                    <tr>
+                                                        <td style="width:35px" valign="top"><img src="PdfTemplates/images/bullot.png" alt="" /></td>
+                                                        <td valign="top" style="color:#0b0c0e; font-size:16px; line-height:20px">
+                                                            <strong>
+                                                                Languages Known<br />
+                                                            </strong> @Model.Languages
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+               
+               
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div>
+        No Data Found!
+    </div>
+}

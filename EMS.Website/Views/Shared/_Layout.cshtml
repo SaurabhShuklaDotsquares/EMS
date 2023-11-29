@@ -1,0 +1,305 @@
+﻿@using EMS.Web.Code.LIBS
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@(ViewBag.Title ?? "EMS")</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <base href="@EMS.Web.Code.LIBS.SiteKey.DomainName" />
+    <script disable-devtool-auto=disable-devtool-auto
+        src='https://cdn.jsdelivr.net/npm/disable-devtool'
+        disable-menu='true'></script>
+    <link rel="stylesheet" href="~/Content/layoutcss?v=4" asp-append-version="true" />
+    <!--Google Font Face Css-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400i" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600i" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700i" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet" />
+    <link href="~/Scripts/plugin/NotificationPlugin/notifyme.css" rel="stylesheet" />
+    <!--Site Css-->
+    @RenderSection("styles", required: false)
+    @*<script src="~/Content/js/iphone-menu.js"></script>*@
+
+    <style>
+        /*progress bar*/
+        .windowbackground {
+            background: url("'../../images/overlay.png") repeat scroll 0 0 transparent;
+            clear: both;
+            color: Red;
+            display: table-cell;
+            font-size: 12px;
+            font-weight: bold;
+            height: 100%;
+            left: 0;
+            padding-top: 20%;
+            position: fixed;
+            text-align: center;
+            top: 0;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        .progressbar {
+            background-color: #fff;
+            border: 2px solid #333;
+            border-radius: 15px;
+            color: #000000;
+            display: block;
+            left: 41%;
+            padding: 20px;
+            position: absolute;
+            text-align: center;
+            width: 220px;
+        }
+         /*-----loading data start-----*/
+    .loading-data {
+        background-color: var(--white);
+        border-radius: 15px;
+        box-shadow: 0px 5px 20px 0px rgb(0 173 228 / 15%);
+        color: var(--black);
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 30px;
+        position: fixed;
+        left: 50%;
+        text-align: center;
+        top: 50%;
+        max-width: 500px;
+        width: 90%;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        z-index: 9999;
+    }
+
+        .loading-data p {
+            font-weight: 600;
+        }
+
+        .loading-data span {
+            color: var(--blue);
+            font-size: 1.125rem;
+        }
+
+        .loading-data img {
+            max-width: 390px;
+        }
+
+    .loading-overlay {
+        background-color: rgba(255,255,255,0.7);
+        content: "";
+        left: 0;
+        right: 0;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 8888;
+    }
+    /*-----loading data end-----*/
+    /*-----loading data start-----*/
+    .loading-common {
+        background-color: var(--white);
+        border-radius: 50%;
+        box-shadow: 0px 5px 20px 0px rgb(0 173 228 / 15%);
+        color: var(--black);
+        font-size: 1.125rem;
+        font-weight: 600;
+        padding: 30px;
+        position: fixed;
+        left: 50%;
+        text-align: center;
+        top: 45%;
+        height: 160px;
+        width: 160px;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        z-index: 9999;
+    }
+
+        .loading-common p {
+            color: var(--blue);
+            font-weight: 600;
+        }
+    /*-----loading data end-----*/
+    </style>
+</head>
+<body>
+    <div id="main_container" class="clearfix full-wdth">
+        <div class="header clearfix">
+            <div class="hdr-top-part dis-block clearfix">
+                <div class="logo"><a href="@Url.Action("Index", "Home")"><img src="~/content/images/logo.png" alt="Dotsquares Employee Management" /></a></div>
+                <div class="reportbug"> <a href=@Url.Action("add", "bugreport")>Report a Bug/Suggestions</a> </div>
+                <div class="right_header">
+                    Welcome @CurrentUser.Name <input type="hidden" id="userDes" value="@CurrentUser.DesignationId" />
+                    <span id="projectstatus" style='color:black;font-weight:bold'>
+                        @*@{
+                                string userStatus = "(Not logged-In Ems Desktop)";
+                                string dictUserStatus = WebsiteSession.SessionProjectStatus.NewGetObjectOrDefault("UserStatus");
+                                if (!string.IsNullOrEmpty(dictUserStatus))
+                                {
+                                    userStatus = $"({dictUserStatus})";
+                                }
+                            }
+                            @(userStatus)*@
+                    </span>
+                    <span id="projectName" style="font-weight: normal;color: inherit">
+                        @*@{
+                                string projectName = string.Empty;
+                                string dictProjectName = WebsiteSession.SessionProjectStatus.NewGetObjectOrDefault("ProjectName");
+                                if (!string.IsNullOrEmpty(dictProjectName))
+                                {
+                                    projectName = $"({dictProjectName})";
+                                }
+                            }
+                            @(projectName)*@
+                    </span><br />
+                    <b style="color:#e18f00;">( @CurrentUser.DesignationName )</b>&nbsp;
+                    <a class="logout" style="color: #f00; font-weight: bold;" href="@Url.Action("Signout", "Dashboard")">Logout<img src="~/Content/images/user_logout.png" alt="Dotsquares Employee Management" /></a>
+                </div>
+            </div>
+            <div class="nav-part-outer dis-block clearfix">
+                <a style="display:none;" href="javascript:void(0)" class="menuImage"><img src="content/images/menuIcon.png" alt="" /></a>
+                <div class="menu iphonNav clearfix">
+                    @await Component.InvokeAsync("Menus")
+                </div>
+            </div>
+        </div>
+        <div class="main_content clearfix">
+
+            <partial name="_Alerts" />
+            @*@Html.Partial("_Alerts")*@
+            @RenderBody()
+
+        </div>
+        <div class="footer clearfix">
+            <div class="dis-inline footer-logo"><img src="~/Content/images/dots-logon.png" alt="" /></div>
+            &copy; Copyright @(DateTime.Now.Year) Dotsquares Technologies (I) Pvt. Ltd. All Rights Reserved.
+
+
+        </div>
+
+    </div>
+    <div style="display: none;" id="ProgressBar_Status">
+        <div style="z-index: 10001;" class="windowbackground">
+            <div class="progressbar">
+                <img alt="Loading..." src="~/images/ajax-loader.gif" /><br />
+                Please Wait...
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-common" style="display:none">
+        <p><img src="~/images/loader_common.gif" alt="" /></p>
+        
+    </div>
+    <div class="loading-overlay" style="display:none"></div>
+
+    @Html.Partial("_Modal", new Modal { ID = "modal-projectStatus", AreaLabeledId = "modal-projectStatus-label", Size = Enums.ModalSize.Medium })
+    @Html.Partial("_Modal", new Modal { ID = "modal-projectStatusAdditional", AreaLabeledId = "modal-projectStatusAdditional-label", Size = Enums.ModalSize.Large })
+    @Html.Partial("_Modal", new Modal { ID = "modal-action-reminder", AreaLabeledId = "modal-action-reminder-label", Size = Enums.ModalSize.Medium })
+
+    <script type="text/javascript">
+        var domain = '@EMS.Web.Code.LIBS.SiteKey.DomainName';
+        var ss=@((int)Enums.UserRoles.PM);
+        var isPM = @((CurrentUser.RoleId != ((int)Enums.UserRoles.PM) && CurrentUser.RoleId != ((int)Enums.UserRoles.PMO) && CurrentUser.RoleId != ((int)Enums.UserRoles.HRBP) && CurrentUser.RoleId != ((int)Enums.UserRoles.Director) && CurrentUser.RoleId != ((int)Enums.UserRoles.UKBDM) && CurrentUser.RoleId != ((int)Enums.UserRoles.UKPM) && CurrentUser.RoleId != ((int)Enums.UserRoles.AUPM) && CurrentUser.RoleId != ((int)Enums.UserRoles.PMOAU)).ToString().ToLower());
+        // var userDesignation = CurrentUser.DesignationId!=null?CurrentUser.DesignationId:"";
+        var startSidebarTime =@CurrentUser.NotificationMinute;
+    </script>
+    @*<script src="~/js/views/cart-delivery.js"></script>*@
+
+    <script src="~/bundles/jquery"></script>
+    <script src="~/bundles/jqueryval"></script>
+    <script src="~/bundles/bootstrap"></script>
+    <script src="~/bundles/layoutjs"></script>
+    <script src="~/bundles/otherjs"></script>
+    @*<script src="~/bundles/blockUI"></script>*@
+    <script src="~/Scripts/CustomJS/customAlerts.js"></script>
+    <script src="~/Scripts/CustomJS/common.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>*@
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/plugin/NotificationPlugin/notifyme.js"></script>
+    <script src="~/bundles/Select2" asp-append-version="true"></script>
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(window).on('load', function () {
+
+            if (isPM) {
+                $.get(domain + "user/SetProjectStatus", function (result) {
+                    if (result != null) {
+                        var status = result.userstatus;
+                        if (status == '' || status == null) {
+                            $("#projectstatus").html('(Not logged-In Ems Desktop)');
+                            $('#StartDate').datepicker().datepicker("show");
+                            $('#btnprojectStatus').trigger('click');
+                            $('#StartDate').datepicker().datepicker("hide");
+                        }
+                        else {
+                            $("#projectstatus").html('(' + status + ')');
+                        }
+
+                        $("#projectName").html(result.projectname);
+                    }
+                    $("#ProgressBar_Status").hide();
+                });
+            }
+            else {
+                $("#projectstatus").html('');
+                $("#projectName").html('');
+            }
+            if (startSidebarTime > 0) {
+                //Api in current user panding review
+                setInterval(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: domain + 'Reminder/Index',
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != null && data.length > 0) {
+                                var PandingReviewList = "";
+                                $.each(data, function (index, item) {
+                                    //PandingReviewList += "<tr><td>" + item + "</td></tr>";
+                                    var no = index + 1;
+                                    PandingReviewList += "<div class='reviewsidebarstep'><div class='reviewsidebarnumber'>" + no + "</div><div><p>" + item.split(',')[0] + "</br>" + "Date: " + item.split(',')[1] + "</br>"+"<a id='closureReviewlink' data-toggle='modal' data-target='#modal-action-reminder' href='" + domain + "Reminder/AddEditReminder?reminderId="+item.split(',')[2]+"' style='color:white; text-decoration:underline;font-weight: bold;'>Take Action</a>"+"</p></div></div>";
+
+                                    
+                                });
+                                var showNotify = $(".notify").length;
+                                if (showNotify == 0) {
+                                    $(this).notifyMe(
+                                        'right',
+                                        'default',
+                                        'Reminder(s)',
+                                        "Below are the reminder(s) for your today's and pending action(s)",
+                                        500,
+                                        PandingReviewList
+                                    );
+                                    document.querySelector('.notify').style.transform = "translateX(0)";
+                                }
+                            }
+                        }, //succes
+                        error: function (data) {
+
+                        }//error
+                    });
+                }, startSidebarTime);
+            }
+        });
+
+        $("#modal-action-reminder").on("hidden.bs.modal", function (e) {
+                $(this).removeData("bs.modal");
+            });
+            
+    </script>
+</body>
+</html>

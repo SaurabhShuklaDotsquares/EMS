@@ -1,0 +1,52 @@
+﻿@model EMS.Dto.LeadNotesDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+<style>
+    .comments {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        font-size: 13px;
+    }
+
+        .comments i {
+            color: #757575;
+            font-size: 12px;
+            text-decoration: dotted;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .comments:last-child {
+            border-bottom: 0;
+        }
+</style>
+
+<div>
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = @Model.LeadId })
+    <div class="modal-body">
+        <div id="error-ModalMessage"></div>
+        @*<div class="row margin-bottom15" style="margin-left:0px;">
+            <h5 class="modal-title">@Model.LeadId</h5>
+        </div>*@
+
+        @if (Model.LeadNoteList != null && Model.LeadNoteList.Count > 0)
+        {
+            foreach (var leadTran in Model.LeadNoteList)
+            {
+                <div class="comments">
+                    <i>@leadTran.notes_time.ToString() &nbsp;&nbsp;  <b>@(leadTran.user_name != null && leadTran.user_name != "" ? "[Added By " + leadTran.user_name + "]" : "")</b></i>
+                    @Html.Raw(leadTran.notes_details)
+                </div>
+              
+            }
+        }
+        else
+        {
+            <div class="comments">
+                No record found!
+            </div>
+        }
+    </div>
+    @*@Html.Partial("_ModalFooter", new ModalFooter { CancelButtonText = "Close", CancelButtonID = "btn-cancle", OnlyCancelButton = true })*@
+</div>

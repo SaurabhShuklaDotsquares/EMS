@@ -1,0 +1,72 @@
+﻿
+@model EMS.Dto.MomMeetingDto
+@using EMS.Web.Models.Others
+@using EMS.Core
+@using (Html.BeginForm())
+{
+
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Send Email" })
+
+    <div class="modal-body ">
+        @Html.HiddenFor(Model => Model.Id)
+        @Html.HiddenFor(model => Model.ParticipantType)
+        @Html.HiddenFor(model => Model.PaticipantList)
+        @Html.HiddenFor(model => Model.MeetingMasterID)
+
+        @Html.Hidden("hdnParticipantType", Model.ParticipantType)
+        @Html.Hidden("hdnSelectedGroup", Model.selectedGroup)
+        <div id="NotificationMessage"></div>
+        <input type="hidden" id="selectedGroup" name="selectedGroup" />
+        @*<p class="del-msg">Are you sure you want to send email ?</p>*@
+
+        <div class="row form-group clearfix">
+            @*<div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Participant Type</label>
+                        </div>
+                        <div class="col-md-6">
+                            @Model.ParticipantType
+                        </div>
+                    </div>
+                </div>*@
+            <div class="col-md-12">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        @if (Model.ParticipantType == Enums.MomMeetingParticipantType.Group)
+                        {
+                            @foreach (var item in Model.selectedGroup.Split(";"))
+                            {
+                                if (item != "")
+                                {
+                                    @Html.CheckBox("chkGroupForEmail", new { @value = item, @id = item, @class = "clsGroupForEmail" })
+                                    <label for="chkGroupForEmail">@item</label>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2">
+                        <label class="control-label" id="lblParticipant">Participants</label>
+                    </div>
+                    <div class="col-md-10">
+                        @if (Model.ParticipantType == Enums.MomMeetingParticipantType.Individual)
+                        {
+                            @Html.TextAreaFor(model => model.selectedParticpants, 3, 5, htmlAttributes: new { @class = "form-control  ParticipantClass", @autoComplete = "off", @required = "required" })
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(model => model.selectedParticpants, 3, 5, htmlAttributes: new { @class = "form-control  ParticipantClass", @autoComplete = "off" })
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        @Html.Partial("_ModalFooter", new ModalFooter { })
+    </div>
+}

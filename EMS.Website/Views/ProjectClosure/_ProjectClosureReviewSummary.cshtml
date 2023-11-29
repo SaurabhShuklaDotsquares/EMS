@@ -1,0 +1,71 @@
+﻿@model List<ProjectClosureReviewSummaryDto>
+@using Microsoft.AspNetCore.Html;
+@if (Model.Count > 0)
+{
+
+
+    Func<String, IHtmlContent> SummaryHeader =@<text>
+    <thead>
+        <tr>
+            <th></th>
+            <th class="rowCenterText">100%</th>
+            <th class="rowCenterText">50-50%</th>
+            <th class="rowCenterText">Not Sure/ Not Applicable</th>
+        </tr>
+    </thead>
+    </text>;
+
+
+
+Func<ProjectClosureReviewSummaryDto,IHtmlContent> ReviewSummary = @<text>
+    <tr>
+        <td colspan="4" style="background-color: #eaeaea;font-size: 15px;font-weight: 500;text-transform: uppercase;">Team Manager : @item.PMName</td>
+    </tr>
+    <tr>
+        <td>Number of Projects</td>
+        <td class="rowCenterText">@(item.ProjectPromising > 0 ? item.ProjectPromising.ToString() : "-")</td>
+        <td class="rowCenterText">@(item.ProjectLessPromising > 0 ? item.ProjectLessPromising.ToString() : "-")</td>
+        <td class="rowCenterText">@(item.ProjectNotSure > 0 ? item.ProjectNotSure.ToString() : "-")</td>
+    </tr>
+    <tr>
+        <td>Number of Developers</td>
+        <td class="rowCenterText">@(item.OccupancyIncreasePromising > 0 ? item.OccupancyIncreasePromising.ToString() : "-")</td>
+        <td class="rowCenterText">@(item.OccupancyIncreaseLessPromising > 0 ? item.OccupancyIncreaseLessPromising.ToString() : "-")</td>
+        <td class="rowCenterText">@(item.OccupancyIncreaseNotSure > 0 ? item.OccupancyIncreaseNotSure.ToString() : "-")</td>
+    </tr>
+</text>;
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-stats">
+            @SummaryHeader("")
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        @ReviewSummary(Model[i])
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.Count > 1)
+    {
+        <div class="col-md-6">
+            <table class="table table-stats">
+                @SummaryHeader("")
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        if (i % 2 != 0)
+                        {
+                            @ReviewSummary(Model[i])
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+}

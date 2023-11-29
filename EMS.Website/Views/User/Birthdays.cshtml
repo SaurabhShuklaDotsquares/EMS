@@ -1,0 +1,80 @@
+﻿@using EMS.Core
+@{
+    ViewData["Title"] = "Birthdays";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        @Html.Partial("_Notification")
+        <div class="box">
+            <div class="timesheet-page full-wdth clearfix">
+                <div class="dis-block clearfix row">
+                    @*<h2 class="pull-left">
+                            Birthdays
+                        </h2>*@
+                    <div class="col-sm-4">
+                        <h2>Birthdays</h2>
+                    </div>
+                    <div class="col-md-8 search-filter">
+                        <div class="pull-right box1">
+
+                            <a class="export-btn" data-href="user/ExportBirthdayDataReportToExcel" href="user/ExportBirthdayDataReportToExcel" style="">
+                                <img src="content/images/excel.png" alt=""> Export To Excel
+                            </a>
+                        </div>
+                    </div>
+                    @*@if (CurrentUser.RoleId == (int)Enums.UserRoles.PM || CurrentUser.RoleId == (int)Enums.UserRoles.PMO || CurrentUser.RoleId == (int)Enums.UserRoles.UKPM || CurrentUser.RoleId == (int)Enums.UserRoles.UKBDM)*@
+                    @*@if (CurrentUser.IsSuperAdmin)
+                    {
+
+                        <div class="pull-right"><a class="btn  btn-custom pull-right orange pull-right" href="@Url.Action("edituser","user")" id="btn_search">Add User</a></div>
+
+                    }*@
+                </div>
+                <div class="box marR7 flotR margin-top20" id="div_verified">
+
+                    <button type="button" class="btn btn-custom pull-right orange" id="btn_search">Search</button>
+                    @*<button type="button" class="btn btn-custom pull-left" data-ng-click="SearchTimeSheet()" id="btn_search">Search</button>*@
+
+                    <div class="wdth1 margin-right10 pull-right">
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.TextBox("txt_dateFrom", null, new { @class = "form-control dtfrom", @placeholder = "From Date", style = "width: 150px;" })
+                        </div>
+                        <div class="wdth1 margin-right10 pull-left">
+                            @Html.TextBox("txt_dateTo", null, new
+                       {
+                           @class = "form-control dtTo",
+                           @placeholder = "To Date",
+                           style = "width: 150px;"
+                       })
+                        </div>
+                    </div>
+                    <div class="wdth2 margin-right10">
+
+                        @if (RoleValidator.HR_RoleIds.Contains(CurrentUser.RoleId))
+                        {
+                            @Html.DropDownList("ddl_pm", ViewBag.PMList as IEnumerable<SelectListItem>, new { @class = "form-control pull-right margin-right10", @style = "width: 150px;" })
+                            <label class="pull-right margin-right10 margin-top10"><b>Project Manager:</b></label>
+                        }
+                    </div>
+
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body ">
+                    <section id="no-more-tables">
+                        <table id="grid-birthdays" class="display postable table table-bordered table-striped table-condensed" width="100%"></table>
+                    </section>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+    {
+    <script type="text/javascript" src="~/bundles/User/birthdays"></script>
+}
+
+

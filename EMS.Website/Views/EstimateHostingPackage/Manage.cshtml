@@ -1,0 +1,124 @@
+﻿@model EstimateHostingPackageDto
+@{
+    ViewData["Title"] = (Model.Id > 0 ? "Edit" : "Add") + " Estimate hosting package";
+}
+@section styles{
+    <link href="~/css/select2.css" rel="stylesheet" />
+}
+
+<div class="main_content clearfix">
+    <div class="full-wdth clearfix padding20">
+        <partial name="_Notification" />
+        <div class="timesheet-page full-wdth clearfix">
+            <h2>@(ViewData["Title"])</h2>
+            <div class="create-form-outer-box dis-block clearfix">
+                <div class="form-wdth1 dis-block clearfix">
+                    <form method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row margin-bottom15">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="col-md-4"></label>
+                                <div class="col-md-8">
+                                    <input type="text" asp-for="Name" class="form-control" maxlength="200" />
+                                    <span asp-validation-for="Name"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row margin-bottom15">
+                            <div class="col-md-6">
+                                <label asp-for="PackageDetail" class="col-md-4"></label>
+                                <div class="col-md-8">
+                                    <textarea asp-for="PackageDetail" class="form-control" style="height:150px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row margin-bottom15">
+                            <div class="col-md-6">
+                                <label asp-for="EstimateTechnologyIds" class="col-md-4"></label>
+                                <div class="col-md-8">
+                                    <select type="text" asp-for="EstimateTechnologyIds" asp-items="ViewBag.EstimateTechnology" multiple="multiple" class="form-control">
+                                    </select>
+                                    <span asp-validation-for="EstimateTechnologyIds"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="CountryId" class="col-md-4"></label>
+                                <div class="col-md-8">
+                                    <input type="hidden" asp-for="CurrencyId" />
+                                    <select type="text" asp-for="CountryId" asp-items="ViewBag.Country" class="form-control">
+                                        <option value="">Select Country</option>
+                                    </select>
+                                    <span asp-validation-for="CountryId"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row margin-bottom15">
+                            <div class="col-md-6">
+                                <label asp-for="HostingCost" class="col-md-4"></label>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-addon currsymb">
+                                            @Model.CurrSign
+                                        </div>
+                                        <input type="text" asp-for="HostingCost" class="form-control" />
+                                        <span asp-validation-for="HostingCost"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <select type="text" asp-for="HostingCostType" asp-items="@(Html.GetEnumSelectList<EMS.Core.Enums.EstimateCostType>())" class="form-control">
+                                        <option value="">Select Hosting Cost Type</option>
+                                    </select>
+                                    <span asp-validation-for="HostingCostType"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="SetupCost" class="col-md-2"></label>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-addon currsymb">
+                                            @Model.CurrSign
+                                        </div>
+                                        <input type="text" asp-for="SetupCost" class="form-control" />
+                                        <span asp-validation-for="SetupCost"></span>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-md-4">
+                                    <select type="text" asp-for="SetupCostType" asp-items="@(Html.GetEnumSelectList<EMS.Core.Enums.EstimateCostType>())" class="form-control">
+                                        <option value="">Select Setup Cost Type</option>
+                                    </select>
+                                    <span asp-validation-for="SetupCostType"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row margin-bottom15">
+                            <div class="col-md-6">
+                                <label asp-for="IsActive" class="col-md-4"></label>
+                                <div class="col-md-8">
+                                    <input type="checkbox" asp-for="IsActive" />
+                                    <span asp-validation-for="PackageDetail"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <a href="/estimatehostingpackage" class="btn btn-custom">Back</a>
+                                <button type="submit" class="btn btn-custom  margin-right10">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/scripts/select2.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/CustomJS/estimatehostingpackage/manage.js" asp-append-version="true"></script>
+}
+

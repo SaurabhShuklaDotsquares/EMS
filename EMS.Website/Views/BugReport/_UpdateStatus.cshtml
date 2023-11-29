@@ -1,0 +1,58 @@
+﻿@using EMS.Web.Models.Others
+@model BugStatusDto
+@using (Html.BeginForm())
+{
+    @Html.Partial("_ModalHeader", new ModalHeader { Heading = "Update Status" })
+    <div class="modal-body">
+        <div id="validation-summary"></div>
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label title="Section Name" class="control-label"></label>
+                    @*@Html.Label("Section Name ", htmlAttributes: new { @class = "control-label" })*@
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-group">
+                    @Html.DisplayTextFor(model => model.SectionName)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group"> @Html.LabelFor(model => model.SectionDescription, htmlAttributes: new { @class = "control-label" })</div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-group">
+                    @Html.DisplayTextFor(model => model.SectionDescription)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group required"> @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label" })</div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.StatusId,  Model.StatusList, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group required"> @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label" })</div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-group"> @Html.TextAreaFor(x => x.Comment,  5, 10, htmlAttributes: new { @class = "form-control", @autocomplete = "off", @data_rule_required = "true", @data_msg_required = "*required" })</div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_ModalFooter", new ModalFooter { })
+}
+
+

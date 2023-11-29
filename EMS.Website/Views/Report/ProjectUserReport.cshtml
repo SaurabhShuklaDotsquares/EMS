@@ -1,0 +1,36 @@
+﻿@model ProjectDto
+@{
+    ViewBag.Title = "Dotsquares Employee Management 2013";
+}
+<div class="main_content">
+    <div class="full-wdth padding20">
+        <div id="MessageDiv"></div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Project User Report</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 form-group">
+                @Html.DropDownList("Technology", Model.TechnologySelectList, "-All Technology-", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3 form-group">
+                @Html.DropDownListFor(x => x.Model, Model.ModelList, "-All Model-", new { @class = "form-control" })
+            </div>
+            <div class="col-md-3 form-group">
+                @Html.TextBox("search", null, new { @class = "form-control", @placeholder = "Project Name/CRM ID" })
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-custom pull-right" id="btn_reset">Reset</button>
+                <button type="button" class="btn btn-custom pull-right  margin-right5" id="CustomSearch">Search</button>
+            </div>
+            <table id="grid-ProjectUserList" class="display postable table table-stats table-condensed"></table>
+        </div>
+    </div>
+    </div>
+
+    @section scripts{
+        <script type="text/javascript" src="~/bundles/Report/ProjectUserReport"></script>
+    }

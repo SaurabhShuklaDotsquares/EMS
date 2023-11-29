@@ -1,0 +1,95 @@
+﻿@using EMS.Web.Models.Others
+@using EMS.Core
+@model List<CompanyHeadingDto>
+@{
+    ViewBag.Title = "Configuration Items (CI)";
+}
+
+<div class="full-wdth padding20">
+    <h2 class="pull-left">Configuration Items (CI)</h2>
+
+    @if (CurrentUser.IsSPEG)
+    {
+        <a class="btn btn-custom pull-right" href="@Url.Action("addedit", "orgdocument")">Add New</a>
+    }
+    <div class="clearfix"></div>
+
+    @{Html.RenderPartial("_Notification"); }
+
+    <div class="table-custom timesheet-table table-responsive clearfix">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <h4>Baselined @item.Heading</h4>
+                <table class="table table-stats">
+                    <thead>
+                        <tr>
+                            <th width="25%">
+                                Document
+                            </th>
+                            @*<th width="10%">
+                                Approved On
+                            </th>*@
+                            <th width="20%">Approved By</th>
+                            @if (CurrentUser.IsSPEG)
+                            {
+                            <th width="25%">Access To</th>
+                            <th width="10%">
+                                Action
+                            </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var doc in item.Documents)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(doc.DocumentPath))
+                                    {
+                                        <a target="_blank" title="Download - @doc.DocumentName" href="@doc.DocumentPath" class="ablue">
+                                            <i class="fa fa-download"></i> @doc.DocumentName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        @doc.DocumentName
+                                    }
+                                </td>
+                                @*<td>
+                                    @doc.ApprovedOn
+                                </td>*@
+                                <td>
+                                    @doc.ApprovedBy
+                                </td>
+                                @if (CurrentUser.IsSPEG)
+                                {
+                                    
+                                    <td>
+                                        @{ 
+                                            string accessTo = "";
+                                            accessTo += !string.IsNullOrWhiteSpace(doc.Department) ? "<b>Departments</b> : " + doc.Department : "";
+                                            accessTo += !string.IsNullOrWhiteSpace(doc.Roles) ? (accessTo != "" ? "<br>" : "") + "<b>Roles</b> : " + doc.Roles : "";
+                                            
+                                            @Html.Raw(accessTo)
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("addedit", new { id= doc.Id })" class="btn btn-default btn-sm"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                                        @if (doc.HasHistory)
+                                        {
+                                            <a class="btn btn-default btn-sm" href="@Url.Action("orgdocrevisionhistory", new { id= doc.DocumentMasterId })"
+                                               data-target="#modal-orgDocRevisionHistory" data-toggle="modal" title="View revision history"><i class="fa fa-history"></i> History</a>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+</div>
+@Html.Partial("_Modal", new Modal { ID = "modal-orgDocRevisionHistory", AreaLabeledId = "modal-orgDocRevisionHistory-label", Size = Enums.ModalSize.Medium })

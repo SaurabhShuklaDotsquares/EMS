@@ -1,0 +1,12 @@
+﻿@model List<EstimateHostingPackageDto>
+
+@if (Model.Count > 0)
+{
+    <div class="row package-box">
+        <h2 class="col-md-12">Hosting Package Server </h2>
+        @foreach (var item in Model)
+        {
+            <partial name="_EstimateHostingPackage" model="item" />
+        }
+    </div>
+}
